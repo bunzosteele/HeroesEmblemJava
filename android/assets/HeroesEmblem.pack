@@ -1,0 +1,572 @@
+
+HeroesEmblem.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+pedestal
+  rotate: false
+  xy: 1, 69
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+Archer-Attack-1-0
+  rotate: false
+  xy: 1, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Attack-1-1
+  rotate: false
+  xy: 51, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Attack-2-0
+  rotate: false
+  xy: 1, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Attack-2-1
+  rotate: false
+  xy: 85, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Idle-1-0
+  rotate: false
+  xy: 119, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Idle-1-1
+  rotate: false
+  xy: 153, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Idle-2-0
+  rotate: false
+  xy: 187, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Idle-2-1
+  rotate: false
+  xy: 221, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Idle-3-0
+  rotate: false
+  xy: 255, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Archer-Idle-3-1
+  rotate: false
+  xy: 289, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Bridge
+  rotate: false
+  xy: 323, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeBot
+  rotate: false
+  xy: 357, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeTop
+  rotate: false
+  xy: 391, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Attack-1-0
+  rotate: false
+  xy: 425, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Attack-1-1
+  rotate: false
+  xy: 459, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Attack-2-0
+  rotate: false
+  xy: 493, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Attack-2-1
+  rotate: false
+  xy: 527, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Idle-1-0
+  rotate: false
+  xy: 561, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Idle-1-1
+  rotate: false
+  xy: 595, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Idle-2-0
+  rotate: false
+  xy: 629, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Idle-2-1
+  rotate: false
+  xy: 663, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Idle-3-0
+  rotate: false
+  xy: 697, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Footman-Idle-3-1
+  rotate: false
+  xy: 731, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest
+  rotate: false
+  xy: 765, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+gold
+  rotate: false
+  xy: 799, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+grass
+  rotate: false
+  xy: 833, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Attack-1-0
+  rotate: false
+  xy: 867, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Attack-1-1
+  rotate: false
+  xy: 901, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Attack-2-0
+  rotate: false
+  xy: 935, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Attack-2-1
+  rotate: false
+  xy: 969, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Idle-1-0
+  rotate: false
+  xy: 35, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Idle-1-1
+  rotate: false
+  xy: 35, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Idle-2-0
+  rotate: false
+  xy: 69, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Idle-2-1
+  rotate: false
+  xy: 69, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Idle-3-0
+  rotate: false
+  xy: 103, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Knight-Idle-3-1
+  rotate: false
+  xy: 103, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Attack-1-0
+  rotate: false
+  xy: 137, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Attack-1-1
+  rotate: false
+  xy: 137, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Attack-2-0
+  rotate: false
+  xy: 171, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Attack-2-1
+  rotate: false
+  xy: 171, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Idle-1-0
+  rotate: false
+  xy: 205, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Idle-1-1
+  rotate: false
+  xy: 205, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Idle-2-0
+  rotate: false
+  xy: 239, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Idle-2-1
+  rotate: false
+  xy: 239, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Idle-3-0
+  rotate: false
+  xy: 273, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mage-Idle-3-1
+  rotate: false
+  xy: 273, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+MetalFloor
+  rotate: false
+  xy: 307, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+MetalWall
+  rotate: false
+  xy: 307, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Mountain
+  rotate: false
+  xy: 341, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Plating
+  rotate: false
+  xy: 341, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Attack-1-0
+  rotate: false
+  xy: 375, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Attack-1-1
+  rotate: false
+  xy: 375, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Attack-2-0
+  rotate: false
+  xy: 409, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Attack-2-1
+  rotate: false
+  xy: 409, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Idle-1-0
+  rotate: false
+  xy: 443, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Idle-1-1
+  rotate: false
+  xy: 443, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Idle-2-0
+  rotate: false
+  xy: 477, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Idle-2-1
+  rotate: false
+  xy: 477, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Idle-3-0
+  rotate: false
+  xy: 511, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Priest-Idle-3-1
+  rotate: false
+  xy: 511, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sand
+  rotate: false
+  xy: 545, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Shop
+  rotate: false
+  xy: 545, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Shopkeeper-1
+  rotate: false
+  xy: 579, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Shopkeeper-2
+  rotate: false
+  xy: 579, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Shopkeeper-3
+  rotate: false
+  xy: 613, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Attack-1-0
+  rotate: false
+  xy: 613, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Attack-1-1
+  rotate: false
+  xy: 647, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Attack-2-0
+  rotate: false
+  xy: 647, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Attack-2-1
+  rotate: false
+  xy: 681, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Idle-1-0
+  rotate: false
+  xy: 681, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Idle-1-1
+  rotate: false
+  xy: 715, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Idle-2-0
+  rotate: false
+  xy: 715, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Idle-2-1
+  rotate: false
+  xy: 749, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Idle-3-0
+  rotate: false
+  xy: 749, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Spearman-Idle-3-1
+  rotate: false
+  xy: 783, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Void
+  rotate: false
+  xy: 783, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Wall
+  rotate: false
+  xy: 817, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water
+  rotate: false
+  xy: 817, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+WoodFloor
+  rotate: false
+  xy: 851, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+WoodFloorDam1
+  rotate: false
+  xy: 851, 17
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
