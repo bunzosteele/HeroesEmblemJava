@@ -1,0 +1,8 @@
+<tiles>
+	<Grass>
+	    <DefenseModifier>0</DefenseModifier>
+	    <AccuracyModifier>0</AccuracyModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass>
+</tiles>

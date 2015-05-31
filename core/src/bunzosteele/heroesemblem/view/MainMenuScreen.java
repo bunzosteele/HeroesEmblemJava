@@ -1,5 +1,7 @@
 package bunzosteele.heroesemblem.view;
 
+import java.io.IOException;
+
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.controller.MainMenuController;
 
@@ -27,7 +29,7 @@ public class MainMenuScreen extends ScreenAdapter{
 		touchpoint = new Vector3();
 	}
 	
-	public void update(){
+	public void update() throws IOException{
 		if (Gdx.input.justTouched()){
 			touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			if(newGameBounds.contains(touchpoint.x, touchpoint.y)){
@@ -60,7 +62,12 @@ public class MainMenuScreen extends ScreenAdapter{
 	
 	@Override
 	public void render(float delta){
-		update();
+		try {
+			update();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		draw();
 	}
 }

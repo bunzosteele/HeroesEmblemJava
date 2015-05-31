@@ -18,6 +18,10 @@ public class ShopStatusPanel{
 	HeroesEmblem game;
 	ShopState state;
 	int currentFrame = 1;
+	int xOffset;
+	int yOffset;
+	int width;
+	int height;
 	
 	public ShopStatusPanel(HeroesEmblem game, ShopState state){
 		this.game = game;
@@ -30,12 +34,16 @@ public class ShopStatusPanel{
 					currentFrame = 1;
 			}
 		},0,1/3.0f);
+		xOffset = 0;
+		yOffset = Gdx.graphics.getHeight()/ 5;
+		width = Gdx.graphics.getWidth()/ 5;
+		height = 4 * Gdx.graphics.getHeight()/ 5;
 	}
 	
 	public void draw(){
 		game.shapeRenderer.begin(ShapeType.Filled);
-		game.shapeRenderer.setColor(.7f,.3f,.1f,1);	
-		game.shapeRenderer.rect(0, Gdx.graphics.getHeight()/ 6, Gdx.graphics.getWidth()/6, 5 * Gdx.graphics.getHeight()/ 6);
+		game.shapeRenderer.setColor(.6f,.3f,.1f,1);	
+		game.shapeRenderer.rect(xOffset, yOffset, width, height);
 		game.shapeRenderer.end();
 		TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
 		AtlasRegion shopkeeperRegion = textureAtlas.findRegion("Shopkeeper-" + currentFrame);
@@ -49,11 +57,24 @@ public class ShopStatusPanel{
 		BitmapFont font = generator.generateFont(parameter);
 		generator.dispose();
 		game.batcher.begin();
-		game.batcher.draw(shopkeeperSprite, 0, Gdx.graphics.getHeight() - scaledSize, scaledSize, scaledSize);
-		game.batcher.draw(goldSprite, 0, Gdx.graphics.getHeight()/6, scaledSize, scaledSize);
-		font.draw(game.batcher, "" + state.gold, scaledSize, Gdx.graphics.getHeight()/6 + scaledSize, scaledSize * 2, 1, false);
+		game.batcher.draw(shopkeeperSprite, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, scaledSize);
+		game.batcher.draw(goldSprite, xOffset, yOffset, scaledSize, scaledSize);
+		font.draw(game.batcher, "" + state.gold, scaledSize, yOffset + scaledSize, scaledSize * 2, 1, false);
 		game.batcher.end();
 		font.dispose();
 		textureAtlas.dispose();
+	}
+		
+	public boolean isTouched(float x, float y){
+		if(x >= xOffset && x < xOffset + width){
+			if( y >= yOffset && y < yOffset + height){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void processTouch(float x, float y){
+		state.selected = null;
 	}
 }

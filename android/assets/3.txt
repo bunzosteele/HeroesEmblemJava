@@ -1,0 +1,9 @@
+G* W  O  W  O  O  O  W  W  O  O  O  W  O  W  G*
+G  W  O  O  O  W  P1 P3 P4 P2 W  O  O  O  W  G
+G  W  O  W  O  W  W  W  W  W  W  O  W  O  W  G
+G  W  O  W  O5 O  T  T  T  T  O  O6 W  O  W  G
+G  W  O  W  W  W  W  T  T  W  W  W  W  O  W  G
+G  W  O  O  O  O8 O  T  T  O  O7 O  O  O  W  G
+G  W  W  W  W  W  W  T  T  W  W  W  W  W  W  G
+G  G  G  G  G* G  G  G  G  G  G  G* G  G  G  G
+F* F* G* G  G* G  G  G  G  G  G  G* G  G* F* F*

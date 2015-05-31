@@ -6,56 +6,41 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
-import bunzosteele.heroesemblem.controller.MainMenuController;
+import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.ShopState;
 
-public class ShopScreen extends ScreenAdapter{
+public class BattleScreen extends ScreenAdapter{
 	
 	HeroesEmblem game;
 	OrthographicCamera camera;
 	Vector3 touchpoint;
-	ShopState state;
-	ShopStatusPanel shopStatus;
-	StockWindow stockWindow;
+	BattleState state;
+	BattleWindow battleWindow;
 	UnitStatusPanel unitStatus;
-	ShopControls shopControls;
+	BattleControls battleControls;
 	
-	public ShopScreen(HeroesEmblem game) throws IOException{
+	public BattleScreen(HeroesEmblem game, ShopState shopState) throws IOException{
+		state = new BattleState(shopState);
 		this.game = game;
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		touchpoint = new Vector3();
-		state = new ShopState();
-		shopStatus = new ShopStatusPanel(game, state);
-		stockWindow = new StockWindow(game, state);
+		battleWindow = new BattleWindow(game, state);
 		unitStatus = new UnitStatusPanel(game, state);
-		shopControls = new ShopControls(game, state);
-	}
-	
-	public ShopScreen(HeroesEmblem game, ShopState state){
-		this.game = game;
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		touchpoint = new Vector3();
+		battleControls = new BattleControls(game, state);
 	}
 	
 	public void update() throws IOException{
 		if (Gdx.input.justTouched()){
 			touchpoint.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0);
-			if (stockWindow.isTouched(touchpoint.x, touchpoint.y)){
-				stockWindow.processTouch(touchpoint.x, touchpoint.y);
-			}else if(shopStatus.isTouched(touchpoint.x, touchpoint.y)){
-				shopStatus.processTouch(touchpoint.x, touchpoint.y);
+			if (battleWindow.isTouched(touchpoint.x, touchpoint.y)){
+				battleWindow.processTouch(touchpoint.x, touchpoint.y);
 			}else if(unitStatus.isTouched(touchpoint.x, touchpoint.y)){
 				unitStatus.processTouch(touchpoint.x, touchpoint.y);
-			}else if(shopControls.isTouched(touchpoint.x, touchpoint.y)){
-				shopControls.processTouch(touchpoint.x, touchpoint.y);
+			}else if(battleControls.isTouched(touchpoint.x, touchpoint.y)){
+				battleControls.processTouch(touchpoint.x, touchpoint.y);
 			}
 		}
 	}
@@ -65,10 +50,9 @@ public class ShopScreen extends ScreenAdapter{
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
-		shopStatus.draw();
-		stockWindow.draw();
+		battleWindow.draw();
 		unitStatus.draw();
-		shopControls.draw();
+		battleControls.draw();
 	}
 	
 	@Override

@@ -13,4 +13,12 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new HeroesEmblem(), config);
 	}
+	
+	@Override
+	public void onDestroy()
+	{
+	        super.onDestroy();
+	        this.finish();
+	        android.os.Process.killProcess(android.os.Process.myPid()); 
+	}
 }

@@ -20,6 +20,11 @@ public class StockWindow {
 	ShopState state;
 	int idleFrame = 1;
 	int attackFrame = 1;
+	int xOffset;
+	int yOffset;
+	int width;
+	int height;
+	int columnWidth;
 	
 	public StockWindow(HeroesEmblem game, ShopState state){
 		this.game = game;
@@ -34,11 +39,15 @@ public class StockWindow {
 				if(attackFrame > 2)
 					attackFrame = 1;
 			}}, 0 , 1/3f);
+		xOffset = Gdx.graphics.getWidth() / 5;
+		yOffset = Gdx.graphics.getHeight() / 5;
+		width = 3 * Gdx.graphics.getWidth() / 5;
+		height = 4 * Gdx.graphics.getHeight() / 5;
+		columnWidth = width / 9;
 	}
 	
 	public void draw(){
-		int windowOffset = Gdx.graphics.getWidth() / 6;
-		int columnWidth = (2 * Gdx.graphics.getWidth() / 3) / 9;
+
 		int unitOffset = 0;
 		TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
 		AtlasRegion pedestalRegion = textureAtlas.findRegion("pedestal");
@@ -47,19 +56,69 @@ public class StockWindow {
 		for(Unit unit : state.stock){
 			if (unitOffset < 4){
 				game.batcher.begin();
-				game.batcher.draw(pedestalSprite, windowOffset + columnWidth + (columnWidth * unitOffset * 2), 3 *Gdx.graphics.getHeight()/ 4, columnWidth, columnWidth);
+				game.batcher.draw(pedestalSprite, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, columnWidth);
 				game.batcher.end();
-				UnitRenderer.DrawUnit(game, unit, windowOffset + columnWidth + (columnWidth * unitOffset * 2), 3 *Gdx.graphics.getHeight()/ 4, columnWidth, "Idle", idleFrame);
+				if(state.selected != null && state.selected.isEquivalentTo(unit))
+					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, "Attack", attackFrame);
+				else
+					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, "Idle", idleFrame);
 			}
 			else{
 				game.batcher.begin();
-				game.batcher.draw(pedestalSprite, windowOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), Gdx.graphics.getHeight()/ 4, columnWidth, columnWidth);
+				game.batcher.draw(pedestalSprite, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, columnWidth);
 				game.batcher.end();
-				UnitRenderer.DrawUnit(game, unit, windowOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), Gdx.graphics.getHeight()/ 4, columnWidth, "Idle", idleFrame);
+				if(state.selected != null && state.selected.isEquivalentTo(unit))
+					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, "Attack", attackFrame);
+				else
+					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, "Idle", idleFrame);
 			}
 				unitOffset++;
 		}
 
 		textureAtlas.dispose();
+	}
+	
+	public boolean isTouched(float x, float y){
+		if(x >= xOffset && x < xOffset + width){
+			if( y >= yOffset && y < yOffset + height){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void processTouch(float x, float y){
+		int unitOffset = 0;
+		boolean hit = false;
+		for(Unit unit : state.stock){
+			if (unitOffset < 4){
+				int lowerXBound = xOffset + columnWidth + (columnWidth * unitOffset * 2);
+				int upperXBound = lowerXBound+columnWidth;
+				int lowerYBound = yOffset - columnWidth/2 + 3 *height/4;
+				int upperYBound = yOffset - columnWidth/2 + 3 *height/4 + columnWidth;
+				if(x >= lowerXBound && x < upperXBound){
+					if( y >= lowerYBound && y < upperYBound){
+						state.selected = state.stock.get(unitOffset);
+						hit = true;
+					}
+				}
+			}
+			else{
+				int lowerXBound = xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2);
+				int upperXBound = lowerXBound+columnWidth;
+				int lowerYBound = yOffset - columnWidth/2 + height/4;
+				int upperYBound = (yOffset - columnWidth/2 + height/4) + columnWidth;
+				if(x >= lowerXBound && x < upperXBound){
+					if( y >= lowerYBound && y < upperYBound){
+						state.selected = state.stock.get(unitOffset);
+						hit = true;
+					}
+				}
+			}
+				unitOffset++;
+		}
+		if(!hit){
+			state.selected = null;
+		}
 	}
 }

@@ -1,0 +1,9 @@
+W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W
+W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W
+W  W  O1 L5 L  O  O  O  L  O  O  O  L* L* W  W
+W  W  L2 L6 O  O  O  O  O  L  O  O  L* O* W  W
+W  W  L  L  O  O  L  L  O  O  O  O  L  L  W  W
+W  W  L3 L7 O  O  O  L  L  O  O  L  O* L* W  W
+W  W  O4 O8 O  O  O  L  L  O  O  L  O* L* W  W
+W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W
+W  W  W  W  W  W  W  W  W  W  W  W  W  W  W  W
