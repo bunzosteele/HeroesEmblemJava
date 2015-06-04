@@ -3,7 +3,7 @@ HeroesEmblem.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-pedestal
+Pedestal
   rotate: false
   xy: 1, 69
   size: 48, 48
@@ -178,14 +178,14 @@ Forest
   orig: 32, 32
   offset: 0, 0
   index: -1
-gold
+Gold
   rotate: false
   xy: 799, 85
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-grass
+Grass
   rotate: false
   xy: 833, 85
   size: 32, 32
@@ -430,7 +430,7 @@ Priest-Idle-3-1
   orig: 32, 32
   offset: 0, 0
   index: -1
-sand
+Sand
   rotate: false
   xy: 545, 51
   size: 32, 32
@@ -563,7 +563,7 @@ WoodFloor
   orig: 32, 32
   offset: 0, 0
   index: -1
-WoodFloorDam1
+WoodFloorDam
   rotate: false
   xy: 851, 17
   size: 32, 32

@@ -19,7 +19,7 @@ public class BattleScreen extends ScreenAdapter{
 	Vector3 touchpoint;
 	BattleState state;
 	BattleWindow battleWindow;
-	UnitStatusPanel unitStatus;
+	BattleUnitStatusPanel unitStatus;
 	BattleControls battleControls;
 	
 	public BattleScreen(HeroesEmblem game, ShopState shopState) throws IOException{
@@ -28,7 +28,7 @@ public class BattleScreen extends ScreenAdapter{
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		touchpoint = new Vector3();
 		battleWindow = new BattleWindow(game, state);
-		unitStatus = new UnitStatusPanel(game, state);
+		unitStatus = new BattleUnitStatusPanel(game, state);
 		battleControls = new BattleControls(game, state);
 	}
 	

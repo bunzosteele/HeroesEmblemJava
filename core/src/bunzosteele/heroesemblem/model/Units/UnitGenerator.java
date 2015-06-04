@@ -22,6 +22,30 @@ public final class UnitGenerator {
 		return stock;
 	}
 	
+	public static List<Unit> GenerateEnemies(int maxEnemies, int difficulty) throws IOException{
+		List<Unit> enemies = new ArrayList<Unit>();
+		enemies.add(GenerateUnit(1, GenerateUnitType()));
+		int remainingPoints = difficulty;
+		Random random = new Random();
+		while(remainingPoints > 0){
+			if(enemies.size() < maxEnemies){
+				int roll = random.nextInt(2);
+				if(roll == 0){
+					int levelUpRoll = random.nextInt(enemies.size());
+					enemies.get(levelUpRoll).AddExperience(enemies.get(levelUpRoll).experienceNeeded);
+				}else{
+					enemies.add(GenerateUnit(1, GenerateUnitType()));
+				}
+			}else{
+				int levelUpRoll = random.nextInt(enemies.size());
+				enemies.get(levelUpRoll).AddExperience(enemies.get(levelUpRoll).experienceNeeded);
+			}	
+			remainingPoints--;
+		}
+
+		return enemies;
+	}
+	
 	public static Unit GenerateUnit(int team, UnitType type) throws IOException{
 		UnitGenerator.id++;
 		int costModifier = 0;

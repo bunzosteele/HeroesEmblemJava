@@ -56,29 +56,36 @@ public final class UnitRenderer {
 		font.dispose();
 	}
 	
+	public static void DrawEnemyStats(HeroesEmblem game, Unit unit, int initialX, int initialY, int scaledSize) throws IOException{
+		XmlReader reader = new XmlReader();
+		Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
+		BitmapFont font = GenerateFont(scaledSize);
+
+		game.batcher.begin();
+			font.draw(game.batcher, unit.name, initialX, initialY);	
+			font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - 2 * scaledSize);
+			font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - scaledSize);
+			font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - 3 * scaledSize);
+
+		game.batcher.end();
+		font.dispose();
+	}
+	
 	public static void DrawOwnedStats(HeroesEmblem game, Unit unit, int initialX, int initialY, int scaledSize) throws IOException{
 		XmlReader reader = new XmlReader();
 		Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
-		Element unitStats = xml.getChildByName(unit.type.toString());
 		BitmapFont font = GenerateFont(scaledSize);
 
 		game.batcher.begin();
 			font.draw(game.batcher, unit.name, initialX, initialY);	
 			font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - scaledSize);
 			font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - 2 * scaledSize);
-			SetHealthFont(unit, unitStats, font);
 			font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 3 * scaledSize);
-			SetAttackFont(unit, unitStats, font);
 			font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - 4 * scaledSize);
-			SetDefenseFont(unit, unitStats, font);
 			font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - 5 * scaledSize);
-			SetEvasionFont(unit, unitStats, font);
 			font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - 6 * scaledSize);
-			SetAccuracyFont(unit, unitStats, font);
 			font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - 7 * scaledSize);
-			SetMovementFont(unit, unitStats, font);
 			font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - 8 * scaledSize);
-			SetAbilityFont(unit, font);
 			font.draw(game.batcher, "ABILITY: " + unit.ability.displayName, initialX, initialY - 9 * scaledSize);
 		game.batcher.end();
 		font.dispose();

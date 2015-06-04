@@ -48,7 +48,7 @@ public class ShopStatusPanel{
 		TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
 		AtlasRegion shopkeeperRegion = textureAtlas.findRegion("Shopkeeper-" + currentFrame);
 		Sprite shopkeeperSprite = new Sprite(shopkeeperRegion);
-		AtlasRegion goldRegion = textureAtlas.findRegion("gold");
+		AtlasRegion goldRegion = textureAtlas.findRegion("Gold");
 		Sprite goldSprite = new Sprite(goldRegion);
 		float scaledSize = Gdx.graphics.getWidth()/18;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));

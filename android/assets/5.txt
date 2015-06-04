@@ -1,9 +1,0 @@
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .
-S  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  S
-S  -  -  -  -  -  -  -  -  -  -  -  -  -  -  S
-S  B* B  B  B  B  B3 B2 B  B  B  B  B  B  B* S
-S  B  B* B  B  B  B6 B1 B7 B  B  B  B  B* B  S
-S  B* B  B  B  B  B5 B4 B  B  B  B  B  B  B* S
-S  +  +  +  +  +  +  +  +  +  +  +  +  +  +  S
-S  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  S8
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .

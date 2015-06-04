@@ -10,14 +10,12 @@ public class Tile {
 	public int accuracyModifier;
 	public int movementCost;
 	public int altitude;
-	public boolean spawn;
 	
-	public Tile(TileType type, int defenseModifier, int accuracyModifier, int movementCost, int altitude, boolean spawn) throws IOException{	
+	public Tile(TileType type, int defenseModifier, int accuracyModifier, int movementCost, int altitude) throws IOException{	
 		this.type = type;
 		this.defenseModifier = defenseModifier;
 		this.accuracyModifier = accuracyModifier;
 		this.movementCost = movementCost;
 		this.altitude = altitude;
-		this.spawn = spawn;
 	}
 }

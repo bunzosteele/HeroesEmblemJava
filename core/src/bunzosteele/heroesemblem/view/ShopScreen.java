@@ -25,7 +25,7 @@ public class ShopScreen extends ScreenAdapter{
 	ShopState state;
 	ShopStatusPanel shopStatus;
 	StockWindow stockWindow;
-	UnitStatusPanel unitStatus;
+	ShopUnitStatusPanel unitStatus;
 	ShopControls shopControls;
 	
 	public ShopScreen(HeroesEmblem game) throws IOException{
@@ -35,7 +35,7 @@ public class ShopScreen extends ScreenAdapter{
 		state = new ShopState();
 		shopStatus = new ShopStatusPanel(game, state);
 		stockWindow = new StockWindow(game, state);
-		unitStatus = new UnitStatusPanel(game, state);
+		unitStatus = new ShopUnitStatusPanel(game, state);
 		shopControls = new ShopControls(game, state);
 	}
 	

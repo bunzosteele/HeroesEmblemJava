@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
 public final class TileBuilder {
-	public static Tile BuildTile(String tileKey, Element tileStats) throws IOException{
-		Element grassStats = tileStats.getChildByName(TileType.Grass.toString());
-		return new Tile(TileType.Grass, grassStats.getInt("DefenseModifier"), grassStats.getInt("AccuracyModifier"), grassStats.getInt("MovementCost"), grassStats.getInt("Altitude"), false);
+	public static Tile BuildTile(TileType tileType, Element xml) throws IOException{
+		Element tileStats = xml.getChildByName(tileType.toString());
+		return new Tile(tileType, tileStats.getInt("DefenseModifier"), tileStats.getInt("AccuracyModifier"), tileStats.getInt("MovementCost"), tileStats.getInt("Altitude"));
 	}
 }

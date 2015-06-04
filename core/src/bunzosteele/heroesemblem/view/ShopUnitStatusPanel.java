@@ -14,19 +14,20 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
+import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.model.State;
 
-public class UnitStatusPanel {
+public class ShopUnitStatusPanel {
 	HeroesEmblem game;
-	State state;
+	ShopState state;
 	int currentFrame = 1;
 	int xOffset;
 	int yOffset;
 	int width;
 	int height;
 	
-	public UnitStatusPanel(HeroesEmblem game, State state){
+	public ShopUnitStatusPanel(HeroesEmblem game, ShopState state){
 		this.game = game;
 		this.state = state;
 		Timer.schedule(new Task(){

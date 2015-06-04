@@ -50,7 +50,7 @@ public class StockWindow {
 
 		int unitOffset = 0;
 		TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
-		AtlasRegion pedestalRegion = textureAtlas.findRegion("pedestal");
+		AtlasRegion pedestalRegion = textureAtlas.findRegion("Pedestal");
 		Sprite pedestalSprite = new Sprite(pedestalRegion);
 
 		for(Unit unit : state.stock){
