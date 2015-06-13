@@ -20,75 +20,70 @@ import bunzosteele.heroesemblem.model.Units.UnitType;
 public final class UnitRenderer {
 		
 	public static void DrawUnit(HeroesEmblem game, Unit unit, int x, int y, int scaledSize, String animation, int frame){
-		TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
-		AtlasRegion region = textureAtlas.findRegion(unit.type + "-" + animation + "-" + frame + "-" + unit.team);
+		AtlasRegion region = game.textureAtlas.findRegion(unit.type + "-" + animation + "-" + frame + "-" + unit.team);
 		Sprite sprite = new Sprite(region);
-		game.batcher.begin();
+		if(unit.isTakingDamage){
+			game.font.setColor(new Color(1f, 0, 0, 1f));
+			if(!unit.isDying){
+				game.batcher.setColor(new Color(1f, 0, 0, .5f));
+			}else{
+				game.batcher.setColor(new Color(1f, 0, 0, .1f * unit.deathFrame));
+			}
+		}else if(unit.isGettingExperience){
+			game.font.setColor(new Color(1f, .8f, 0, 1f));
+			game.batcher.setColor(new Color(1f, .8f, 0, .5f));
+		}
 		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
-		game.batcher.end();
-		textureAtlas.dispose();
+		game.font.getData().setScale(.2f);
+		game.font.draw(game.batcher, unit.damageDisplay, x + scaledSize /2, y + scaledSize);
+		game.batcher.setColor(Color.WHITE);
 	}
 	
 	public static void DrawStockStats(HeroesEmblem game, Unit unit, int initialX, int initialY, int scaledSize) throws IOException{
 		XmlReader reader = new XmlReader();
 		Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
 		Element unitStats = xml.getChildByName(unit.type.toString());
-		BitmapFont font = GenerateFont(scaledSize);
-
-		game.batcher.begin();
-			font.draw(game.batcher, "" + unit.cost, initialX + scaledSize, Gdx.graphics.getHeight());	
-			font.draw(game.batcher, unit.name, initialX, initialY);	
-			SetHealthFont(unit, unitStats, font);
-			font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - scaledSize);
-			SetAttackFont(unit, unitStats, font);
-			font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - 2 * scaledSize);
-			SetDefenseFont(unit, unitStats, font);
-			font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - 3 * scaledSize);
-			SetEvasionFont(unit, unitStats, font);
-			font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - 4 * scaledSize);
-			SetAccuracyFont(unit, unitStats, font);
-			font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - 5 * scaledSize);
-			SetMovementFont(unit, unitStats, font);
-			font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - 6 * scaledSize);
-			SetAbilityFont(unit, font);
-			font.draw(game.batcher, "ABILITY: " + unit.ability.displayName, initialX, initialY - 7 * scaledSize);
-		game.batcher.end();
-		font.dispose();
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.2f);
+		game.font.draw(game.batcher, "" + unit.cost, initialX + scaledSize, Gdx.graphics.getHeight());	
+		game.font.draw(game.batcher, unit.name, initialX, initialY);	
+		SetHealthFont(unit, unitStats, game.font);
+		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - scaledSize);
+		SetAttackFont(unit, unitStats, game.font);
+		game.font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - 2 * scaledSize);
+		SetDefenseFont(unit, unitStats, game.font);
+		game.font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - 3 * scaledSize);
+		SetEvasionFont(unit, unitStats, game.font);
+		game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - 4 * scaledSize);
+		SetAccuracyFont(unit, unitStats, game.font);
+		game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - 5 * scaledSize);
+		SetMovementFont(unit, unitStats, game.font);
+		game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - 6 * scaledSize);
+		SetAbilityFont(unit, game.font);
+		game.font.draw(game.batcher, "ABILITY: " + unit.ability.displayName, initialX, initialY - 7 * scaledSize);
 	}
 	
 	public static void DrawEnemyStats(HeroesEmblem game, Unit unit, int initialX, int initialY, int scaledSize) throws IOException{
-		XmlReader reader = new XmlReader();
-		Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
-		BitmapFont font = GenerateFont(scaledSize);
-
-		game.batcher.begin();
-			font.draw(game.batcher, unit.name, initialX, initialY);	
-			font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - 2 * scaledSize);
-			font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - scaledSize);
-			font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - 3 * scaledSize);
-
-		game.batcher.end();
-		font.dispose();
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.2f);
+		game.font.draw(game.batcher, unit.name, initialX, initialY);	
+		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - 2 * scaledSize);
+		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - scaledSize);
 	}
 	
 	public static void DrawOwnedStats(HeroesEmblem game, Unit unit, int initialX, int initialY, int scaledSize) throws IOException{
-		XmlReader reader = new XmlReader();
-		Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
-		BitmapFont font = GenerateFont(scaledSize);
-
-		game.batcher.begin();
-			font.draw(game.batcher, unit.name, initialX, initialY);	
-			font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - scaledSize);
-			font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - 2 * scaledSize);
-			font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 3 * scaledSize);
-			font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - 4 * scaledSize);
-			font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - 5 * scaledSize);
-			font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - 6 * scaledSize);
-			font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - 7 * scaledSize);
-			font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - 8 * scaledSize);
-			font.draw(game.batcher, "ABILITY: " + unit.ability.displayName, initialX, initialY - 9 * scaledSize);
-		game.batcher.end();
-		font.dispose();
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.2f);
+		game.font.draw(game.batcher, unit.name, initialX, initialY);	
+		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - scaledSize);
+		game.font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - 2 * scaledSize);
+		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 3 * scaledSize);
+		game.font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - 4 * scaledSize);
+		game.font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - 5 * scaledSize);
+		game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - 6 * scaledSize);
+		game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - 7 * scaledSize);
+		game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - 8 * scaledSize);
+		game.font.draw(game.batcher, "ABILITY: " + unit.ability.displayName, initialX, initialY - 9 * scaledSize);
 	}
 	
 	public static void SetHealthFont(Unit unit, Element unitStats, BitmapFont font){
@@ -163,27 +158,5 @@ public final class UnitRenderer {
 			font.setColor(new Color(255, 0, 0, 1));
 		else
 			font.setColor(new Color(255, 215, 0, 1));
-	}
-	
-	private static BitmapFont GenerateFont(int scaledSize){
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = scaledSize;
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		return font;
-	}
-	
-	private static BitmapFont GenerateFont(FreeTypeFontParameter parameter){
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		return font;
-	}
-		
-	private static void DrawStat(HeroesEmblem game, FreeTypeFontParameter parameter, String output, int x, int y){
-		BitmapFont font = GenerateFont(parameter);
-		font.draw(game.batcher, output, x, y);
-		font.dispose();
 	}
 }

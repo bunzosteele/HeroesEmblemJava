@@ -7,7 +7,7 @@ import java.util.List;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
-public class ShopState extends State {
+public class ShopState{
 	public List<Unit> stock;
 	public List<Unit> roster;
 	public Unit selected;
@@ -26,7 +26,6 @@ public class ShopState extends State {
 		this.roster = battleState.roster;
 		selected = null;
 		this.gold = battleState.gold + battleState.difficulty * 50;
-		roundsSurvived = battleState.roundsSurvived + 1;
-		
+		roundsSurvived = battleState.roundsSurvived + 1;		
 	}
 }

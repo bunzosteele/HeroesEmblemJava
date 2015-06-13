@@ -1,6 +1,7 @@
 package bunzosteele.heroesemblem.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -23,7 +24,7 @@ public class ShopStatusPanel{
 	int width;
 	int height;
 	
-	public ShopStatusPanel(HeroesEmblem game, ShopState state){
+	public ShopStatusPanel(HeroesEmblem game, ShopState state, int width, int height, int yOffset){
 		this.game = game;
 		this.state = state;
 		Timer.schedule(new Task(){
@@ -35,34 +36,27 @@ public class ShopStatusPanel{
 			}
 		},0,1/3.0f);
 		xOffset = 0;
-		yOffset = Gdx.graphics.getHeight()/ 5;
-		width = Gdx.graphics.getWidth()/ 5;
-		height = 4 * Gdx.graphics.getHeight()/ 5;
+		this.yOffset = yOffset;
+		this.width = width;
+		this.height = height;
 	}
 	
 	public void draw(){
-		game.shapeRenderer.begin(ShapeType.Filled);
+		AtlasRegion shopkeeperRegion = game.textureAtlas.findRegion("Shopkeeper-" + currentFrame);
+		Sprite shopkeeperSprite = new Sprite(shopkeeperRegion);
+		AtlasRegion goldRegion = game.textureAtlas.findRegion("Gold");
+		Sprite goldSprite = new Sprite(goldRegion);
+		float scaledSize = (width/4);
+		game.batcher.draw(shopkeeperSprite, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, scaledSize);
+		game.batcher.draw(goldSprite, xOffset, yOffset + (game.font.getData().lineHeight - scaledSize) /2, scaledSize, scaledSize);
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "" + state.gold, scaledSize, yOffset + game.font.getData().lineHeight, scaledSize * 2, 1, false);
+	}
+	
+	public void drawBackground(){
 		game.shapeRenderer.setColor(.6f,.3f,.1f,1);	
 		game.shapeRenderer.rect(xOffset, yOffset, width, height);
-		game.shapeRenderer.end();
-		TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
-		AtlasRegion shopkeeperRegion = textureAtlas.findRegion("Shopkeeper-" + currentFrame);
-		Sprite shopkeeperSprite = new Sprite(shopkeeperRegion);
-		AtlasRegion goldRegion = textureAtlas.findRegion("Gold");
-		Sprite goldSprite = new Sprite(goldRegion);
-		float scaledSize = Gdx.graphics.getWidth()/18;
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = (int) (scaledSize);
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		game.batcher.begin();
-		game.batcher.draw(shopkeeperSprite, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, scaledSize);
-		game.batcher.draw(goldSprite, xOffset, yOffset, scaledSize, scaledSize);
-		font.draw(game.batcher, "" + state.gold, scaledSize, yOffset + scaledSize, scaledSize * 2, 1, false);
-		game.batcher.end();
-		font.dispose();
-		textureAtlas.dispose();
 	}
 		
 	public boolean isTouched(float x, float y){

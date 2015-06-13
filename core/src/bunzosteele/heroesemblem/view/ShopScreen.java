@@ -33,10 +33,27 @@ public class ShopScreen extends ScreenAdapter{
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		touchpoint = new Vector3();
 		state = new ShopState();
-		shopStatus = new ShopStatusPanel(game, state);
-		stockWindow = new StockWindow(game, state);
-		unitStatus = new ShopUnitStatusPanel(game, state);
-		shopControls = new ShopControls(game, state);
+		int sideWidth = Gdx.graphics.getWidth() / 6;
+		int controlHeight =  Gdx.graphics.getHeight() / 6;
+		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
+		int windowHeight = Gdx.graphics.getHeight() - controlHeight;
+		double desiredRatio = 9 /(double)16;
+		double actualRatio =  windowHeight / (double) windowWidth;		
+		while(actualRatio != desiredRatio){
+			if(actualRatio > desiredRatio){
+				windowHeight--;
+				controlHeight++;
+				actualRatio =  windowHeight / (double) windowWidth;
+			}else{
+				windowWidth--;
+				sideWidth++;
+				actualRatio =  windowHeight / (double) windowWidth;
+			}
+		}		
+		shopStatus = new ShopStatusPanel(game, state, sideWidth, windowHeight, controlHeight);
+		stockWindow = new StockWindow(game, state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
+		unitStatus = new ShopUnitStatusPanel(game, state, sideWidth, windowHeight, windowWidth, controlHeight);
+		shopControls = new ShopControls(game, state, sideWidth, windowWidth - sideWidth, controlHeight);
 	}
 	
 	public ShopScreen(HeroesEmblem game, ShopState state){
@@ -64,11 +81,22 @@ public class ShopScreen extends ScreenAdapter{
 		GL20 gl = Gdx.gl;
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		camera.update();
+		
+		game.shapeRenderer.begin(ShapeType.Filled);
+		shopStatus.drawBackground();
+		stockWindow.drawBackground();
+		unitStatus.drawBackground();
+		shopControls.drawBackground();
+		game.shapeRenderer.end();
+
+		game.batcher.begin();
 		shopStatus.draw();
 		stockWindow.draw();
 		unitStatus.draw();
 		shopControls.draw();
+		game.batcher.end();
 	}
 	
 	@Override

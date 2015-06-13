@@ -10,6 +10,8 @@ public class Tile {
 	public int accuracyModifier;
 	public int movementCost;
 	public int altitude;
+	public int x;
+	public int y;
 	
 	public Tile(TileType type, int defenseModifier, int accuracyModifier, int movementCost, int altitude) throws IOException{	
 		this.type = type;

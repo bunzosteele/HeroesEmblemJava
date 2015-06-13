@@ -76,8 +76,7 @@ public final class BattlefieldGenerator {
 				spawns.add(new Spawn(x, y, spawnId == playerSpawnId));
 			}		
 			x++;
-		}
-		
+		}	
 		return spawns;
 	}
 	
@@ -108,21 +107,26 @@ public final class BattlefieldGenerator {
 	
 	private static List<List<Tile>> GenerateBattlefieldTiles(Element xml, Map<Integer, TileType> tilesById, Element tileStats, int width) throws IOException{
 		int rowCount = 0;
+		int columnCount = 0;
 		List<List<Tile>> battlefield = new ArrayList<List<Tile>>();
 		List<Tile> row = new ArrayList<Tile>();
 		Array<Element> tiles = xml.getChildrenByName("tile");
 		for(Element e : tiles){
-			if (rowCount == width){
-			rowCount = 0;
-			battlefield.add(0, row);
-			row = new ArrayList<Tile>();	
+			if (columnCount == width){
+				columnCount = 0;
+				rowCount ++;
+				battlefield.add(row);
+				row = new ArrayList<Tile>();	
 			}
 			int tileId = e.getInt("gid");
 			TileType tileType = tilesById.get(tileId);
-			row.add(TileBuilder.BuildTile(tileType, tileStats));
-			rowCount++;
+			Tile tile = TileBuilder.BuildTile(tileType, tileStats);
+			tile.x = columnCount;
+			tile.y = rowCount;			
+			row.add(tile);		
+			columnCount++;
 		}
-		battlefield.add(0, row);
+		battlefield.add(row);
 		
 		return battlefield;
 	}

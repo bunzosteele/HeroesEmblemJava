@@ -3,6 +3,10 @@ package bunzosteele.heroesemblem.view;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -20,7 +24,7 @@ public class BattleUnitStatusPanel {
 	int width;
 	int height;
 	
-	public BattleUnitStatusPanel(HeroesEmblem game, BattleState state){
+	public BattleUnitStatusPanel(HeroesEmblem game, BattleState state, int width, int height, int xOffset, int yOffset){
 		this.game = game;
 		this.state = state;
 		Timer.schedule(new Task(){
@@ -31,18 +35,14 @@ public class BattleUnitStatusPanel {
 					currentFrame = 1;
 			}
 		},0,1/3.0f);
-		xOffset = 4 * Gdx.graphics.getWidth()/5;
-		yOffset = Gdx.graphics.getHeight()/5;
-		width = Gdx.graphics.getWidth()/5;
-		height = 4 * Gdx.graphics.getHeight()/5;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.width = width;
+		this.height = height;
 	}
 	
 	public void draw() throws IOException{
-		game.shapeRenderer.begin(ShapeType.Filled);
-		game.shapeRenderer.setColor(.6f,.3f,.1f,1);	
-		game.shapeRenderer.rect(xOffset, yOffset, width, height);
-		game.shapeRenderer.end();
-		int scaledSize = height/12;
+		int scaledSize = height/14;
 		if(state.selected != null){
 			UnitRenderer.DrawUnit(game, state.selected, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, "Attack", currentFrame);
 			if (!state.roster.contains(state.selected))
@@ -50,6 +50,14 @@ public class BattleUnitStatusPanel {
 			else
 				UnitRenderer.DrawOwnedStats(game, state.selected, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
 		}
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "Round: " + state.turnCount, xOffset + scaledSize, yOffset + game.font.getData().lineHeight);
+	}
+	
+	public void drawBackground(){
+		game.shapeRenderer.setColor(.6f,.3f,.1f,1);	
+		game.shapeRenderer.rect(xOffset, yOffset, width, height);
 	}
 	
 	public boolean isTouched(float x, float y){

@@ -26,7 +26,7 @@ public class StockWindow {
 	int height;
 	int columnWidth;
 	
-	public StockWindow(HeroesEmblem game, ShopState state){
+	public StockWindow(HeroesEmblem game, ShopState state, int width, int height, int xOffset, int yOffset){
 		this.game = game;
 		this.state = state;
 		Timer.schedule(new Task(){
@@ -39,34 +39,28 @@ public class StockWindow {
 				if(attackFrame > 2)
 					attackFrame = 1;
 			}}, 0 , 1/3f);
-		xOffset = Gdx.graphics.getWidth() / 5;
-		yOffset = Gdx.graphics.getHeight() / 5;
-		width = 3 * Gdx.graphics.getWidth() / 5;
-		height = 4 * Gdx.graphics.getHeight() / 5;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.width = width;
+		this.height = height;
 		columnWidth = width / 9;
 	}
 	
 	public void draw(){
-
 		int unitOffset = 0;
-		TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
-		AtlasRegion pedestalRegion = textureAtlas.findRegion("Pedestal");
+		AtlasRegion pedestalRegion = game.textureAtlas.findRegion("Pedestal");
 		Sprite pedestalSprite = new Sprite(pedestalRegion);
 
 		for(Unit unit : state.stock){
 			if (unitOffset < 4){
-				game.batcher.begin();
 				game.batcher.draw(pedestalSprite, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, columnWidth);
-				game.batcher.end();
 				if(state.selected != null && state.selected.isEquivalentTo(unit))
 					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, "Attack", attackFrame);
 				else
 					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, "Idle", idleFrame);
 			}
 			else{
-				game.batcher.begin();
 				game.batcher.draw(pedestalSprite, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, columnWidth);
-				game.batcher.end();
 				if(state.selected != null && state.selected.isEquivalentTo(unit))
 					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, "Attack", attackFrame);
 				else
@@ -74,8 +68,10 @@ public class StockWindow {
 			}
 				unitOffset++;
 		}
-
-		textureAtlas.dispose();
+	}
+	
+	public void drawBackground(){
+		
 	}
 	
 	public boolean isTouched(float x, float y){

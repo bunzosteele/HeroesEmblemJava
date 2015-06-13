@@ -5,9 +5,6 @@ import java.io.IOException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -16,7 +13,6 @@ import com.badlogic.gdx.utils.Timer.Task;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.ShopState;
-import bunzosteele.heroesemblem.model.State;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
@@ -31,7 +27,7 @@ public class ShopControls {
 	int rosterWidth;
 	int height;
 	
-	public ShopControls(HeroesEmblem game, ShopState state){
+	public ShopControls(HeroesEmblem game, ShopState state, int buttonWidth, int rosterWidth, int height){
 		this.game = game;
 		this.state = state;
 		Timer.schedule(new Task(){
@@ -47,9 +43,9 @@ public class ShopControls {
 		},0,1/3.0f);
 		xOffset = 0;
 		yOffset = 0;
-		buttonWidth = Gdx.graphics.getWidth() /5;
-		rosterWidth = 3 * Gdx.graphics.getWidth() /5;
-		height = Gdx.graphics.getHeight()/ 5;
+		this.buttonWidth = buttonWidth;
+		this.rosterWidth = rosterWidth;
+		this.height = height;
 	}
 	
 	public void draw(){	
@@ -58,34 +54,27 @@ public class ShopControls {
 		drawComplete();
 	}
 	
-	private void drawBuy(){
+	public void drawBackground(){
+		drawBuyBackground();
+		drawRosterBackground();
+		drawCompleteBackground();
+	}
+	
+	private void drawBuy(){		
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "Buy", xOffset, yOffset + 3 * height / 4, buttonWidth, 1, false);
+	}
+	
+	private void drawBuyBackground(){
 		Color color = new Color(.3f,.3f,.3f,1);
 		if(canPurchaseSelected())
 			color = new Color(.3f,.8f,.3f,1);
-		
-		
-		game.shapeRenderer.begin(ShapeType.Filled);
 		game.shapeRenderer.setColor(color);	
-		game.shapeRenderer.rect(xOffset, yOffset,buttonWidth, height);
-		game.shapeRenderer.end();
-		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = height/2;
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		game.batcher.begin();
-		font.draw(game.batcher, "Buy", xOffset, yOffset + 3 * height / 4, buttonWidth, 1, false);
-		game.batcher.end();
-		font.dispose();
+		game.shapeRenderer.rect(xOffset, yOffset, rosterWidth, height);
 	}
 	
 	private void drawRoster(){
-		game.shapeRenderer.begin(ShapeType.Filled);
-		game.shapeRenderer.setColor(.6f,.3f,.1f,1);	
-		game.shapeRenderer.rect(buttonWidth, yOffset, rosterWidth, height);
-		game.shapeRenderer.end();
-		
 		int unitOffset = 0;
 		int columnWidth = rosterWidth / 10; 
 		int gapWidth = (2 * rosterWidth/10) / 9;
@@ -99,7 +88,18 @@ public class ShopControls {
 		}
 	}
 	
+	private void drawRosterBackground(){
+		game.shapeRenderer.setColor(.6f,.3f,.1f,1);	
+		game.shapeRenderer.rect(buttonWidth, yOffset, rosterWidth, height);
+	}
+	
 	private void drawComplete(){
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "Complete", buttonWidth + rosterWidth, yOffset + 3 * height / 4, buttonWidth, 1, false);
+	}
+	
+	private void drawCompleteBackground(){
 		Color color = new Color(.3f,.3f,.3f,1);
 		if(canStartGame())
 			color = new Color(.3f,.8f,.3f,1);
@@ -113,20 +113,8 @@ public class ShopControls {
 		if(!canAffordMoreUnits || state.roster.size() >= 8)
 			color = new Color(.4f,1f,.4f,1);		
 		
-		game.shapeRenderer.begin(ShapeType.Filled);
 		game.shapeRenderer.setColor(color);	
 		game.shapeRenderer.rect(buttonWidth + rosterWidth, yOffset, buttonWidth, height);
-		game.shapeRenderer.end();
-		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = height/2;
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		game.batcher.begin();
-		font.draw(game.batcher, "Complete", buttonWidth + rosterWidth, yOffset + 3 * height / 4, buttonWidth, 1, false);
-		game.batcher.end();
-		font.dispose();
 	}
 		
 	public boolean isTouched(float x, float y){

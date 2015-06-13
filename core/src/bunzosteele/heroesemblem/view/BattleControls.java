@@ -31,7 +31,7 @@ public class BattleControls {
 	int smallButtonWidth;
 	int height;
 	
-	public BattleControls(HeroesEmblem game, BattleState state){
+	public BattleControls(HeroesEmblem game, BattleState state, int height, int endOffset, int endWidth){
 		this.game = game;
 		this.state = state;
 		Timer.schedule(new Task(){
@@ -47,9 +47,9 @@ public class BattleControls {
 		},0,1/3.0f);
 		xOffset = 0;
 		yOffset = 0;
-		largeButtonWidth = (4* Gdx.graphics.getWidth() /5) /3;
-		smallButtonWidth = Gdx.graphics.getWidth() /5;
-		height = Gdx.graphics.getHeight()/ 5;
+		largeButtonWidth = endOffset/3;
+		smallButtonWidth = endWidth;
+		this.height = height;
 	}
 	
 	public void draw(){	
@@ -59,78 +59,93 @@ public class BattleControls {
 		drawEnd();
 	}
 	
-	private void drawMove(){
-		Color color = new Color(.3f,.3f,.3f,1);
-		
-		game.shapeRenderer.begin(ShapeType.Filled);
-		game.shapeRenderer.setColor(color);	
-		game.shapeRenderer.rect(xOffset, yOffset, largeButtonWidth, height);
-		game.shapeRenderer.end();
-		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = height/2;
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		game.batcher.begin();
-		font.draw(game.batcher, "Move", xOffset, yOffset + 3 * height / 4, largeButtonWidth, 1, false);
-		game.batcher.end();
-		font.dispose();
+	public void drawBackground(){
+		drawMoveBackground();
+		drawAttackBackground();
+		drawAbilityBackground();
+		drawEndBackground();
 	}
 	
-	private void drawAttack(){
+	private void drawMove(){
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "Move", xOffset, yOffset + 3 * height / 4, largeButtonWidth, 1, false);
+	}
+	
+	private void drawMoveBackground(){
 		Color color = new Color(.3f,.3f,.3f,1);
+		if (state.CanMove()){
+			color = new Color(.4f,.6f,.4f,1);
+		}
+		if (state.isMoving){
+			color = new Color(.5f,.9f,.5f,1);
+		}
 		
-		game.shapeRenderer.begin(ShapeType.Filled);
+		game.shapeRenderer.setColor(color);	
+		game.shapeRenderer.rect(xOffset, yOffset, largeButtonWidth, height);
+	}
+	
+	private void drawAttack(){	
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "Attack", xOffset + largeButtonWidth, yOffset + 3 * height / 4, largeButtonWidth, 1, false);
+	}
+	
+	private void drawAttackBackground(){
+		Color color = new Color(.3f,.3f,.3f,1);
+		if (state.CanAttack(state.selected)){
+			color = new Color(.4f,.6f,.4f,1);
+		}
+		if (state.isAttacking){
+			color = new Color(.5f,.9f,.5f,1);
+		}
+		
 		game.shapeRenderer.setColor(color);	
 		game.shapeRenderer.rect(xOffset + largeButtonWidth, yOffset, largeButtonWidth, height);
-		game.shapeRenderer.end();
-		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = height/2;
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		game.batcher.begin();
-		font.draw(game.batcher, "Attack", xOffset + largeButtonWidth, yOffset + 3 * height / 4, largeButtonWidth, 1, false);
-		game.batcher.end();
-		font.dispose();
 	}
+	
 	private void drawAbility(){
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "Ability", xOffset + 2 * largeButtonWidth, yOffset + 3 * height / 4, largeButtonWidth, 1, false);
+	}
+	
+	private void drawAbilityBackground(){
 		Color color = new Color(.3f,.3f,.3f,1);
+		if (state.CanAttack(state.selected)){
+			color = new Color(.4f,.6f,.4f,1);
+		}
+		if (state.isAttacking){
+			color = new Color(.5f,.9f,.5f,1);
+		}
 		
-		game.shapeRenderer.begin(ShapeType.Filled);
 		game.shapeRenderer.setColor(color);	
 		game.shapeRenderer.rect(xOffset + 2 * largeButtonWidth, yOffset, largeButtonWidth, height);
-		game.shapeRenderer.end();
-		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = height/2;
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		game.batcher.begin();
-		font.draw(game.batcher, "Ability", xOffset + 2 * largeButtonWidth, yOffset + 3 * height / 4, largeButtonWidth, 1, false);
-		game.batcher.end();
-		font.dispose();
 	}
-	private void drawEnd(){
-		Color color = new Color(.3f,.3f,.3f,1);
+	
+	private void drawEnd(){	
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "End Turn", xOffset + 3 * largeButtonWidth, yOffset + 3 * height / 4, smallButtonWidth, 1, false);
+	}
+	
+	private void drawEndBackground(){
+		Color color = new Color(.50f,.50f,.3f,1);
+		if(!hasActions()){
+			color = new Color(.70f,.70f,.4f,1);
+		}		
 		
-		game.shapeRenderer.begin(ShapeType.Filled);
 		game.shapeRenderer.setColor(color);	
 		game.shapeRenderer.rect(xOffset + 3 * largeButtonWidth, yOffset,smallButtonWidth, height);
-		game.shapeRenderer.end();
-		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LeagueGothic-CondensedRegular.otf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = height/2;
-		BitmapFont font = generator.generateFont(parameter);
-		generator.dispose();
-		game.batcher.begin();
-		font.draw(game.batcher, "End Turn", xOffset + 3 * largeButtonWidth, yOffset + 3 * height / 4, smallButtonWidth, 1, false);
-		game.batcher.end();
-		font.dispose();
+	}
+	
+	private boolean hasActions(){
+		for(Unit unit : state.roster){
+			if(!unit.hasMoved || (!unit.hasAttacked && state.CanAttack(unit))){
+				return true;
+			}
+		}
+		return false;
 	}
 		
 	public boolean isTouched(float x, float y){
@@ -143,13 +158,54 @@ public class BattleControls {
 	}
 	
 	public void processTouch(float x, float y) throws IOException{
+		if(state.currentPlayer != 0)
+			return;
+					
 		if(x >= xOffset && x < xOffset + largeButtonWidth){
 			if( y >= yOffset && y < yOffset + height){
-				processBuyTouch();
+				processMoveTouch();
+			}
+		}
+		if(x >= xOffset + largeButtonWidth && x < xOffset + 2 * largeButtonWidth){
+			if( y >= yOffset && y < yOffset + height){
+				processAttackTouch();
+			}
+		}
+		if(x >= xOffset + 2* largeButtonWidth && x < xOffset + 3 * largeButtonWidth){
+			if( y >= yOffset && y < yOffset + height){
+				processAbilityTouch();
+			}
+		}
+		if(x >= xOffset + 3* largeButtonWidth && x < Gdx.graphics.getWidth()){
+			if( y >= yOffset && y < yOffset + height){
+				processEndTouch();
 			}
 		}
 	}
 	
-	private void processBuyTouch() throws IOException{
+	public void processMoveTouch(){
+		state.isAttacking = false;
+		if(state.CanMove())
+			state.isMoving = !state.isMoving;
 	}
+	
+	public void processAttackTouch(){
+		state.isMoving = false;
+		if(state.CanAttack(state.selected))
+			state.isAttacking = !state.isAttacking;
+	}
+	
+	public void processAbilityTouch(){
+
+	}
+	
+	public void processEndTouch(){
+		state.EndTurn();
+		
+		
+		// TODO: COMPUTERS TURN
+		
+		state.EndTurn();
+	}
+	
 }
