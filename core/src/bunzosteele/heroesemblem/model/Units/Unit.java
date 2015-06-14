@@ -32,13 +32,16 @@ public abstract class Unit {
 	public boolean isAttacking = false;
 	public boolean isTakingDamage = false;
 	public boolean isGettingExperience = false;
+	public boolean isHealing = false;
 	public boolean isMissed = false;
 	public boolean isDying = false;
 	public int experienceFrame = 1;
 	public int damageFrame = 1;
+	public int healFrame = 1;
 	public int attackFrame = 1;
 	public int missedFrame = 1;
 	public int deathFrame = 10;
+	public int distanceMoved = 0;
 	public boolean hasMoved;
 	public boolean hasAttacked;
 	public String damageDisplay = "";
@@ -129,6 +132,13 @@ public abstract class Unit {
 		this.damageDisplay = "" + damage;
 	}
 	
+	public void healDamage(int heal){
+		this.currentHealth += heal;
+		if(currentHealth > maximumHealth)
+			currentHealth = maximumHealth;
+		this.damageDisplay = "" + heal;
+	}
+	
 	public void startAttack(){
 		isAttacking = true;
 		Timer.schedule(new Task(){
@@ -151,6 +161,20 @@ public abstract class Unit {
 				if(damageFrame > 2){
 					damageFrame = 1;
 					isTakingDamage = false;
+					damageDisplay = "";
+				}
+			}}, 0 , 1f, 1);
+	}
+	
+	public void startHeal(){
+		isHealing = true;
+		Timer.schedule(new Task(){
+			@Override
+			public void run(){
+				healFrame++;
+				if(healFrame > 2){
+					healFrame = 1;
+					isHealing = false;
 					damageDisplay = "";
 				}
 			}}, 0 , 1f, 1);

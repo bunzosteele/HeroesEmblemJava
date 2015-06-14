@@ -86,6 +86,35 @@ public class BattleWindow {
 				drawHighlight(tile.x, tile.y, color);
 			}
 		}
+		if(state.isUsingAbility){
+			HashSet<Tile> options = state.selected.ability.GetTargetTiles(state, state.selected);
+			for(Tile tile : options){
+				drawHighlight(tile.x, tile.y, state.selected.ability.abilityColor);
+			}
+		}
+	}
+	
+	public void drawHealthBars(){
+		for(Unit unit : state.AllUnits()){
+			drawHealthBar(unit);
+		}
+	}
+	
+	private void drawHealthBar(Unit unit){
+		float healthPercent = unit.currentHealth / (float) unit.maximumHealth;
+		if (healthPercent > 0){
+			Color color;
+			if(healthPercent > .7){
+				color = new Color(0f, 1f, 0f, 1f);
+			}else if(healthPercent > .3){
+				color = new Color(1f, 1f, 0f, 1f);
+			}else{
+				color = new Color(1f, 0f, 0f, 1f);
+			}
+		
+			game.shapeRenderer.setColor(color);	
+			game.shapeRenderer.rect((unit.x * tileWidth) + xOffset, Gdx.graphics.getHeight() - (tileHeight * (unit.y+1)), tileWidth * healthPercent, tileHeight/10);
+		}
 	}
 	
 	private void drawUnits(){
@@ -93,7 +122,7 @@ public class BattleWindow {
 			if(unit.isAttacking){
 				UnitRenderer.DrawUnit(game, unit, unit.x * tileWidth, Gdx.graphics.getHeight() - (unit.y + 1) * tileHeight, tileWidth, "Attack", unit.attackFrame);
 			}else{
-				UnitRenderer.DrawUnit(game, unit, unit.x * tileWidth, Gdx.graphics.getHeight() - (unit.y + 1) * tileHeight, tileWidth, "Idle", idleFrame);					
+				UnitRenderer.DrawUnit(game, unit, unit.x * tileWidth, Gdx.graphics.getHeight() - (unit.y + 1) * tileHeight, tileWidth, "Idle", idleFrame, state.IsTapped(unit));					
 			}
 		}
 	}
@@ -113,6 +142,11 @@ public class BattleWindow {
 	}
 	
 	public void processTouch(float x, float y){		
+		if(state.selected != null && state.selected.ability.isMultiInput && state.selected.ability.target != null){
+			
+		}
+		
+		
 		if (state.selected != null && state.isAttacking){
 			HashSet<Tile> options = CombatHelper.GetAttackOptions(state, state.selected);
 			for(Tile tile : options){
@@ -124,13 +158,12 @@ public class BattleWindow {
 								if(CombatHelper.Attack(state.selected, enemy, state.battlefield)){
 									enemy.startDamage();
 									if(enemy.currentHealth <= 0){
-										enemy.startDeath();
 										state.selected.giveExperience(enemy.maximumHealth);
+										enemy.startDeath();
 									}	
 								}else{
 									enemy.startMiss();
 								}
-
 
 								state.isAttacking = false;
 								state.selected.hasAttacked = true;
@@ -143,12 +176,45 @@ public class BattleWindow {
 			}
 		}		
 		
+		if(state.selected != null && state.isUsingAbility){
+			HashSet<Tile> options = state.selected.ability.GetTargetTiles(state, state.selected);
+			for(Tile tile : options){
+				if(tile.x * tileWidth < x && x <= tile.x * tileWidth + tileWidth){
+					if(Gdx.graphics.getHeight() - (tile.y + 1) * tileHeight < y && y <= Gdx.graphics.getHeight() - (tile.y) * tileHeight){
+						if(state.selected.ability.Execute(state, tile)){
+							state.isUsingAbility = false;
+							state.selected.hasAttacked = true;
+							state.selected.ability.exhausted = true;
+							for(Unit unit : state.AllUnits()){
+								if(unit.currentHealth <= 0){
+									state.selected.giveExperience(unit.maximumHealth);
+									unit.startDeath();
+								}
+							}
+							state.selected = null;
+							return;
+						}else{
+							if(!state.selected.ability.isMultiInput || state.selected.ability == null){
+								state.isUsingAbility = false;
+								state.selected = null;
+							}else{
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		for(Unit unit : state.AllUnits()){
 			if(unit.x * tileWidth < x && x <= unit.x * tileWidth +tileWidth){
 				if(Gdx.graphics.getHeight() - (unit.y + 1) * tileHeight < y && y <= Gdx.graphics.getHeight() - (unit.y) * tileHeight){
+					if(state.selected != null && state.selected.ability != null && state.selected.ability.target != null)
+						state.selected.ability.target = null;
 					state.selected = unit;
 					state.isMoving = false;
 					state.isAttacking = false;
+					state.isUsingAbility = false;
 					return;
 				}
 			}
@@ -159,6 +225,7 @@ public class BattleWindow {
 			for(Tile tile : options){
 				if(tile.x * tileWidth < x && x <= tile.x * tileWidth + tileWidth){
 					if(Gdx.graphics.getHeight() - (tile.y + 1) * tileHeight < y && y <= Gdx.graphics.getHeight() - (tile.y) * tileHeight){
+						state.selected.distanceMoved = (Math.abs(state.selected.x - tile.x) + Math.abs(state.selected.y - tile.y));
 						state.selected.x = tile.x;
 						state.selected.y = tile.y;
 						state.isMoving = false;
@@ -169,8 +236,11 @@ public class BattleWindow {
 			}
 		}
 		
+		if(state.selected != null && state.selected.ability != null && state.selected.ability.target != null)
+			state.selected.ability.target = null;
 		state.selected = null;
 		state.isAttacking = false;
 		state.isMoving = false;
+		state.isUsingAbility = false;
 	}
 }

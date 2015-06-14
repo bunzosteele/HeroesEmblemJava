@@ -51,6 +51,10 @@ public class BattleScreen extends ScreenAdapter{
 	}
 	
 	public void update() throws IOException{
+		if(state.enemies.size() == 0){
+			state.EndBattle();
+			game.setScreen(new ShopScreen(game, new ShopState(state)));
+		}
 		if (Gdx.input.justTouched()){
 			touchpoint.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0);
 			if (battleWindow.isTouched(touchpoint.x, touchpoint.y)){
@@ -87,6 +91,11 @@ public class BattleScreen extends ScreenAdapter{
 			battleWindow.drawHighlights();
 			game.shapeRenderer.end();
 			Gdx.gl.glDisable(GL20.GL_BLEND);
+			
+			game.shapeRenderer.begin(ShapeType.Filled);
+			battleWindow.drawHealthBars();
+			game.shapeRenderer.end();
+
 	}
 	
 	@Override

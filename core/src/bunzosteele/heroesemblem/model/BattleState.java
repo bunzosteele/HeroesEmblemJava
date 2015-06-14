@@ -2,6 +2,7 @@ package bunzosteele.heroesemblem.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -21,18 +22,20 @@ public class BattleState{
 	public List<List<Tile>> battlefield;
 	public boolean isMoving;
 	public boolean isAttacking;
+	public boolean isUsingAbility;
 	public int currentPlayer;
 	public int turnCount;
 	
 	public BattleState(ShopState shopState) throws IOException{
 		turnCount = 1;
 		currentPlayer = 0;
+		roundsSurvived = shopState.roundsSurvived;
+		difficulty = (int) Math.pow(2, roundsSurvived);
 		this.roster = shopState.roster;
 		selected = null;
 		this.gold = shopState.gold;
 		Random random = new Random();
-		//int battlefieldId = random.nextInt(difficulty + 6) -6;
-		int battlefieldId = -7;
+		int battlefieldId = random.nextInt(difficulty + 6) - 6;
 		battlefield = BattlefieldGenerator.GenerateBattlefield(battlefieldId);
 		List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
 		List<Spawn> playerSpawns = new ArrayList<Spawn>();
@@ -57,6 +60,7 @@ public class BattleState{
 		}
 		return false;
 	}
+	
 	public boolean CanAttack(Unit unit){
 		if(unit != null && unit.team == 0){
 			if(!unit.hasAttacked){
@@ -72,6 +76,14 @@ public class BattleState{
 		return false;
 	}
 	
+	public boolean CanUseAbility(Unit unit){
+		if(unit != null && unit.ability != null){
+			return unit.ability.CanUse(this, unit);
+		}else{
+			return false;
+		}
+	}
+	
 	public List<Unit> AllUnits(){
 		List<Unit> allUnits = new ArrayList<Unit>();
 		for(Unit unit : roster){
@@ -84,6 +96,10 @@ public class BattleState{
 	}
 	
 	public void EndTurn(){
+		this.isAttacking = false;
+		this.isMoving = false;
+		this.isUsingAbility = false;
+		this.selected = null;
 		this.currentPlayer = (this.currentPlayer + 1) % 2;
 		if(currentPlayer == 0){
 			this.turnCount++;
@@ -91,7 +107,36 @@ public class BattleState{
 		for(Unit unit : AllUnits()){
 			unit.hasMoved = false;
 			unit.hasAttacked = false;
+			unit.distanceMoved = 0;
 		}
+	}
+	
+	public void EndBattle(){
+		for(Unit unit : AllUnits()){
+			if(unit.ability != null){
+				unit.ability.exhausted = false;					
+			}
+			unit.isAttacking = false;
+			unit.isDying = false;
+			unit.isGettingExperience = false;
+			unit.isHealing = false;
+			unit.isMissed = false;
+			unit.isTakingDamage = false;
+			unit.experienceFrame = 1;
+			unit.damageFrame = 1;
+			unit.healFrame = 1;
+			unit.attackFrame = 1;
+			unit.missedFrame = 1;
+			unit.deathFrame = 10;
+			unit.distanceMoved = 0;
+			unit.hasAttacked = false;
+			unit.hasMoved = false;
+			unit.damageDisplay = "";
+		}
+		this.selected = null;
+		this.isAttacking = false;
+		this.isMoving = false;
+		this.isUsingAbility = false;		
 	}
 	
 	public void CleanBoard(){
@@ -109,6 +154,19 @@ public class BattleState{
 				}	
 			}
 		}
+	}
+	
+	public boolean IsTapped(Unit unit){
+		if(!unit.hasMoved)
+			return false;
+		
+		if(CanAttack(unit) && !unit.hasAttacked)
+			return false;
+		
+		if(CanUseAbility(unit))
+			return false;
+		
+		return true;
 	}
 	
 	private void SpawnUnits(List<Unit> units, List<Spawn> spawns){

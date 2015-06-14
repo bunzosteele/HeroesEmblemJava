@@ -112,10 +112,10 @@ public class BattleControls {
 	
 	private void drawAbilityBackground(){
 		Color color = new Color(.3f,.3f,.3f,1);
-		if (state.CanAttack(state.selected)){
+		if (state.CanUseAbility(state.selected)){
 			color = new Color(.4f,.6f,.4f,1);
 		}
-		if (state.isAttacking){
+		if (state.isUsingAbility){
 			color = new Color(.5f,.9f,.5f,1);
 		}
 		
@@ -141,7 +141,7 @@ public class BattleControls {
 	
 	private boolean hasActions(){
 		for(Unit unit : state.roster){
-			if(!unit.hasMoved || (!unit.hasAttacked && state.CanAttack(unit))){
+			if(!state.IsTapped(unit)){
 				return true;
 			}
 		}
@@ -185,18 +185,23 @@ public class BattleControls {
 	
 	public void processMoveTouch(){
 		state.isAttacking = false;
+		state.isUsingAbility = false;
 		if(state.CanMove())
 			state.isMoving = !state.isMoving;
 	}
 	
 	public void processAttackTouch(){
 		state.isMoving = false;
+		state.isUsingAbility = false;
 		if(state.CanAttack(state.selected))
 			state.isAttacking = !state.isAttacking;
 	}
 	
 	public void processAbilityTouch(){
-
+		state.isMoving = false;
+		state.isAttacking = false;
+		if(state.CanUseAbility(state.selected))
+			state.isUsingAbility = !state.isUsingAbility;
 	}
 	
 	public void processEndTouch(){

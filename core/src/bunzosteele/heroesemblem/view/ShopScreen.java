@@ -29,10 +29,20 @@ public class ShopScreen extends ScreenAdapter{
 	ShopControls shopControls;
 	
 	public ShopScreen(HeroesEmblem game) throws IOException{
+		state = new ShopState();
+		InitializeShopScreen(game);
+	}
+	
+	public ShopScreen(HeroesEmblem game, ShopState state){
+		this.state = state;
+		InitializeShopScreen(game);
+	}
+	
+	private void InitializeShopScreen(HeroesEmblem game){
 		this.game = game;
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		touchpoint = new Vector3();
-		state = new ShopState();
+
 		int sideWidth = Gdx.graphics.getWidth() / 6;
 		int controlHeight =  Gdx.graphics.getHeight() / 6;
 		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
@@ -54,12 +64,6 @@ public class ShopScreen extends ScreenAdapter{
 		stockWindow = new StockWindow(game, state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
 		unitStatus = new ShopUnitStatusPanel(game, state, sideWidth, windowHeight, windowWidth, controlHeight);
 		shopControls = new ShopControls(game, state, sideWidth, windowWidth - sideWidth, controlHeight);
-	}
-	
-	public ShopScreen(HeroesEmblem game, ShopState state){
-		this.game = game;
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		touchpoint = new Vector3();
 	}
 	
 	public void update() throws IOException{

@@ -32,6 +32,12 @@ public final class CombatHelper {
 		int damage = attacker.attack;
 		damage -= victim.defense;
 		damage -= tile.defenseModifier;
+		if(attacker.ability != null)
+			damage += attacker.ability.AttackModifier(attacker);
+		
+		if(victim.ability != null && victim.ability.IsBlockingDamage())
+			damage = 0;
+			
 		Random random = new Random();
 		int roll = random.nextInt(101);
 		if (roll <= 10){
@@ -112,23 +118,9 @@ public final class CombatHelper {
 		}
 		return occupied;
 	}
-	
-	private static boolean isVisited(int x, int y, List<Tile> visited){
-		boolean isVisited = false;
-		for(Tile tile: visited){
-			if(tile.x == x && tile.y == y)
-				isVisited = true;
-		}
-		return isVisited;
-	}
-	
+		
 	private static int startingAltitude(Unit unit, List<List<Tile>> battlefield){
 		return battlefield.get(unit.y).get(unit.x).altitude;
 	}
-	
-	private static boolean inRange(int targetX, int targetY, int originX, int originY, int range){
-		int dx = Math.abs(originX - targetX);
-		int dy = Math.abs(originY - targetY);
-		return (dx + dy) <= range;
-	}
+
 }

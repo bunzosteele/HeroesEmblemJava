@@ -19,8 +19,12 @@ import bunzosteele.heroesemblem.model.Units.UnitType;
 
 public final class UnitRenderer {
 		
-	public static void DrawUnit(HeroesEmblem game, Unit unit, int x, int y, int scaledSize, String animation, int frame){
-		AtlasRegion region = game.textureAtlas.findRegion(unit.type + "-" + animation + "-" + frame + "-" + unit.team);
+	public static void DrawUnit(HeroesEmblem game, Unit unit, int x, int y, int scaledSize, String animation, int frame, boolean tapped){
+		int animationFrame = frame;
+		if(tapped){
+			animationFrame = 1;
+		}
+		AtlasRegion region = game.textureAtlas.findRegion(unit.type + "-" + animation + "-" + animationFrame + "-" + unit.team);
 		Sprite sprite = new Sprite(region);
 		if(unit.isTakingDamage){
 			game.font.setColor(new Color(1f, 0, 0, 1f));
@@ -32,11 +36,20 @@ public final class UnitRenderer {
 		}else if(unit.isGettingExperience){
 			game.font.setColor(new Color(1f, .8f, 0, 1f));
 			game.batcher.setColor(new Color(1f, .8f, 0, .5f));
+		}else if(unit.isHealing){
+			game.font.setColor(new Color(0f, 1f, 0, 1f));
+			game.batcher.setColor(new Color(0f, 1f, 0, .5f));
+		}else if(tapped){
+			game.batcher.setColor(new Color(1f, 1f, 1f, .7f));
 		}
 		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
 		game.font.getData().setScale(.2f);
 		game.font.draw(game.batcher, unit.damageDisplay, x + scaledSize /2, y + scaledSize);
 		game.batcher.setColor(Color.WHITE);
+	}
+	
+	public static void DrawUnit(HeroesEmblem game, Unit unit, int x, int y, int scaledSize, String animation, int frame){
+		DrawUnit(game,unit, x, y,scaledSize, animation, frame, false);
 	}
 	
 	public static void DrawStockStats(HeroesEmblem game, Unit unit, int initialX, int initialY, int scaledSize) throws IOException{

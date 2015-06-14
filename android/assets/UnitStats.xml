@@ -1,7 +1,7 @@
 <units>
     <Archer>
         <Attack>9</Attack>
-        <Defense>3</Defense>
+        <Defense>2</Defense>
         <Evasion>20</Evasion>
         <Accuracy>75</Accuracy>
         <Movement>4</Movement>
@@ -12,7 +12,7 @@
     </Archer>
     <Spearman>
         <Attack>10</Attack>
-        <Defense>3</Defense>
+        <Defense>2</Defense>
         <Evasion>10</Evasion>
         <Accuracy>90</Accuracy>
         <Movement>4</Movement>
@@ -23,7 +23,7 @@
     </Spearman>
     <Mage>
          <Attack>9</Attack>
-        <Defense>2</Defense>
+        <Defense>1</Defense>
         <Evasion>10</Evasion>
         <Accuracy>80</Accuracy>
         <Movement>4</Movement>
@@ -34,7 +34,7 @@
     </Mage>
     <Knight>
         <Attack>10</Attack>
-        <Defense>5</Defense>
+        <Defense>4</Defense>
         <Evasion>5</Evasion>
         <Accuracy>95</Accuracy>
         <Movement>6</Movement>
@@ -45,7 +45,7 @@
     </Knight>
     <Footman>
         <Attack>11</Attack>
-        <Defense>4</Defense>
+        <Defense>3</Defense>
         <Evasion>5</Evasion>
         <Accuracy>95</Accuracy>
         <Movement>4</Movement>
@@ -56,7 +56,7 @@
     </Footman>
     <Priest>
         <Attack>4</Attack>
-        <Defense>2</Defense>
+        <Defense>1</Defense>
         <Evasion>15</Evasion>
         <Accuracy>100</Accuracy>
         <Movement>4</Movement>

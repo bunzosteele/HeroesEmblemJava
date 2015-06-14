@@ -9,34 +9,27 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.graphics.Color;
 
-public abstract class Ability {
+public class Vault extends Ability {
+	public Vault(){
+		displayName = "Vault";
+		isDaily = false;
+		isActive = true;
+		isTargeted = true;
+		abilityColor = new Color(0f, 0f, 1f, .5f);
+	}
 	
-	public String displayName;
-	public boolean isDaily;
-	public boolean isActive;
-	public boolean isTargeted;
-	public Color abilityColor;
-	public boolean exhausted;
-	public boolean isMultiInput;
-	public Unit target = null;
-	
+	@Override
 	public boolean CanUse(BattleState state, Unit originUnit){
 		return false;
 	}
 	
+	@Override
 	public HashSet<Tile> GetTargetTiles(BattleState state, Unit originUnit){
 		return null;
 	}
 	
+	@Override
 	public boolean Execute(BattleState state, Tile targetTile){
-		return false;
-	}
-	
-	public int AttackModifier(Unit attacker){
-		return 0;
-	}
-	
-	public boolean IsBlockingDamage(){
 		return false;
 	}
 }
