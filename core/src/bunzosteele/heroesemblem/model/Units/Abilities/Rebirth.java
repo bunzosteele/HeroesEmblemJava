@@ -2,7 +2,6 @@ package bunzosteele.heroesemblem.model.Units.Abilities;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -10,11 +9,11 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class Heal extends Ability
+public class Rebirth extends Ability
 {
-	public Heal()
+	public Rebirth()
 	{
-		this.displayName = "Heal";
+		this.displayName = "Rebirth";
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(0f, 1f, 0f, .5f);
@@ -24,6 +23,10 @@ public class Heal extends Ability
 	public boolean CanUse(final BattleState state, final Unit originUnit)
 	{
 		if (originUnit.hasAttacked)
+		{
+			return false;
+		}
+		if (this.exhausted)
 		{
 			return false;
 		}
@@ -49,29 +52,11 @@ public class Heal extends Ability
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
 				state.selected.startAttack();
-				int heal = state.selected.attack;
-				final Random random = new Random();
-				final int roll = random.nextInt(101);
-				if (roll <= 10)
-				{
-					heal -= 1;
-				} else if (roll == 100)
-				{
-					heal = heal * 2;
-				} else if (roll > 90)
-				{
-					heal += 1;
-				}
-
-				if (heal < 0)
-				{
-					heal = 0;
-				}
-
-				if (heal > (unit.maximumHealth - unit.currentHealth))
-				{
-					heal = unit.maximumHealth - unit.currentHealth;
-				}
+				final int heal = unit.maximumHealth - unit.currentHealth;
+				final int initialExp = unit.experience;
+				final int resultingExp = unit.experience / 2;
+				unit.experience = resultingExp;
+				state.selected.giveExperience(initialExp - resultingExp);
 
 				unit.healDamage(heal);
 				unit.startHeal();

@@ -2,7 +2,6 @@ package bunzosteele.heroesemblem.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -12,7 +11,8 @@ import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
-public class BattleState{
+public class BattleState
+{
 	public List<Unit> enemies;
 	public List<Unit> roster;
 	public Unit selected;
@@ -25,48 +25,63 @@ public class BattleState{
 	public boolean isUsingAbility;
 	public int currentPlayer;
 	public int turnCount;
-	
-	public BattleState(ShopState shopState) throws IOException{
-		turnCount = 1;
-		currentPlayer = 0;
-		roundsSurvived = shopState.roundsSurvived;
-		difficulty = (int) Math.pow(2, roundsSurvived);
+
+	public BattleState(final ShopState shopState) throws IOException
+	{
+		this.turnCount = 1;
+		this.currentPlayer = 0;
+		this.roundsSurvived = shopState.roundsSurvived;
+		this.difficulty = (int) Math.pow(2, this.roundsSurvived);
 		this.roster = shopState.roster;
-		selected = null;
+		this.selected = null;
 		this.gold = shopState.gold;
-		Random random = new Random();
-		int battlefieldId = random.nextInt(difficulty + 6) - 6;
-		battlefield = BattlefieldGenerator.GenerateBattlefield(battlefieldId);
-		List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
-		List<Spawn> playerSpawns = new ArrayList<Spawn>();
-		List<Spawn> enemySpawns = new ArrayList<Spawn>();
-		for(Spawn spawn : spawns){
-			if(spawn.isPlayer){
+		final Random random = new Random();
+		final int battlefieldId = random.nextInt(this.difficulty + 6) - 6;
+		this.battlefield = BattlefieldGenerator.GenerateBattlefield(battlefieldId);
+		final List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
+		final List<Spawn> playerSpawns = new ArrayList<Spawn>();
+		final List<Spawn> enemySpawns = new ArrayList<Spawn>();
+		for (final Spawn spawn : spawns)
+		{
+			if (spawn.isPlayer)
+			{
 				playerSpawns.add(spawn);
-			}else{
+			} else
+			{
 				enemySpawns.add(spawn);
 			}
 		}
-		enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), difficulty - battlefieldId);
-		SpawnUnits(roster, playerSpawns);
-		SpawnUnits(enemies, enemySpawns);
+		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId);
+		this.SpawnUnits(this.roster, playerSpawns);
+		this.SpawnUnits(this.enemies, enemySpawns);
 	}
-	
-	public boolean CanMove(){
-		if(this.selected != null && this.selected.team == 0){
-			if(!this.selected.hasMoved){
-				return true;
-			}
+
+	public List<Unit> AllUnits()
+	{
+		final List<Unit> allUnits = new ArrayList<Unit>();
+		for (final Unit unit : this.roster)
+		{
+			allUnits.add(unit);
 		}
-		return false;
+		for (final Unit unit : this.enemies)
+		{
+			allUnits.add(unit);
+		}
+		return allUnits;
 	}
-	
-	public boolean CanAttack(Unit unit){
-		if(unit != null && unit.team == 0){
-			if(!unit.hasAttacked){
-				for(Tile tile: CombatHelper.GetAttackOptions(this, unit)){
-					for(Unit enemy : enemies){
-						if(enemy.x == tile.x && enemy.y == tile.y){
+
+	public boolean CanAttack(final Unit unit)
+	{
+		if ((unit != null) && (unit.team == this.currentPlayer))
+		{
+			if (!unit.hasAttacked)
+			{
+				for (final Tile tile : CombatHelper.GetAttackOptions(this, unit))
+				{
+					for (final Unit enemy : this.enemies)
+					{
+						if ((enemy.x == tile.x) && (enemy.y == tile.y))
+						{
 							return true;
 						}
 					}
@@ -75,46 +90,73 @@ public class BattleState{
 		}
 		return false;
 	}
-	
-	public boolean CanUseAbility(Unit unit){
-		if(unit != null && unit.ability != null){
+
+	public boolean CanMove()
+	{
+		if ((this.selected != null) && (this.selected.team == this.currentPlayer))
+		{
+			if (!this.selected.hasMoved)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean CanUseAbility(final Unit unit)
+	{
+		if ((unit != null) && (unit.ability != null) && (unit.team == this.currentPlayer))
+		{
 			return unit.ability.CanUse(this, unit);
-		}else{
+		} else
+		{
 			return false;
 		}
 	}
-	
-	public List<Unit> AllUnits(){
-		List<Unit> allUnits = new ArrayList<Unit>();
-		for(Unit unit : roster){
-			allUnits.add(unit);
+
+	public void CleanBoard()
+	{
+		for (int i = this.roster.size() - 1; i >= 0; i--)
+		{
+			if (this.roster.get(i).isDying)
+			{
+				if (this.roster.get(i).deathFrame < 1)
+				{
+					this.roster.remove(i);
+				}
+			}
 		}
-		for(Unit unit : enemies){
-			allUnits.add(unit);
-		}	
-		return allUnits;
-	}
-	
-	public void EndTurn(){
-		this.isAttacking = false;
-		this.isMoving = false;
-		this.isUsingAbility = false;
-		this.selected = null;
-		this.currentPlayer = (this.currentPlayer + 1) % 2;
-		if(currentPlayer == 0){
-			this.turnCount++;
-		}
-		for(Unit unit : AllUnits()){
-			unit.hasMoved = false;
-			unit.hasAttacked = false;
-			unit.distanceMoved = 0;
+		for (int i = this.enemies.size() - 1; i >= 0; i--)
+		{
+			if (this.enemies.get(i).isDying)
+			{
+				if (this.enemies.get(i).deathFrame < 1)
+				{
+					this.enemies.remove(i);
+				}
+			}
 		}
 	}
-	
-	public void EndBattle(){
-		for(Unit unit : AllUnits()){
-			if(unit.ability != null){
-				unit.ability.exhausted = false;					
+
+	public List<Unit> CurrentPlayerUnits()
+	{
+		if (this.currentPlayer == 0)
+		{
+			return this.roster;
+		} else
+		{
+			return this.enemies;
+		}
+	}
+
+	public void EndBattle()
+	{
+		for (final Unit unit : this.AllUnits())
+		{
+			if (unit.ability != null)
+			{
+				unit.ability.exhausted = false;
+				unit.ability.targets = new ArrayList<Unit>();
 			}
 			unit.isAttacking = false;
 			unit.isDying = false;
@@ -136,44 +178,55 @@ public class BattleState{
 		this.selected = null;
 		this.isAttacking = false;
 		this.isMoving = false;
-		this.isUsingAbility = false;		
+		this.isUsingAbility = false;
 	}
-	
-	public void CleanBoard(){
-		for(int i = roster.size()-1; i >= 0; i--){
-			if(roster.get(i).isDying){
-				if(roster.get(i).deathFrame < 1){
-					roster.remove(i);
-				}	
-			}
+
+	public void EndTurn()
+	{
+		this.isAttacking = false;
+		this.isMoving = false;
+		this.isUsingAbility = false;
+		this.selected = null;
+		this.currentPlayer = (this.currentPlayer + 1) % 2;
+		if (this.currentPlayer == 0)
+		{
+			this.turnCount++;
 		}
-		for(int i = enemies.size()-1; i >= 0; i--){
-			if(enemies.get(i).isDying){
-				if(enemies.get(i).deathFrame < 1){
-					enemies.remove(i);
-				}	
-			}
+		for (final Unit unit : this.CurrentPlayerUnits())
+		{
+			unit.hasMoved = false;
+			unit.hasAttacked = false;
+			unit.distanceMoved = 0;
 		}
 	}
-	
-	public boolean IsTapped(Unit unit){
-		if(!unit.hasMoved)
+
+	public boolean IsTapped(final Unit unit)
+	{
+		if (!unit.hasMoved)
+		{
 			return false;
-		
-		if(CanAttack(unit) && !unit.hasAttacked)
+		}
+
+		if (this.CanAttack(unit) && !unit.hasAttacked)
+		{
 			return false;
-		
-		if(CanUseAbility(unit))
+		}
+
+		if (this.CanUseAbility(unit))
+		{
 			return false;
-		
+		}
+
 		return true;
 	}
-	
-	private void SpawnUnits(List<Unit> units, List<Spawn> spawns){
-		Random random = new Random();
-		for(Unit unit : units){
-			int spawnRoll = random.nextInt(spawns.size());
-			Spawn spawn = spawns.get(spawnRoll);
+
+	private void SpawnUnits(final List<Unit> units, final List<Spawn> spawns)
+	{
+		final Random random = new Random();
+		for (final Unit unit : units)
+		{
+			final int spawnRoll = random.nextInt(spawns.size());
+			final Spawn spawn = spawns.get(spawnRoll);
 			unit.x = spawn.x;
 			unit.y = spawn.y;
 			spawns.remove(spawn);

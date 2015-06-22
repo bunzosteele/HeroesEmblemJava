@@ -2,7 +2,6 @@ package bunzosteele.heroesemblem.model.Units.Abilities;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -10,14 +9,14 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class Heal extends Ability
+public class ShieldBash extends Ability
 {
-	public Heal()
+	public ShieldBash()
 	{
-		this.displayName = "Heal";
+		this.displayName = "Shield Bash";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(0f, 1f, 0f, .5f);
+		this.abilityColor = new Color(1f, 0f, 0f, .5f);
 	}
 
 	@Override
@@ -28,11 +27,16 @@ public class Heal extends Ability
 			return false;
 		}
 
+		if (this.exhausted)
+		{
+			return false;
+		}
+
 		for (final Tile tile : this.GetTargetTiles(state, originUnit))
 		{
-			for (final Unit unit : state.roster)
+			for (final Unit unit : state.enemies)
 			{
-				if ((unit.x == tile.x) && (unit.y == tile.y) && (unit.currentHealth != unit.maximumHealth))
+				if ((unit.x == tile.x) && (unit.y == tile.y))
 				{
 					return true;
 				}
@@ -49,32 +53,10 @@ public class Heal extends Ability
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
 				state.selected.startAttack();
-				int heal = state.selected.attack;
-				final Random random = new Random();
-				final int roll = random.nextInt(101);
-				if (roll <= 10)
-				{
-					heal -= 1;
-				} else if (roll == 100)
-				{
-					heal = heal * 2;
-				} else if (roll > 90)
-				{
-					heal += 1;
-				}
-
-				if (heal < 0)
-				{
-					heal = 0;
-				}
-
-				if (heal > (unit.maximumHealth - unit.currentHealth))
-				{
-					heal = unit.maximumHealth - unit.currentHealth;
-				}
-
-				unit.healDamage(heal);
-				unit.startHeal();
+				unit.hasAttacked = true;
+				unit.hasMoved = true;
+				unit.dealDamage(state.selected.attack);
+				unit.startDamage();
 				return true;
 			}
 		}
@@ -83,7 +65,7 @@ public class Heal extends Ability
 
 	private List<Unit> GetTargetableUnits(final BattleState state)
 	{
-		return state.roster;
+		return state.enemies;
 	}
 
 	@Override

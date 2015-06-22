@@ -10,216 +10,303 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
-public final class UnitGenerator {
+public final class UnitGenerator
+{
 	private static int id = 0;
-	
-	public static List<Unit> GenerateStock() throws IOException{
-		List<Unit> stock = new ArrayList<Unit>();
-		while(stock.size() < 8){
-			UnitType unitType = GenerateUnitType();
-			stock.add(GenerateUnit(0, unitType));
+
+	private static int GenerateAbility(int team)
+	{
+		if (team > 0)
+			return 0;
+		
+		final Random random = new Random();
+		final int roll = random.nextInt(101);
+
+		if (roll <= 50)
+		{
+			return 0;
 		}
-		return stock;
+		if (roll <= 80)
+		{
+			return 1;
+		}
+		return 2;
 	}
-	
-	public static List<Unit> GenerateEnemies(int maxEnemies, int difficulty) throws IOException{
-		List<Unit> enemies = new ArrayList<Unit>();
-		enemies.add(GenerateUnit(1, GenerateUnitType()));
+
+	private static int GenerateAccuracyBonus()
+	{
+		final Random random = new Random();
+		final int roll = random.nextInt(21) - 1;
+		return roll;
+	}
+
+	private static int GenerateAttackBonus()
+	{
+		final Random random = new Random();
+		final int roll = random.nextInt(101);
+
+		if (roll > 99)
+		{
+			return 3;
+		}
+		if (roll > 90)
+		{
+			return 2;
+		}
+		if (roll > 80)
+		{
+			return 2;
+		}
+		if (roll > 70)
+		{
+			return 1;
+		}
+		if (roll < 30)
+		{
+			return -1;
+		}
+		if (roll < 10)
+		{
+			return -2;
+		}
+		return 0;
+	}
+
+	private static int GenerateDefenseBonus()
+	{
+		final Random random = new Random();
+		final int roll = random.nextInt(101);
+
+		if (roll > 99)
+		{
+			return 3;
+		}
+		if (roll > 90)
+		{
+			return 2;
+		}
+		if (roll > 80)
+		{
+			return 2;
+		}
+		if (roll > 70)
+		{
+			return 1;
+		}
+		if (roll < 30)
+		{
+			return -1;
+		}
+		if (roll < 10)
+		{
+			return -2;
+		}
+		return 0;
+	}
+
+	public static List<Unit> GenerateEnemies(final int maxEnemies, final int difficulty) throws IOException
+	{
+		final List<Unit> enemies = new ArrayList<Unit>();
+		enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType()));
 		int remainingPoints = difficulty;
-		Random random = new Random();
-		while(remainingPoints > 0){
-			if(enemies.size() < maxEnemies){
-				int roll = random.nextInt(2);
-				if(roll == 0){
-					int levelUpRoll = random.nextInt(enemies.size());
+		final Random random = new Random();
+		while (remainingPoints > 0)
+		{
+			if (enemies.size() < maxEnemies)
+			{
+				final int roll = random.nextInt(2);
+				if (roll == 0)
+				{
+					final int levelUpRoll = random.nextInt(enemies.size());
 					enemies.get(levelUpRoll).AddExperience(enemies.get(levelUpRoll).experienceNeeded);
-				}else{
-					enemies.add(GenerateUnit(1, GenerateUnitType()));
+				} else
+				{
+					enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType()));
 				}
-			}else{
-				int levelUpRoll = random.nextInt(enemies.size());
+			} else
+			{
+				final int levelUpRoll = random.nextInt(enemies.size());
 				enemies.get(levelUpRoll).AddExperience(enemies.get(levelUpRoll).experienceNeeded);
-			}	
+			}
 			remainingPoints--;
 		}
 
 		return enemies;
 	}
-	
-	public static Unit GenerateUnit(int team, UnitType type) throws IOException{
+
+	private static int GenerateEvasionBonus()
+	{
+		final Random random = new Random();
+		final int roll = random.nextInt(11) - 5;
+		return roll;
+	}
+
+	private static int GenerateHealthBonus()
+	{
+		final Random random = new Random();
+		final int roll = random.nextInt(101);
+
+		if (roll > 99)
+		{
+			return 5;
+		}
+		if (roll > 95)
+		{
+			return 5;
+		}
+		if (roll > 90)
+		{
+			return 3;
+		}
+		if (roll > 80)
+		{
+			return 2;
+		}
+		if (roll > 70)
+		{
+			return 1;
+		}
+		if (roll < 30)
+		{
+			return -1;
+		}
+		if (roll < 20)
+		{
+			return -2;
+		}
+		if (roll < 10)
+		{
+			return -3;
+		}
+		if (roll < 5)
+		{
+			return -4;
+		}
+		if (roll < 1)
+		{
+			return -5;
+		}
+		return 0;
+	}
+
+	private static int GenerateMovementBonus()
+	{
+		final Random random = new Random();
+		final int roll = random.nextInt(101);
+
+		if (roll > 90)
+		{
+			return 1;
+		}
+		if (roll < 10)
+		{
+			return -1;
+		}
+		return 0;
+	}
+
+	public static List<Unit> GenerateStock() throws IOException
+	{
+		final List<Unit> stock = new ArrayList<Unit>();
+		while (stock.size() < 8)
+		{
+			final UnitType unitType = UnitGenerator.GenerateUnitType();
+			stock.add(UnitGenerator.GenerateUnit(0, unitType));
+		}
+		return stock;
+	}
+
+	public static Unit GenerateUnit(final int team, final UnitType type) throws IOException
+	{
 		UnitGenerator.id++;
 		int costModifier = 0;
-		int attackBonus = GenerateAttackBonus();
+		final int attackBonus = UnitGenerator.GenerateAttackBonus();
 		costModifier += attackBonus * 50;
-		int defenseBonus = GenerateDefenseBonus();
+		final int defenseBonus = UnitGenerator.GenerateDefenseBonus();
 		costModifier += defenseBonus * 50;
-		int evasionBonus = GenerateEvasionBonus();
+		final int evasionBonus = UnitGenerator.GenerateEvasionBonus();
 		costModifier += evasionBonus * 10;
-		int accuracyBonus = GenerateAccuracyBonus();
+		final int accuracyBonus = UnitGenerator.GenerateAccuracyBonus();
 		costModifier += accuracyBonus * 5;
-		int movementBonus = GenerateMovementBonus();
+		final int movementBonus = UnitGenerator.GenerateMovementBonus();
 		costModifier += movementBonus * 200;
-		int healthBonus = GenerateHealthBonus();
+		final int healthBonus = UnitGenerator.GenerateHealthBonus();
 		costModifier += healthBonus * 25;
-		int ability = GenerateAbility();
+		final int ability = UnitGenerator.GenerateAbility(team);
 		costModifier += ability * 200;
-		if (ability == 0){
+		if (ability == 0)
+		{
 			costModifier -= 200;
 		}
-				
-		XmlReader reader = new XmlReader();
-		Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
-		Element unitStats = xml.getChildByName(type.toString());
-		int attack = unitStats.getInt("Attack") + attackBonus;
-		int defense = unitStats.getInt("Defense") + defenseBonus;
-		int evasion = unitStats.getInt("Evasion") + evasionBonus;
-		int accuracy = unitStats.getInt("Accuracy") + accuracyBonus;
-		int movement = unitStats.getInt("Movement") + movementBonus;
-		int maximumHealth = unitStats.getInt("MaximumHealth") + healthBonus;
-		int maximumRange = unitStats.getInt("MaximumRange");
-		int minimumRange = unitStats.getInt("MinimumRange");
-		int cost = unitStats.getInt("Cost") + costModifier;
-		
-		String name = GenerateUnitName();
-		
-		if(type == UnitType.Spearman){
-			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, id);
-		}else if(type == UnitType.Archer){
-			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, id);
-		}else if(type == UnitType.Footman){
-			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, id);
-		}else if(type == UnitType.Knight){
-			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, id);
-		}else if(type == UnitType.Mage){
-			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, id);
-		}else{
-			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, id);
+
+		final XmlReader reader = new XmlReader();
+		final Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
+		final Element unitStats = xml.getChildByName(type.toString());
+		final int attack = unitStats.getInt("Attack") + attackBonus;
+		final int defense = unitStats.getInt("Defense") + defenseBonus;
+		final int evasion = unitStats.getInt("Evasion") + evasionBonus;
+		final int accuracy = unitStats.getInt("Accuracy") + accuracyBonus;
+		final int movement = unitStats.getInt("Movement") + movementBonus;
+		final int maximumHealth = unitStats.getInt("MaximumHealth") + healthBonus;
+		final int maximumRange = unitStats.getInt("MaximumRange");
+		final int minimumRange = unitStats.getInt("MinimumRange");
+		final int cost = unitStats.getInt("Cost") + costModifier;
+
+		final String name = UnitGenerator.GenerateUnitName();
+
+		if (type == UnitType.Spearman)
+		{
+			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+		} else if (type == UnitType.Archer)
+		{
+			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+		} else if (type == UnitType.Footman)
+		{
+			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+		} else if (type == UnitType.Knight)
+		{
+			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+		} else if (type == UnitType.Mage)
+		{
+			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+		} else
+		{
+			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
 		}
 	}
-	
-	private static UnitType GenerateUnitType(){
-		Random random = new Random();
-		int roll = random.nextInt(7);
-		if(roll == 1){
+
+	private static String GenerateUnitName() throws IOException
+	{
+		final XmlReader reader = new XmlReader();
+		final Element xml = reader.parse(Gdx.files.internal("Names.xml"));
+		final Array<Element> names = xml.getChildrenByName("name");
+		final Random random = new Random();
+		final int roll = random.nextInt(names.size);
+		return names.get(roll).getText();
+	}
+
+	private static UnitType GenerateUnitType()
+	{
+		final Random random = new Random();
+		final int roll = random.nextInt(7);
+		if (roll == 1)
+		{
 			return UnitType.Spearman;
-		}else if(roll == 2){
+		} else if (roll == 2)
+		{
 			return UnitType.Archer;
-		}else if(roll == 3){
+		} else if (roll == 3)
+		{
 			return UnitType.Footman;
-		}else if(roll == 4){
+		} else if (roll == 4)
+		{
 			return UnitType.Knight;
-		}else if(roll == 5){
+		} else if (roll == 5)
+		{
 			return UnitType.Mage;
-		}else{
+		} else
+		{
 			return UnitType.Priest;
 		}
-	}
-	
-	private static int GenerateAttackBonus(){
-		Random random = new Random();
-		int roll = random.nextInt(101);
-		
-		if(roll > 99)
-			return 3;
-		if(roll > 90)
-			return 2;
-		if(roll > 80)
-			return 2;
-		if(roll > 70)
-			return 1;
-		if(roll < 30)
-			return -1;
-		if(roll < 10)
-			return -2;
-		return 0;
-	}
-	
-	private static int GenerateDefenseBonus(){
-		Random random = new Random();
-		int roll = random.nextInt(101);
-		
-		if(roll > 99)
-			return 3;
-		if(roll > 90)
-			return 2;
-		if(roll > 80)
-			return 2;
-		if(roll > 70)
-			return 1;
-		if(roll < 30)
-			return -1;
-		if(roll < 10)
-			return -2;
-		return 0;
-	}
-	
-	private static int GenerateEvasionBonus(){
-		Random random = new Random();
-		int roll = random.nextInt(11) -5;
-		return roll;
-	}
-	
-	private static int GenerateAccuracyBonus(){
-		Random random = new Random();
-		int roll = random.nextInt(21) -1;
-		return roll;
-	}
-	
-	private static int GenerateMovementBonus(){
-		Random random = new Random();
-		int roll = random.nextInt(101);
-		
-		if(roll > 90)
-			return 1;
-		if(roll < 10)
-			return -1;
-		return 0;
-	}
-	
-	private static int GenerateAbility(){
-		Random random = new Random();
-		int roll = random.nextInt(101);
-		
-		if(roll <= 50)
-			return 0;
-		if(roll <= 80)
-			return 1;
-		return 2;
-	}
-	
-	private static int GenerateHealthBonus(){
-		Random random = new Random();
-		int roll = random.nextInt(101);
-		
-		if(roll > 99)
-			return 5;
-		if(roll > 95)
-			return 5;
-		if(roll > 90)
-			return 3;
-		if(roll > 80)
-			return 2;
-		if(roll > 70)
-			return 1;
-		if(roll < 30)
-			return -1;
-		if(roll < 20)
-			return -2;
-		if(roll < 10)
-			return -3;
-		if(roll < 5)
-			return -4;
-		if(roll < 1)
-			return -5;
-		return 0;
-	}
-	
-	private static String GenerateUnitName() throws IOException{
-		XmlReader reader = new XmlReader();
-		Element xml = reader.parse(Gdx.files.internal("Names.xml"));
-		Array<Element> names = xml.getChildrenByName("name");
-		Random random = new Random();
-		int roll = random.nextInt(names.size);
-		return names.get(roll).getText();
 	}
 }

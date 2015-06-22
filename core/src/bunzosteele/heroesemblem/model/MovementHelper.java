@@ -1,83 +1,114 @@
 package bunzosteele.heroesemblem.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
-public final class MovementHelper {
-	
-	public static HashSet<Tile> GetMovementOptions(BattleState state){
-		if(state.selected == null){
+public final class MovementHelper
+{
+
+	private static int getMovementCost(final int x, final int y, final List<List<Tile>> battlefield)
+	{
+		return battlefield.get(y).get(x).movementCost;
+	}
+
+	public static HashSet<Tile> GetMovementOptions(final BattleState state)
+	{
+		if (state.selected == null)
+		{
 			return null;
 		}
-		HashSet<Tile> options = new HashSet<Tile>();
-		List<Unit> allUnits = state.AllUnits();
+		final HashSet<Tile> options = new HashSet<Tile>();
+		final List<Unit> allUnits = state.AllUnits();
 		allUnits.remove(state.selected);
-		return GetMovementOptionsCore(state.selected.x, state.selected.y, allUnits, state.enemies, state.selected, state.battlefield, state.selected.movement, options);
+		return MovementHelper.GetMovementOptionsCore(state.selected.x, state.selected.y, allUnits, state.enemies, state.selected, state.battlefield, state.selected.movement, options);
 	}
 	
-	public static HashSet<Tile> GetMovementOptionsCore(int x, int y, List<Unit> allUnits, List<Unit> enemies, Unit movingUnit, List<List<Tile>> battlefield, int movement, HashSet<Tile> options){
-			if(!isVisited(x, y, options) && !(x == movingUnit.x && y == movingUnit.y) && !isOccupied(x, y, allUnits)){
-				Tile newOption = battlefield.get(y).get(x);
-				options.add(newOption);
+	public static HashSet<Tile> GetMovementOptions(final BattleState state, Unit unit, List<Unit> unmovedAllies){
+		final HashSet<Tile> options = new HashSet<Tile>();
+		final List<Unit> allUnits = state.AllUnits();
+		allUnits.remove(unit);
+		allUnits.removeAll(unmovedAllies);
+		return MovementHelper.GetMovementOptionsCore(unit.x, unit.y, allUnits, state.enemies, null, state.battlefield, unit.movement, options);
+	}
+
+	public static HashSet<Tile> GetMovementOptionsCore(final int x, final int y, final List<Unit> allUnits, final List<Unit> enemies, final Unit movingUnit, final List<List<Tile>> battlefield, final int movement, final HashSet<Tile> options)
+	{
+		boolean isSelfBlocked = movingUnit != null && ((x == movingUnit.x) && (y == movingUnit.y));
+		if (!MovementHelper.isVisited(x, y, options) && !isSelfBlocked && !MovementHelper.isOccupied(x, y, allUnits))
+		{
+			final Tile newOption = battlefield.get(y).get(x);
+			options.add(newOption);
+		}
+
+		if (MovementHelper.isInBounds(x, y - 1, battlefield) && !MovementHelper.isOccupied(x, y - 1, enemies))
+		{
+			final int remainingMovement = movement - MovementHelper.getMovementCost(x, y - 1, battlefield);
+			if (remainingMovement >= 0)
+			{
+				MovementHelper.GetMovementOptionsCore(x, y - 1, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);
 			}
-		
-			if(isInBounds(x, y-1, battlefield) && !isOccupied(x, y-1, enemies)){				
-				int remainingMovement = movement - getMovementCost(x, y -1, battlefield);
-				if (remainingMovement >= 0){
-					GetMovementOptionsCore(x, y-1, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);		
-				}
+		}
+		if (MovementHelper.isInBounds(x + 1, y, battlefield) && !MovementHelper.isOccupied(x + 1, y, enemies))
+		{
+			final int remainingMovement = movement - MovementHelper.getMovementCost(x + 1, y, battlefield);
+			if (remainingMovement >= 0)
+			{
+				MovementHelper.GetMovementOptionsCore(x + 1, y, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);
 			}
-			if(isInBounds(x+1, y, battlefield) && !isOccupied(x+1, y, enemies)){				
-				int remainingMovement = movement - getMovementCost(x+1, y, battlefield);
-				if (remainingMovement >= 0){
-					GetMovementOptionsCore(x+1, y, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);		
-				}
+		}
+		if (MovementHelper.isInBounds(x, y + 1, battlefield) && !MovementHelper.isOccupied(x, y + 1, enemies))
+		{
+			final int remainingMovement = movement - MovementHelper.getMovementCost(x, y + 1, battlefield);
+			if (remainingMovement >= 0)
+			{
+				MovementHelper.GetMovementOptionsCore(x, y + 1, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);
 			}
-			if(isInBounds(x, y+1, battlefield) && !isOccupied(x, y+1, enemies)){				
-				int remainingMovement = movement - getMovementCost(x, y+1, battlefield);
-				if (remainingMovement >= 0){
-					GetMovementOptionsCore(x, y+1, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);		
-				}
+		}
+		if (MovementHelper.isInBounds(x - 1, y, battlefield) && !MovementHelper.isOccupied(x - 1, y, enemies))
+		{
+			final int remainingMovement = movement - MovementHelper.getMovementCost(x - 1, y, battlefield);
+			if (remainingMovement >= 0)
+			{
+				MovementHelper.GetMovementOptionsCore(x - 1, y, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);
 			}
-			if(isInBounds(x-1, y, battlefield) && !isOccupied(x-1, y, enemies)){				
-				int remainingMovement = movement - getMovementCost(x-1, y, battlefield);
-				if (remainingMovement >= 0){
-					GetMovementOptionsCore(x-1, y, allUnits, enemies, movingUnit, battlefield, remainingMovement, options);		
-				}
-			}
+		}
 		return options;
 	}
-	
-	private static boolean isInBounds(int x, int y, List<List<Tile>> battlefield){
-		int height = battlefield.size();
-		int width = battlefield.get(0).size();
-		
-		return x >= 0 && x < width && y >= 0 && y < height;
+
+	private static boolean isInBounds(final int x, final int y, final List<List<Tile>> battlefield)
+	{
+		final int height = battlefield.size();
+		final int width = battlefield.get(0).size();
+
+		return (x >= 0) && (x < width) && (y >= 0) && (y < height);
 	}
-	
-	private static boolean isOccupied(int x , int y, List<Unit> units){
+
+	private static boolean isOccupied(final int x, final int y, final List<Unit> units)
+	{
 		boolean occupied = false;
-		for(Unit unit : units){
-			if (unit.x == x && unit.y == y)
+		for (final Unit unit : units)
+		{
+			if ((unit.x == x) && (unit.y == y))
+			{
 				occupied = true;
+			}
 		}
 		return occupied;
 	}
-	
-	private static boolean isVisited(int x, int y, HashSet<Tile> visited){
+
+	private static boolean isVisited(final int x, final int y, final HashSet<Tile> visited)
+	{
 		boolean isVisited = false;
-		for(Tile tile: visited){
-			if(tile.x == x && tile.y == y)
+		for (final Tile tile : visited)
+		{
+			if ((tile.x == x) && (tile.y == y))
+			{
 				isVisited = true;
+			}
 		}
 		return isVisited;
-	}
-	
-	private static int getMovementCost(int x, int y, List<List<Tile>> battlefield){
-		return battlefield.get(y).get(x).movementCost;
 	}
 }

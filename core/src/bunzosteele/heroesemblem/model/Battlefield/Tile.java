@@ -2,9 +2,8 @@ package bunzosteele.heroesemblem.model.Battlefield;
 
 import java.io.IOException;
 
-import bunzosteele.heroesemblem.model.Units.Abilities.Ability;
-
-public class Tile {
+public class Tile
+{
 	public TileType type;
 	public int defenseModifier;
 	public int accuracyModifier;
@@ -12,8 +11,9 @@ public class Tile {
 	public int altitude;
 	public int x;
 	public int y;
-	
-	public Tile(TileType type, int defenseModifier, int accuracyModifier, int movementCost, int altitude) throws IOException{	
+
+	public Tile(final TileType type, final int defenseModifier, final int accuracyModifier, final int movementCost, final int altitude) throws IOException
+	{
 		this.type = type;
 		this.defenseModifier = defenseModifier;
 		this.accuracyModifier = accuracyModifier;

@@ -8,14 +8,14 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class Vault extends Ability
+public class Snipe extends Ability
 {
-	public Vault()
+	public Snipe()
 	{
-		this.displayName = "Vault";
+		this.displayName = "Snipe";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(0f, 0f, 1f, .5f);
+		this.abilityColor = new Color(1f, 0f, 0f, .5f);
 	}
 
 	@Override
@@ -26,7 +26,12 @@ public class Vault extends Ability
 			return false;
 		}
 
-		return this.GetTargetTiles(state, originUnit).size() > 0;
+		if (this.exhausted)
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -34,10 +39,18 @@ public class Vault extends Ability
 	{
 		if (this.GetTargetTiles(state, state.selected).contains(targetTile))
 		{
-			state.selected.x = targetTile.x;
-			state.selected.y = targetTile.y;
-			return true;
+			for (final Unit unit : state.AllUnits())
+			{
+				if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
+				{
+					state.selected.startAttack();
+					unit.dealDamage(state.selected.attack);
+					unit.startDamage();
+					return true;
+				}
+			}
 		}
+
 		return false;
 	}
 
@@ -45,21 +58,10 @@ public class Vault extends Ability
 	public HashSet<Tile> GetTargetTiles(final BattleState state, final Unit originUnit)
 	{
 		final HashSet<Tile> targets = new HashSet<Tile>();
-		for (int xOffset = -2; xOffset <= 2; xOffset++)
+		for (final Unit unit : state.enemies)
 		{
-			for (int yOffset = -2; yOffset <= 2; yOffset++)
-			{
-				if (this.isValidTarget(originUnit.x + xOffset, originUnit.y + yOffset, state) && ((Math.abs(xOffset) == 2) || (Math.abs(yOffset) == 2)))
-				{
-					targets.add(state.battlefield.get(originUnit.y + yOffset).get(originUnit.x + xOffset));
-				}
-			}
+			targets.add(state.battlefield.get(unit.y).get(unit.x));
 		}
 		return targets;
-	}
-
-	private boolean isValidTarget(final int x, final int y, final BattleState state)
-	{
-		return this.isInBounds(x, y, state.battlefield) && this.isEmpty(x, y, state.AllUnits()) && this.isValidTerrain(x, y, state);
 	}
 }

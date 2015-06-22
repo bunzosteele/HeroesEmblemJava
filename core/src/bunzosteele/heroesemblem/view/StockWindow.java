@@ -1,21 +1,16 @@
 package bunzosteele.heroesemblem.view;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
-
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
-public class StockWindow {
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+
+public class StockWindow
+{
 	HeroesEmblem game;
 	ShopState state;
 	int idleFrame = 1;
@@ -25,96 +20,125 @@ public class StockWindow {
 	int width;
 	int height;
 	int columnWidth;
-	
-	public StockWindow(HeroesEmblem game, ShopState state, int width, int height, int xOffset, int yOffset){
+
+	public StockWindow(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
+	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task(){
+		Timer.schedule(new Task()
+		{
 			@Override
-			public void run(){
-				idleFrame++;
-				attackFrame++;
-				if(idleFrame > 3)
-					idleFrame = 1;
-				if(attackFrame > 2)
-					attackFrame = 1;
-			}}, 0 , 1/3f);
+			public void run()
+			{
+				StockWindow.this.idleFrame++;
+				StockWindow.this.attackFrame++;
+				if (StockWindow.this.idleFrame > 3)
+				{
+					StockWindow.this.idleFrame = 1;
+				}
+				if (StockWindow.this.attackFrame > 2)
+				{
+					StockWindow.this.attackFrame = 1;
+				}
+			}
+		}, 0, 1 / 3f);
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		columnWidth = width / 9;
+		this.columnWidth = width / 9;
 	}
-	
-	public void draw(){
-		int unitOffset = 0;
-		AtlasRegion pedestalRegion = game.textureAtlas.findRegion("Pedestal");
-		Sprite pedestalSprite = new Sprite(pedestalRegion);
 
-		for(Unit unit : state.stock){
-			if (unitOffset < 4){
-				game.batcher.draw(pedestalSprite, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, columnWidth);
-				if(state.selected != null && state.selected.isEquivalentTo(unit))
-					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, "Attack", attackFrame);
-				else
-					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * unitOffset * 2), yOffset - columnWidth/2 + 3 *height/4, columnWidth, "Idle", idleFrame);
+	public void draw()
+	{
+		int unitOffset = 0;
+		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
+		final Sprite pedestalSprite = new Sprite(pedestalRegion);
+
+		for (final Unit unit : this.state.stock)
+		{
+			if (unitOffset < 4)
+			{
+				this.game.batcher.draw(pedestalSprite, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 2), (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4), this.columnWidth, this.columnWidth);
+				if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
+				{
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 2), (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4), this.columnWidth, "Attack", this.attackFrame);
+				} else
+				{
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 2), (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4), this.columnWidth, "Idle", this.idleFrame);
+				}
+			} else
+			{
+				this.game.batcher.draw(pedestalSprite, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 2), (this.yOffset - (this.columnWidth / 2)) + (this.height / 4), this.columnWidth, this.columnWidth);
+				if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
+				{
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 2), (this.yOffset - (this.columnWidth / 2)) + (this.height / 4), this.columnWidth, "Attack", this.attackFrame);
+				} else
+				{
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 2), (this.yOffset - (this.columnWidth / 2)) + (this.height / 4), this.columnWidth, "Idle", this.idleFrame);
+				}
 			}
-			else{
-				game.batcher.draw(pedestalSprite, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, columnWidth);
-				if(state.selected != null && state.selected.isEquivalentTo(unit))
-					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, "Attack", attackFrame);
-				else
-					UnitRenderer.DrawUnit(game, unit, xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2), yOffset - columnWidth/2 + height/4, columnWidth, "Idle", idleFrame);
-			}
-				unitOffset++;
+			unitOffset++;
 		}
 	}
-	
-	public void drawBackground(){
-		
+
+	public void drawBackground()
+	{
+
 	}
-	
-	public boolean isTouched(float x, float y){
-		if(x >= xOffset && x < xOffset + width){
-			if( y >= yOffset && y < yOffset + height){
+
+	public boolean isTouched(final float x, final float y)
+	{
+		if ((x >= this.xOffset) && (x < (this.xOffset + this.width)))
+		{
+			if ((y >= this.yOffset) && (y < (this.yOffset + this.height)))
+			{
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public void processTouch(float x, float y){
+
+	public void processTouch(final float x, final float y)
+	{
 		int unitOffset = 0;
 		boolean hit = false;
-		for(Unit unit : state.stock){
-			if (unitOffset < 4){
-				int lowerXBound = xOffset + columnWidth + (columnWidth * unitOffset * 2);
-				int upperXBound = lowerXBound+columnWidth;
-				int lowerYBound = yOffset - columnWidth/2 + 3 *height/4;
-				int upperYBound = yOffset - columnWidth/2 + 3 *height/4 + columnWidth;
-				if(x >= lowerXBound && x < upperXBound){
-					if( y >= lowerYBound && y < upperYBound){
-						state.selected = state.stock.get(unitOffset);
+		for (final Unit unit : this.state.stock)
+		{
+			if (unitOffset < 4)
+			{
+				final int lowerXBound = this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 2);
+				final int upperXBound = lowerXBound + this.columnWidth;
+				final int lowerYBound = (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4);
+				final int upperYBound = (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4) + this.columnWidth;
+				if ((x >= lowerXBound) && (x < upperXBound))
+				{
+					if ((y >= lowerYBound) && (y < upperYBound))
+					{
+						this.state.selected = this.state.stock.get(unitOffset);
+						hit = true;
+					}
+				}
+			} else
+			{
+				final int lowerXBound = this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 2);
+				final int upperXBound = lowerXBound + this.columnWidth;
+				final int lowerYBound = (this.yOffset - (this.columnWidth / 2)) + (this.height / 4);
+				final int upperYBound = ((this.yOffset - (this.columnWidth / 2)) + (this.height / 4)) + this.columnWidth;
+				if ((x >= lowerXBound) && (x < upperXBound))
+				{
+					if ((y >= lowerYBound) && (y < upperYBound))
+					{
+						this.state.selected = this.state.stock.get(unitOffset);
 						hit = true;
 					}
 				}
 			}
-			else{
-				int lowerXBound = xOffset + columnWidth + (columnWidth * (unitOffset-4) * 2);
-				int upperXBound = lowerXBound+columnWidth;
-				int lowerYBound = yOffset - columnWidth/2 + height/4;
-				int upperYBound = (yOffset - columnWidth/2 + height/4) + columnWidth;
-				if(x >= lowerXBound && x < upperXBound){
-					if( y >= lowerYBound && y < upperYBound){
-						state.selected = state.stock.get(unitOffset);
-						hit = true;
-					}
-				}
-			}
-				unitOffset++;
+			unitOffset++;
 		}
-		if(!hit){
-			state.selected = null;
+		if (!hit)
+		{
+			this.state.selected = null;
 		}
 	}
 }

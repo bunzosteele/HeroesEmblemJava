@@ -1,18 +1,8 @@
 package bunzosteele.heroesemblem.view;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.BattleState;
@@ -21,7 +11,16 @@ import bunzosteele.heroesemblem.model.MovementHelper;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
-public class BattleWindow {
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+
+public class BattleWindow
+{
 	HeroesEmblem game;
 	BattleState state;
 	Texture img;
@@ -33,171 +32,181 @@ public class BattleWindow {
 	int height;
 	int tileWidth;
 	int tileHeight;
-	
-	public BattleWindow(HeroesEmblem game, BattleState state, int width, int height, int yOffset){
+
+	public BattleWindow(final HeroesEmblem game, final BattleState state, final int width, final int height, final int yOffset)
+	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task(){
+		Timer.schedule(new Task()
+		{
 			@Override
-			public void run(){
-				idleFrame++;
-				if(idleFrame > 3)
-					idleFrame = 1;
-			}}, 0 , 1/3f);
-		xOffset = 0;
+			public void run()
+			{
+				BattleWindow.this.idleFrame++;
+				if (BattleWindow.this.idleFrame > 3)
+				{
+					BattleWindow.this.idleFrame = 1;
+				}
+			}
+		}, 0, 1 / 3f);
+		this.xOffset = 0;
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		tileWidth = width / 16;
-		tileHeight = height / 9;
+		this.tileWidth = width / 16;
+		this.tileHeight = height / 9;
 	}
-	
-	public void draw(){
-		drawBattlefield();
-		drawUnits();
+
+	public void draw()
+	{
+		this.drawBattlefield();
+		this.drawUnits();
 	}
-	
-	private void drawBattlefield(){
+
+	private void drawBattlefield()
+	{
 		int rowOffset = 1;
-		for(List<Tile> row : state.battlefield){
+		for (final List<Tile> row : this.state.battlefield)
+		{
 			int tileOffset = 0;
-			for(Tile tile : row){
-				AtlasRegion tileRegion = game.textureAtlas.findRegion(tile.type.toString());
-				Sprite tileSprite = new Sprite(tileRegion);
-				game.batcher.draw(tileSprite, xOffset + tileWidth * tileOffset, Gdx.graphics.getHeight() - (tileHeight * rowOffset), tileWidth, tileHeight);
-				tileOffset ++;
+			for (final Tile tile : row)
+			{
+				final AtlasRegion tileRegion = this.game.textureAtlas.findRegion(tile.type.toString());
+				final Sprite tileSprite = new Sprite(tileRegion);
+				this.game.batcher.draw(tileSprite, this.xOffset + (this.tileWidth * tileOffset), Gdx.graphics.getHeight() - (this.tileHeight * rowOffset), this.tileWidth, this.tileHeight);
+				tileOffset++;
 			}
 			rowOffset++;
 		}
 	}
-	
-	public void drawHighlights(){
-		if(state.isMoving){
-			HashSet<Tile> options = MovementHelper.GetMovementOptions(state);
-			Color color = new Color(.2f, .2f, .7f, .5f);
-			for(Tile tile : options){
-				drawHighlight(tile.x, tile.y, color);
-			}
-		}
-		if(state.isAttacking){
-			HashSet<Tile> options = CombatHelper.GetAttackOptions(state, state.selected);
-			Color color = new Color(.7f, .2f, .2f, .5f);
-			for(Tile tile : options){
-				drawHighlight(tile.x, tile.y, color);
-			}
-		}
-		if(state.isUsingAbility){
-			HashSet<Tile> options = state.selected.ability.GetTargetTiles(state, state.selected);
-			for(Tile tile : options){
-				drawHighlight(tile.x, tile.y, state.selected.ability.abilityColor);
-			}
-		}
-	}
-	
-	public void drawHealthBars(){
-		for(Unit unit : state.AllUnits()){
-			drawHealthBar(unit);
-		}
-	}
-	
-	private void drawHealthBar(Unit unit){
-		float healthPercent = unit.currentHealth / (float) unit.maximumHealth;
-		if (healthPercent > 0){
+
+	private void drawHealthBar(final Unit unit)
+	{
+		final float healthPercent = unit.currentHealth / (float) unit.maximumHealth;
+		if (healthPercent > 0)
+		{
 			Color color;
-			if(healthPercent > .7){
+			if (healthPercent > .7)
+			{
 				color = new Color(0f, 1f, 0f, 1f);
-			}else if(healthPercent > .3){
+			} else if (healthPercent > .3)
+			{
 				color = new Color(1f, 1f, 0f, 1f);
-			}else{
+			} else
+			{
 				color = new Color(1f, 0f, 0f, 1f);
 			}
-		
-			game.shapeRenderer.setColor(color);	
-			game.shapeRenderer.rect((unit.x * tileWidth) + xOffset, Gdx.graphics.getHeight() - (tileHeight * (unit.y+1)), tileWidth * healthPercent, tileHeight/10);
+
+			this.game.shapeRenderer.setColor(color);
+			this.game.shapeRenderer.rect((unit.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth * healthPercent, this.tileHeight / 10);
 		}
 	}
-	
-	private void drawUnits(){
-		for(Unit unit : state.AllUnits()){
-			if(unit.isAttacking){
-				UnitRenderer.DrawUnit(game, unit, unit.x * tileWidth, Gdx.graphics.getHeight() - (unit.y + 1) * tileHeight, tileWidth, "Attack", unit.attackFrame);
-			}else{
-				UnitRenderer.DrawUnit(game, unit, unit.x * tileWidth, Gdx.graphics.getHeight() - (unit.y + 1) * tileHeight, tileWidth, "Idle", idleFrame, state.IsTapped(unit));					
+
+	public void drawHealthBars()
+	{
+		for (final Unit unit : this.state.AllUnits())
+		{
+			this.drawHealthBar(unit);
+		}
+	}
+
+	private void drawHighlight(final int x, final int y, final Color color)
+	{
+		this.game.shapeRenderer.setColor(color);
+		this.game.shapeRenderer.rect((x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (y + 1)), this.tileWidth, this.tileHeight);
+	}
+
+	public void drawHighlights()
+	{
+		if (this.state.isMoving)
+		{
+			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state);
+			final Color color = new Color(.2f, .2f, .7f, .5f);
+			for (final Tile tile : options)
+			{
+				this.drawHighlight(tile.x, tile.y, color);
+			}
+		}
+		if (this.state.isAttacking)
+		{
+			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected);
+			final Color color = new Color(.7f, .2f, .2f, .5f);
+			for (final Tile tile : options)
+			{
+				this.drawHighlight(tile.x, tile.y, color);
+			}
+		}
+		if (this.state.isUsingAbility)
+		{
+			final HashSet<Tile> options = this.state.selected.ability.GetTargetTiles(this.state, this.state.selected);
+			for (final Tile tile : options)
+			{
+				this.drawHighlight(tile.x, tile.y, this.state.selected.ability.abilityColor);
 			}
 		}
 	}
-	
-	private void drawHighlight(int x, int y, Color color){
-		game.shapeRenderer.setColor(color);	
-		game.shapeRenderer.rect((x * tileWidth) + xOffset, Gdx.graphics.getHeight() - (tileHeight * (y+1)), tileWidth, tileHeight);
+
+	private void drawUnits()
+	{
+		for (final Unit unit : this.state.AllUnits())
+		{
+			if (unit.isAttacking)
+			{
+				UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, "Attack", unit.attackFrame);
+			} else
+			{
+				UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, "Idle", this.idleFrame, this.state.IsTapped(unit));
+			}
+		}
 	}
-	
-	public boolean isTouched(float x, float y){
-		if(x >= xOffset && x < xOffset + width){
-			if( y >= yOffset && y < yOffset + height){
+
+	public boolean isTouched(final float x, final float y)
+	{
+		if ((x >= this.xOffset) && (x < (this.xOffset + this.width)))
+		{
+			if ((y >= this.yOffset) && (y < (this.yOffset + this.height)))
+			{
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public void processTouch(float x, float y){		
-		if(state.selected != null && state.selected.ability.isMultiInput && state.selected.ability.target != null){
-			
-		}
-		
-		
-		if (state.selected != null && state.isAttacking){
-			HashSet<Tile> options = CombatHelper.GetAttackOptions(state, state.selected);
-			for(Tile tile : options){
-				if(tile.x * tileWidth < x && x <= tile.x * tileWidth + tileWidth){
-					if(Gdx.graphics.getHeight() - (tile.y + 1) * tileHeight < y && y <= Gdx.graphics.getHeight() - (tile.y) * tileHeight){
-						for(Unit enemy : state.enemies){
-							if(enemy.x == tile.x && enemy.y == tile.y){
-								state.selected.startAttack();
-								if(CombatHelper.Attack(state.selected, enemy, state.battlefield)){
+
+	public void processTouch(final float x, final float y)
+	{
+		if ((this.state.selected != null) && this.state.isAttacking)
+		{
+			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected);
+			for (final Tile tile : options)
+			{
+				if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
+				{
+					if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
+					{
+						for (final Unit enemy : this.state.enemies)
+						{
+							if ((enemy.x == tile.x) && (enemy.y == tile.y))
+							{
+								this.state.selected.startAttack();
+								if (CombatHelper.Attack(this.state.selected, enemy, this.state.battlefield))
+								{
 									enemy.startDamage();
-									if(enemy.currentHealth <= 0){
-										state.selected.giveExperience(enemy.maximumHealth);
-										enemy.startDeath();
-									}	
-								}else{
+									if (enemy.currentHealth <= 0)
+									{
+										this.state.selected.giveExperience(enemy.maximumHealth);
+										if ((enemy.ability != null) && !enemy.ability.IsPreventingDeath(enemy))
+										{
+											enemy.startDeath();
+										}
+									}
+								} else
+								{
 									enemy.startMiss();
 								}
 
-								state.isAttacking = false;
-								state.selected.hasAttacked = true;
-								state.selected = null;
-								return;
-							}
-						}
-					}
-				}
-			}
-		}		
-		
-		if(state.selected != null && state.isUsingAbility){
-			HashSet<Tile> options = state.selected.ability.GetTargetTiles(state, state.selected);
-			for(Tile tile : options){
-				if(tile.x * tileWidth < x && x <= tile.x * tileWidth + tileWidth){
-					if(Gdx.graphics.getHeight() - (tile.y + 1) * tileHeight < y && y <= Gdx.graphics.getHeight() - (tile.y) * tileHeight){
-						if(state.selected.ability.Execute(state, tile)){
-							state.isUsingAbility = false;
-							state.selected.hasAttacked = true;
-							state.selected.ability.exhausted = true;
-							for(Unit unit : state.AllUnits()){
-								if(unit.currentHealth <= 0){
-									state.selected.giveExperience(unit.maximumHealth);
-									unit.startDeath();
-								}
-							}
-							state.selected = null;
-							return;
-						}else{
-							if(!state.selected.ability.isMultiInput || state.selected.ability == null){
-								state.isUsingAbility = false;
-								state.selected = null;
-							}else{
+								this.state.isAttacking = false;
+								this.state.selected.hasAttacked = true;
+								this.state.selected = null;
 								return;
 							}
 						}
@@ -205,42 +214,97 @@ public class BattleWindow {
 				}
 			}
 		}
-		
-		for(Unit unit : state.AllUnits()){
-			if(unit.x * tileWidth < x && x <= unit.x * tileWidth +tileWidth){
-				if(Gdx.graphics.getHeight() - (unit.y + 1) * tileHeight < y && y <= Gdx.graphics.getHeight() - (unit.y) * tileHeight){
-					if(state.selected != null && state.selected.ability != null && state.selected.ability.target != null)
-						state.selected.ability.target = null;
-					state.selected = unit;
-					state.isMoving = false;
-					state.isAttacking = false;
-					state.isUsingAbility = false;
+
+		if ((this.state.selected != null) && this.state.isUsingAbility)
+		{
+			final HashSet<Tile> options = this.state.selected.ability.GetTargetTiles(this.state, this.state.selected);
+			for (final Tile tile : options)
+			{
+				if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
+				{
+					if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
+					{
+						if (this.state.selected.ability.Execute(this.state, tile))
+						{
+							this.state.isUsingAbility = false;
+							this.state.selected.hasAttacked = true;
+							this.state.selected.ability.exhausted = true;
+							for (final Unit unit : this.state.AllUnits())
+							{
+								if (unit.currentHealth <= 0)
+								{
+									this.state.selected.giveExperience(unit.maximumHealth);
+									if ((unit.ability != null) && !unit.ability.IsPreventingDeath(unit))
+									{
+										unit.startDeath();
+									}
+								}
+							}
+							this.state.selected = null;
+							return;
+						} else
+						{
+							if (!this.state.selected.ability.isMultiInput || (this.state.selected.ability == null))
+							{
+								this.state.isUsingAbility = false;
+								this.state.selected = null;
+							} else
+							{
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (final Unit unit : this.state.AllUnits())
+		{
+			if (((unit.x * this.tileWidth) < x) && (x <= ((unit.x * this.tileWidth) + this.tileWidth)))
+			{
+				if (((Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((unit.y) * this.tileHeight))))
+				{
+					if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
+					{
+						this.state.selected.ability.targets = new ArrayList<Unit>();
+					}
+					this.state.selected = unit;
+					this.state.isMoving = false;
+					this.state.isAttacking = false;
+					this.state.isUsingAbility = false;
 					return;
 				}
 			}
 		}
-		
-		if (state.selected != null && state.isMoving){
-			HashSet<Tile> options = MovementHelper.GetMovementOptions(state);
-			for(Tile tile : options){
-				if(tile.x * tileWidth < x && x <= tile.x * tileWidth + tileWidth){
-					if(Gdx.graphics.getHeight() - (tile.y + 1) * tileHeight < y && y <= Gdx.graphics.getHeight() - (tile.y) * tileHeight){
-						state.selected.distanceMoved = (Math.abs(state.selected.x - tile.x) + Math.abs(state.selected.y - tile.y));
-						state.selected.x = tile.x;
-						state.selected.y = tile.y;
-						state.isMoving = false;
-						state.selected.hasMoved = true;
+
+		if ((this.state.selected != null) && this.state.isMoving)
+		{
+			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state);
+			for (final Tile tile : options)
+			{
+				if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
+				{
+					if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
+					{
+						this.state.selected.distanceMoved = (Math.abs(this.state.selected.x - tile.x) + Math.abs(this.state.selected.y - tile.y));
+						this.state.selected.x = tile.x;
+						this.state.selected.y = tile.y;
+						this.state.isMoving = false;
+						this.state.selected.hasMoved = true;
 						return;
 					}
 				}
 			}
 		}
-		
-		if(state.selected != null && state.selected.ability != null && state.selected.ability.target != null)
-			state.selected.ability.target = null;
-		state.selected = null;
-		state.isAttacking = false;
-		state.isMoving = false;
-		state.isUsingAbility = false;
+
+		if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
+		{
+			this.state.selected.ability.targets = new ArrayList<Unit>();
+		}
+
+		this.state.selected = null;
+		this.state.isAttacking = false;
+		this.state.isMoving = false;
+		this.state.isUsingAbility = false;
 	}
 }

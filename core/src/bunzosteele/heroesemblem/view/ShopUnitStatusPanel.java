@@ -2,14 +2,15 @@ package bunzosteele.heroesemblem.view;
 
 import java.io.IOException;
 
+import bunzosteele.heroesemblem.HeroesEmblem;
+import bunzosteele.heroesemblem.model.ShopState;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
-import bunzosteele.heroesemblem.HeroesEmblem;
-import bunzosteele.heroesemblem.model.ShopState;
-
-public class ShopUnitStatusPanel {
+public class ShopUnitStatusPanel
+{
 	HeroesEmblem game;
 	ShopState state;
 	int currentFrame = 1;
@@ -17,50 +18,65 @@ public class ShopUnitStatusPanel {
 	int yOffset;
 	int width;
 	int height;
-	
-	public ShopUnitStatusPanel(HeroesEmblem game, ShopState state, int width, int height, int xOffset, int yOffset){
+
+	public ShopUnitStatusPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
+	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task(){
+		Timer.schedule(new Task()
+		{
 			@Override
-			public void run(){
-				currentFrame++;
-				if(currentFrame > 3)
-					currentFrame = 1;
+			public void run()
+			{
+				ShopUnitStatusPanel.this.currentFrame++;
+				if (ShopUnitStatusPanel.this.currentFrame > 3)
+				{
+					ShopUnitStatusPanel.this.currentFrame = 1;
+				}
 			}
-		},0,1/3.0f);
+		}, 0, 1 / 3.0f);
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
 	}
-	
-	public void draw() throws IOException{
-		int scaledSize = height/12;
-		if(state.selected != null){
-			UnitRenderer.DrawUnit(game, state.selected, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, "Idle", currentFrame);
-			if (!state.roster.contains(state.selected))
-				UnitRenderer.DrawStockStats(game, state.selected, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
-			else
-				UnitRenderer.DrawOwnedStats(game, state.selected, xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+
+	public void draw() throws IOException
+	{
+		final int scaledSize = this.height / 12;
+		if (this.state.selected != null)
+		{
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, "Idle", this.currentFrame);
+			if (!this.state.roster.contains(this.state.selected))
+			{
+				UnitRenderer.DrawStockStats(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+			} else
+			{
+				UnitRenderer.DrawOwnedStats(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+			}
 		}
 	}
-	
-	public void drawBackground(){
-		game.shapeRenderer.setColor(.6f,.3f,.1f,1);	
-		game.shapeRenderer.rect(xOffset, yOffset, width, height);
+
+	public void drawBackground()
+	{
+		this.game.shapeRenderer.setColor(.6f, .3f, .1f, 1);
+		this.game.shapeRenderer.rect(this.xOffset, this.yOffset, this.width, this.height);
 	}
-	
-	public boolean isTouched(float x, float y){
-		if(x >= xOffset && x < xOffset + width){
-			if( y >= yOffset && y < yOffset + height){
+
+	public boolean isTouched(final float x, final float y)
+	{
+		if ((x >= this.xOffset) && (x < (this.xOffset + this.width)))
+		{
+			if ((y >= this.yOffset) && (y < (this.yOffset + this.height)))
+			{
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public void processTouch(float x, float y){
-		state.selected = null;
+
+	public void processTouch(final float x, final float y)
+	{
+		this.state.selected = null;
 	}
 }

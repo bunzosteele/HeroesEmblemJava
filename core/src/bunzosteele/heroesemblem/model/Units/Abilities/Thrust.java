@@ -2,7 +2,6 @@ package bunzosteele.heroesemblem.model.Units.Abilities;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -10,14 +9,14 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class Heal extends Ability
+public class Thrust extends Ability
 {
-	public Heal()
+	public Thrust()
 	{
-		this.displayName = "Heal";
+		this.displayName = "Thrust";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(0f, 1f, 0f, .5f);
+		this.abilityColor = new Color(1f, 0f, 0f, .5f);
 	}
 
 	@Override
@@ -28,11 +27,16 @@ public class Heal extends Ability
 			return false;
 		}
 
+		if (this.exhausted)
+		{
+			return false;
+		}
+
 		for (final Tile tile : this.GetTargetTiles(state, originUnit))
 		{
-			for (final Unit unit : state.roster)
+			for (final Unit unit : state.enemies)
 			{
-				if ((unit.x == tile.x) && (unit.y == tile.y) && (unit.currentHealth != unit.maximumHealth))
+				if ((unit.x == tile.x) && (unit.y == tile.y))
 				{
 					return true;
 				}
@@ -48,33 +52,41 @@ public class Heal extends Ability
 		{
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
-				state.selected.startAttack();
-				int heal = state.selected.attack;
-				final Random random = new Random();
-				final int roll = random.nextInt(101);
-				if (roll <= 10)
+				final int originX = state.selected.x;
+				final int originY = state.selected.y;
+				final int dx = unit.x - originX;
+				final int dy = unit.y - originY;
+				final int nextX = originX + (2 * dx);
+				final int nextY = originY + (2 * dy);
+				final boolean canKnockBack = this.isInBounds(nextX, nextY, state.battlefield) && this.isEmpty(nextX, nextY, state.AllUnits()) && (unit.movement >= state.battlefield.get(originY + (2 * dy)).get(originX + (2 * dx)).movementCost);
+				if (canKnockBack)
 				{
-					heal -= 1;
-				} else if (roll == 100)
+					state.selected.startAttack();
+					state.selected.x += dx;
+					state.selected.y += dy;
+					unit.x += dx;
+					unit.y += dy;
+					unit.dealDamage(state.selected.attack);
+					unit.startDamage();
+				} else if (this.isInBounds(nextX, nextY, state.battlefield) && !this.isEmpty(nextX, nextY, state.AllUnits()))
 				{
-					heal = heal * 2;
-				} else if (roll > 90)
+					state.selected.startAttack();
+					unit.dealDamage(state.selected.attack);
+					unit.startDamage();
+					for (final Unit nextUnit : state.AllUnits())
+					{
+						if ((nextUnit.x == nextX) && (nextUnit.y == nextY))
+						{
+							nextUnit.dealDamage(state.selected.attack / 2);
+							nextUnit.startDamage();
+						}
+					}
+				} else
 				{
-					heal += 1;
+					state.selected.startAttack();
+					unit.dealDamage(state.selected.attack * 2);
+					unit.startDamage();
 				}
-
-				if (heal < 0)
-				{
-					heal = 0;
-				}
-
-				if (heal > (unit.maximumHealth - unit.currentHealth))
-				{
-					heal = unit.maximumHealth - unit.currentHealth;
-				}
-
-				unit.healDamage(heal);
-				unit.startHeal();
 				return true;
 			}
 		}
@@ -83,7 +95,7 @@ public class Heal extends Ability
 
 	private List<Unit> GetTargetableUnits(final BattleState state)
 	{
-		return state.roster;
+		return state.enemies;
 	}
 
 	@Override
