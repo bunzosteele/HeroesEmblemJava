@@ -35,38 +35,33 @@ public class Knight extends Unit
 	{
 		int score = 0;
 		int costToCombat = AiHelper.GetCostToCombat(tile, state, this);
+		score += (100 - costToCombat);
 		if(costToCombat == 0){
 			HashSet<Unit> attackableUnits = CombatHelper.GetAttackableTargets(tile.x, tile.y, this, state);
 			if(attackableUnits.size() > 0){
 				score += 50;
 				score += this.attack;
 				for(Unit unit : attackableUnits){
-					if(this.currentHealth / (float) this.maximumHealth <= .5){
-						score -= 10;
-					}else{
-						score -= 5;
-					}
-					if(unit.currentHealth <= this.attack){
-						score += 25;
+					score += 10 - state.GetTileForUnit(unit).defenseModifier;
+					if(unit.currentHealth + state.GetTileForUnit(unit).defenseModifier <= this.attack){
+						score += 30;
 					}					
 				}
 			}
 		}
-		score += (100 - costToCombat);
+		
+		HashSet<Unit> threateningUnits = AiHelper.GetUnitsThatCanAttackTile(state, tile);
+		for(Unit unit : threateningUnits){
+			if(this.currentHealth / (float) this.maximumHealth <= .3){
+				score -= 10;
+			}else{
+				score -= 3;
+			}
+		}
+		
+		score += tile.defenseModifier * 5;
+		score += tile.accuracyModifier;
+
 		return score;
-	}
-
-	@Override
-	public HashSet<Unit> GetTargets(BattleState state)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int GetTargetScore(Unit target, BattleState state)
-	{
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

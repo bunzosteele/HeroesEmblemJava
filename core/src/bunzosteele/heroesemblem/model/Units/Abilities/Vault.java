@@ -6,10 +6,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Vault extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("vault.wav"));
+	
 	public Vault()
 	{
 		this.displayName = "Vault";
@@ -30,12 +34,13 @@ public class Vault extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
-		if (this.GetTargetTiles(state, state.selected).contains(targetTile))
+		if (this.GetTargetTiles(state, executor).contains(targetTile))
 		{
-			state.selected.x = targetTile.x;
-			state.selected.y = targetTile.y;
+			executor.x = targetTile.x;
+			executor.y = targetTile.y;
+			Vault.sound.play();
 			return true;
 		}
 		return false;

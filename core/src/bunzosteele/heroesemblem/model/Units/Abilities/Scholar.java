@@ -8,10 +8,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Scholar extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("scholar.wav"));
+	
 	public Scholar()
 	{
 		this.displayName = "Scholar";
@@ -43,14 +47,15 @@ public class Scholar extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
-				state.selected.startAttack();
-				final int exp = state.selected.attack * 5;
+				executor.startAttack();
+				Scholar.sound.play();
+				final int exp = executor.attack * 5;
 				unit.giveExperience(exp);
 				this.targets.add(unit);
 				return true;
@@ -59,7 +64,8 @@ public class Scholar extends Ability
 		return false;
 	}
 
-	private List<Unit> GetTargetableUnits(final BattleState state)
+	@Override
+	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
 		final List<Unit> targetables = new ArrayList<Unit>();
 		for (final Unit unit : state.roster)

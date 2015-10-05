@@ -6,13 +6,17 @@ import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.AiProcessor;
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.ShopState;
+import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class BattleScreen extends ScreenAdapter
 {
@@ -24,6 +28,7 @@ public class BattleScreen extends ScreenAdapter
 	BattleUnitStatusPanel unitStatus;
 	BattleControls battleControls;
 	AiProcessor aiProcessor;
+	boolean spoofAiThinking = false;
 
 	public BattleScreen(final HeroesEmblem game, final ShopState shopState) throws IOException
 	{
@@ -63,7 +68,6 @@ public class BattleScreen extends ScreenAdapter
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.camera.update();
-		this.state.CleanBoard();
 
 		this.game.shapeRenderer.begin(ShapeType.Filled);
 		this.unitStatus.drawBackground();
@@ -111,15 +115,28 @@ public class BattleScreen extends ScreenAdapter
 
 	public void update() throws IOException
 	{		
-		if (this.state.enemies.size() == 0)
+		this.state.CleanBoard();
+		if (this.state.roster.size() == 0)
+		{
+			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived));
+		}else if (this.state.enemies.size() == 0)
 		{
 			this.state.EndBattle();
 			this.game.setScreen(new ShopScreen(this.game, new ShopState(this.state)));
-		}
-		if(this.state.currentPlayer > 0){
-			aiProcessor.MakeMove();
-		}
-		if (this.state.currentPlayer == 0 && Gdx.input.justTouched())
+		}else if(this.state.currentPlayer > 0){
+			if(!spoofAiThinking){
+				spoofAiThinking = true;
+				Timer.schedule(new Task()
+				{
+					@Override
+					public void run()
+					{
+						spoofAiThinking = false;
+					}
+				}, .5f, 0, 0);
+				aiProcessor.MakeMove();
+			}
+		}else if (this.state.currentPlayer == 0 && Gdx.input.justTouched())
 		{
 			this.touchpoint.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0);
 			if (this.battleWindow.isTouched(this.touchpoint.x, this.touchpoint.y))

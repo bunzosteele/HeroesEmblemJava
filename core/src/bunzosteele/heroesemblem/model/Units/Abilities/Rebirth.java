@@ -7,10 +7,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Rebirth extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("rebirth.wav"));
+	
 	public Rebirth()
 	{
 		this.displayName = "Rebirth";
@@ -45,18 +49,19 @@ public class Rebirth extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
-				state.selected.startAttack();
+				executor.startAttack();
+				Rebirth.sound.play();
 				final int heal = unit.maximumHealth - unit.currentHealth;
 				final int initialExp = unit.experience;
 				final int resultingExp = unit.experience / 2;
 				unit.experience = resultingExp;
-				state.selected.giveExperience(initialExp - resultingExp);
+				executor.giveExperience(initialExp - resultingExp);
 
 				unit.healDamage(heal);
 				unit.startHeal();
@@ -66,7 +71,8 @@ public class Rebirth extends Ability
 		return false;
 	}
 
-	private List<Unit> GetTargetableUnits(final BattleState state)
+	@Override
+	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
 		return state.roster;
 	}

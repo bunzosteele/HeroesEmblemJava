@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+
 import bunzosteele.heroesemblem.model.Battlefield.BattlefieldGenerator;
 import bunzosteele.heroesemblem.model.Battlefield.Spawn;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -78,9 +81,9 @@ public class BattleState
 			{
 				for (final Tile tile : CombatHelper.GetAttackOptions(this, unit))
 				{
-					for (final Unit enemy : this.enemies)
+					for (final Unit enemy : this.AllUnits())
 					{
-						if ((enemy.x == tile.x) && (enemy.y == tile.y))
+						if ((enemy.x == tile.x) && (enemy.y == tile.y) && (enemy.team != this.currentPlayer))
 						{
 							return true;
 						}
@@ -140,13 +143,11 @@ public class BattleState
 
 	public List<Unit> CurrentPlayerUnits()
 	{
-		if (this.currentPlayer == 0)
-		{
-			return this.roster;
-		} else
-		{
-			return this.enemies;
-		}
+		return this.currentPlayer == 0 ? this.roster : this.enemies;
+	}
+	
+	public Tile GetTileForUnit(Unit unit){
+		return this.battlefield.get(unit.y).get(unit.x);
 	}
 
 	public void EndBattle()
@@ -187,16 +188,16 @@ public class BattleState
 		this.isMoving = false;
 		this.isUsingAbility = false;
 		this.selected = null;
-		this.currentPlayer = (this.currentPlayer + 1) % 2;
-		if (this.currentPlayer == 0)
-		{
-			this.turnCount++;
-		}
 		for (final Unit unit : this.CurrentPlayerUnits())
 		{
 			unit.hasMoved = false;
 			unit.hasAttacked = false;
 			unit.distanceMoved = 0;
+		}
+		this.currentPlayer = (this.currentPlayer + 1) % 2;
+		if (this.currentPlayer == 0)
+		{
+			this.turnCount++;
 		}
 	}
 

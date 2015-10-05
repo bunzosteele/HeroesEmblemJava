@@ -8,10 +8,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Heal extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("heal.wav"));
+	
 	public Heal()
 	{
 		this.displayName = "Heal";
@@ -30,7 +34,7 @@ public class Heal extends Ability
 
 		for (final Tile tile : this.GetTargetTiles(state, originUnit))
 		{
-			for (final Unit unit : state.roster)
+			for (final Unit unit : state.CurrentPlayerUnits())
 			{
 				if ((unit.x == tile.x) && (unit.y == tile.y) && (unit.currentHealth != unit.maximumHealth))
 				{
@@ -42,14 +46,15 @@ public class Heal extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
-				state.selected.startAttack();
-				int heal = state.selected.attack;
+				executor.startAttack();
+				Heal.sound.play();
+				int heal = executor.attack;
 				final Random random = new Random();
 				final int roll = random.nextInt(101);
 				if (roll <= 10)
@@ -81,9 +86,10 @@ public class Heal extends Ability
 		return false;
 	}
 
-	private List<Unit> GetTargetableUnits(final BattleState state)
+	@Override
+	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
-		return state.roster;
+		return state.CurrentPlayerUnits();
 	}
 
 	@Override

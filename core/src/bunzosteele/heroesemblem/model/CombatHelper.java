@@ -26,7 +26,7 @@ public final class CombatHelper
 		HashSet<Unit> attackableUnits = new HashSet<Unit>();
 		for(Unit unit : state.roster){
 			for(Tile option : options){
-				if(unit.x == option.x && unit.y == option.y){
+				if(unit.x == option.x && unit.y == option.y && !unit.isDying){
 					attackableUnits.add(unit);
 				}
 			}
@@ -111,14 +111,14 @@ public final class CombatHelper
 
 	public static HashSet<Tile> GetAttackOptions(final BattleState state, final Unit attackingUnit)
 	{
-		if (state.selected == null)
+		if (attackingUnit == null)
 		{
 			return new HashSet<Tile>();
 		}
 		HashSet<Tile> maxOptions = new HashSet<Tile>();
 		HashSet<Tile> minOptions = new HashSet<Tile>();
 		final List<Unit> friendlies = new ArrayList<Unit>();
-		for (Unit unit : state.roster)
+		for (Unit unit : (state.currentPlayer == 0 ? state.roster : state.enemies))
 		{
 			if (!unit.isEquivalentTo(attackingUnit))
 			{

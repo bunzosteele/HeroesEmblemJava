@@ -7,6 +7,8 @@ import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -22,6 +24,8 @@ public class ShopControls
 	int buttonWidth;
 	int rosterWidth;
 	int height;
+	public static Sound buySound = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
+	public static Sound finalBuySound = Gdx.audio.newSound(Gdx.files.internal("finalbuy.wav"));
 
 	public ShopControls(final HeroesEmblem game, final ShopState state, final int buttonWidth, final int rosterWidth, final int height)
 	{
@@ -167,10 +171,21 @@ public class ShopControls
 	{
 		if (this.canPurchaseSelected())
 		{
+			ShopControls.buySound.play();
 			this.state.roster.add(this.state.selected);
 			this.state.gold -= this.state.selected.cost;
 			this.state.selected = null;
 			this.state.stock = UnitGenerator.GenerateStock();
+			boolean canBuy = false;
+			for(Unit unit : this.state.stock){
+				if (unit.cost < this.state.gold)
+					canBuy = true;
+			}			
+			if(canBuy){
+				ShopControls.buySound.play();
+			}else{
+				ShopControls.finalBuySound.play();
+			}
 		}
 	}
 

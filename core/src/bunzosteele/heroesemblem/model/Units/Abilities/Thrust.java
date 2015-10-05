@@ -7,10 +7,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Thrust extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("thrust.wav"));
+	
 	public Thrust()
 	{
 		this.displayName = "Thrust";
@@ -46,14 +50,14 @@ public class Thrust extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
-				final int originX = state.selected.x;
-				final int originY = state.selected.y;
+				final int originX = executor.x;
+				final int originY = executor.y;
 				final int dx = unit.x - originX;
 				final int dy = unit.y - originY;
 				final int nextX = originX + (2 * dx);
@@ -61,31 +65,38 @@ public class Thrust extends Ability
 				final boolean canKnockBack = this.isInBounds(nextX, nextY, state.battlefield) && this.isEmpty(nextX, nextY, state.AllUnits()) && (unit.movement >= state.battlefield.get(originY + (2 * dy)).get(originX + (2 * dx)).movementCost);
 				if (canKnockBack)
 				{
-					state.selected.startAttack();
-					state.selected.x += dx;
-					state.selected.y += dy;
+					executor.startAttack();
+					Thrust.sound.play();
+					executor.x += dx;
+					executor.y += dy;
 					unit.x += dx;
 					unit.y += dy;
-					unit.dealDamage(state.selected.attack);
+					unit.dealDamage(executor.attack);
 					unit.startDamage();
+					unit.checkDeath(executor);
 				} else if (this.isInBounds(nextX, nextY, state.battlefield) && !this.isEmpty(nextX, nextY, state.AllUnits()))
 				{
-					state.selected.startAttack();
-					unit.dealDamage(state.selected.attack);
+					executor.startAttack();
+					Thrust.sound.play();
+					unit.dealDamage(executor.attack);
 					unit.startDamage();
+					unit.checkDeath(executor);
 					for (final Unit nextUnit : state.AllUnits())
 					{
 						if ((nextUnit.x == nextX) && (nextUnit.y == nextY))
 						{
-							nextUnit.dealDamage(state.selected.attack / 2);
+							nextUnit.dealDamage(executor.attack / 2);
 							nextUnit.startDamage();
+							nextUnit.checkDeath(executor);
 						}
 					}
 				} else
 				{
-					state.selected.startAttack();
-					unit.dealDamage(state.selected.attack * 2);
+					executor.startAttack();
+					Thrust.sound.play();
+					unit.dealDamage(executor.attack * 2);
 					unit.startDamage();
+					unit.checkDeath(executor);
 				}
 				return true;
 			}
@@ -93,7 +104,8 @@ public class Thrust extends Ability
 		return false;
 	}
 
-	private List<Unit> GetTargetableUnits(final BattleState state)
+	@Override
+	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
 		return state.enemies;
 	}

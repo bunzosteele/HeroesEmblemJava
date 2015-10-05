@@ -1,6 +1,7 @@
 package bunzosteele.heroesemblem.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.CombatHelper;
 
 public final class AiHelper
 {
@@ -17,19 +19,85 @@ public final class AiHelper
 		unit.hasMoved = true;
 	}
 	
-	public static void ExecuteAction(Unit unit){
-		
+	public static void ExecuteAction(BattleState state, Unit unit){
+		if(unit.ability != null && unit.ability.CanUse(state, unit)){
+			UseAbility(state, unit);
+		}else{
+			Attack(state, unit);
+		}
+		unit.hasAttacked = true;
+	}
+
+	public static HashSet<Unit> GetUnitsThatCanAttackTile(BattleState state, Tile tile){
+		List<Unit> playerUnits = state.roster;
+		HashSet<Unit> threats = new HashSet<Unit>();
+		for(Unit playerUnit : playerUnits){
+			if(CombatHelper.GetAttackableTargets(playerUnit.x, playerUnit.y, playerUnit, state).contains(tile)){
+				threats.add(playerUnit);
+			}
+		}
+		return threats;
 	}
 	
+	private static void UseAbility(BattleState state, Unit unit){
+		List<Tile> targetTiles = new ArrayList<Tile>(unit.ability.GetTargetTiles(state, unit));
+		List<Unit> targetableUnits = unit.ability.GetTargetableUnits(state);
+		List<Unit> validTargets = new ArrayList<Unit>();
+		for(Unit potentialTarget : targetableUnits){
+			if(targetTiles.contains(state.GetTileForUnit(potentialTarget)))
+				validTargets.add(potentialTarget);
+		}
+		validTargets.sort(Unit.UnitHeathComparator);
+		unit.ability.Execute(state, unit, state.GetTileForUnit(validTargets.get(0)));
+		unit.ability.exhausted = true;
+	}
+	
+	private static void Attack(BattleState state, Unit unit){
+		HashSet<Unit> targets = CombatHelper.GetAttackableTargets(unit.x, unit.y, unit, state);
+		if(targets.size() > 0){
+			Unit target = SelectAttackTarget(state, unit, targets);
+			unit.startAttack();
+			if (CombatHelper.Attack(unit, target, state.battlefield))
+			{
+				Unit.hitSound.play();
+				target.startDamage();
+				target.checkDeath(unit);
+			} else
+			{
+				Unit.missSound.play();
+				target.startMiss();
+			}
+		}
+	}
+	
+	private static Unit SelectAttackTarget(BattleState state, Unit attacker, HashSet<Unit> targets){
+		List<Unit> orderedTargets = new ArrayList<Unit>(targets);
+		orderedTargets.sort(Unit.UnitHeathComparator);
+		List<Unit> killableUnits = new ArrayList<Unit>();
+		for(Unit target : orderedTargets){
+			Tile targetTile = state.battlefield.get(target.y).get(target.x);
+			if(target.currentHealth + targetTile.defenseModifier < attacker.attack){
+				killableUnits.add(target);
+			}
+		}
+		Unit finalTarget = null;
+		for(Unit killableUnit : killableUnits){
+			Tile targetTile = state.battlefield.get(killableUnit.y).get(killableUnit.x);
+			if(finalTarget == null || (killableUnit.evasion + targetTile.accuracyModifier) < (finalTarget.evasion + state.battlefield.get(finalTarget.y).get(finalTarget.x).accuracyModifier)){
+				finalTarget = killableUnit;
+			}
+		}
+		
+		if(finalTarget == null){
+			finalTarget = orderedTargets.get(0);
+		}
+		
+		return finalTarget;
+	}
+
 	public static Map<Tile, Integer> GetMovementOptions(BattleState state, Unit unit){
 		Map<Tile, Integer> optionsWithScore = new HashMap<Tile, Integer>();
-		List<Unit> unmovedAllies = new ArrayList<Unit>();
-		for(Unit ally : state.enemies){
-			if(!ally.hasMoved){
-				unmovedAllies.add(ally);
-			}
-		}	
-		HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit, unmovedAllies);
+		HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit);
 		for(Tile tile : options){
 			int score = unit.GetTileScore(tile, state);
 			optionsWithScore.put(tile, score);
@@ -37,14 +105,21 @@ public final class AiHelper
 		return optionsWithScore;
 	}
 	
-	public static Tile GetDesiredDestination(BattleState state, Unit unit){
+	public static Tile GetDestination(BattleState state, Unit unit, int priority){
 		Map<Tile, Integer> options = GetMovementOptions(state, unit);
-		Tile destination = null;
-		for(Tile tile : options.keySet()){
-			if(destination == null || options.get(tile) > options.get(destination))
-				destination = tile;
+		for(int i = 0; i < priority; i++){
+			options.remove(GetHighestValueTile(options));
 		}
-		return destination;
+		return GetHighestValueTile(options);
+	}
+	
+	private static Tile GetHighestValueTile(Map<Tile, Integer> options){
+		Tile highestValueTile = null;
+		for(Tile tile : options.keySet()){
+			if(highestValueTile == null || options.get(tile) > options.get(highestValueTile))
+				highestValueTile = tile;
+		}
+		return highestValueTile;
 	}
 	
 	public static Map<Unit, Integer> GetActionOptions(BattleState state, Unit unit){
@@ -63,6 +138,7 @@ public final class AiHelper
 	
 	public static int GetCostToCombat(Tile tile, BattleState state, Unit unit){
 		Map<Tile, Integer> options = new HashMap<Tile, Integer>();
+		options.put(state.battlefield.get(tile.y).get(tile.x), 0);
 		List<Tile> visited = new ArrayList<Tile>();
 		return GetCostToCombatCore(tile.x, tile.y, state, unit, 0, options, visited);
 	}

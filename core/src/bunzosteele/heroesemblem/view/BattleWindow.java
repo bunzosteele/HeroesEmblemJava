@@ -12,6 +12,7 @@ import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -190,17 +191,12 @@ public class BattleWindow
 								this.state.selected.startAttack();
 								if (CombatHelper.Attack(this.state.selected, enemy, this.state.battlefield))
 								{
+									Unit.hitSound.play();
 									enemy.startDamage();
-									if (enemy.currentHealth <= 0)
-									{
-										this.state.selected.giveExperience(enemy.maximumHealth);
-										if ((enemy.ability != null) && !enemy.ability.IsPreventingDeath(enemy))
-										{
-											enemy.startDeath();
-										}
-									}
+									enemy.checkDeath(this.state.selected);
 								} else
 								{
+									Unit.missSound.play();
 									enemy.startMiss();
 								}
 
@@ -224,22 +220,11 @@ public class BattleWindow
 				{
 					if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
 					{
-						if (this.state.selected.ability.Execute(this.state, tile))
+						if (this.state.selected.ability.Execute(this.state, this.state.selected, tile))
 						{
 							this.state.isUsingAbility = false;
 							this.state.selected.hasAttacked = true;
 							this.state.selected.ability.exhausted = true;
-							for (final Unit unit : this.state.AllUnits())
-							{
-								if (unit.currentHealth <= 0)
-								{
-									this.state.selected.giveExperience(unit.maximumHealth);
-									if ((unit.ability != null) && !unit.ability.IsPreventingDeath(unit))
-									{
-										unit.startDeath();
-									}
-								}
-							}
 							this.state.selected = null;
 							return;
 						} else

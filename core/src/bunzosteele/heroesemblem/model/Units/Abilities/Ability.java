@@ -32,11 +32,15 @@ public abstract class Ability
 		return false;
 	}
 
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		return false;
 	}
-
+	
+	public List<Unit> GetTargetableUnits(final BattleState state)
+	{
+		return null;
+	}
 	public HashSet<Tile> GetTargetTiles(final BattleState state, final Unit originUnit)
 	{
 		return null;

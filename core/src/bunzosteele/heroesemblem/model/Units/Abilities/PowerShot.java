@@ -7,10 +7,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class PowerShot extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("powershot.wav"));
+	
 	public PowerShot()
 	{
 		this.displayName = "Power Shot";
@@ -46,7 +50,7 @@ public class PowerShot extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		final HashSet<Tile> targetTiles = this.GetTargetedTiles(state, targetTile);
 		boolean hit = false;
@@ -57,19 +61,22 @@ public class PowerShot extends Ability
 				if ((unit.x == tile.x) && (unit.y == tile.y))
 				{
 					hit = true;
-					unit.dealDamage(state.selected.attack);
+					unit.dealDamage(executor.attack);
 					unit.startDamage();
+					unit.checkDeath(executor);
 				}
 			}
 		}
 		if (hit)
 		{
-			state.selected.startAttack();
+			executor.startAttack();
+			PowerShot.sound.play();
 		}
 		return hit;
 	}
 
-	private List<Unit> GetTargetableUnits(final BattleState state)
+	@Override
+	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
 		return state.AllUnits();
 	}

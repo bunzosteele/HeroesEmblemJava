@@ -6,10 +6,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class ChainLightning extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("lightning.wav"));
+	
 	public ChainLightning()
 	{
 		this.displayName = "Chain Lightning";
@@ -35,15 +39,16 @@ public class ChainLightning extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		final HashSet<Unit> damagedUnits = new HashSet<Unit>();
-		if (this.GetTargetTiles(state, state.selected).contains(targetTile))
+		if (this.GetTargetTiles(state, executor).contains(targetTile))
 		{
-			int damage = state.selected.attack;
+			int damage = executor.attack;
 			int originX = targetTile.x;
 			int originY = targetTile.y;
-			state.selected.startAttack();
+			ChainLightning.sound.play();
+			executor.startAttack();
 			while (damage > 0)
 			{
 				Unit damagedUnit = null;
@@ -58,6 +63,7 @@ public class ChainLightning extends Ability
 				{
 					damagedUnit.dealDamage(damage);
 					damagedUnit.startDamage();
+					damagedUnit.checkDeath(executor);
 					damagedUnits.add(damagedUnit);
 					damage = damage / 2;
 					Unit nextUnit = null;

@@ -2,12 +2,15 @@ package bunzosteele.heroesemblem.model.Units;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Abilities.Ability;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -49,7 +52,10 @@ public abstract class Unit implements Ai
 	public boolean hasMoved;
 	public boolean hasAttacked;
 	public String damageDisplay = "";
-	public List<Tile> blockedSpaces = new ArrayList<Tile>();
+	public static Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
+	public static Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("death.wav"));;
+	public static Sound missSound = Gdx.audio.newSound(Gdx.files.internal("miss.wav"));;
+	public static Sound levelSound = Gdx.audio.newSound(Gdx.files.internal("level.wav"));;
 
 	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id) throws IOException
 	{
@@ -75,6 +81,8 @@ public abstract class Unit implements Ai
 		this.experience += experience;
 		while (this.experience >= this.experienceNeeded)
 		{
+			if(this.team == 0)
+				Unit.levelSound.play();
 			this.level += 1;
 			this.experience -= this.experienceNeeded;
 			this.experienceNeeded += 50;
@@ -236,6 +244,22 @@ public abstract class Unit implements Ai
 			}
 		}, 0, 1f, 1);
 	}
+	
+	public void checkDeath(Unit attacker){
+		if (this.currentHealth <= 0)
+		{
+			if ((this.ability != null) && !this.ability.IsPreventingDeath(this))
+			{
+				attacker.giveExperience(this.maximumHealth);
+				this.startDeath();
+				Unit.deathSound.play();
+			}else if(this.ability == null){
+				attacker.giveExperience(this.maximumHealth);
+				this.startDeath();
+				Unit.deathSound.play();
+			}
+		}
+	}
 
 	public void startDeath()
 	{
@@ -288,4 +312,13 @@ public abstract class Unit implements Ai
 			}
 		}, 0, 1f, 1);
 	}
+	
+    public static Comparator<Unit> UnitHeathComparator = new Comparator<Unit>() {
+
+	public int compare(Unit u1, Unit u2) {
+	   int u1Health = u1.currentHealth;
+	   int u2Health = u2.currentHealth;
+
+	   return u1Health - u2Health;
+    }};
 }

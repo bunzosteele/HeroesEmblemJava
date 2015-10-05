@@ -8,10 +8,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Teleport extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("teleport.wav"));
+	
 	public Teleport()
 	{
 		this.displayName = "Teleport";
@@ -38,7 +42,7 @@ public class Teleport extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		if (this.targets.size() == 0)
 		{
@@ -52,13 +56,14 @@ public class Teleport extends Ability
 			return false;
 		} else
 		{
-			if (!this.GetTargetTiles(state, state.selected).contains(targetTile))
+			if (!this.GetTargetTiles(state, executor).contains(targetTile))
 			{
 				this.targets = new ArrayList<Unit>();
 				return false;
 			} else
 			{
-				state.selected.startAttack();
+				executor.startAttack();
+				Teleport.sound.play();
 				this.targets.get(0).x = targetTile.x;
 				this.targets.get(0).y = targetTile.y;
 				return true;
@@ -66,7 +71,8 @@ public class Teleport extends Ability
 		}
 	}
 
-	private List<Unit> GetTargetableUnits(final BattleState state)
+	@Override
+	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
 		return state.AllUnits();
 	}

@@ -7,10 +7,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class ShieldBash extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("bash.wav"));
+	
 	public ShieldBash()
 	{
 		this.displayName = "Shield Bash";
@@ -46,24 +50,27 @@ public class ShieldBash extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
-				state.selected.startAttack();
+				executor.startAttack();
+				ShieldBash.sound.play();
 				unit.hasAttacked = true;
 				unit.hasMoved = true;
-				unit.dealDamage(state.selected.attack);
+				unit.dealDamage(executor.attack);
 				unit.startDamage();
+				unit.checkDeath(executor);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private List<Unit> GetTargetableUnits(final BattleState state)
+	@Override
+	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
 		return state.enemies;
 	}

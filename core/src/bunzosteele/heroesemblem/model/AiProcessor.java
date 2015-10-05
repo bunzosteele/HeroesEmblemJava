@@ -15,39 +15,85 @@ public class AiProcessor
 	}
 	
 	public void MakeMove(){
-		List<Unit> units = new ArrayList<Unit>();
+		List<Unit> unitsToMove = new ArrayList<Unit>();
 		for(Unit unit: state.enemies){
-			if(!state.IsTapped(unit)){
-				units.add(unit);
+			if(!unit.hasMoved){
+				Tile desiredDestination = AiHelper.GetDestination(state, unit, 0);
+				if(unit.x != desiredDestination.x || unit.y != desiredDestination.y)
+					unitsToMove.add(unit);
 			}
 		}
 		
-		if(units.size() == 0){
-			this.state.EndTurn();
-			return;
-		}
-		
-		Unit highestPriorityUnit = units.get(0);
-		int highestScore = AiHelper.GetPriority(state, highestPriorityUnit);
-		for(Unit unit : units){
-			int thisScore = AiHelper.GetPriority(state, unit);
-			if (thisScore > highestScore){
-				highestPriorityUnit = unit;
-				highestScore = thisScore;
+		List<Unit> unitsToAttack = new ArrayList<Unit>();
+		for(Unit unit: state.enemies){
+			if(!unit.hasAttacked && (state.CanAttack(unit))){
+				unitsToAttack.add(unit);
 			}
 		}
 		
-		Tile destination = AiHelper.GetDesiredDestination(state, highestPriorityUnit);
-		Unit conflictedUnit = GetConflictedUnit(destination, units, highestPriorityUnit);
-		if(conflictedUnit != null){
-			List<Unit> backedUnits = new ArrayList<Unit>();
-			backedUnits.add(highestPriorityUnit);
-			Unit blockingUnit = ResolveConflict(backedUnits, conflictedUnit, units);
-			highestPriorityUnit = blockingUnit;
-			destination = GetHighestPriorityDestination(GetNonConflictingDestinations(highestPriorityUnit, units));
+		List<Unit> moveableUnits = new ArrayList<Unit>();
+		for(Unit unit: state.enemies){
+			if(!unit.hasMoved){
+				moveableUnits.add(unit);
+			}
 		}
-		AiHelper.ExecuteMove(destination, highestPriorityUnit);
-		AiHelper.ExecuteAction(highestPriorityUnit);
+		
+		if(unitsToMove.size() == 0){
+			if(unitsToAttack.size() == 0){
+				this.state.EndTurn();
+				return;
+			}else{
+				AiHelper.ExecuteAction(state, unitsToAttack.get(0));
+			}
+		}else{			
+			Unit highestPriorityUnit = unitsToMove.get(0);
+			int highestScore = AiHelper.GetPriority(state, highestPriorityUnit);
+			for(Unit unit : unitsToMove){
+				int thisScore = AiHelper.GetPriority(state, unit);
+				if (thisScore > highestScore){
+					highestPriorityUnit = unit;
+					highestScore = thisScore;
+				}
+			}
+			
+			Tile destination = AiHelper.GetDestination(state, highestPriorityUnit, 0);
+			if(destination == null){
+				destination = state.battlefield.get(highestPriorityUnit.y).get(highestPriorityUnit.x);
+			}
+			Unit conflictedUnit = GetConflictedUnit(destination, moveableUnits, highestPriorityUnit);
+			if(conflictedUnit != null){
+				List<Unit> backedUnits = new ArrayList<Unit>();
+				backedUnits.add(highestPriorityUnit);
+				Unit blockingUnit = ResolveConflict(backedUnits, conflictedUnit, moveableUnits);
+				highestPriorityUnit = blockingUnit;
+				destination = GetHighestPriorityDestination(GetNonConflictingDestinations(highestPriorityUnit, moveableUnits));
+			}		
+			if(destination == null){
+				destination = state.battlefield.get(highestPriorityUnit.y).get(highestPriorityUnit.x);
+			}		
+			int conflictCount = 0;
+			while(GetConflictedUnit(destination, state.AllUnits(), highestPriorityUnit) != null){
+				conflictCount++;
+				Tile nextDestination = AiHelper.GetDestination(state, highestPriorityUnit, conflictCount);
+				if(nextDestination != null){
+					destination = nextDestination;
+				}else{
+					destination = state.battlefield.get(highestPriorityUnit.y).get(highestPriorityUnit.x);
+				}
+			}
+			
+			if(!unitsToMove.contains(highestPriorityUnit)){
+				if(!highestPriorityUnit.hasAttacked)
+					AiHelper.ExecuteAction(state, highestPriorityUnit);	
+				if(!highestPriorityUnit.hasMoved)
+					AiHelper.ExecuteMove(destination, highestPriorityUnit);
+			}else{	
+				if(!highestPriorityUnit.hasMoved)
+					AiHelper.ExecuteMove(destination, highestPriorityUnit);
+				if(!highestPriorityUnit.hasAttacked)
+					AiHelper.ExecuteAction(state, highestPriorityUnit);
+			}
+		}
 	}
 	
 	private Tile GetHighestPriorityDestination(Map<Tile, Integer> options){
@@ -75,13 +121,14 @@ public class AiProcessor
 	}
 	
 	private Unit ResolveConflict(List<Unit> backedUnits, Unit currentUnit, List<Unit> allUnits){
-		Tile destination = AiHelper.GetDesiredDestination(state, currentUnit);
+		Tile destination = AiHelper.GetDestination(state, currentUnit, 0);
 		Unit nextConflict = GetConflictedUnit(destination, allUnits, currentUnit);
 		
+		int conflictCount = 1;
 		while(nextConflict != null && backedUnits.contains(nextConflict)){
-			currentUnit.blockedSpaces.add(destination);
-			destination = AiHelper.GetDesiredDestination(state, currentUnit);
+			destination = AiHelper.GetDestination(state, currentUnit, conflictCount);
 			nextConflict = GetConflictedUnit(destination, allUnits, currentUnit);
+			conflictCount++;
 		}
 			
 		if(nextConflict != null){

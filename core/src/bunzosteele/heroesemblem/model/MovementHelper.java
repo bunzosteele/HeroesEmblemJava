@@ -26,12 +26,16 @@ public final class MovementHelper
 		return MovementHelper.GetMovementOptionsCore(state.selected.x, state.selected.y, allUnits, state.enemies, state.selected, state.battlefield, state.selected.movement, options);
 	}
 	
-	public static HashSet<Tile> GetMovementOptions(final BattleState state, Unit unit, List<Unit> unmovedAllies){
+	public static HashSet<Tile> GetMovementOptions(final BattleState state, Unit unit){
 		final HashSet<Tile> options = new HashSet<Tile>();
 		final List<Unit> allUnits = state.AllUnits();
 		allUnits.remove(unit);
-		allUnits.removeAll(unmovedAllies);
-		return MovementHelper.GetMovementOptionsCore(unit.x, unit.y, allUnits, state.enemies, null, state.battlefield, unit.movement, options);
+		for(Unit unmovedUnit: state.enemies){
+			if(!unit.hasMoved){
+				allUnits.remove(unmovedUnit);
+			}
+		}
+		return MovementHelper.GetMovementOptionsCore(unit.x, unit.y, allUnits, state.roster, null, state.battlefield, unit.movement, options);
 	}
 
 	public static HashSet<Tile> GetMovementOptionsCore(final int x, final int y, final List<Unit> allUnits, final List<Unit> enemies, final Unit movingUnit, final List<List<Tile>> battlefield, final int movement, final HashSet<Tile> options)

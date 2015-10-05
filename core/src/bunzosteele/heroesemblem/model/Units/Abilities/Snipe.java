@@ -6,10 +6,14 @@ import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Snipe extends Ability
 {
+	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("snipe.wav"));
+	
 	public Snipe()
 	{
 		this.displayName = "Snipe";
@@ -35,17 +39,19 @@ public class Snipe extends Ability
 	}
 
 	@Override
-	public boolean Execute(final BattleState state, final Tile targetTile)
+	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
-		if (this.GetTargetTiles(state, state.selected).contains(targetTile))
+		if (this.GetTargetTiles(state, executor).contains(targetTile))
 		{
 			for (final Unit unit : state.AllUnits())
 			{
 				if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 				{
-					state.selected.startAttack();
-					unit.dealDamage(state.selected.attack);
+					executor.startAttack();
+					Snipe.sound.play();
+					unit.dealDamage(executor.attack);
 					unit.startDamage();
+					unit.checkDeath(executor);
 					return true;
 				}
 			}
