@@ -84,11 +84,11 @@ public class ShopControls
 		this.drawBuyBackground();
 		this.drawRosterBackground();
 		this.drawCompleteBackground();
-		this.game.font.getData().setScale(.3f);
+		this.game.font.getData().setScale(.25f);
 		this.drawBuy();
 		this.game.font.getData().setScale(.33f);
 		this.drawRoster();
-		this.game.font.getData().setScale(.3f);
+		this.game.font.getData().setScale(.25f);
 		this.drawComplete();
 		this.game.font.getData().setScale(.33f);
 	}

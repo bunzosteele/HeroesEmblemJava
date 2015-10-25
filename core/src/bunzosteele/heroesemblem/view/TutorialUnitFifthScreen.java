@@ -78,8 +78,7 @@ public class TutorialUnitFifthScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.25f);
 		this.game.batcher.draw(sprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5,  this.xOffset, this.xOffset);
-		this.game.font.draw(this.game.batcher, "The mage is powerful, but fragile.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "It has good range and powerful spells.", this.xOffset * 3 / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 2 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "The mage is powerful, but fragile.\nIt has good range and powerful spells.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
 		this.game.font.draw(this.game.batcher, "Lightning: Hits unit, and it's nearest units, for decreasing damage.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.font.draw(this.game.batcher, "Teleport: Move any unit on the battlefield.", this.xOffset * 3 / 2, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.batcher.end();

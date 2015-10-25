@@ -59,10 +59,7 @@ public class TutorialBattleSecondScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.25f);
-		this.game.font.draw(this.game.batcher, "Elevated terrain can block the line of sight of ranged units.", this.xOffset / 2, this.yOffset * 3 - this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Terrain can provide defensive other advantages as well.", this.xOffset / 2, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Defeating enemies gives you experience. Use experience to level up.", this.xOffset / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Gold earned each battle depends on the difficulty of the battle, and the average level of your army.", this.xOffset / 2, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "Elevated terrain can block the line of sight of ranged units.\nTerrain can provide defensive other advantages as well.\nDefeating enemies gives you experience. Use experience to level up.\nGold earned each battle increases with the difficulty of the battle, and the average level of your army.", this.xOffset / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
 		this.game.batcher.end();
 	}
 

@@ -117,7 +117,7 @@ public class HighscoreScreen extends ScreenAdapter
 		}
 		
 		if(this.selected > -1){
-			if(this.selected < this.highscores.highscores.size() && this.highscores.highscores.get(selected) != null){
+			if(this.highscores != null && this.selected < this.highscores.highscores.size() && this.highscores.highscores.get(selected) != null){
 				HighscoreManager.UnitDto unit = this.highscores.highscores.get(selected).heroUnit;
 				this.game.font.draw(this.game.batcher, unit.name, 3 * this.xOffset, this.headerOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 				this.game.font.getData().setScale(.2f);

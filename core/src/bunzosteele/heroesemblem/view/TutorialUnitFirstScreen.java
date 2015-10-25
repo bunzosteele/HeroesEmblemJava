@@ -76,8 +76,7 @@ public class TutorialUnitFirstScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.25f);
 		this.game.batcher.draw(sprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5,  this.xOffset, this.xOffset);
-		this.game.font.draw(this.game.batcher, "The footman is a beefy melee unit.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "It has high defense, and the highest base attack.", this.xOffset * 3 / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 2 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "The footman is a beefy melee unit.\nIt has high defense and attack.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
 		this.game.font.draw(this.game.batcher, "Block: Chance to block all incoming damage.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.font.draw(this.game.batcher, "Shield Bash: Deal high damage, and stun target for one turn.", this.xOffset * 3 / 2, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.batcher.end();

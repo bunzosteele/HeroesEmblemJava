@@ -63,11 +63,7 @@ public class TutorialShopSecondScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset/2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.25f);
-		this.game.font.draw(this.game.batcher, "Here, you can see the selected unit's stats.", this.xOffset, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "The cost of the unit is in the upper right corner.", this.xOffset, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Boosted stats are shown in gold.", this.xOffset, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Reduced stats are shown in red.", this.xOffset, this.yOffset * 3 - 4 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "You can see how much gold you have remaining above the 'Buy' button in the shop.", this.xOffset, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "Here, you can see the selected unit's stats.\nThe cost of the unit is in the upper right corner.\nBoosted stats are shown in gold.\nReduced stats are shown in red.\nYou can see how much gold you have remaining above the 'Buy' button in the shop.", this.xOffset, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
 		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, this.yOffset * 2 * exampleRatio, this.yOffset * 2);
 		this.game.batcher.end();
 	}

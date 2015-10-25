@@ -50,7 +50,7 @@ public class SplashScreen extends ScreenAdapter
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.game.batcher.begin();
-		this.game.font.getData().setScale(.5f);
+		this.game.font.getData().setScale(.45f);
 		this.game.font.draw(this.game.batcher, "This game was made live on Twitch!", 0, 3 * Gdx.graphics.getHeight() / 4, Gdx.graphics.getWidth(), 1, false);
 		this.game.batcher.draw(glitchSprite, (Gdx.graphics.getWidth() / 2) - ((Gdx.graphics.getHeight() / 2) - 2 * this.game.font.getData().lineHeight) / 2 , Gdx.graphics.getHeight() / 4 + 1 * this.game.font.getData().lineHeight, ((Gdx.graphics.getHeight() / 2) - 2 * this.game.font.getData().lineHeight), ((Gdx.graphics.getHeight() / 2) - 2 * this.game.font.getData().lineHeight));
 		this.game.font.draw(this.game.batcher, "Watch future development at", 0, Gdx.graphics.getHeight() / 4 + this.game.font.getData().lineHeight, Gdx.graphics.getWidth(), 1, false);

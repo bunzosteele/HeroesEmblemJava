@@ -68,7 +68,7 @@ public class BattleControls
 
 	public void draw()
 	{
-		this.game.font.getData().setScale(.3f);
+		this.game.font.getData().setScale(.25f);
 		this.drawMove();
 		this.drawAttack();
 		this.drawAbility();

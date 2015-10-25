@@ -78,8 +78,7 @@ public class TutorialUnitSecondScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.25f);
 		this.game.batcher.draw(sprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5,  this.xOffset, this.xOffset);
-		this.game.font.draw(this.game.batcher, "Spearman is fast and evasive.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "It can attack from a range", this.xOffset * 3 / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 2 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "Spearman is fast and evasive.\nIt can attack from a range.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
 		this.game.font.draw(this.game.batcher, "Vault: Leap over obstacles to a nearby space.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.font.draw(this.game.batcher, "Thrust: Advance against an enemy, crushing all in the way.", this.xOffset * 3 / 2, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.batcher.end();

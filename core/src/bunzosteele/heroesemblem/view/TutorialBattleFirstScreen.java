@@ -61,10 +61,7 @@ public class TutorialBattleFirstScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.25f);
-		this.game.font.draw(this.game.batcher, "Each turn, every unit can move once and perform one action (Attack or Ability).", this.xOffset / 2, this.yOffset * 3 - this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Some abilities can only be used once per battle.", this.xOffset / 2, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Others are used passively and cannot be activated.", this.xOffset / 2, this.yOffset * 3 - 4 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Once you are done moving and performing actions, press 'End Turn'.", this.xOffset / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "Each turn, every unit can move once and perform one action (Attack or Ability).\nSome abilities can only be used once per battle.\nOthers are used passively and cannot be activated.\nOnce you are done moving and performing actions, press 'End Turn'.", this.xOffset / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
 		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, 3 * this.xOffset, 3 * this.xOffset * exampleRatio);
 		this.game.batcher.end();
 	}

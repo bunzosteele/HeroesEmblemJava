@@ -78,8 +78,7 @@ public class TutorialUnitFourthScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.25f);
 		this.game.batcher.draw(sprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5,  this.xOffset, this.xOffset);
-		this.game.font.draw(this.game.batcher, "The archer is evasive, but weak.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "It has the greatest range of all.", this.xOffset * 3 / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 2 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "The archer is evasive, but weak.\nIt has the greatest range of all.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
 		this.game.font.draw(this.game.batcher, "PowerShot: Hit all units in a straight line. CAN HIT ALLIES.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.font.draw(this.game.batcher, "Snipe: Hit any unit on the battlefield for massive damage.", this.xOffset * 3 / 2, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.batcher.end();

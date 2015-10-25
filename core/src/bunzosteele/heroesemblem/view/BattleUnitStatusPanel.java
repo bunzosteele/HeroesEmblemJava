@@ -63,7 +63,7 @@ public class BattleUnitStatusPanel
 			}
 		}
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.3f);
+		this.game.font.getData().setScale(.25f);
 		this.game.font.draw(this.game.batcher, "Round: " + this.state.turnCount, this.xOffset+ scaledSize / 4, this.yOffset + 2 * this.game.font.getData().lineHeight, this.width - scaledSize / 2, 1, false);
 		this.game.font.getData().setScale(.33f);
 	}
