@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import bunzosteele.heroesemblem.HeroesEmblem;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
@@ -104,10 +106,10 @@ public final class UnitGenerator
 		return 0;
 	}
 
-	public static List<Unit> GenerateEnemies(final int maxEnemies, final int difficulty) throws IOException
+	public static List<Unit> GenerateEnemies(final int maxEnemies, final int difficulty, HeroesEmblem game) throws IOException
 	{
 		final List<Unit> enemies = new ArrayList<Unit>();
-		enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType()));
+		enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), game));
 		int remainingPoints = difficulty;
 		final Random random = new Random();
 		while (remainingPoints > 0)
@@ -118,15 +120,15 @@ public final class UnitGenerator
 				if (roll == 0)
 				{
 					final int levelUpRoll = random.nextInt(enemies.size());
-					enemies.get(levelUpRoll).AddExperience(enemies.get(levelUpRoll).experienceNeeded);
+					enemies.get(levelUpRoll).AddExperience(50);
 				} else
 				{
-					enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType()));
+					enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), game));
 				}
 			} else
 			{
 				final int levelUpRoll = random.nextInt(enemies.size());
-				enemies.get(levelUpRoll).AddExperience(enemies.get(levelUpRoll).experienceNeeded);
+				enemies.get(levelUpRoll).AddExperience(50);
 			}
 			remainingPoints--;
 		}
@@ -205,18 +207,18 @@ public final class UnitGenerator
 		return 0;
 	}
 
-	public static List<Unit> GenerateStock() throws IOException
+	public static List<Unit> GenerateStock(HeroesEmblem game) throws IOException
 	{
 		final List<Unit> stock = new ArrayList<Unit>();
 		while (stock.size() < 8)
 		{
 			final UnitType unitType = UnitGenerator.GenerateUnitType();
-			stock.add(UnitGenerator.GenerateUnit(0, unitType));
+			stock.add(UnitGenerator.GenerateUnit(0, unitType, game));
 		}
 		return stock;
 	}
 
-	public static Unit GenerateUnit(final int team, final UnitType type) throws IOException
+	public static Unit GenerateUnit(final int team, final UnitType type, final HeroesEmblem game) throws IOException
 	{
 		UnitGenerator.id++;
 		int costModifier = 0;
@@ -256,22 +258,22 @@ public final class UnitGenerator
 
 		if (type == UnitType.Spearman)
 		{
-			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
 		} else if (type == UnitType.Archer)
 		{
-			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
 		} else if (type == UnitType.Footman)
 		{
-			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
 		} else if (type == UnitType.Knight)
 		{
-			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
 		} else if (type == UnitType.Mage)
 		{
-			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
 		} else
 		{
-			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id);
+			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
 		}
 	}
 

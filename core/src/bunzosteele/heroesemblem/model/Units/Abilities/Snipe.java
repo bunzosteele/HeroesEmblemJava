@@ -1,6 +1,7 @@
 package bunzosteele.heroesemblem.model.Units.Abilities;
 
 import java.util.HashSet;
+import java.util.Random;
 
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -12,8 +13,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Snipe extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("snipe.wav"));
-	
 	public Snipe()
 	{
 		this.displayName = "Snipe";
@@ -48,10 +47,22 @@ public class Snipe extends Ability
 				if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 				{
 					executor.startAttack();
-					Snipe.sound.play();
-					unit.dealDamage(executor.attack);
+					int damage = executor.attack;
+					final Random random = new Random();
+					final int roll = random.nextInt(101);
+					if (roll > 95)
+					{
+						damage = damage * 3;
+					} else if (roll > 60)
+					{
+						damage = damage * 2;
+					}
+					unit.dealDamage(damage);
+					executor.damageDealt += damage;
 					unit.startDamage();
-					unit.checkDeath(executor);
+					if(unit.checkDeath(executor) && unit.team == 0){
+						state.SaveHeroUnit(unit);
+					}
 					return true;
 				}
 			}
@@ -69,5 +80,11 @@ public class Snipe extends Ability
 			targets.add(state.battlefield.get(unit.y).get(unit.x));
 		}
 		return targets;
+	}
+	
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("snipe.wav"));
+		sound.play(volume);
 	}
 }

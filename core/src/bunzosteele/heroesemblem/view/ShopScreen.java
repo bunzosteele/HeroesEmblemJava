@@ -3,6 +3,7 @@ package bunzosteele.heroesemblem.view;
 import java.io.IOException;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
+import bunzosteele.heroesemblem.model.MusicManager;
 import bunzosteele.heroesemblem.model.ShopState;
 
 import com.badlogic.gdx.Gdx;
@@ -16,8 +17,6 @@ public class ShopScreen extends ScreenAdapter
 {
 
 	HeroesEmblem game;
-	OrthographicCamera camera;
-	Vector3 touchpoint;
 	ShopState state;
 	ShopStatusPanel shopStatus;
 	StockWindow stockWindow;
@@ -26,14 +25,16 @@ public class ShopScreen extends ScreenAdapter
 
 	public ShopScreen(final HeroesEmblem game) throws IOException
 	{
-		this.state = new ShopState();
+		this.state = new ShopState(game);
 		this.InitializeShopScreen(game);
+		game.adsController.hideBannerAd();
 	}
 
 	public ShopScreen(final HeroesEmblem game, final ShopState state)
 	{
 		this.state = state;
 		this.InitializeShopScreen(game);
+		game.adsController.hideBannerAd();
 	}
 
 	public void draw() throws IOException
@@ -42,18 +43,9 @@ public class ShopScreen extends ScreenAdapter
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		this.camera.update();
-
-		this.game.shapeRenderer.begin(ShapeType.Filled);
-		this.shopStatus.drawBackground();
-		this.stockWindow.drawBackground();
-		this.unitStatus.drawBackground();
-		this.shopControls.drawBackground();
-		this.game.shapeRenderer.end();
-
 		this.game.batcher.begin();
-		this.shopStatus.draw();
 		this.stockWindow.draw();
+		this.shopStatus.draw();
 		this.unitStatus.draw();
 		this.shopControls.draw();
 		this.game.batcher.end();
@@ -62,8 +54,6 @@ public class ShopScreen extends ScreenAdapter
 	private void InitializeShopScreen(final HeroesEmblem game)
 	{
 		this.game = game;
-		this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		this.touchpoint = new Vector3();
 
 		int sideWidth = Gdx.graphics.getWidth() / 6;
 		int controlHeight = Gdx.graphics.getHeight() / 6;
@@ -89,6 +79,7 @@ public class ShopScreen extends ScreenAdapter
 		this.stockWindow = new StockWindow(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
 		this.unitStatus = new ShopUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.shopControls = new ShopControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
+		MusicManager.PlayShopMusic(this.game.settings.getFloat("musicVolume", .5f));
 	}
 
 	@Override
@@ -116,19 +107,18 @@ public class ShopScreen extends ScreenAdapter
 	{
 		if (Gdx.input.justTouched())
 		{
-			this.touchpoint.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0);
-			if (this.stockWindow.isTouched(this.touchpoint.x, this.touchpoint.y))
+			if (this.stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.stockWindow.processTouch(this.touchpoint.x, this.touchpoint.y);
-			} else if (this.shopStatus.isTouched(this.touchpoint.x, this.touchpoint.y))
+				this.stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (this.shopStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.shopStatus.processTouch(this.touchpoint.x, this.touchpoint.y);
-			} else if (this.unitStatus.isTouched(this.touchpoint.x, this.touchpoint.y))
+				this.shopStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (this.unitStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.unitStatus.processTouch(this.touchpoint.x, this.touchpoint.y);
-			} else if (this.shopControls.isTouched(this.touchpoint.x, this.touchpoint.y))
+				this.unitStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (this.shopControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.shopControls.processTouch(this.touchpoint.x, this.touchpoint.y);
+				this.shopControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			}
 		}
 	}

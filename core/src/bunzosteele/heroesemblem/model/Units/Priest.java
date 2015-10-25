@@ -15,9 +15,9 @@ import bunzosteele.heroesemblem.model.Units.Abilities.Scholar;
 
 public class Priest extends Unit
 {
-	public Priest(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id) throws IOException
+	public Priest(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed) throws IOException
 	{
-		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id);
+		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed);
 		this.type = UnitType.Priest;
 		if (ability == 1)
 		{
@@ -36,7 +36,8 @@ public class Priest extends Unit
 	{
 		int score = 0;
 		int costToCombat = AiHelper.GetCostToCombat(tile, state, this);
-		score += costToCombat;
+		score += (400 - costToCombat * 4);
+		score += (500 - AiHelper.GetCostToHeal(tile, state, this) * 5);
 		if(costToCombat == 0){
 			HashSet<Unit> attackableUnits = CombatHelper.GetAttackableTargets(tile.x, tile.y, this, state);
 			if(attackableUnits.size() > 0){
@@ -54,9 +55,9 @@ public class Priest extends Unit
 		HashSet<Unit> threateningUnits = AiHelper.GetUnitsThatCanAttackTile(state, tile);
 		for(Unit unit : threateningUnits){
 			if(this.currentHealth / (float) this.maximumHealth <= .5){
-				score -= 20;
+				score -= 40;
 			}else{
-				score -= 10;
+				score -= 20;
 			}
 		}
 		

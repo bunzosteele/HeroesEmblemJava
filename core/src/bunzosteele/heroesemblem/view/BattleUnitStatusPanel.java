@@ -7,6 +7,8 @@ import bunzosteele.heroesemblem.model.BattleState;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -19,6 +21,7 @@ public class BattleUnitStatusPanel
 	int yOffset;
 	int width;
 	int height;
+	Sprite backdrop;
 
 	public BattleUnitStatusPanel(final HeroesEmblem game, final BattleState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -40,31 +43,34 @@ public class BattleUnitStatusPanel
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
+		final AtlasRegion backdropRegion = this.game.textureAtlas.findRegion("BackdropRight");
+		this.backdrop = new Sprite(backdropRegion);
 	}
 
 	public void draw() throws IOException
 	{
-		final int scaledSize = this.height / 14;
+		drawBackground();
+		final int scaledSize = this.width / 3;
 		if (this.state.selected != null)
 		{
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, "Attack", this.currentFrame);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, "Attack", this.currentFrame);
 			if (!this.state.roster.contains(this.state.selected))
 			{
-				UnitRenderer.DrawEnemyStats(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+				UnitRenderer.DrawEnemyStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);
 			} else
 			{
-				UnitRenderer.DrawOwnedStats(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+				UnitRenderer.DrawOwnedStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);
 			}
 		}
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
-		this.game.font.draw(this.game.batcher, "Round: " + this.state.turnCount, this.xOffset + scaledSize, this.yOffset + this.game.font.getData().lineHeight);
+		this.game.font.getData().setScale(.3f);
+		this.game.font.draw(this.game.batcher, "Round: " + this.state.turnCount, this.xOffset+ scaledSize / 4, this.yOffset + 2 * this.game.font.getData().lineHeight, this.width - scaledSize / 2, 1, false);
+		this.game.font.getData().setScale(.33f);
 	}
 
 	public void drawBackground()
 	{
-		this.game.shapeRenderer.setColor(.6f, .3f, .1f, 1);
-		this.game.shapeRenderer.rect(this.xOffset, this.yOffset, this.width, this.height);
+		this.game.batcher.draw(this.backdrop, this.xOffset, this.yOffset, this.width, this.height);
 	}
 
 	public boolean isTouched(final float x, final float y)

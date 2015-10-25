@@ -14,7 +14,7 @@ public class AiProcessor
 		this.state = state;
 	}
 	
-	public void MakeMove(){
+	public void MakeMove(float volume){
 		List<Unit> unitsToMove = new ArrayList<Unit>();
 		for(Unit unit: state.enemies){
 			if(!unit.hasMoved){
@@ -43,7 +43,7 @@ public class AiProcessor
 				this.state.EndTurn();
 				return;
 			}else{
-				AiHelper.ExecuteAction(state, unitsToAttack.get(0));
+				AiHelper.ExecuteAction(state, unitsToAttack.get(0), volume);
 			}
 		}else{			
 			Unit highestPriorityUnit = unitsToMove.get(0);
@@ -84,14 +84,14 @@ public class AiProcessor
 			
 			if(!unitsToMove.contains(highestPriorityUnit)){
 				if(!highestPriorityUnit.hasAttacked)
-					AiHelper.ExecuteAction(state, highestPriorityUnit);	
+					AiHelper.ExecuteAction(state, highestPriorityUnit, volume);	
 				if(!highestPriorityUnit.hasMoved)
 					AiHelper.ExecuteMove(destination, highestPriorityUnit);
 			}else{	
 				if(!highestPriorityUnit.hasMoved)
 					AiHelper.ExecuteMove(destination, highestPriorityUnit);
 				if(!highestPriorityUnit.hasAttacked)
-					AiHelper.ExecuteAction(state, highestPriorityUnit);
+					AiHelper.ExecuteAction(state, highestPriorityUnit, volume);
 			}
 		}
 	}

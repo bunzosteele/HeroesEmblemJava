@@ -12,11 +12,9 @@ import com.badlogic.gdx.graphics.Color;
 
 public class ChainLightning extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("lightning.wav"));
-	
 	public ChainLightning()
 	{
-		this.displayName = "Chain Lightning";
+		this.displayName = "Lightning";
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(1f, 0f, 0f, .5f);
@@ -47,7 +45,6 @@ public class ChainLightning extends Ability
 			int damage = executor.attack;
 			int originX = targetTile.x;
 			int originY = targetTile.y;
-			ChainLightning.sound.play();
 			executor.startAttack();
 			while (damage > 0)
 			{
@@ -62,8 +59,11 @@ public class ChainLightning extends Ability
 				if (damagedUnit != null)
 				{
 					damagedUnit.dealDamage(damage);
+					executor.damageDealt += damage;
 					damagedUnit.startDamage();
-					damagedUnit.checkDeath(executor);
+					if(damagedUnit.checkDeath(executor) && damagedUnit.team == 0){
+						state.SaveHeroUnit(damagedUnit);
+					}
 					damagedUnits.add(damagedUnit);
 					damage = damage / 2;
 					Unit nextUnit = null;
@@ -112,5 +112,11 @@ public class ChainLightning extends Ability
 			targets.add(state.battlefield.get(unit.y).get(unit.x));
 		}
 		return targets;
+	}
+	
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("lightning.wav"));
+		sound.play(volume);
 	}
 }

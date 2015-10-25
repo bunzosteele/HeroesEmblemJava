@@ -14,8 +14,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Teleport extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("teleport.wav"));
-	
 	public Teleport()
 	{
 		this.displayName = "Teleport";
@@ -63,7 +61,6 @@ public class Teleport extends Ability
 			} else
 			{
 				executor.startAttack();
-				Teleport.sound.play();
 				this.targets.get(0).x = targetTile.x;
 				this.targets.get(0).y = targetTile.y;
 				return true;
@@ -106,5 +103,11 @@ public class Teleport extends Ability
 			}
 		}
 		return targets;
+	}
+	
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("teleport.wav"));
+		sound.play(volume);
 	}
 }

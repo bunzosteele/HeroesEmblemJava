@@ -191,12 +191,16 @@ public class BattleWindow
 								this.state.selected.startAttack();
 								if (CombatHelper.Attack(this.state.selected, enemy, this.state.battlefield))
 								{
-									Unit.hitSound.play();
+									if(enemy.currentHealth >= 1){
+										Unit.hitSound.play(this.game.settings.getFloat("sfxVolume", .5f));
+									}else{
+										Unit.deathSound.play(this.game.settings.getFloat("sfxVolume", .5f));
+									}
 									enemy.startDamage();
 									enemy.checkDeath(this.state.selected);
 								} else
 								{
-									Unit.missSound.play();
+									Unit.missSound.play(this.game.settings.getFloat("sfxVolume", .5f));
 									enemy.startMiss();
 								}
 
@@ -222,10 +226,11 @@ public class BattleWindow
 					{
 						if (this.state.selected.ability.Execute(this.state, this.state.selected, tile))
 						{
+							this.state.selected.ability.PlaySound(this.game.settings.getFloat("sfxVolume", .5f));
 							this.state.isUsingAbility = false;
 							this.state.selected.hasAttacked = true;
 							this.state.selected.ability.exhausted = true;
-							this.state.selected = null;
+							this.state.selected = null;			
 							return;
 						} else
 						{

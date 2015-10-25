@@ -12,9 +12,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class PowerShot extends Ability
-{
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("powershot.wav"));
-	
+{	
 	public PowerShot()
 	{
 		this.displayName = "Power Shot";
@@ -62,15 +60,17 @@ public class PowerShot extends Ability
 				{
 					hit = true;
 					unit.dealDamage(executor.attack);
+					executor.damageDealt += executor.attack;
 					unit.startDamage();
-					unit.checkDeath(executor);
+					if(unit.checkDeath(executor) && unit.team == 0){
+						state.SaveHeroUnit(unit);
+					}
 				}
 			}
 		}
 		if (hit)
 		{
 			executor.startAttack();
-			PowerShot.sound.play();
 		}
 		return hit;
 	}
@@ -203,5 +203,11 @@ public class PowerShot extends Ability
 	private boolean isHigherAltitude(final int originAltitude, final int x, final int y, final List<List<Tile>> battlefield)
 	{
 		return originAltitude < battlefield.get(y).get(x).altitude;
+	}
+	
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("powershot.wav"));
+		sound.play(volume);
 	}
 }

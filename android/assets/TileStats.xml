@@ -59,12 +59,24 @@
 	    <MovementCost>3</MovementCost>
 	    <Altitude>1</Altitude>
 	</Sand>
+	<Ash>
+	    <DefenseModifier>1</DefenseModifier>
+	    <AccuracyModifier>-5</AccuracyModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash>
 	<Wall>
 	    <DefenseModifier>0</DefenseModifier>
 	    <AccuracyModifier>0</AccuracyModifier>
 	    <MovementCost>1000</MovementCost>
 	    <Altitude>5</Altitude>
 	</Wall>
+	<Lava>
+	    <DefenseModifier>1</DefenseModifier>
+	    <AccuracyModifier>0</AccuracyModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Lava>
 	<Water>
 	    <DefenseModifier>1</DefenseModifier>
 	    <AccuracyModifier>0</AccuracyModifier>

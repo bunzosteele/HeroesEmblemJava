@@ -107,6 +107,7 @@ public final class CombatHelper
 		}
 
 		victim.dealDamage(damage);
+		attacker.damageDealt += damage;
 	}
 
 	public static HashSet<Tile> GetAttackOptions(final BattleState state, final Unit attackingUnit)

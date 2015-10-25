@@ -13,8 +13,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Rebirth extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("rebirth.wav"));
-	
 	public Rebirth()
 	{
 		this.displayName = "Rebirth";
@@ -53,16 +51,14 @@ public class Rebirth extends Ability
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
-			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
+			if ((unit.x == targetTile.x) && (unit.y == targetTile.y) && unit.currentHealth != unit.maximumHealth)
 			{
 				executor.startAttack();
-				Rebirth.sound.play();
 				final int heal = unit.maximumHealth - unit.currentHealth;
 				final int initialExp = unit.experience;
 				final int resultingExp = unit.experience / 2;
 				unit.experience = resultingExp;
 				executor.giveExperience(initialExp - resultingExp);
-
 				unit.healDamage(heal);
 				unit.startHeal();
 				return true;
@@ -97,7 +93,45 @@ public class Rebirth extends Ability
 		{
 			targets.add(state.battlefield.get(originUnit.y).get(originUnit.x - 1));
 		}
+		if (this.isInBounds(originUnit.x, originUnit.y - 2, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y - 2).get(originUnit.x));
+		}
+		if (this.isInBounds(originUnit.x + 2, originUnit.y, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y).get(originUnit.x + 2));
+		}
+		if (this.isInBounds(originUnit.x, originUnit.y + 2, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y + 2).get(originUnit.x));
+		}
+		if (this.isInBounds(originUnit.x - 2, originUnit.y, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y).get(originUnit.x - 2));
+		}
+		if (this.isInBounds(originUnit.x - 1, originUnit.y - 1, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y - 1).get(originUnit.x - 1));
+		}
+		if (this.isInBounds(originUnit.x + 1, originUnit.y + 1, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y + 1).get(originUnit.x + 1));
+		}
+		if (this.isInBounds(originUnit.x - 1, originUnit.y + 1, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y + 1).get(originUnit.x - 1));
+		}
+		if (this.isInBounds(originUnit.x + 1, originUnit.y - 1, state.battlefield))
+		{
+			targets.add(state.battlefield.get(originUnit.y - 1).get(originUnit.x + 1));
+		}
 		return targets;
+	}
+	
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("rebirth.wav"));
+		sound.play(volume);
 	}
 
 }

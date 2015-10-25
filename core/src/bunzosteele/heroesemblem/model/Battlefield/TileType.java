@@ -16,5 +16,7 @@ public enum TileType
 	Wall,
 	Water,
 	WoodFloor,
-	WoodFloorDam
+	WoodFloorDam,
+	Ash,
+	Lava
 }

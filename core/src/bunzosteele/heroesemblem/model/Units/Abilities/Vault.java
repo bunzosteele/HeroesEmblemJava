@@ -12,8 +12,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Vault extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("vault.wav"));
-	
 	public Vault()
 	{
 		this.displayName = "Vault";
@@ -40,7 +38,6 @@ public class Vault extends Ability
 		{
 			executor.x = targetTile.x;
 			executor.y = targetTile.y;
-			Vault.sound.play();
 			return true;
 		}
 		return false;
@@ -66,5 +63,11 @@ public class Vault extends Ability
 	private boolean isValidTarget(final int x, final int y, final BattleState state)
 	{
 		return this.isInBounds(x, y, state.battlefield) && this.isEmpty(x, y, state.AllUnits()) && this.isValidTerrain(x, y, state);
+	}
+	
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("vault.wav"));
+		sound.play(volume);
 	}
 }

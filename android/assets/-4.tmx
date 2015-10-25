@@ -152,7 +152,7 @@
    <tile gid="13"/>
    <tile gid="4"/>
    <tile gid="5"/>
-   <tile gid="10"/>
+   <tile gid="5"/>
    <tile gid="8"/>
    <tile gid="8"/>
    <tile gid="5"/>
@@ -165,26 +165,9 @@
    <tile gid="5"/>
    <tile gid="5"/>
    <tile gid="5"/>
-   <tile gid="4"/>
-   <tile gid="5"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="8"/>
-   <tile gid="8"/>
-   <tile gid="8"/>
    <tile gid="5"/>
    <tile gid="5"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
-   <tile gid="10"/>
+   <tile gid="5"/>
    <tile gid="8"/>
    <tile gid="8"/>
    <tile gid="8"/>
@@ -198,9 +181,26 @@
    <tile gid="10"/>
    <tile gid="10"/>
    <tile gid="10"/>
+   <tile gid="5"/>
+   <tile gid="5"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
+   <tile gid="5"/>
+   <tile gid="5"/>
    <tile gid="10"/>
    <tile gid="10"/>
    <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
   </data>
  </layer>
  <layer name="Spawns" width="16" height="9">

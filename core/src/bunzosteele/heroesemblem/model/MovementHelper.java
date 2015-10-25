@@ -8,7 +8,6 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 public final class MovementHelper
 {
-
 	private static int getMovementCost(final int x, final int y, final List<List<Tile>> battlefield)
 	{
 		return battlefield.get(y).get(x).movementCost;

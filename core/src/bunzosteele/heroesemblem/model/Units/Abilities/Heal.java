@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Heal extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("heal.wav"));
 	
 	public Heal()
 	{
@@ -44,16 +43,39 @@ public class Heal extends Ability
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean CouldUse(final BattleState state, final Unit originUnit, int x, int y)
+	{
+		if (originUnit.hasAttacked)
+		{
+			return false;
+		}
+		
+		final HashSet<Tile> targets = GetTargetTiles(state, originUnit);
+
+		for (final Tile tile : targets)
+		{
+			for (final Unit unit : state.CurrentPlayerUnits())
+			{
+				if ((unit.x == tile.x) && (unit.y == tile.y) && (unit.currentHealth != unit.maximumHealth))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public boolean Execute(final BattleState state, Unit executor, final Tile targetTile)
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
-			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
+			int missingHealth = unit.maximumHealth - unit.currentHealth;
+			if ((unit.x == targetTile.x) && (unit.y == targetTile.y) && missingHealth > 0)
 			{
 				executor.startAttack();
-				Heal.sound.play();
 				int heal = executor.attack;
 				final Random random = new Random();
 				final int roll = random.nextInt(101);
@@ -67,19 +89,24 @@ public class Heal extends Ability
 				{
 					heal += 1;
 				}
-
 				if (heal < 0)
 				{
 					heal = 0;
 				}
-
-				if (heal > (unit.maximumHealth - unit.currentHealth))
+				if (heal > (missingHealth))
 				{
-					heal = unit.maximumHealth - unit.currentHealth;
+					heal = missingHealth;
 				}
-
+				int priestExp = heal;
+				if(priestExp > unit.experience)
+					priestExp = unit.experience;
+				
 				unit.healDamage(heal);
 				unit.startHeal();
+				unit.experience = unit.experience - priestExp;
+				if(unit.experience < 0)
+					unit.experience = 0;
+				executor.giveExperience(priestExp);
 				return true;
 			}
 		}
@@ -115,4 +142,9 @@ public class Heal extends Ability
 		return targets;
 	}
 
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("heal.wav"));
+		sound.play(volume);
+	}
 }

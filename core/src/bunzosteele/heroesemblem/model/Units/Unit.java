@@ -31,6 +31,8 @@ public abstract class Unit implements Ai
 	public int experience;
 	public int experienceNeeded;
 	public int level;
+	public int unitsKilled;
+	public int damageDealt;
 	public Ability ability;
 	public int cost;
 	public int id;
@@ -56,8 +58,9 @@ public abstract class Unit implements Ai
 	public static Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("death.wav"));;
 	public static Sound missSound = Gdx.audio.newSound(Gdx.files.internal("miss.wav"));;
 	public static Sound levelSound = Gdx.audio.newSound(Gdx.files.internal("level.wav"));;
+	public float gameSpeed;
 
-	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id) throws IOException
+	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float gameSpeed) throws IOException
 	{
 		this.team = team;
 		this.name = name;
@@ -74,15 +77,16 @@ public abstract class Unit implements Ai
 		this.id = id;
 		this.level = 1;
 		this.experienceNeeded = 50;
+		this.gameSpeed = gameSpeed;
 	}
 
-	public void AddExperience(final int experience)
+	public boolean AddExperience(final int experience)
 	{
+		boolean leveled = false;
 		this.experience += experience;
 		while (this.experience >= this.experienceNeeded)
 		{
-			if(this.team == 0)
-				Unit.levelSound.play();
+			leveled = true;
 			this.level += 1;
 			this.experience -= this.experienceNeeded;
 			this.experienceNeeded += 50;
@@ -164,6 +168,7 @@ public abstract class Unit implements Ai
 			}
 			this.currentHealth = this.maximumHealth;
 		}
+		return leveled;
 	}
 
 	public void dealDamage(final int damage)
@@ -172,9 +177,9 @@ public abstract class Unit implements Ai
 		this.damageDisplay = "" + damage;
 	}
 
-	public void giveExperience(final int amount)
+	public boolean giveExperience(final int amount)
 	{
-		this.AddExperience(amount);
+		boolean leveled = this.AddExperience(amount);
 		this.damageDisplay = "" + amount;
 		this.isGettingExperience = true;
 		Timer.schedule(new Task()
@@ -190,7 +195,8 @@ public abstract class Unit implements Ai
 					Unit.this.damageDisplay = "";
 				}
 			}
-		}, 0, 1f, 1);
+		}, 0, this.gameSpeed, 1);
+		return leveled;
 	}
 
 	public void healDamage(final int heal)
@@ -223,7 +229,7 @@ public abstract class Unit implements Ai
 					Unit.this.isAttacking = false;
 				}
 			}
-		}, 0, 1f, 3);
+		}, 0, this.gameSpeed, 3);
 	}
 
 	public void startDamage()
@@ -234,7 +240,7 @@ public abstract class Unit implements Ai
 			@Override
 			public void run()
 			{
-				Unit.this.damageFrame++;
+				++Unit.this.damageFrame;
 				if (Unit.this.damageFrame > 2)
 				{
 					Unit.this.damageFrame = 1;
@@ -242,23 +248,27 @@ public abstract class Unit implements Ai
 					Unit.this.damageDisplay = "";
 				}
 			}
-		}, 0, 1f, 1);
+		}, 0, this.gameSpeed, 1);
 	}
 	
-	public void checkDeath(Unit attacker){
+	public boolean checkDeath(Unit attacker){
 		if (this.currentHealth <= 0)
 		{
-			if ((this.ability != null) && !this.ability.IsPreventingDeath(this))
+			if(this.ability == null){
+				attacker.giveExperience(this.maximumHealth + this.attack + this.defense);
+				this.startDeath();
+				++attacker.unitsKilled;
+				return true;
+			}
+			if (!this.ability.IsPreventingDeath(this))
 			{
-				attacker.giveExperience(this.maximumHealth);
+				attacker.giveExperience(this.maximumHealth + this.attack + this.defense);
 				this.startDeath();
-				Unit.deathSound.play();
-			}else if(this.ability == null){
-				attacker.giveExperience(this.maximumHealth);
-				this.startDeath();
-				Unit.deathSound.play();
+				++attacker.unitsKilled;
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public void startDeath()
@@ -271,7 +281,7 @@ public abstract class Unit implements Ai
 			{
 				Unit.this.deathFrame--;
 			}
-		}, 0, .1f, 10);
+		}, 0, this.gameSpeed / 10, 10);
 	}
 
 	public void startHeal()
@@ -290,7 +300,7 @@ public abstract class Unit implements Ai
 					Unit.this.damageDisplay = "";
 				}
 			}
-		}, 0, 1f, 1);
+		}, 0, this.gameSpeed, 1);
 	}
 
 	public void startMiss()
@@ -310,15 +320,6 @@ public abstract class Unit implements Ai
 					Unit.this.damageDisplay = "";
 				}
 			}
-		}, 0, 1f, 1);
+		}, 0, this.gameSpeed, 1);
 	}
-	
-    public static Comparator<Unit> UnitHeathComparator = new Comparator<Unit>() {
-
-	public int compare(Unit u1, Unit u2) {
-	   int u1Health = u1.currentHealth;
-	   int u2Health = u2.currentHealth;
-
-	   return u1Health - u2Health;
-    }};
 }

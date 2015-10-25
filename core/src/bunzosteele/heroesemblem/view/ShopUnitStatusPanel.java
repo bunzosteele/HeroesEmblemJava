@@ -6,6 +6,8 @@ import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.ShopState;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -18,6 +20,7 @@ public class ShopUnitStatusPanel
 	int yOffset;
 	int width;
 	int height;
+	Sprite backdrop;
 
 	public ShopUnitStatusPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -39,28 +42,30 @@ public class ShopUnitStatusPanel
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
+		final AtlasRegion backdropRegion = this.game.textureAtlas.findRegion("BackdropRight");
+		this.backdrop = new Sprite(backdropRegion);
 	}
 
 	public void draw() throws IOException
 	{
-		final int scaledSize = this.height / 12;
+		drawBackground();
+		final int scaledSize = this.width / 3;
 		if (this.state.selected != null)
 		{
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, "Idle", this.currentFrame);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, "Idle", this.currentFrame);
 			if (!this.state.roster.contains(this.state.selected))
 			{
-				UnitRenderer.DrawStockStats(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+				UnitRenderer.DrawStockStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);
 			} else
 			{
-				UnitRenderer.DrawOwnedStats(this.game, this.state.selected, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+				UnitRenderer.DrawOwnedStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);
 			}
 		}
 	}
 
 	public void drawBackground()
 	{
-		this.game.shapeRenderer.setColor(.6f, .3f, .1f, 1);
-		this.game.shapeRenderer.rect(this.xOffset, this.yOffset, this.width, this.height);
+		this.game.batcher.draw(this.backdrop, this.xOffset, this.yOffset, this.width, this.height);
 	}
 
 	public boolean isTouched(final float x, final float y)

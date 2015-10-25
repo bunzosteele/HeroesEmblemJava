@@ -19,11 +19,11 @@ public final class AiHelper
 		unit.hasMoved = true;
 	}
 	
-	public static void ExecuteAction(BattleState state, Unit unit){
+	public static void ExecuteAction(BattleState state, Unit unit, float volume){
 		if(unit.ability != null && unit.ability.CanUse(state, unit)){
-			UseAbility(state, unit);
+			UseAbility(state, unit, volume);
 		}else{
-			Attack(state, unit);
+			Attack(state, unit, volume);
 		}
 		unit.hasAttacked = true;
 	}
@@ -39,7 +39,7 @@ public final class AiHelper
 		return threats;
 	}
 	
-	private static void UseAbility(BattleState state, Unit unit){
+	private static void UseAbility(BattleState state, Unit unit, float volume){
 		List<Tile> targetTiles = new ArrayList<Tile>(unit.ability.GetTargetTiles(state, unit));
 		List<Unit> targetableUnits = unit.ability.GetTargetableUnits(state);
 		List<Unit> validTargets = new ArrayList<Unit>();
@@ -47,34 +47,40 @@ public final class AiHelper
 			if(targetTiles.contains(state.GetTileForUnit(potentialTarget)))
 				validTargets.add(potentialTarget);
 		}
-		validTargets.sort(Unit.UnitHeathComparator);
-		unit.ability.Execute(state, unit, state.GetTileForUnit(validTargets.get(0)));
+		Unit weakestTarget = null;
+		for(Unit target : validTargets){
+			if(weakestTarget == null || (weakestTarget.maximumHealth - weakestTarget.currentHealth) < (target.maximumHealth - target.currentHealth)){
+				weakestTarget = target;
+			}
+		}
+		unit.ability.Execute(state, unit, state.GetTileForUnit(weakestTarget));
+		unit.ability.PlaySound(volume);
 		unit.ability.exhausted = true;
 	}
 	
-	private static void Attack(BattleState state, Unit unit){
+	private static void Attack(BattleState state, Unit unit, float volume){
 		HashSet<Unit> targets = CombatHelper.GetAttackableTargets(unit.x, unit.y, unit, state);
 		if(targets.size() > 0){
 			Unit target = SelectAttackTarget(state, unit, targets);
 			unit.startAttack();
 			if (CombatHelper.Attack(unit, target, state.battlefield))
 			{
-				Unit.hitSound.play();
+				Unit.hitSound.play(volume);
 				target.startDamage();
-				target.checkDeath(unit);
+				if(target.checkDeath(unit) && target.team == 0){
+					state.SaveHeroUnit(target);
+				}
 			} else
 			{
-				Unit.missSound.play();
+				Unit.missSound.play(volume);
 				target.startMiss();
 			}
 		}
 	}
 	
 	private static Unit SelectAttackTarget(BattleState state, Unit attacker, HashSet<Unit> targets){
-		List<Unit> orderedTargets = new ArrayList<Unit>(targets);
-		orderedTargets.sort(Unit.UnitHeathComparator);
 		List<Unit> killableUnits = new ArrayList<Unit>();
-		for(Unit target : orderedTargets){
+		for(Unit target : targets){
 			Tile targetTile = state.battlefield.get(target.y).get(target.x);
 			if(target.currentHealth + targetTile.defenseModifier < attacker.attack){
 				killableUnits.add(target);
@@ -89,7 +95,11 @@ public final class AiHelper
 		}
 		
 		if(finalTarget == null){
-			finalTarget = orderedTargets.get(0);
+			for(Unit target : targets){
+				if(finalTarget == null || finalTarget.currentHealth > target.currentHealth){
+					finalTarget = target;
+				}
+			}
 		}
 		
 		return finalTarget;
@@ -173,10 +183,57 @@ public final class AiHelper
 			if(!visited.contains(option) && option.movementCost <= unit.movement)
 				options.put(option, option.movementCost + cost);
 		}
+		if(options.size() <= 0)
+			return -1;
 		Tile nextStep = GetCheapestOption(options);
 		int nextCost = options.get(nextStep);
 		options.remove(nextStep);
 		return GetCostToCombatCore(nextStep.x, nextStep.y, state, unit, nextCost, options, visited);		
+	}
+	
+	public static int GetCostToHeal(Tile tile, BattleState state, Unit unit){
+		Map<Tile, Integer> options = new HashMap<Tile, Integer>();
+		options.put(state.battlefield.get(tile.y).get(tile.x), 0);
+		List<Tile> visited = new ArrayList<Tile>();
+		return GetCostToHealCore(tile.x, tile.y, state, unit, 0, options, visited);
+	}
+	
+	private static int GetCostToHealCore(int x, int y, BattleState state, Unit unit, int cost, Map<Tile, Integer> options, List<Tile> visited){
+		visited.add(state.battlefield.get(y).get(x));
+		if(unit.ability.CouldUse(state, unit, x, y)){
+			return cost;
+		}
+		
+		if (IsInBounds(x, y - 1, state.battlefield))
+		{
+			Tile option = state.battlefield.get(y - 1).get(x);
+			if(!visited.contains(option) && option.movementCost <= unit.movement)
+				options.put(option, option.movementCost + cost);
+		}
+		if (IsInBounds(x + 1, y, state.battlefield))
+		{
+			Tile option = state.battlefield.get(y).get(x + 1);
+			if(!visited.contains(option) && option.movementCost <= unit.movement)
+				options.put(option, option.movementCost + cost);
+		}
+		if (IsInBounds(x, y + 1, state.battlefield))
+		{
+			Tile option = state.battlefield.get(y + 1).get(x);
+			if(!visited.contains(option) && option.movementCost <= unit.movement)
+				options.put(option, option.movementCost + cost);
+		}
+		if (IsInBounds(x - 1, y, state.battlefield))
+		{
+			Tile option = state.battlefield.get(y).get(x - 1);
+			if(!visited.contains(option) && option.movementCost <= unit.movement)
+				options.put(option, option.movementCost + cost);
+		}
+		if(options.size() <= 0)
+			return -1;
+		Tile nextStep = GetCheapestOption(options);
+		int nextCost = options.get(nextStep);
+		options.remove(nextStep);
+		return GetCostToHealCore(nextStep.x, nextStep.y, state, unit, nextCost, options, visited);		
 	}
 	
 	private static Tile GetCheapestOption(Map<Tile, Integer> options){

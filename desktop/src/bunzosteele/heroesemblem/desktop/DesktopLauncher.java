@@ -9,6 +9,6 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.height = 480;
 		config.width = 854;
-		new LwjglApplication(new HeroesEmblem(), config);
+		new LwjglApplication(new HeroesEmblem(null), config);
 	}
 }

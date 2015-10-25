@@ -13,8 +13,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class ShieldBash extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("bash.wav"));
-	
 	public ShieldBash()
 	{
 		this.displayName = "Shield Bash";
@@ -57,12 +55,14 @@ public class ShieldBash extends Ability
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
 				executor.startAttack();
-				ShieldBash.sound.play();
 				unit.hasAttacked = true;
 				unit.hasMoved = true;
 				unit.dealDamage(executor.attack);
+				executor.damageDealt += executor.attack;
 				unit.startDamage();
-				unit.checkDeath(executor);
+				if(unit.checkDeath(executor) && unit.team == 0){
+					state.SaveHeroUnit(unit);
+				}
 				return true;
 			}
 		}
@@ -98,4 +98,9 @@ public class ShieldBash extends Ability
 		return targets;
 	}
 
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("bash.wav"));
+		sound.play(volume);
+	}
 }

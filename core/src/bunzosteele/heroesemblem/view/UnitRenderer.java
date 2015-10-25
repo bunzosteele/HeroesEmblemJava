@@ -20,31 +20,34 @@ public final class UnitRenderer
 	{
 		game.font.setColor(Color.WHITE);
 		game.font.getData().setScale(.2f);
-		game.font.draw(game.batcher, unit.name, initialX, initialY);
-		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - (2 * scaledSize));
-		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - scaledSize);
+		game.font.draw(game.batcher, unit.name, initialX, initialY - game.font.getData().lineHeight);
+		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 2 * game.font.getData().lineHeight);
+		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - (3 * game.font.getData().lineHeight));
+		game.font.getData().setScale(.33f);
 	}
 
 	public static void DrawOwnedStats(final HeroesEmblem game, final Unit unit, final int initialX, final int initialY, final int scaledSize) throws IOException
 	{
 		game.font.setColor(Color.WHITE);
 		game.font.getData().setScale(.2f);
-		game.font.draw(game.batcher, unit.name, initialX, initialY);
-		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - scaledSize);
-		game.font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - (2 * scaledSize));
-		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - (3 * scaledSize));
-		game.font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - (4 * scaledSize));
-		game.font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - (5 * scaledSize));
-		game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - (6 * scaledSize));
-		game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - (7 * scaledSize));
-		game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - (8 * scaledSize));
+		game.font.draw(game.batcher, unit.name, initialX, initialY - game.font.getData().lineHeight);
+		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - 2 * game.font.getData().lineHeight);
+		game.font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - (3 * game.font.getData().lineHeight));
+		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - (4 * game.font.getData().lineHeight));
+		game.font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - (5 * game.font.getData().lineHeight));
+		game.font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - (6 * game.font.getData().lineHeight));
+		game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - (7 * game.font.getData().lineHeight));
+		game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - (8 * game.font.getData().lineHeight));
+		game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - (9 * game.font.getData().lineHeight));
+		game.font.draw(game.batcher, "ABILITY:", initialX, initialY - (10 * game.font.getData().lineHeight));
 		if (unit.ability == null)
 		{
-			game.font.draw(game.batcher, "ABILITY: None", initialX, initialY - (9 * scaledSize));
+			game.font.draw(game.batcher, "NONE", initialX, initialY - (11 * game.font.getData().lineHeight));
 		} else
 		{
-			game.font.draw(game.batcher, "ABILITY: " + unit.ability.displayName, initialX, initialY - (9 * scaledSize));
+			game.font.draw(game.batcher, unit.ability.displayName, initialX, initialY - (11 * game.font.getData().lineHeight));
 		}
+		game.font.getData().setScale(.33f);
 	}
 
 	public static void DrawStockStats(final HeroesEmblem game, final Unit unit, final int initialX, final int initialY, final int scaledSize) throws IOException
@@ -53,29 +56,32 @@ public final class UnitRenderer
 		final Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
 		final Element unitStats = xml.getChildByName(unit.type.toString());
 		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.33f);
+		game.font.draw(game.batcher, "" + unit.cost, initialX + scaledSize, Gdx.graphics.getHeight() - (scaledSize / 4) - game.font.getData().lineHeight / 2);
 		game.font.getData().setScale(.2f);
-		game.font.draw(game.batcher, "" + unit.cost, initialX + scaledSize, Gdx.graphics.getHeight());
-		game.font.draw(game.batcher, unit.name, initialX, initialY);
+		game.font.draw(game.batcher, unit.name, initialX, initialY - game.font.getData().lineHeight);
 		UnitRenderer.SetHealthFont(unit, unitStats, game.font);
-		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - scaledSize);
+		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 2 * game.font.getData().lineHeight);
 		UnitRenderer.SetAttackFont(unit, unitStats, game.font);
-		game.font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - (2 * scaledSize));
+		game.font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - (3 * game.font.getData().lineHeight));
 		UnitRenderer.SetDefenseFont(unit, unitStats, game.font);
-		game.font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - (3 * scaledSize));
+		game.font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - (4 * game.font.getData().lineHeight));
 		UnitRenderer.SetEvasionFont(unit, unitStats, game.font);
-		game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - (4 * scaledSize));
+		game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - (5 * game.font.getData().lineHeight));
 		UnitRenderer.SetAccuracyFont(unit, unitStats, game.font);
-		game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - (5 * scaledSize));
+		game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - (6 * game.font.getData().lineHeight));
 		UnitRenderer.SetMovementFont(unit, unitStats, game.font);
-		game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - (6 * scaledSize));
+		game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - (7 * game.font.getData().lineHeight));
 		UnitRenderer.SetAbilityFont(unit, game.font);
+		game.font.draw(game.batcher, "ABILITY:", initialX, initialY - (8 * game.font.getData().lineHeight));
 		if (unit.ability == null)
 		{
-			game.font.draw(game.batcher, "ABILITY: None", initialX, initialY - (7 * scaledSize));
+			game.font.draw(game.batcher, "NONE", initialX, initialY - (9 * game.font.getData().lineHeight));
 		} else
 		{
-			game.font.draw(game.batcher, "ABILITY: " + unit.ability.displayName, initialX, initialY - (7 * scaledSize));
+			game.font.draw(game.batcher, unit.ability.displayName, initialX, initialY - (9 * game.font.getData().lineHeight));
 		}
+		game.font.getData().setScale(.33f);
 	}
 
 	public static void DrawUnit(final HeroesEmblem game, final Unit unit, final int x, final int y, final int scaledSize, final String animation, final int frame)
@@ -118,8 +124,9 @@ public final class UnitRenderer
 			game.batcher.setColor(new Color(1f, 1f, 1f, .7f));
 		}
 		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
-		game.font.getData().setScale(.2f);
+		game.font.getData().setScale(.165f);
 		game.font.draw(game.batcher, unit.damageDisplay, x + (scaledSize / 2), y + scaledSize);
+		game.font.getData().setScale(.33f);
 		game.batcher.setColor(Color.WHITE);
 	}
 

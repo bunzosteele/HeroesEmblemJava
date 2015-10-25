@@ -13,8 +13,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Thrust extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("thrust.wav"));
-	
 	public Thrust()
 	{
 		this.displayName = "Thrust";
@@ -66,37 +64,46 @@ public class Thrust extends Ability
 				if (canKnockBack)
 				{
 					executor.startAttack();
-					Thrust.sound.play();
 					executor.x += dx;
 					executor.y += dy;
 					unit.x += dx;
 					unit.y += dy;
 					unit.dealDamage(executor.attack);
+					executor.damageDealt += executor.attack;
 					unit.startDamage();
-					unit.checkDeath(executor);
+					if(unit.checkDeath(executor) && unit.team == 0){
+						state.SaveHeroUnit(unit);
+					}
 				} else if (this.isInBounds(nextX, nextY, state.battlefield) && !this.isEmpty(nextX, nextY, state.AllUnits()))
 				{
 					executor.startAttack();
-					Thrust.sound.play();
 					unit.dealDamage(executor.attack);
+					executor.damageDealt += executor.attack;
 					unit.startDamage();
-					unit.checkDeath(executor);
+					if(unit.checkDeath(executor) && unit.team == 0){
+						state.SaveHeroUnit(unit);
+					}
 					for (final Unit nextUnit : state.AllUnits())
 					{
 						if ((nextUnit.x == nextX) && (nextUnit.y == nextY))
 						{
 							nextUnit.dealDamage(executor.attack / 2);
+							executor.damageDealt += executor.attack / 2;
 							nextUnit.startDamage();
-							nextUnit.checkDeath(executor);
+							if(nextUnit.checkDeath(executor) && nextUnit.team == 0){
+								state.SaveHeroUnit(nextUnit);
+							}
 						}
 					}
 				} else
 				{
 					executor.startAttack();
-					Thrust.sound.play();
 					unit.dealDamage(executor.attack * 2);
+					executor.damageDealt += executor.attack * 2;
 					unit.startDamage();
-					unit.checkDeath(executor);
+					if(unit.checkDeath(executor) && unit.team == 0){
+						state.SaveHeroUnit(unit);
+					}
 				}
 				return true;
 			}
@@ -131,6 +138,12 @@ public class Thrust extends Ability
 			targets.add(state.battlefield.get(originUnit.y).get(originUnit.x - 1));
 		}
 		return targets;
+	}
+	
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("thrust.wav"));
+		sound.play(volume);
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
+import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.Battlefield.BattlefieldGenerator;
 import bunzosteele.heroesemblem.model.Battlefield.Spawn;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -28,18 +29,23 @@ public class BattleState
 	public boolean isUsingAbility;
 	public int currentPlayer;
 	public int turnCount;
+	public Unit heroUnit;
+	public HeroesEmblem game;
 
 	public BattleState(final ShopState shopState) throws IOException
 	{
+		this.game = shopState.game;
 		this.turnCount = 1;
 		this.currentPlayer = 0;
 		this.roundsSurvived = shopState.roundsSurvived;
-		this.difficulty = (int) Math.pow(2, this.roundsSurvived);
+		this.difficulty = (int) Math.pow(2, roundsSurvived);
 		this.roster = shopState.roster;
 		this.selected = null;
 		this.gold = shopState.gold;
 		final Random random = new Random();
-		final int battlefieldId = random.nextInt(this.difficulty + 6) - 6;
+		int maxMap = BattlefieldGenerator.DetectMaximumMap();
+		int minMap = BattlefieldGenerator.DetectMinimumMap();	
+		final int battlefieldId = (random.nextInt(difficulty + Math.abs(minMap)) % (maxMap + Math.abs(minMap) + 1)) + minMap;
 		this.battlefield = BattlefieldGenerator.GenerateBattlefield(battlefieldId);
 		final List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
 		final List<Spawn> playerSpawns = new ArrayList<Spawn>();
@@ -54,9 +60,11 @@ public class BattleState
 				enemySpawns.add(spawn);
 			}
 		}
-		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId);
+		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.game);
+		this.heroUnit = shopState.heroUnit;
 		this.SpawnUnits(this.roster, playerSpawns);
 		this.SpawnUnits(this.enemies, enemySpawns);
+		this.StartBattle();
 	}
 
 	public List<Unit> AllUnits()
@@ -152,6 +160,27 @@ public class BattleState
 
 	public void EndBattle()
 	{
+		WipeUnitVariables();
+	}
+	
+	public void StartBattle()
+	{
+		WipeUnitVariables();		
+	}
+	
+	public boolean SaveHeroUnit(Unit deceased){
+		if(this.heroUnit == null){
+			this.heroUnit = deceased;
+			return true;
+		}
+		if(this.heroUnit.level < deceased.level || (this.heroUnit.level == deceased.level && this.heroUnit.experience <= deceased.experience)){
+			this.heroUnit = deceased;
+			return true;
+		}
+		return false;
+	}
+	
+	private void WipeUnitVariables(){
 		for (final Unit unit : this.AllUnits())
 		{
 			if (unit.ability != null)

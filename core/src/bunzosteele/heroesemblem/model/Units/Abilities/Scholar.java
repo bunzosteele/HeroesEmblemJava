@@ -14,8 +14,6 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Scholar extends Ability
 {
-	private static Sound sound = Gdx.audio.newSound(Gdx.files.internal("scholar.wav"));
-	
 	public Scholar()
 	{
 		this.displayName = "Scholar";
@@ -35,7 +33,7 @@ public class Scholar extends Ability
 
 		for (final Tile tile : this.GetTargetTiles(state, originUnit))
 		{
-			for (final Unit unit : state.roster)
+			for (final Unit unit : GetTargetableUnits(state))
 			{
 				if ((unit.x == tile.x) && (unit.y == tile.y))
 				{
@@ -54,9 +52,11 @@ public class Scholar extends Ability
 			if ((unit.x == targetTile.x) && (unit.y == targetTile.y))
 			{
 				executor.startAttack();
-				Scholar.sound.play();
 				final int exp = executor.attack * 5;
-				unit.giveExperience(exp);
+				boolean leveled = unit.giveExperience(exp);
+				if(leveled){
+					executor.giveExperience(exp);
+				}
 				this.targets.add(unit);
 				return true;
 			}
@@ -101,4 +101,9 @@ public class Scholar extends Ability
 		return targets;
 	}
 
+	@Override
+	public void PlaySound(float volume){
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("scholar.wav"));
+		sound.play(volume);
+	}
 }

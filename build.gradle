@@ -33,6 +33,7 @@ allprojects {
 project(":desktop") {
     apply plugin: "java"
 
+	configurations { natives }
 
     dependencies {
         compile project(":core")

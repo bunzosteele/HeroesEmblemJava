@@ -10,6 +10,8 @@ import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -26,6 +28,10 @@ public class ShopControls
 	int height;
 	public static Sound buySound = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
 	public static Sound finalBuySound = Gdx.audio.newSound(Gdx.files.internal("finalbuy.wav"));
+	Sprite inactiveButton;
+	Sprite activeButton;
+	Sprite emphasisButton;
+	Sprite backdrop;
 
 	public ShopControls(final HeroesEmblem game, final ShopState state, final int buttonWidth, final int rosterWidth, final int height)
 	{
@@ -53,6 +59,14 @@ public class ShopControls
 		this.buttonWidth = buttonWidth;
 		this.rosterWidth = rosterWidth;
 		this.height = height;
+		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
+		this.inactiveButton = new Sprite(inactiveRegion);
+		final AtlasRegion activeRegion = this.game.textureAtlas.findRegion("ActiveButton");
+		this.activeButton = new Sprite(activeRegion);
+		final AtlasRegion emphasisRegion = this.game.textureAtlas.findRegion("EmphasisButton");
+		this.emphasisButton = new Sprite(emphasisRegion);
+		final AtlasRegion backdropRegion = this.game.textureAtlas.findRegion("BackdropBottom");
+		this.backdrop = new Sprite(backdropRegion);
 	}
 
 	private boolean canPurchaseSelected()
@@ -67,51 +81,42 @@ public class ShopControls
 
 	public void draw()
 	{
-		this.drawBuy();
-		this.drawRoster();
-		this.drawComplete();
-	}
-
-	public void drawBackground()
-	{
 		this.drawBuyBackground();
 		this.drawRosterBackground();
 		this.drawCompleteBackground();
+		this.game.font.getData().setScale(.3f);
+		this.drawBuy();
+		this.game.font.getData().setScale(.33f);
+		this.drawRoster();
+		this.game.font.getData().setScale(.3f);
+		this.drawComplete();
+		this.game.font.getData().setScale(.33f);
 	}
 
 	private void drawBuy()
 	{
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
-		this.game.font.draw(this.game.batcher, "Buy", this.xOffset, this.yOffset + ((3 * this.height) / 4), this.buttonWidth, 1, false);
+		this.game.font.draw(this.game.batcher, "Buy", this.xOffset, this.yOffset + ((3 * this.height) / 5), this.buttonWidth, 1, false);
 	}
 
 	private void drawBuyBackground()
 	{
-		Color color = new Color(.3f, .3f, .3f, 1);
 		if (this.canPurchaseSelected())
 		{
-			color = new Color(.3f, .8f, .3f, 1);
+			this.game.batcher.draw(activeButton, this.xOffset, this.yOffset, this.buttonWidth, this.height);
+		}else{
+			this.game.batcher.draw(inactiveButton, this.xOffset, this.yOffset, this.buttonWidth, this.height);
 		}
-		this.game.shapeRenderer.setColor(color);
-		this.game.shapeRenderer.rect(this.xOffset, this.yOffset, this.rosterWidth, this.height);
 	}
 
 	private void drawComplete()
 	{
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
-		this.game.font.draw(this.game.batcher, "Complete", this.buttonWidth + this.rosterWidth, this.yOffset + ((3 * this.height) / 4), this.buttonWidth, 1, false);
+		this.game.font.draw(this.game.batcher, "Complete", this.buttonWidth + this.rosterWidth, this.yOffset + ((3 * this.height) / 5), this.buttonWidth, 1, false);
 	}
 
 	private void drawCompleteBackground()
 	{
-		Color color = new Color(.3f, .3f, .3f, 1);
-		if (this.canStartGame())
-		{
-			color = new Color(.3f, .8f, .3f, 1);
-		}
-
 		boolean canAffordMoreUnits = false;
 		for (final Unit unit : this.state.stock)
 		{
@@ -119,15 +124,17 @@ public class ShopControls
 			{
 				canAffordMoreUnits = true;
 			}
+		}		
+		if(this.canStartGame()){
+			if (!canAffordMoreUnits || (this.state.roster.size() >= 8))
+			{
+				this.game.batcher.draw(emphasisButton, this.buttonWidth + this.rosterWidth, this.yOffset, this.buttonWidth, this.height);
+			}else{
+				this.game.batcher.draw(activeButton, this.buttonWidth + this.rosterWidth, this.yOffset, this.buttonWidth, this.height);
+			}
+		}else{
+			this.game.batcher.draw(inactiveButton, this.buttonWidth + this.rosterWidth, this.yOffset, this.buttonWidth, this.height);
 		}
-
-		if (!canAffordMoreUnits || (this.state.roster.size() >= 8))
-		{
-			color = new Color(.4f, 1f, .4f, 1);
-		}
-
-		this.game.shapeRenderer.setColor(color);
-		this.game.shapeRenderer.rect(this.buttonWidth + this.rosterWidth, this.yOffset, this.buttonWidth, this.height);
 	}
 
 	private void drawRoster()
@@ -149,10 +156,9 @@ public class ShopControls
 		}
 	}
 
-	private void drawRosterBackground()
+	public void drawRosterBackground()
 	{
-		this.game.shapeRenderer.setColor(.6f, .3f, .1f, 1);
-		this.game.shapeRenderer.rect(this.buttonWidth, this.yOffset, this.rosterWidth, this.height);
+		this.game.batcher.draw(backdrop, this.buttonWidth, this.yOffset, this.rosterWidth, this.height);
 	}
 
 	public boolean isTouched(final float x, final float y)
@@ -171,20 +177,19 @@ public class ShopControls
 	{
 		if (this.canPurchaseSelected())
 		{
-			ShopControls.buySound.play();
 			this.state.roster.add(this.state.selected);
 			this.state.gold -= this.state.selected.cost;
 			this.state.selected = null;
-			this.state.stock = UnitGenerator.GenerateStock();
+			this.state.stock = UnitGenerator.GenerateStock(this.game);
 			boolean canBuy = false;
 			for(Unit unit : this.state.stock){
 				if (unit.cost < this.state.gold)
 					canBuy = true;
 			}			
 			if(canBuy){
-				ShopControls.buySound.play();
+				ShopControls.buySound.play(this.game.settings.getFloat("sfxVolume", .5f));
 			}else{
-				ShopControls.finalBuySound.play();
+				ShopControls.finalBuySound.play(this.game.settings.getFloat("sfxVolume", .5f));
 			}
 		}
 	}

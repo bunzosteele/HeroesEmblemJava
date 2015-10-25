@@ -32,6 +32,36 @@ public final class BattlefieldGenerator
 		final List<List<Tile>> battlefield = BattlefieldGenerator.GenerateBattlefieldTiles(terrainLayer, tilesById, tileStats, battlefieldXml.getChildByName("layer").getInt("width"));
 		return battlefield;
 	}
+	
+	public static int DetectMinimumMap(){
+		final XmlReader reader = new XmlReader();
+		int battlefieldId = 0;
+		while(true){
+			try
+			{
+				reader.parse(Gdx.files.internal(battlefieldId + ".tmx"));
+			} catch (Exception e)
+			{
+				return battlefieldId + 1;
+			}
+			battlefieldId--;
+		}
+	}
+	
+	public static int DetectMaximumMap(){
+		final XmlReader reader = new XmlReader();
+		int battlefieldId = 0;
+		while(true){
+			try
+			{
+				reader.parse(Gdx.files.internal(battlefieldId + ".tmx"));
+			} catch (Exception e)
+			{
+				return battlefieldId - 1;
+			}
+			battlefieldId++;
+		}
+	}
 
 	private static List<List<Tile>> GenerateBattlefieldTiles(final Element xml, final Map<Integer, TileType> tilesById, final Element tileStats, final int width) throws IOException
 	{

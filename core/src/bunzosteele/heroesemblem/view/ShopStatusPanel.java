@@ -19,6 +19,7 @@ public class ShopStatusPanel
 	int yOffset;
 	int width;
 	int height;
+	Sprite backdrop;
 
 	public ShopStatusPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int yOffset)
 	{
@@ -40,26 +41,28 @@ public class ShopStatusPanel
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
+		final AtlasRegion backdropRegion = this.game.textureAtlas.findRegion("BackdropLeft");
+		this.backdrop = new Sprite(backdropRegion);
 	}
 
 	public void draw()
 	{
+		drawBackground();
+		
 		final AtlasRegion shopkeeperRegion = this.game.textureAtlas.findRegion("Shopkeeper-" + this.currentFrame);
 		final Sprite shopkeeperSprite = new Sprite(shopkeeperRegion);
 		final AtlasRegion goldRegion = this.game.textureAtlas.findRegion("Gold");
 		final Sprite goldSprite = new Sprite(goldRegion);
-		final float scaledSize = (this.width / 4);
-		this.game.batcher.draw(shopkeeperSprite, this.xOffset, Gdx.graphics.getHeight() - scaledSize, scaledSize, scaledSize);
-		this.game.batcher.draw(goldSprite, this.xOffset, this.yOffset + ((this.game.font.getData().lineHeight - scaledSize) / 2), scaledSize, scaledSize);
+		final float scaledSize = (this.width / 3);
+		this.game.batcher.draw(shopkeeperSprite, scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(goldSprite, scaledSize / 4, yOffset + scaledSize / 4, scaledSize * 3 / 4, scaledSize * 3 / 4);
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
-		this.game.font.draw(this.game.batcher, "" + this.state.gold, scaledSize, this.yOffset + this.game.font.getData().lineHeight, scaledSize * 2, 1, false);
+		this.game.font.draw(this.game.batcher, "" + this.state.gold, scaledSize * 11 / 10, this.yOffset + this.game.font.getData().lineHeight * 4 / 3, this.width - scaledSize * 6 / 4, 1, false);
 	}
 
 	public void drawBackground()
 	{
-		this.game.shapeRenderer.setColor(.6f, .3f, .1f, 1);
-		this.game.shapeRenderer.rect(this.xOffset, this.yOffset, this.width, this.height);
+		this.game.batcher.draw(this.backdrop, this.xOffset, this.yOffset, this.width, this.height);
 	}
 
 	public boolean isTouched(final float x, final float y)

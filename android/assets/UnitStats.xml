@@ -15,14 +15,14 @@
         <Defense>2</Defense>
         <Evasion>10</Evasion>
         <Accuracy>90</Accuracy>
-        <Movement>4</Movement>
+        <Movement>5</Movement>
         <Cost>950</Cost>
         <MaximumHealth>20</MaximumHealth>
         <MinimumRange>0</MinimumRange>
         <MaximumRange>2</MaximumRange>        
     </Spearman>
     <Mage>
-         <Attack>9</Attack>
+        <Attack>10</Attack>
         <Defense>1</Defense>
         <Evasion>10</Evasion>
         <Accuracy>80</Accuracy>

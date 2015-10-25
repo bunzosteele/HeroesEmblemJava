@@ -14,9 +14,9 @@ import bunzosteele.heroesemblem.model.Units.Abilities.Teleport;
 
 public class Mage extends Unit
 {
-	public Mage(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id) throws IOException
+	public Mage(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed) throws IOException
 	{
-		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id);
+		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed);
 		this.type = UnitType.Mage;
 		if (ability == 1)
 		{
@@ -35,7 +35,7 @@ public class Mage extends Unit
 	{
 		int score = 0;
 		int costToCombat = AiHelper.GetCostToCombat(tile, state, this);
-		score += (100 - costToCombat);
+		score += (800 - costToCombat * 8);
 		if(costToCombat == 0){
 			HashSet<Unit> attackableUnits = CombatHelper.GetAttackableTargets(tile.x, tile.y, this, state);
 			if(attackableUnits.size() > 0){

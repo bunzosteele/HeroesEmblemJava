@@ -5,6 +5,7 @@ import java.io.IOException;
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.AiProcessor;
 import bunzosteele.heroesemblem.model.BattleState;
+import bunzosteele.heroesemblem.model.MusicManager;
 import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
@@ -21,8 +22,6 @@ import com.badlogic.gdx.utils.Timer.Task;
 public class BattleScreen extends ScreenAdapter
 {
 	HeroesEmblem game;
-	OrthographicCamera camera;
-	Vector3 touchpoint;
 	BattleState state;
 	BattleWindow battleWindow;
 	BattleUnitStatusPanel unitStatus;
@@ -34,8 +33,6 @@ public class BattleScreen extends ScreenAdapter
 	{
 		this.state = new BattleState(shopState);
 		this.game = game;
-		this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		this.touchpoint = new Vector3();
 		int sideWidth = Gdx.graphics.getWidth() / 6;
 		int controlHeight = Gdx.graphics.getHeight() / 6;
 		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
@@ -60,6 +57,8 @@ public class BattleScreen extends ScreenAdapter
 		this.unitStatus = new BattleUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.battleControls = new BattleControls(game, this.state, controlHeight, windowWidth, sideWidth);
 		this.aiProcessor = new AiProcessor(state);
+		MusicManager.PlayBattleMusic(this.game.settings.getFloat("musicVolume", .5f));
+		game.adsController.hideBannerAd();
 	}
 
 	public void draw() throws IOException
@@ -67,16 +66,11 @@ public class BattleScreen extends ScreenAdapter
 		final GL20 gl = Gdx.gl;
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.camera.update();
-
-		this.game.shapeRenderer.begin(ShapeType.Filled);
-		this.unitStatus.drawBackground();
-		this.battleControls.drawBackground();
-		this.game.shapeRenderer.end();
 
 		this.game.batcher.begin();
 		this.battleWindow.draw();
 		this.unitStatus.draw();
+		this.battleControls.drawBackground();
 		this.battleControls.draw();
 		this.game.batcher.end();
 
@@ -118,7 +112,7 @@ public class BattleScreen extends ScreenAdapter
 		this.state.CleanBoard();
 		if (this.state.roster.size() == 0)
 		{
-			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived));
+			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived, this.state.heroUnit));
 		}else if (this.state.enemies.size() == 0)
 		{
 			this.state.EndBattle();
@@ -133,21 +127,20 @@ public class BattleScreen extends ScreenAdapter
 					{
 						spoofAiThinking = false;
 					}
-				}, .5f, 0, 0);
-				aiProcessor.MakeMove();
+				}, this.game.settings.getFloat("cpuSpeed", .6f), 0, 0);
+				aiProcessor.MakeMove(this.game.settings.getFloat("sfxVolume", .5f));
 			}
 		}else if (this.state.currentPlayer == 0 && Gdx.input.justTouched())
 		{
-			this.touchpoint.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0);
-			if (this.battleWindow.isTouched(this.touchpoint.x, this.touchpoint.y))
+			if (this.battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.battleWindow.processTouch(this.touchpoint.x, this.touchpoint.y);
-			} else if (this.unitStatus.isTouched(this.touchpoint.x, this.touchpoint.y))
+				this.battleWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (this.unitStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.unitStatus.processTouch(this.touchpoint.x, this.touchpoint.y);
-			} else if (this.battleControls.isTouched(this.touchpoint.x, this.touchpoint.y))
+				this.unitStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (this.battleControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.battleControls.processTouch(this.touchpoint.x, this.touchpoint.y);
+				this.battleControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			}
 		}
 	}

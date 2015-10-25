@@ -9,6 +9,8 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -23,6 +25,10 @@ public class BattleControls
 	int largeButtonWidth;
 	int smallButtonWidth;
 	int height;
+	Sprite inactiveButton;
+	Sprite activeButton;
+	Sprite emphasisButton;
+	Sprite button;
 
 	public BattleControls(final HeroesEmblem game, final BattleState state, final int height, final int endOffset, final int endWidth)
 	{
@@ -50,66 +56,72 @@ public class BattleControls
 		this.largeButtonWidth = endOffset / 3;
 		this.smallButtonWidth = endWidth;
 		this.height = height;
+		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
+		this.inactiveButton = new Sprite(inactiveRegion);
+		final AtlasRegion activeRegion = this.game.textureAtlas.findRegion("ActiveButton");
+		this.activeButton = new Sprite(activeRegion);
+		final AtlasRegion emphasisRegion = this.game.textureAtlas.findRegion("EmphasisButton");
+		this.emphasisButton = new Sprite(emphasisRegion);
+		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");
+		this.button = new Sprite(buttonRegion);
 	}
 
 	public void draw()
 	{
+		this.game.font.getData().setScale(.3f);
 		this.drawMove();
 		this.drawAttack();
 		this.drawAbility();
 		this.drawEnd();
+		this.game.font.getData().setScale(.33f);
 	}
 
 	private void drawAbility()
 	{
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
 		if ((this.state.selected != null) && (this.state.selected.ability != null))
 		{
-			this.game.font.draw(this.game.batcher, this.state.selected.ability.displayName, this.xOffset + (2 * this.largeButtonWidth), this.yOffset + ((3 * this.height) / 4), this.largeButtonWidth, 1, false);
+			this.game.font.draw(this.game.batcher, this.state.selected.ability.displayName, this.xOffset + (2 * this.largeButtonWidth), this.yOffset + ((3 * this.height) / 5), this.largeButtonWidth, 1, false);
 		} else
 		{
-			this.game.font.draw(this.game.batcher, "Ability", this.xOffset + (2 * this.largeButtonWidth), this.yOffset + ((3 * this.height) / 4), this.largeButtonWidth, 1, false);
+			this.game.font.draw(this.game.batcher, "Ability", this.xOffset + (2 * this.largeButtonWidth), this.yOffset + ((3 * this.height) / 5), this.largeButtonWidth, 1, false);
 		}
 	}
 
 	private void drawAbilityBackground()
 	{
-		Color color = new Color(.3f, .3f, .3f, 1);
 		if (this.state.CanUseAbility(this.state.selected))
 		{
-			color = new Color(.4f, .6f, .4f, 1);
+			if (this.state.isUsingAbility)
+			{
+				this.game.batcher.draw(emphasisButton, this.xOffset + (2 * this.largeButtonWidth), this.yOffset, this.largeButtonWidth, this.height);
+			}else{
+				this.game.batcher.draw(activeButton, this.xOffset + (2 * this.largeButtonWidth), this.yOffset, this.largeButtonWidth, this.height);
+			}
+		}else{
+			this.game.batcher.draw(inactiveButton, this.xOffset + (2 * this.largeButtonWidth), this.yOffset, this.largeButtonWidth, this.height);
 		}
-		if (this.state.isUsingAbility)
-		{
-			color = new Color(.5f, .9f, .5f, 1);
-		}
-
-		this.game.shapeRenderer.setColor(color);
-		this.game.shapeRenderer.rect(this.xOffset + (2 * this.largeButtonWidth), this.yOffset, this.largeButtonWidth, this.height);
 	}
 
 	private void drawAttack()
 	{
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
-		this.game.font.draw(this.game.batcher, "Attack", this.xOffset + this.largeButtonWidth, this.yOffset + ((3 * this.height) / 4), this.largeButtonWidth, 1, false);
+		this.game.font.draw(this.game.batcher, "Attack", this.xOffset + this.largeButtonWidth, this.yOffset + ((3 * this.height) / 5), this.largeButtonWidth, 1, false);
 	}
 
 	private void drawAttackBackground()
 	{
-		Color color = new Color(.3f, .3f, .3f, 1);
 		if (this.state.CanAttack(this.state.selected))
 		{
-			color = new Color(.4f, .6f, .4f, 1);
+			if (this.state.isAttacking)
+			{
+				this.game.batcher.draw(emphasisButton, this.xOffset + this.largeButtonWidth, this.yOffset, this.largeButtonWidth, this.height);
+			}else{
+				this.game.batcher.draw(activeButton, this.xOffset + this.largeButtonWidth, this.yOffset, this.largeButtonWidth, this.height);
+			}
+		}else{
+			this.game.batcher.draw(inactiveButton, this.xOffset + this.largeButtonWidth, this.yOffset, this.largeButtonWidth, this.height);
 		}
-		if (this.state.isAttacking)
-		{
-			color = new Color(.5f, .9f, .5f, 1);
-		}
-
-		this.game.shapeRenderer.setColor(color);
-		this.game.shapeRenderer.rect(this.xOffset + this.largeButtonWidth, this.yOffset, this.largeButtonWidth, this.height);
 	}
 
 	public void drawBackground()
@@ -123,43 +135,38 @@ public class BattleControls
 	private void drawEnd()
 	{
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
-		this.game.font.draw(this.game.batcher, "End Turn", this.xOffset + (3 * this.largeButtonWidth), this.yOffset + ((3 * this.height) / 4), this.smallButtonWidth, 1, false);
+		this.game.font.draw(this.game.batcher, "End Turn", this.xOffset + (3 * this.largeButtonWidth), this.yOffset + ((3 * this.height) / 5), this.smallButtonWidth, 1, false);
 	}
 
 	private void drawEndBackground()
 	{
-		Color color = new Color(.50f, .50f, .3f, 1);
 		if (!this.hasActions())
 		{
-			color = new Color(.70f, .70f, .4f, 1);
+			this.game.batcher.draw(emphasisButton, this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
+		}else{
+			this.game.batcher.draw(button, this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
 		}
-
-		this.game.shapeRenderer.setColor(color);
-		this.game.shapeRenderer.rect(this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
 	}
 
 	private void drawMove()
 	{
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.getData().setScale(.4f);
-		this.game.font.draw(this.game.batcher, "Move", this.xOffset, this.yOffset + ((3 * this.height) / 4), this.largeButtonWidth, 1, false);
+		this.game.font.draw(this.game.batcher, "Move", this.xOffset, this.yOffset + ((3 * this.height) / 5), this.largeButtonWidth, 1, false);
 	}
 
 	private void drawMoveBackground()
 	{
-		Color color = new Color(.3f, .3f, .3f, 1);
 		if (this.state.CanMove())
 		{
-			color = new Color(.4f, .6f, .4f, 1);
+			if (this.state.isMoving)
+			{
+				this.game.batcher.draw(emphasisButton, this.xOffset, this.yOffset, this.largeButtonWidth, this.height);
+			}else{
+				this.game.batcher.draw(activeButton, this.xOffset, this.yOffset, this.largeButtonWidth, this.height);
+			}
+		}else{
+			this.game.batcher.draw(inactiveButton, this.xOffset, this.yOffset, this.largeButtonWidth, this.height);
 		}
-		if (this.state.isMoving)
-		{
-			color = new Color(.5f, .9f, .5f, 1);
-		}
-
-		this.game.shapeRenderer.setColor(color);
-		this.game.shapeRenderer.rect(this.xOffset, this.yOffset, this.largeButtonWidth, this.height);
 	}
 
 	private boolean hasActions()
