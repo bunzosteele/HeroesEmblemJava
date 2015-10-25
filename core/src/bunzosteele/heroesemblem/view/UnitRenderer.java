@@ -19,7 +19,7 @@ public final class UnitRenderer
 	public static void DrawEnemyStats(final HeroesEmblem game, final Unit unit, final int initialX, final int initialY, final int scaledSize) throws IOException
 	{
 		game.font.setColor(Color.WHITE);
-		game.font.getData().setScale(.2f);
+		game.font.getData().setScale(.18f);
 		game.font.draw(game.batcher, unit.name, initialX, initialY - game.font.getData().lineHeight);
 		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 2 * game.font.getData().lineHeight);
 		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - (3 * game.font.getData().lineHeight));
@@ -29,7 +29,7 @@ public final class UnitRenderer
 	public static void DrawOwnedStats(final HeroesEmblem game, final Unit unit, final int initialX, final int initialY, final int scaledSize) throws IOException
 	{
 		game.font.setColor(Color.WHITE);
-		game.font.getData().setScale(.2f);
+		game.font.getData().setScale(.18f);
 		game.font.draw(game.batcher, unit.name, initialX, initialY - game.font.getData().lineHeight);
 		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - 2 * game.font.getData().lineHeight);
 		game.font.draw(game.batcher, "EXP: " + unit.experience + "/" + unit.experienceNeeded, initialX, initialY - (3 * game.font.getData().lineHeight));
@@ -58,7 +58,7 @@ public final class UnitRenderer
 		game.font.setColor(Color.WHITE);
 		game.font.getData().setScale(.33f);
 		game.font.draw(game.batcher, "" + unit.cost, initialX + scaledSize, Gdx.graphics.getHeight() - (scaledSize / 4) - game.font.getData().lineHeight / 2);
-		game.font.getData().setScale(.2f);
+		game.font.getData().setScale(.18f);
 		game.font.draw(game.batcher, unit.name, initialX, initialY - game.font.getData().lineHeight);
 		UnitRenderer.SetHealthFont(unit, unitStats, game.font);
 		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 2 * game.font.getData().lineHeight);
