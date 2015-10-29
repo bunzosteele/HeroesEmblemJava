@@ -180,7 +180,7 @@ public class ShopControls
 			this.state.roster.add(this.state.selected);
 			this.state.gold -= this.state.selected.cost;
 			this.state.selected = null;
-			this.state.stock = UnitGenerator.GenerateStock(this.game);
+			this.state.stock = UnitGenerator.GenerateStock(this.state.roster, this.game);
 			boolean canBuy = false;
 			for(Unit unit : this.state.stock){
 				if (unit.cost < this.state.gold)

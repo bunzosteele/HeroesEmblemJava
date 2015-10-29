@@ -145,6 +145,10 @@ public class BattleWindow
 				this.drawHighlight(tile.x, tile.y, this.state.selected.ability.abilityColor);
 			}
 		}
+		if(this.state.selected != null){
+			final Color color = new Color(.35f, .35f, .55f, .3f);
+			this.drawHighlight(this.state.selected.x, this.state.selected.y, color);
+		}
 	}
 
 	private void drawUnits()

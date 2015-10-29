@@ -23,6 +23,7 @@ public class BattleState
 	public int gold;
 	public int roundsSurvived;
 	public int difficulty;
+	public int battlefieldId;
 	public List<List<Tile>> battlefield;
 	public boolean isMoving;
 	public boolean isAttacking;
@@ -45,7 +46,7 @@ public class BattleState
 		final Random random = new Random();
 		int maxMap = BattlefieldGenerator.DetectMaximumMap();
 		int minMap = BattlefieldGenerator.DetectMinimumMap();	
-		final int battlefieldId = (random.nextInt(difficulty + Math.abs(minMap)) % (maxMap + Math.abs(minMap) + 1)) + minMap;
+		this.battlefieldId = (random.nextInt(difficulty + Math.abs(minMap)) % (maxMap + Math.abs(minMap) + 1)) + minMap;
 		this.battlefield = BattlefieldGenerator.GenerateBattlefield(battlefieldId);
 		final List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
 		final List<Spawn> playerSpawns = new ArrayList<Spawn>();
@@ -60,7 +61,7 @@ public class BattleState
 				enemySpawns.add(spawn);
 			}
 		}
-		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.game);
+		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.roster, this.game);
 		this.heroUnit = shopState.heroUnit;
 		this.SpawnUnits(this.roster, playerSpawns);
 		this.SpawnUnits(this.enemies, enemySpawns);

@@ -1,5 +1,6 @@
 package bunzosteele.heroesemblem.model.Units.Abilities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Rebirth extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(0f, 1f, 0f, .5f);
+		this.areTargetsPersistent = true;
 	}
 
 	@Override
@@ -28,16 +30,12 @@ public class Rebirth extends Ability
 		{
 			return false;
 		}
-		if (this.exhausted)
-		{
-			return false;
-		}
 
 		for (final Tile tile : this.GetTargetTiles(state, originUnit))
 		{
-			for (final Unit unit : state.roster)
+			for (final Unit unit : GetTargetableUnits(state))
 			{
-				if ((unit.x == tile.x) && (unit.y == tile.y) && (unit.currentHealth != unit.maximumHealth))
+				if ((unit.x == tile.x) && (unit.y == tile.y))
 				{
 					return true;
 				}
@@ -51,16 +49,15 @@ public class Rebirth extends Ability
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
-			if ((unit.x == targetTile.x) && (unit.y == targetTile.y) && unit.currentHealth != unit.maximumHealth)
+			if ((unit.x == targetTile.x) && (unit.y == targetTile.y) && unit.currentHealth != unit.maximumHealth && !this.targets.contains(unit))
 			{
 				executor.startAttack();
 				final int heal = unit.maximumHealth - unit.currentHealth;
-				final int initialExp = unit.experience;
-				final int resultingExp = unit.experience / 2;
-				unit.experience = resultingExp;
-				executor.giveExperience(initialExp - resultingExp);
+				unit.experience = 0;
+				executor.giveExperience(heal);
 				unit.healDamage(heal);
 				unit.startHeal();
+				this.targets.add(unit);
 				return true;
 			}
 		}
@@ -70,9 +67,17 @@ public class Rebirth extends Ability
 	@Override
 	public List<Unit> GetTargetableUnits(final BattleState state)
 	{
-		return state.roster;
+		final List<Unit> targetables = new ArrayList<Unit>();
+		for (final Unit unit : state.roster)
+		{
+			if (!this.targets.contains(unit) && (unit.currentHealth != unit.maximumHealth))
+			{
+				targetables.add(unit);
+			}
+		}
+		return targetables;
 	}
-
+	
 	@Override
 	public HashSet<Tile> GetTargetTiles(final BattleState state, final Unit originUnit)
 	{

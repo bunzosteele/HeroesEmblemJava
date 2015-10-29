@@ -55,12 +55,12 @@ public class TutorialShopThirdScreen extends ScreenAdapter
 		}
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
-		this.game.font.getData().setScale(.66f);
+		this.game.font.getData().setScale(.60f);
 		this.game.font.draw(this.game.batcher, "Shop", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
-		this.game.font.getData().setScale(.25f);
+		this.game.font.getData().setScale(.20f);
 		this.game.font.draw(this.game.batcher, "Press the 'Buy' button to purchase the selected unit.\nPress the 'Complete' button to go to battle!\nYour team can also be viewed by selecting the unit from the roster at the bottom of the screen", this.xOffset / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
 		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, 3 * this.xOffset, 3 * this.xOffset * exampleRatio);
 		this.game.batcher.end();

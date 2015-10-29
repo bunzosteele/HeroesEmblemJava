@@ -20,9 +20,9 @@ public class ShopState
 
 	public ShopState(HeroesEmblem game) throws IOException
 	{
-		this.stock = UnitGenerator.GenerateStock(game);
-		this.game = game;
 		this.roster = new ArrayList<Unit>();
+		this.stock = UnitGenerator.GenerateStock(this.roster, game);
+		this.game = game;
 		this.selected = null;
 		this.gold = 5000;
 	}
@@ -30,10 +30,10 @@ public class ShopState
 	public ShopState(final BattleState battleState) throws IOException
 	{
 		this.game = battleState.game;
-		this.stock = UnitGenerator.GenerateStock(battleState.game);
 		this.roster = battleState.roster;
+		this.stock = UnitGenerator.GenerateStock(this.roster, battleState.game);
 		this.selected = null;
-		int bonusGold = battleState.difficulty * 50;
+		int bonusGold = 300 + battleState.difficulty * 25;
 		int totalLevel = 0;
 		for(Unit unit : roster){
 			totalLevel+= unit.level;

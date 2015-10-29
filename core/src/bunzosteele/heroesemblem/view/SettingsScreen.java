@@ -86,7 +86,7 @@ public class SettingsScreen extends ScreenAdapter
 		this.game.batcher.draw(inactiveSmallButtonSprite, (this.xOffset * 3 / 2) + 9 * this.game.font.getData().lineHeight, this.yOffset * 3 - 33 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);	
 		this.game.batcher.draw(inactiveSmallButtonSprite, (this.xOffset * 3 / 2) + 12 * this.game.font.getData().lineHeight, this.yOffset * 3 - 33 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);
 		
-		float cpuSpeed = this.game.settings.getFloat("cpuSpeed", .6f);
+		float cpuSpeed = this.game.settings.getFloat("cpuSpeed", 1.1f);
 		this.game.batcher.draw(activeSmallButtonSprite, ((this.xOffset * 3 / 2) + 12 * this.game.font.getData().lineHeight) - ((3 * this.game.font.getData().lineHeight) * (cpuSpeed - .1f) / .25f), this.yOffset * 3 - 33 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset, this.game.font.getData().lineHeight / 2, 2 * this.xOffset, 2 * this.game.font.getData().lineHeight);

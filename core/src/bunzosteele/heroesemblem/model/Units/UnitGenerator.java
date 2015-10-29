@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 public final class UnitGenerator
 {
 	private static int id = 0;
+	
 
 	private static int GenerateAbility(int team)
 	{
@@ -106,10 +107,10 @@ public final class UnitGenerator
 		return 0;
 	}
 
-	public static List<Unit> GenerateEnemies(final int maxEnemies, final int difficulty, HeroesEmblem game) throws IOException
+	public static List<Unit> GenerateEnemies(final int maxEnemies, final int difficulty, List<Unit> roster, HeroesEmblem game) throws IOException
 	{
 		final List<Unit> enemies = new ArrayList<Unit>();
-		enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), game));
+		enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), roster, game));
 		int remainingPoints = difficulty;
 		final Random random = new Random();
 		while (remainingPoints > 0)
@@ -123,7 +124,7 @@ public final class UnitGenerator
 					enemies.get(levelUpRoll).AddExperience(50);
 				} else
 				{
-					enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), game));
+					enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), roster, game));
 				}
 			} else
 			{
@@ -207,18 +208,18 @@ public final class UnitGenerator
 		return 0;
 	}
 
-	public static List<Unit> GenerateStock(HeroesEmblem game) throws IOException
+	public static List<Unit> GenerateStock(List<Unit> roster, HeroesEmblem game) throws IOException
 	{
 		final List<Unit> stock = new ArrayList<Unit>();
 		while (stock.size() < 8)
 		{
 			final UnitType unitType = UnitGenerator.GenerateUnitType();
-			stock.add(UnitGenerator.GenerateUnit(0, unitType, game));
+			stock.add(UnitGenerator.GenerateUnit(0, unitType, roster, game));
 		}
 		return stock;
 	}
 
-	public static Unit GenerateUnit(final int team, final UnitType type, final HeroesEmblem game) throws IOException
+	public static Unit GenerateUnit(final int team, final UnitType type, List<Unit> roster, final HeroesEmblem game) throws IOException
 	{
 		UnitGenerator.id++;
 		int costModifier = 0;
@@ -231,14 +232,14 @@ public final class UnitGenerator
 		final int accuracyBonus = UnitGenerator.GenerateAccuracyBonus();
 		costModifier += accuracyBonus * 5;
 		final int movementBonus = UnitGenerator.GenerateMovementBonus();
-		costModifier += movementBonus * 200;
+		costModifier += movementBonus * 100;
 		final int healthBonus = UnitGenerator.GenerateHealthBonus();
 		costModifier += healthBonus * 25;
 		final int ability = UnitGenerator.GenerateAbility(team);
-		costModifier += ability * 200;
+		costModifier += ability * 250;
 		if (ability == 0)
 		{
-			costModifier -= 200;
+			costModifier -= 250;
 		}
 
 		final XmlReader reader = new XmlReader();
@@ -254,37 +255,49 @@ public final class UnitGenerator
 		final int minimumRange = unitStats.getInt("MinimumRange");
 		final int cost = unitStats.getInt("Cost") + costModifier;
 
-		final String name = UnitGenerator.GenerateUnitName();
+		final String name = UnitGenerator.GenerateUnitName(roster);
 
 		if (type == UnitType.Spearman)
 		{
-			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
+			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
 		} else if (type == UnitType.Archer)
 		{
-			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
+			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
 		} else if (type == UnitType.Footman)
 		{
-			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
+			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
 		} else if (type == UnitType.Knight)
 		{
-			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
+			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
 		} else if (type == UnitType.Mage)
 		{
-			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
+			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
 		} else
 		{
-			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1f));
+			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
 		}
 	}
 
-	private static String GenerateUnitName() throws IOException
+	private static String GenerateUnitName(List<Unit> roster) throws IOException
 	{
 		final XmlReader reader = new XmlReader();
 		final Element xml = reader.parse(Gdx.files.internal("Names.xml"));
 		final Array<Element> names = xml.getChildrenByName("name");
 		final Random random = new Random();
 		final int roll = random.nextInt(names.size);
+		String name = names.get(roll).getText();
+		while(UnitGenerator.IsNameTaken(roster, name)){
+			name = names.get(roll).getText();
+		}
 		return names.get(roll).getText();
+	}
+	
+	private static boolean IsNameTaken(List<Unit> roster, String name){
+		for(Unit unit : roster){
+			if(unit.name == name)
+				return true;
+		}
+		return false;
 	}
 
 	private static UnitType GenerateUnitType()

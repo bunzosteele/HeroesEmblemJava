@@ -57,7 +57,11 @@ public class BattleScreen extends ScreenAdapter
 		this.unitStatus = new BattleUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.battleControls = new BattleControls(game, this.state, controlHeight, windowWidth, sideWidth);
 		this.aiProcessor = new AiProcessor(state);
-		MusicManager.PlayBattleMusic(this.game.settings.getFloat("musicVolume", .5f));
+		if(state.battlefieldId < 5){
+			MusicManager.PlayEasyBattleMusic(this.game.settings.getFloat("musicVolume", .5f));
+		}else{
+			MusicManager.PlayHardBattleMusic(this.game.settings.getFloat("musicVolume", .5f));	
+		}
 		game.adsController.hideBannerAd();
 	}
 
@@ -127,7 +131,7 @@ public class BattleScreen extends ScreenAdapter
 					{
 						spoofAiThinking = false;
 					}
-				}, this.game.settings.getFloat("cpuSpeed", .6f), 0, 0);
+				}, this.game.settings.getFloat("cpuSpeed", 1.1f), 0, 0);
 				aiProcessor.MakeMove(this.game.settings.getFloat("sfxVolume", .5f));
 			}
 		}else if (this.state.currentPlayer == 0 && Gdx.input.justTouched())

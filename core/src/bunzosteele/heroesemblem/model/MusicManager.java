@@ -8,7 +8,7 @@ public final class MusicManager
 	public static String nowPlayingFile;
 	
 	public static void PlayMenuMusic(float volume){
-		String newFile = "MarchingMusic.mp3";
+		String newFile = "MainTheme.mp3";
 		if(!newFile.equals(MusicManager.nowPlayingFile)){
 			MusicManager.Dispose();
 			MusicManager.nowPlaying = Gdx.audio.newMusic(Gdx.files.internal(newFile));
@@ -27,7 +27,17 @@ public final class MusicManager
 		}
 	}
 	
-	public static void PlayBattleMusic(float volume){
+	public static void PlayEasyBattleMusic(float volume){
+		String newFile = "MarchingMusic.mp3";
+		if(!newFile.equals(MusicManager.nowPlayingFile)){
+			MusicManager.Dispose();
+			MusicManager.nowPlaying = Gdx.audio.newMusic(Gdx.files.internal(newFile));
+			MusicManager.nowPlayingFile = newFile;
+			MusicManager.Play(volume);
+		}
+	}
+	
+	public static void PlayHardBattleMusic(float volume){
 		String newFile = "BattleMusic.mp3";
 		if(!newFile.equals(MusicManager.nowPlayingFile)){
 			MusicManager.Dispose();

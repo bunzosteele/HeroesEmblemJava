@@ -68,19 +68,16 @@ public class TutorialUnitSixthScreen extends ScreenAdapter
 		
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
-		this.game.font.getData().setScale(.66f);
+		this.game.font.getData().setScale(.60f);
 		this.game.font.draw(this.game.batcher, "Units: Priest", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
-		this.game.font.draw(this.game.batcher, "Abilities:", this.xOffset * 3 / 2, this.yOffset * 3 - this.game.font.getData().lineHeight * 3 / 2, this.xOffset * 5 / 2, -1, true);
+		this.game.font.draw(this.game.batcher, "Abilities:", this.xOffset * 3 / 2, this.yOffset * 3 - this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
-		this.game.font.getData().setScale(.25f);
+		this.game.font.getData().setScale(.20f);
 		this.game.batcher.draw(sprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5,  this.xOffset, this.xOffset);
 		this.game.font.draw(this.game.batcher, "Extremely fragile support unit.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Heal: Heal an allied unit.*", this.xOffset * 3 / 2, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight, this.xOffset * 2, -1, true);
-		this.game.font.draw(this.game.batcher, "Rebirth: Restore an allied unit to full health. Has range.", this.xOffset * 3 / 2, this.yOffset * 3 - 4 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
-		this.game.font.draw(this.game.batcher, "Scholar: Give allied unit experience.*", this.xOffset * 3 / 2, this.yOffset * 3 - 6 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
-		this.game.font.draw(this.game.batcher, "*Strengh of ability determined by Attack stat", this.xOffset * 3 / 2, this.yOffset * 3 - 8 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
+		this.game.font.draw(this.game.batcher, "    Heal: Heal an allied unit. Unit loses experience equal to heal amount.\n    Rebirth: Once per unit per battle, restore an allied unit to full health, resetting their level progres.\n    Scholar: Once per unit per battle, give allied unit experience. If that unit levels up, the priest also gains experience.", this.xOffset * 3 / 2, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight, this.xOffset * 2, -1, true);
 		this.game.batcher.end();
 	}
 

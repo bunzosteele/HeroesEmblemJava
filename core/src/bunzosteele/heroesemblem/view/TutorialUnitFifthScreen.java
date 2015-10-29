@@ -69,18 +69,17 @@ public class TutorialUnitFifthScreen extends ScreenAdapter
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 5 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
-		this.game.font.getData().setScale(.66f);
+		this.game.font.getData().setScale(.60f);
 		this.game.font.draw(this.game.batcher, "Units: Mage", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
-		this.game.font.draw(this.game.batcher, "Abilities:", this.xOffset * 3 / 2, this.yOffset * 3 - this.game.font.getData().lineHeight * 5 / 2, this.xOffset * 5 / 2, -1, true);
+		this.game.font.draw(this.game.batcher, "Abilities:", this.xOffset * 3 / 2, this.yOffset * 3 - this.game.font.getData().lineHeight * 2, this.xOffset * 5 / 2, -1, true);
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset/2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
-		this.game.font.getData().setScale(.25f);
+		this.game.font.getData().setScale(.20f);
 		this.game.batcher.draw(sprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5,  this.xOffset, this.xOffset);
 		this.game.font.draw(this.game.batcher, "The mage is powerful, but fragile.\nIt has good range and powerful spells.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "Lightning: Hits unit, and it's nearest units, for decreasing damage.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
-		this.game.font.draw(this.game.batcher, "Teleport: Move any unit on the battlefield.", this.xOffset * 3 / 2, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
+		this.game.font.draw(this.game.batcher, "    Lightning: Hits unit, and it's nearest units, for decreasing damage. Once per battle.\n    Teleport: Move any unit on the battlefield. Once per battle.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 		this.game.batcher.end();
 	}
 

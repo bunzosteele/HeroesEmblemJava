@@ -56,13 +56,13 @@ public class TutorialShopSecondScreen extends ScreenAdapter
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 5 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
-		this.game.font.getData().setScale(.66f);
+		this.game.font.getData().setScale(.60f);
 		this.game.font.draw(this.game.batcher, "Shop", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset/2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
-		this.game.font.getData().setScale(.25f);
+		this.game.font.getData().setScale(.20f);
 		this.game.font.draw(this.game.batcher, "Here, you can see the selected unit's stats.\nThe cost of the unit is in the upper right corner.\nBoosted stats are shown in gold.\nReduced stats are shown in red.\nYou can see how much gold you have remaining above the 'Buy' button in the shop.", this.xOffset, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
 		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, this.yOffset * 2 * exampleRatio, this.yOffset * 2);
 		this.game.batcher.end();
