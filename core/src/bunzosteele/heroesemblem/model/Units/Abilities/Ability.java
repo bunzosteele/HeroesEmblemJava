@@ -84,7 +84,7 @@ public abstract class Ability
 	protected boolean isValidTerrain(final int x, final int y, final BattleState state)
 	{
 		final Tile tile = state.battlefield.get(y).get(x);
-		return state.selected.movement >= tile.movementCost;
+		return tile != null && state.selected != null && state.selected.movement >= tile.movementCost;
 	}
 	
 	public void PlaySound(float volume){
