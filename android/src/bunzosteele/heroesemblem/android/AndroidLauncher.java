@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import bunzosteele.heroesemblem.AdsController;
+import bunzosteele.heroesemblem.AnalyticsController;
 import bunzosteele.heroesemblem.HeroesEmblem;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -15,16 +16,21 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
-public class AndroidLauncher extends AndroidApplication implements AdsController {
+public class AndroidLauncher extends AndroidApplication implements AdsController, AnalyticsController {
 	private static final String BANNER_AD_UNIT_ID = "ca-app-pub-9270769703022419/8818024885";
+	private static final String PROPERTY_ID = "UA-69183424-2";
+	Tracker analytics;
 	AdView bannerAd;
 	
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		View gameView = initializeForView(new HeroesEmblem(this), config);
+		View gameView = initializeForView(new HeroesEmblem(this, this), config);
 		setupAds();
 		RelativeLayout layout = new RelativeLayout(this);
 		layout.addView(gameView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -32,8 +38,19 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		layout.addView(bannerAd, params);
 		setContentView(layout);
+	    GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(this);
+	    analytics = googleAnalytics.newTracker(PROPERTY_ID);
 	}
-
+	
+	@Override
+	public void RecordEvent(String category, String action, String label, long value){		
+		this.analytics.send(new HitBuilders.EventBuilder()
+			.setCategory(category)
+			.setAction(action)
+			.setLabel(label)
+			.setValue(value)
+			.build());
+	}
 	
 	@Override
 	public void onDestroy()
@@ -42,6 +59,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	        this.finish();
 	        android.os.Process.killProcess(android.os.Process.myPid()); 
 	}
+
 	
 	@Override
 	public void showBannerAd(){

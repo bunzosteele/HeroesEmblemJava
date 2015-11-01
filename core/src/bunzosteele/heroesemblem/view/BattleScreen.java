@@ -7,7 +7,9 @@ import bunzosteele.heroesemblem.model.AiProcessor;
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.MusicManager;
 import bunzosteele.heroesemblem.model.ShopState;
+import bunzosteele.heroesemblem.model.Units.LocationDto;
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.Units.UnitDto;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -110,13 +112,55 @@ public class BattleScreen extends ScreenAdapter
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void show()
+	{
+		if(this.game.isQuitting){
+			for(Unit unit : state.roster){
+				state.graveyard.add(generateUnitDto(unit));
+			}
+			this.game.setScreen(new GameOverScreen(game, state.roundsSurvived, state.graveyard));
+		}
+		float cpuSpeed = this.game.settings.getFloat("cpuSpeed", 1.1f);
+		for(Unit unit : this.state.AllUnits()){
+			unit.gameSpeed = cpuSpeed;
+		}
+	}
+	
+	private UnitDto generateUnitDto(Unit deceased){
+		UnitDto unitDto = new UnitDto();
+		unitDto.type = deceased.type.toString();
+		unitDto.name = deceased.name;
+		unitDto.attack = deceased.attack;
+		unitDto.defense = deceased.defense;
+		unitDto.evasion = deceased.evasion;
+		unitDto.accuracy = deceased.accuracy;
+		unitDto.movement = deceased.movement;
+		unitDto.maximumHealth = deceased.maximumHealth;
+		unitDto.level = deceased.level;
+		if(deceased.ability == null){
+			unitDto.ability = "None";
+		}else{
+			unitDto.ability = deceased.ability.displayName;
+		}
+		unitDto.unitsKilled = deceased.unitsKilled;
+		unitDto.damageDealt = deceased.damageDealt;
+		LocationDto location = new LocationDto();
+		location.battlefieldId = Integer.MIN_VALUE;
+		location.x = -1;
+		location.y = -1;
+		unitDto.locationKilled = location;
+		unitDto.roundKilled = this.state.roundsSurvived;
+		return unitDto;
+	}
 
 	public void update() throws IOException
 	{		
 		this.state.CleanBoard();
 		if (this.state.roster.size() == 0)
 		{
-			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived, this.state.heroUnit));
+			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived, this.state.graveyard));
 		}else if (this.state.enemies.size() == 0)
 		{
 			this.state.EndBattle();

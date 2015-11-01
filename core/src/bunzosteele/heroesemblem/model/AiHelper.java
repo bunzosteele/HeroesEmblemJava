@@ -68,7 +68,7 @@ public final class AiHelper
 				Unit.hitSound.play(volume);
 				target.startDamage();
 				if(target.checkDeath(unit) && target.team == 0){
-					state.SaveHeroUnit(target);
+					state.SaveGraveyard(target);
 				}
 			} else
 			{

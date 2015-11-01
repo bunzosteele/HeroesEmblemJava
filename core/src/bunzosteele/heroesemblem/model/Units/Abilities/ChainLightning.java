@@ -62,7 +62,7 @@ public class ChainLightning extends Ability
 					executor.damageDealt += damage;
 					damagedUnit.startDamage();
 					if(damagedUnit.checkDeath(executor) && damagedUnit.team == 0){
-						state.SaveHeroUnit(damagedUnit);
+						state.SaveGraveyard(damagedUnit);
 					}
 					damagedUnits.add(damagedUnit);
 					damage = damage / 2;

@@ -115,3 +115,6 @@ idea {
         }
     }
 }
+    dependencies {
+        compile 'com.google.android.gms:play-services:8.1.0'
+    }

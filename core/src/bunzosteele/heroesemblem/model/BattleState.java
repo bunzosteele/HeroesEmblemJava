@@ -12,7 +12,9 @@ import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.Battlefield.BattlefieldGenerator;
 import bunzosteele.heroesemblem.model.Battlefield.Spawn;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
+import bunzosteele.heroesemblem.model.Units.LocationDto;
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
 public class BattleState
@@ -30,8 +32,8 @@ public class BattleState
 	public boolean isUsingAbility;
 	public int currentPlayer;
 	public int turnCount;
-	public Unit heroUnit;
 	public HeroesEmblem game;
+	public List<UnitDto> graveyard;
 
 	public BattleState(final ShopState shopState) throws IOException
 	{
@@ -62,7 +64,7 @@ public class BattleState
 			}
 		}
 		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.roster, this.game);
-		this.heroUnit = shopState.heroUnit;
+		this.graveyard = shopState.graveyard;
 		this.SpawnUnits(this.roster, playerSpawns);
 		this.SpawnUnits(this.enemies, enemySpawns);
 		this.StartBattle();
@@ -169,16 +171,31 @@ public class BattleState
 		WipeUnitVariables();		
 	}
 	
-	public boolean SaveHeroUnit(Unit deceased){
-		if(this.heroUnit == null){
-			this.heroUnit = deceased;
-			return true;
+	public void SaveGraveyard(Unit deceased){
+		UnitDto unitDto = new UnitDto();
+		unitDto.type = deceased.type.toString();
+		unitDto.name = deceased.name;
+		unitDto.attack = deceased.attack;
+		unitDto.defense = deceased.defense;
+		unitDto.evasion = deceased.evasion;
+		unitDto.accuracy = deceased.accuracy;
+		unitDto.movement = deceased.movement;
+		unitDto.maximumHealth = deceased.maximumHealth;
+		unitDto.level = deceased.level;
+		if(deceased.ability == null){
+			unitDto.ability = "None";
+		}else{
+			unitDto.ability = deceased.ability.displayName;
 		}
-		if(this.heroUnit.level < deceased.level || (this.heroUnit.level == deceased.level && this.heroUnit.experience <= deceased.experience)){
-			this.heroUnit = deceased;
-			return true;
-		}
-		return false;
+		unitDto.unitsKilled = deceased.unitsKilled;
+		unitDto.damageDealt = deceased.damageDealt;
+		LocationDto location = new LocationDto();
+		location.battlefieldId = this.battlefieldId;
+		location.x = deceased.x;
+		location.y = deceased.y;
+		unitDto.locationKilled = location;
+		unitDto.roundKilled = roundsSurvived + 1;
+		this.graveyard.add(unitDto);
 	}
 	
 	private void WipeUnitVariables(){

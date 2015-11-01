@@ -22,6 +22,7 @@ public class BattleUnitStatusPanel
 	int width;
 	int height;
 	Sprite backdrop;
+	Sprite settingsIcon;
 
 	public BattleUnitStatusPanel(final HeroesEmblem game, final BattleState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -45,12 +46,15 @@ public class BattleUnitStatusPanel
 		this.height = height;
 		final AtlasRegion backdropRegion = this.game.textureAtlas.findRegion("BackdropRight");
 		this.backdrop = new Sprite(backdropRegion);
+		final AtlasRegion settingsRegion = this.game.textureAtlas.findRegion("settingsIcon");
+		this.settingsIcon = new Sprite(settingsRegion);
 	}
 
 	public void draw() throws IOException
 	{
 		drawBackground();
 		final int scaledSize = this.width / 3;
+		this.game.batcher.draw(this.settingsIcon, xOffset + scaledSize * 17 / 8, Gdx.graphics.getHeight() - scaledSize * 7 / 8, scaledSize / 2, scaledSize / 2);
 		if (this.state.selected != null)
 		{
 			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, "Attack", this.currentFrame);
@@ -87,6 +91,18 @@ public class BattleUnitStatusPanel
 
 	public void processTouch(final float x, final float y)
 	{
+		int clickedX = Gdx.input.getX();
+		int clickedY = Gdx.input.getY();
+		int xBound = xOffset +  (width * 2 / 3);
+		int yBound = (width / 3);
+		if ((clickedX > xBound) && (clickedY < yBound))
+		{
+			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen()));
+			return;
+		}
 		this.state.selected = null;
+		this.state.isMoving = false;
+		this.state.isUsingAbility = false;
+		this.state.isAttacking = false;
 	}
 }
