@@ -61,7 +61,7 @@ public class Snipe extends Ability
 					executor.damageDealt += damage;
 					unit.startDamage();
 					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveHeroUnit(unit);
+						state.SaveGraveyard(unit);
 					}
 					return true;
 				}

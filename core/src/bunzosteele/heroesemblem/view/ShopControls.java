@@ -5,6 +5,7 @@ import java.io.IOException;
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
 import com.badlogic.gdx.Gdx;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -178,6 +180,26 @@ public class ShopControls
 		if (this.canPurchaseSelected())
 		{
 			this.state.roster.add(this.state.selected);
+			if(this.state.roster.size() == 1){
+				this.state.heroUnit = this.state.selected;
+			}
+			String action = "" + this.state.roundsSurvived;
+			UnitDto unitDto = new UnitDto();
+			unitDto.type = this.state.selected.type.toString();
+			unitDto.attack = this.state.selected.attack;
+			unitDto.defense = this.state.selected.defense;
+			unitDto.evasion = this.state.selected.evasion;
+			unitDto.accuracy = this.state.selected.accuracy;
+			unitDto.movement = this.state.selected.movement;
+			unitDto.maximumHealth = this.state.selected.maximumHealth;
+			if(this.state.selected.ability == null){
+				unitDto.ability = "None";
+			}else{
+				unitDto.ability = this.state.selected.ability.displayName;
+			}
+			Json json = new Json();
+			String parsedUnit = json.toJson(unitDto);
+			this.game.analyticsController.RecordEvent("UnitPurchased", action, parsedUnit, this.state.selected.cost);
 			this.state.gold -= this.state.selected.cost;
 			this.state.selected = null;
 			this.state.stock = UnitGenerator.GenerateStock(this.state.roster, this.game);

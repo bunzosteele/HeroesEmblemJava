@@ -7,6 +7,7 @@ import bunzosteele.heroesemblem.model.HighscoreManager;
 import bunzosteele.heroesemblem.model.MusicManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,7 +28,13 @@ public class SettingsScreen extends ScreenAdapter
 	float smallButtonSize;
 	public static Sound sfxDemo = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
 	boolean erasingHighscores = false;
+	Screen previousScreen = null;
 
+	public SettingsScreen(final HeroesEmblem game, final Screen previousScreen){
+		this(game);
+		this.previousScreen = previousScreen;
+	}
+	
 	public SettingsScreen(final HeroesEmblem game)
 	{
 		this.game = game;
@@ -93,7 +100,11 @@ public class SettingsScreen extends ScreenAdapter
 		this.game.font.getData().setScale(.66f);
 		this.game.font.draw(this.game.batcher, "Settings", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
-		this.game.font.draw(this.game.batcher, "Main Menu", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
+		if(this.previousScreen == null){
+			this.game.font.draw(this.game.batcher, "Main Menu", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
+		}else{
+			this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
+		}
 		this.game.font.draw(this.game.batcher, "SFX Volume:", this.xOffset / 4, this.yOffset * 3 - this.game.font.getData().lineHeight, (float) this.xOffset, 2, false);
 		this.game.font.draw(this.game.batcher, "0", (this.xOffset * 3 / 2), this.yOffset * 3 - this.game.font.getData().lineHeight, (float) smallButtonSize, 1, false);
 		this.game.font.draw(this.game.batcher, "1", (this.xOffset * 3 / 2) + 3 * this.game.font.getData().lineHeight, this.yOffset * 3 - this.game.font.getData().lineHeight, (float) smallButtonSize, 1, false);
@@ -112,7 +123,11 @@ public class SettingsScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "3", (this.xOffset * 3 / 2) + 6 * this.game.font.getData().lineHeight, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, (float) smallButtonSize, 1, false);
 		this.game.font.draw(this.game.batcher, "4", (this.xOffset * 3 / 2) + 9 * this.game.font.getData().lineHeight, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, (float) smallButtonSize, 1, false);
 		this.game.font.draw(this.game.batcher, "5", (this.xOffset * 3 / 2) + 12 * this.game.font.getData().lineHeight, this.yOffset * 3 - 7 * this.game.font.getData().lineHeight, (float) smallButtonSize, 1, false);
-		this.game.font.draw(this.game.batcher, "Erase Highscores", this.xOffset, this.game.font.getData().lineHeight * 7 / 4, (float) this.xOffset * 2, 1, false);
+		if(this.previousScreen == null){
+			this.game.font.draw(this.game.batcher, "Erase Highscores", this.xOffset, this.game.font.getData().lineHeight * 7 / 4, (float) this.xOffset * 2, 1, false);
+		}else{
+			this.game.font.draw(this.game.batcher, "Quit Game", this.xOffset, this.game.font.getData().lineHeight * 7 / 4, (float) this.xOffset * 2, 1, false);
+		}
 		if(this.erasingHighscores){
 			for(int i = 0; i < 33; i++){
 				for(int j = 0; j < 19; j++){
@@ -120,7 +135,11 @@ public class SettingsScreen extends ScreenAdapter
 				}
 			}
 			this.game.font.getData().setScale(.66f);
-			this.game.font.draw(this.game.batcher, "Erase Highscores?", this.xOffset, this.yOffset * 3, (float) this.xOffset * 2, 1, false);
+			if(this.previousScreen == null){
+				this.game.font.draw(this.game.batcher, "Erase Highscores?", this.xOffset, this.yOffset * 3, (float) this.xOffset * 2, 1, false);
+			}else{
+				this.game.font.draw(this.game.batcher, "Resign?", this.xOffset, this.yOffset * 3, (float) this.xOffset * 2, 1, false);
+			}
 			this.game.font.getData().setScale(.33f);
 			this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 4, this.yOffset * 3 / 2, this.xOffset, this.buttonHeight);
 			this.game.batcher.draw(buttonSprite, this.xOffset * 9 / 4, this.yOffset * 3 / 2, this.xOffset, this.buttonHeight);
@@ -187,8 +206,13 @@ public class SettingsScreen extends ScreenAdapter
 		}else{
 			if(y >= this.yOffset * 3 / 2 && y <= this.yOffset * 3 /2 + this.buttonHeight){
 				if(x >= this.xOffset * 3 / 4 && x <= this.xOffset * 3 /4 + this.xOffset){
+					if(this.previousScreen == null){
 					HighscoreManager.EraseHighscores();
 					this.erasingHighscores = false;
+					}else{
+						this.game.isQuitting = true;
+						this.game.setScreen(previousScreen);	
+					}
 				}
 				if(x >= this.xOffset * 9 / 4 && x <= this.xOffset * 9 /4 + this.xOffset){
 					this.erasingHighscores = false;
@@ -283,8 +307,14 @@ public class SettingsScreen extends ScreenAdapter
 	}
 	
 	private void checkMainMenuTouch(int x, int y){
-		if((x >= this.xOffset * 3 - this.game.font.getData().lineHeight && x <= (this.xOffset * 3 - this.game.font.getData().lineHeight) + this.xOffset) && (y >= this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight && y <= this.yOffset * 4 - this.game.font.getData().lineHeight))
-		this.game.setScreen(new MainMenuScreen(this.game));
+		if((x >= this.xOffset * 3 - this.game.font.getData().lineHeight && x <= (this.xOffset * 3 - this.game.font.getData().lineHeight) + this.xOffset) && (y >= this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight && y <= this.yOffset * 4 - this.game.font.getData().lineHeight)){
+			if(this.previousScreen == null){
+				this.game.setScreen(new MainMenuScreen(this.game));
+			}else{
+				this.game.setScreen(previousScreen);
+			}
+		}
+
 	}
 	
 

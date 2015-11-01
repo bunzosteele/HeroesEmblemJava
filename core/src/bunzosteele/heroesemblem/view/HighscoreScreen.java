@@ -6,6 +6,7 @@ import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.HighscoreManager;
 import bunzosteele.heroesemblem.model.HighscoreManager.HighscoreDto;
 import bunzosteele.heroesemblem.model.HighscoreManager.HighscoresDto;
+import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitType;
 import bunzosteele.heroesemblem.model.MusicManager;
 
@@ -118,7 +119,7 @@ public class HighscoreScreen extends ScreenAdapter
 		
 		if(this.selected > -1){
 			if(this.highscores != null && this.selected < this.highscores.highscores.size() && this.highscores.highscores.get(selected) != null){
-				HighscoreManager.UnitDto unit = this.highscores.highscores.get(selected).heroUnit;
+				UnitDto unit = this.highscores.highscores.get(selected).heroUnit;
 				this.game.font.draw(this.game.batcher, unit.name, 3 * this.xOffset, this.headerOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 				this.game.font.getData().setScale(.2f);
 				this.game.font.draw(this.game.batcher, "Level " + unit.level + " " + unit.type, 3 * this.xOffset, this.headerOffset - 5 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);

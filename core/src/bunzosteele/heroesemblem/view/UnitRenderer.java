@@ -59,7 +59,7 @@ public final class UnitRenderer
 		final Element unitStats = xml.getChildByName(unit.type.toString());
 		game.font.setColor(Color.WHITE);
 		game.font.getData().setScale(.33f);
-		game.font.draw(game.batcher, "" + unit.cost, initialX + scaledSize, Gdx.graphics.getHeight() - (scaledSize / 4) - game.font.getData().lineHeight / 2);
+		game.font.draw(game.batcher, "" + unit.cost, initialX + scaledSize, initialY + game.font.getData().lineHeight / 2);
 		game.font.getData().setScale(.18f);
 		game.font.draw(game.batcher, unit.name, initialX, initialY - game.font.getData().lineHeight);
 		game.font.getData().setScale(.20f);

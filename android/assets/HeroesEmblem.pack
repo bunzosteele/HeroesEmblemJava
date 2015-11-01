@@ -5,693 +5,700 @@ filter: Nearest,Nearest
 repeat: none
 ShopControlsExample
   rotate: false
-  xy: 1, 936
+  xy: 1, 934
   size: 858, 87
   orig: 858, 87
   offset: 0, 0
   index: -1
 BattleControlsExample
   rotate: false
-  xy: 1, 849
+  xy: 1, 847
   size: 855, 85
   orig: 855, 85
   offset: 0, 0
   index: -1
 StockExample
   rotate: false
-  xy: 1, 553
+  xy: 1, 551
   size: 423, 294
   orig: 423, 294
   offset: 0, 0
   index: -1
 GlitchIcon_white
   rotate: false
-  xy: 1, 201
+  xy: 1, 199
   size: 350, 350
   orig: 350, 350
   offset: 0, 0
   index: -1
 UnitStatusExample
   rotate: false
-  xy: 426, 451
+  xy: 426, 449
   size: 150, 396
   orig: 150, 396
   offset: 0, 0
   index: -1
 BlueTeam
   rotate: false
-  xy: 861, 957
+  xy: 861, 955
   size: 130, 66
   orig: 130, 66
   offset: 0, 0
   index: -1
 RedTeam
   rotate: false
-  xy: 1, 137
+  xy: 1, 135
   size: 129, 62
   orig: 129, 62
   offset: 0, 0
   index: -1
 ActiveButton
   rotate: false
-  xy: 578, 792
+  xy: 578, 790
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 BackdropBottom
   rotate: false
-  xy: 132, 144
+  xy: 132, 142
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 BackdropLeft
   rotate: false
-  xy: 353, 416
+  xy: 353, 414
   size: 55, 135
   orig: 55, 135
   offset: 0, 0
   index: -1
 BackdropRight
   rotate: false
-  xy: 578, 655
+  xy: 578, 653
   size: 55, 135
   orig: 55, 135
   offset: 0, 0
   index: -1
 Button
   rotate: false
-  xy: 715, 792
+  xy: 715, 790
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 EmphasisButton
   rotate: false
-  xy: 635, 735
+  xy: 635, 733
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 InactiveButton
   rotate: false
-  xy: 635, 678
+  xy: 635, 676
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
+settingsIcon
+  rotate: false
+  xy: 1, 69
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 ActiveSmallButton
   rotate: false
-  xy: 1, 80
+  xy: 269, 142
   size: 55, 55
   orig: 55, 55
   offset: 0, 0
   index: -1
 InactiveSmallButton
   rotate: false
-  xy: 269, 144
+  xy: 353, 357
   size: 55, 55
   orig: 55, 55
   offset: 0, 0
   index: -1
 Pedestal
   rotate: false
-  xy: 353, 366
+  xy: 578, 603
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 Archer-Attack-1-0
   rotate: false
-  xy: 578, 621
+  xy: 772, 756
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Attack-1-1
   rotate: false
-  xy: 772, 758
+  xy: 1, 35
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Attack-2-0
   rotate: false
-  xy: 1, 46
+  xy: 67, 101
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Attack-2-1
   rotate: false
-  xy: 58, 103
+  xy: 353, 323
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-1-0
   rotate: false
-  xy: 353, 332
+  xy: 578, 569
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-1-1
   rotate: false
-  xy: 578, 587
+  xy: 772, 722
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-2-0
   rotate: false
-  xy: 772, 724
+  xy: 806, 756
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-2-1
   rotate: false
-  xy: 806, 758
+  xy: 1, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-3-0
   rotate: false
-  xy: 1, 12
+  xy: 353, 289
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-3-1
   rotate: false
-  xy: 92, 103
+  xy: 578, 535
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Ash
   rotate: false
-  xy: 353, 298
+  xy: 772, 688
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Bridge
   rotate: false
-  xy: 578, 553
+  xy: 806, 722
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 BridgeBot
   rotate: false
-  xy: 772, 690
+  xy: 353, 255
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 BridgeTop
   rotate: false
-  xy: 806, 724
+  xy: 578, 501
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-1-0
   rotate: false
-  xy: 353, 264
+  xy: 806, 688
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-1-1
   rotate: false
-  xy: 578, 519
+  xy: 353, 221
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-2-0
   rotate: false
-  xy: 806, 690
+  xy: 578, 467
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-2-1
   rotate: false
-  xy: 353, 230
+  xy: 35, 35
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-1-0
   rotate: false
-  xy: 578, 485
+  xy: 35, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-1-1
   rotate: false
-  xy: 578, 451
+  xy: 101, 101
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-2-0
   rotate: false
-  xy: 353, 196
+  xy: 326, 165
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-2-1
   rotate: false
-  xy: 635, 644
+  xy: 135, 108
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-3-0
   rotate: false
-  xy: 669, 644
+  xy: 169, 108
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-3-1
   rotate: false
-  xy: 703, 644
+  xy: 203, 108
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Forest
   rotate: false
-  xy: 737, 644
+  xy: 237, 108
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Gold
   rotate: false
-  xy: 35, 46
+  xy: 271, 108
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Grass
   rotate: false
-  xy: 35, 12
+  xy: 635, 642
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-1-0
   rotate: false
-  xy: 861, 923
+  xy: 669, 642
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-1-1
   rotate: false
-  xy: 895, 923
+  xy: 703, 642
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-2-0
   rotate: false
-  xy: 929, 923
+  xy: 737, 642
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-2-1
   rotate: false
-  xy: 858, 889
+  xy: 628, 608
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-1-0
   rotate: false
-  xy: 858, 855
+  xy: 662, 608
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-1-1
   rotate: false
-  xy: 892, 889
+  xy: 696, 608
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-2-0
   rotate: false
-  xy: 892, 855
+  xy: 730, 608
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-2-1
   rotate: false
-  xy: 926, 889
+  xy: 387, 323
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-3-0
   rotate: false
-  xy: 926, 855
+  xy: 387, 289
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-3-1
   rotate: false
-  xy: 963, 923
+  xy: 387, 255
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Lava
   rotate: false
-  xy: 960, 889
+  xy: 387, 221
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-1-0
   rotate: false
-  xy: 960, 855
+  xy: 326, 131
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-1-1
   rotate: false
-  xy: 410, 417
+  xy: 861, 921
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-2-0
   rotate: false
-  xy: 444, 417
+  xy: 895, 921
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-2-1
   rotate: false
-  xy: 478, 417
+  xy: 929, 921
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-1-0
   rotate: false
-  xy: 512, 417
+  xy: 858, 887
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-1-1
   rotate: false
-  xy: 546, 417
+  xy: 858, 853
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-2-0
   rotate: false
-  xy: 580, 417
+  xy: 892, 887
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-2-1
   rotate: false
-  xy: 387, 332
+  xy: 892, 853
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-3-0
   rotate: false
-  xy: 387, 298
+  xy: 926, 887
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-3-1
   rotate: false
-  xy: 387, 264
+  xy: 926, 853
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 MetalFloor
   rotate: false
-  xy: 387, 230
+  xy: 963, 921
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 MetalWall
   rotate: false
-  xy: 387, 196
+  xy: 960, 887
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mountain
   rotate: false
-  xy: 840, 758
+  xy: 960, 853
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Plating
   rotate: false
-  xy: 840, 724
+  xy: 578, 433
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-1-0
   rotate: false
-  xy: 840, 690
+  xy: 410, 415
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-1-1
   rotate: false
-  xy: 772, 656
+  xy: 410, 381
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-2-0
   rotate: false
-  xy: 806, 656
+  xy: 444, 415
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-2-1
   rotate: false
-  xy: 840, 656
+  xy: 444, 381
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-1-0
   rotate: false
-  xy: 69, 69
+  xy: 478, 415
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-1-1
   rotate: false
-  xy: 69, 35
+  xy: 478, 381
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-2-0
   rotate: false
-  xy: 69, 1
+  xy: 512, 415
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-2-1
   rotate: false
-  xy: 103, 69
+  xy: 512, 381
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-3-0
   rotate: false
-  xy: 103, 35
+  xy: 612, 569
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-3-1
   rotate: false
-  xy: 103, 1
+  xy: 612, 535
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Sand
   rotate: false
-  xy: 126, 103
+  xy: 612, 501
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shop
   rotate: false
-  xy: 160, 110
+  xy: 612, 467
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shopkeeper-1
   rotate: false
-  xy: 194, 110
+  xy: 612, 433
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shopkeeper-2
   rotate: false
-  xy: 228, 110
+  xy: 646, 574
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shopkeeper-3
   rotate: false
-  xy: 262, 110
+  xy: 646, 540
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-1-0
   rotate: false
-  xy: 296, 110
+  xy: 680, 574
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-1-1
   rotate: false
-  xy: 137, 69
+  xy: 646, 506
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-2-0
   rotate: false
-  xy: 137, 35
+  xy: 680, 540
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-2-1
   rotate: false
-  xy: 137, 1
+  xy: 714, 574
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-1-0
   rotate: false
-  xy: 171, 76
+  xy: 646, 472
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-1-1
   rotate: false
-  xy: 171, 42
+  xy: 680, 506
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-2-0
   rotate: false
-  xy: 205, 76
+  xy: 714, 540
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-2-1
   rotate: false
-  xy: 171, 8
+  xy: 646, 438
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-3-0
   rotate: false
-  xy: 205, 42
+  xy: 680, 472
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-3-1
   rotate: false
-  xy: 239, 76
+  xy: 714, 506
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Void
   rotate: false
-  xy: 205, 8
+  xy: 680, 438
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Wall
   rotate: false
-  xy: 239, 42
+  xy: 714, 472
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Water
   rotate: false
-  xy: 273, 76
+  xy: 714, 438
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 WoodFloor
   rotate: false
-  xy: 239, 8
+  xy: 748, 574
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 WoodFloorDam
   rotate: false
-  xy: 273, 42
+  xy: 748, 540
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

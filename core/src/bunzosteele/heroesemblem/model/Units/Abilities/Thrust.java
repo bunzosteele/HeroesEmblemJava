@@ -72,7 +72,7 @@ public class Thrust extends Ability
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
 					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveHeroUnit(unit);
+						state.SaveGraveyard(unit);
 					}
 				} else if (this.isInBounds(nextX, nextY, state.battlefield) && !this.isEmpty(nextX, nextY, state.AllUnits()))
 				{
@@ -81,7 +81,7 @@ public class Thrust extends Ability
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
 					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveHeroUnit(unit);
+						state.SaveGraveyard(unit);
 					}
 					for (final Unit nextUnit : state.AllUnits())
 					{
@@ -91,7 +91,7 @@ public class Thrust extends Ability
 							executor.damageDealt += executor.attack / 2;
 							nextUnit.startDamage();
 							if(nextUnit.checkDeath(executor) && nextUnit.team == 0){
-								state.SaveHeroUnit(nextUnit);
+								state.SaveGraveyard(nextUnit);
 							}
 						}
 					}
@@ -102,7 +102,7 @@ public class Thrust extends Ability
 					executor.damageDealt += executor.attack * 2;
 					unit.startDamage();
 					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveHeroUnit(unit);
+						state.SaveGraveyard(unit);
 					}
 				}
 				return true;

@@ -20,12 +20,19 @@ public class HeroesEmblem extends Game
 	public TextureAtlas textureAtlas;
 	public Preferences settings;
 	public AdsController adsController;
+	public AnalyticsController analyticsController;
+	public boolean isQuitting = false;
 	
-	public HeroesEmblem(AdsController adsController){
+	public HeroesEmblem(AdsController adsController, AnalyticsController analyticsController){
             if (adsController != null) {
                 this.adsController = adsController;
             } else {
                 this.adsController = new DummyAdsController();
+            }
+            if (analyticsController != null) {
+                this.analyticsController = analyticsController;
+            } else {
+                this.analyticsController = new DummyAnalyticsController();
             }
 	}
 

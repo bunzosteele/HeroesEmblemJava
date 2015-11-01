@@ -25,6 +25,7 @@ public class MainMenuScreen extends ScreenAdapter
 	public MainMenuScreen(final HeroesEmblem game)
 	{
 		this.game = game;
+		this.game.isQuitting = false;
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
 		final AtlasRegion blueRegion = this.game.textureAtlas.findRegion("BlueTeam");
 		final AtlasRegion redRegion = this.game.textureAtlas.findRegion("RedTeam");

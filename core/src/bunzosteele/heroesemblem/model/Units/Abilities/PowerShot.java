@@ -63,7 +63,7 @@ public class PowerShot extends Ability
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
 					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveHeroUnit(unit);
+						state.SaveGraveyard(unit);
 					}
 				}
 			}

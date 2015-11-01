@@ -9,11 +9,12 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitType;
 
 public class HighscoreManager
 {
-	public static void RecordGame(int roundsSurvived, Unit hero){
+	public static void RecordGame(int roundsSurvived, UnitDto hero){
 		HighscoreDto score = HighscoreManager.GetHighscoreDto(roundsSurvived, hero);
 		HighscoresDto highscores = GetExistingHighscores();
 		List<HighscoreDto> newHighscores = new ArrayList<HighscoreDto>();
@@ -81,27 +82,10 @@ public class HighscoreManager
 		return "";
 	}	
 	
-	private static HighscoreDto GetHighscoreDto(int roundsSurvived, Unit hero){
-		UnitDto heroUnit = new UnitDto();
-		heroUnit.type = hero.type;
-		heroUnit.name = hero.name;
-		heroUnit.attack = hero.attack;
-		heroUnit.defense = hero.defense;
-		heroUnit.evasion = hero.evasion;
-		heroUnit.accuracy = hero.accuracy;
-		heroUnit.movement = hero.movement;
-		heroUnit.maximumHealth = hero.maximumHealth;
-		heroUnit.level = hero.level;
-		if(hero.ability == null){
-			heroUnit.ability = "None";
-		}else{
-			heroUnit.ability = hero.ability.displayName;
-		}
-		heroUnit.unitsKilled = hero.unitsKilled;
-		heroUnit.damageDealt = hero.damageDealt;
+	private static HighscoreDto GetHighscoreDto(int roundsSurvived, UnitDto hero){
 		HighscoreDto score = new HighscoreDto();
 		score.roundsSurvived = roundsSurvived;
-		score.heroUnit = heroUnit;
+		score.heroUnit = hero;
 		return score;
 	}
 	
@@ -112,21 +96,6 @@ public class HighscoreManager
 	public static class HighscoreDto{
 		public int roundsSurvived;
 		public UnitDto heroUnit;
-	}
-	
-	public static class UnitDto{
-		public UnitType type;
-		public String name;
-		public int attack;
-		public int defense;
-		public int evasion;
-		public int accuracy;
-		public int movement;
-		public int maximumHealth;
-		public int level;
-		public String ability;
-		public int unitsKilled;
-		public int damageDealt;
 	}
 	
 	private static final String fileName = "heroesemblem.sav";

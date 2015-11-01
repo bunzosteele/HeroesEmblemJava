@@ -6,6 +6,7 @@ import java.util.List;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
 public class ShopState
@@ -15,6 +16,7 @@ public class ShopState
 	public Unit selected;
 	public int gold;
 	public int roundsSurvived;
+	public List<UnitDto> graveyard;
 	public Unit heroUnit;
 	public HeroesEmblem game;
 
@@ -25,6 +27,7 @@ public class ShopState
 		this.game = game;
 		this.selected = null;
 		this.gold = 5000;
+		this.graveyard = new ArrayList<UnitDto>();
 	}
 
 	public ShopState(final BattleState battleState) throws IOException
@@ -42,6 +45,6 @@ public class ShopState
 		bonusGold = (int) (bonusGold * avgLevel);
 		this.gold = battleState.gold + bonusGold;
 		this.roundsSurvived = battleState.roundsSurvived + 1;
-		this.heroUnit = battleState.heroUnit;
+		this.graveyard = battleState.graveyard;
 	}
 }
