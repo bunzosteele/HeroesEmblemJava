@@ -82,7 +82,7 @@ public class ShopScreen extends ScreenAdapter
 		this.stockWindow = new StockWindow(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
 		this.unitStatus = new ShopUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.shopControls = new ShopControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
-		MusicManager.PlayShopMusic(this.game.settings.getFloat("musicVolume", .5f));
+		MusicManager.PlayShopMusic(this.game.settings.getFloat("musicVolume", .25f));
 	}
 
 	@Override

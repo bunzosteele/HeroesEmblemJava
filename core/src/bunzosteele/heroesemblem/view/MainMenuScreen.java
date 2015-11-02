@@ -37,7 +37,7 @@ public class MainMenuScreen extends ScreenAdapter
 		blueTeamSprite = new Sprite(blueRegion);
 		redTeamSprite = new Sprite(redRegion);
 		backgroundSprite = new Sprite(backgroundRegion);
-		MusicManager.PlayMenuMusic(this.game.settings.getFloat("musicVolume", .5f));
+		MusicManager.PlayMenuMusic(this.game.settings.getFloat("musicVolume", .25f));
 		if(game.adsController.isWifiConnected())
 			game.adsController.showBannerAd();
 	}

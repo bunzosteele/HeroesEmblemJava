@@ -60,9 +60,9 @@ public class BattleScreen extends ScreenAdapter
 		this.battleControls = new BattleControls(game, this.state, controlHeight, windowWidth, sideWidth);
 		this.aiProcessor = new AiProcessor(state);
 		if(state.battlefieldId < 5){
-			MusicManager.PlayEasyBattleMusic(this.game.settings.getFloat("musicVolume", .5f));
+			MusicManager.PlayEasyBattleMusic(this.game.settings.getFloat("musicVolume", .25f));
 		}else{
-			MusicManager.PlayHardBattleMusic(this.game.settings.getFloat("musicVolume", .5f));	
+			MusicManager.PlayHardBattleMusic(this.game.settings.getFloat("musicVolume", .25f));	
 		}
 		game.adsController.hideBannerAd();
 	}

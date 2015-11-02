@@ -84,7 +84,7 @@ public class SettingsScreen extends ScreenAdapter
 		this.game.batcher.draw(inactiveSmallButtonSprite, (this.xOffset * 3 / 2) + 9 * this.game.font.getData().lineHeight, this.yOffset * 3 - 21 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);	
 		this.game.batcher.draw(inactiveSmallButtonSprite, (this.xOffset * 3 / 2) + 12 * this.game.font.getData().lineHeight, this.yOffset * 3 - 21 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);
 		
-		float musicVolume = this.game.settings.getFloat("musicVolume", .5f);
+		float musicVolume = this.game.settings.getFloat("musicVolume", .25f);
 		this.game.batcher.draw(activeSmallButtonSprite, (this.xOffset * 3 / 2) + ((3 * this.game.font.getData().lineHeight) * musicVolume / .25f), this.yOffset * 3 - 21 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);
 		
 		this.game.batcher.draw(inactiveSmallButtonSprite, this.xOffset * 3 / 2, this.yOffset * 3 - 33 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);
