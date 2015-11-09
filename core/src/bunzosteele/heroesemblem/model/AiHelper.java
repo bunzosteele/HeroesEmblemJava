@@ -89,7 +89,7 @@ public final class AiHelper
 		Unit finalTarget = null;
 		for(Unit killableUnit : killableUnits){
 			Tile targetTile = state.battlefield.get(killableUnit.y).get(killableUnit.x);
-			if(finalTarget == null || (killableUnit.evasion + targetTile.accuracyModifier) < (finalTarget.evasion + state.battlefield.get(finalTarget.y).get(finalTarget.x).accuracyModifier)){
+			if(finalTarget == null || (killableUnit.evasion + targetTile.evasionModifier) < (finalTarget.evasion + state.battlefield.get(finalTarget.y).get(finalTarget.x).evasionModifier)){
 				finalTarget = killableUnit;
 			}
 		}

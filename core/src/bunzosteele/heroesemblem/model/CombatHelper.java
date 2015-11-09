@@ -67,7 +67,7 @@ public final class CombatHelper
 	{
 		int chanceToHit = attacker.accuracy;
 		chanceToHit -= victim.evasion;
-		chanceToHit -= tile.accuracyModifier;
+		chanceToHit -= tile.evasionModifier;
 		final Random random = new Random();
 		final int roll = random.nextInt(101);
 		return roll < chanceToHit;

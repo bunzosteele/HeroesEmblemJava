@@ -72,7 +72,7 @@ public class BattleWindow
 			int tileOffset = 0;
 			for (final Tile tile : row)
 			{
-				final AtlasRegion tileRegion = this.game.textureAtlas.findRegion(tile.type.toString());
+				final AtlasRegion tileRegion = this.game.textureAtlas.findRegion(tile.type);
 				final Sprite tileSprite = new Sprite(tileRegion);
 				this.game.batcher.draw(tileSprite, this.xOffset + (this.tileWidth * tileOffset), Gdx.graphics.getHeight() - (this.tileHeight * rowOffset), this.tileWidth, this.tileHeight);
 				tileOffset++;
