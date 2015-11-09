@@ -33,7 +33,7 @@ public class TutorialMenuScreen extends ScreenAdapter
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.backgroundSprite = new Sprite(backgroundRegion);
-		game.adsController.hideBannerAd();
+		game.adsController.showBannerAd();
 	}
 
 	public void draw()

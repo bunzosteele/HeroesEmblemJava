@@ -40,6 +40,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		setContentView(layout);
 	    GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(this);
 	    analytics = googleAnalytics.newTracker(PROPERTY_ID);
+	    analytics.enableAdvertisingIdCollection(true);
 	}
 	
 	@Override

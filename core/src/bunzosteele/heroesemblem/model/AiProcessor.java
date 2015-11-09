@@ -26,7 +26,7 @@ public class AiProcessor
 		
 		List<Unit> unitsToAttack = new ArrayList<Unit>();
 		for(Unit unit: state.enemies){
-			if(!unit.hasAttacked && (state.CanAttack(unit))){
+			if(!unit.hasAttacked && (state.CanAttack(unit) || state.CanUseAbility(unit))){
 				unitsToAttack.add(unit);
 			}
 		}
