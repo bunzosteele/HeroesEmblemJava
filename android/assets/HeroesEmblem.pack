@@ -5,700 +5,1491 @@ filter: Nearest,Nearest
 repeat: none
 ShopControlsExample
   rotate: false
-  xy: 1, 934
+  xy: 1, 936
   size: 858, 87
   orig: 858, 87
   offset: 0, 0
   index: -1
 BattleControlsExample
   rotate: false
-  xy: 1, 847
+  xy: 1, 849
   size: 855, 85
   orig: 855, 85
   offset: 0, 0
   index: -1
 StockExample
   rotate: false
-  xy: 1, 551
+  xy: 1, 553
   size: 423, 294
   orig: 423, 294
   offset: 0, 0
   index: -1
 GlitchIcon_white
   rotate: false
-  xy: 1, 199
+  xy: 1, 201
   size: 350, 350
   orig: 350, 350
   offset: 0, 0
   index: -1
 UnitStatusExample
   rotate: false
-  xy: 426, 449
+  xy: 426, 451
   size: 150, 396
   orig: 150, 396
   offset: 0, 0
   index: -1
 BlueTeam
   rotate: false
-  xy: 861, 955
+  xy: 861, 957
   size: 130, 66
   orig: 130, 66
   offset: 0, 0
   index: -1
 RedTeam
   rotate: false
-  xy: 1, 135
+  xy: 1, 137
   size: 129, 62
   orig: 129, 62
   offset: 0, 0
   index: -1
 ActiveButton
   rotate: false
-  xy: 578, 790
+  xy: 578, 792
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 BackdropBottom
   rotate: false
-  xy: 132, 142
+  xy: 132, 144
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 BackdropLeft
   rotate: false
-  xy: 353, 414
+  xy: 353, 416
   size: 55, 135
   orig: 55, 135
   offset: 0, 0
   index: -1
 BackdropRight
   rotate: false
-  xy: 578, 653
+  xy: 578, 655
   size: 55, 135
   orig: 55, 135
   offset: 0, 0
   index: -1
 Button
   rotate: false
-  xy: 715, 790
+  xy: 715, 792
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 EmphasisButton
   rotate: false
-  xy: 635, 733
+  xy: 635, 735
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
 InactiveButton
   rotate: false
-  xy: 635, 676
+  xy: 635, 678
   size: 135, 55
   orig: 135, 55
   offset: 0, 0
   index: -1
+infoClose
+  rotate: false
+  xy: 1, 71
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+infoOpen
+  rotate: false
+  xy: 772, 726
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 settingsIcon
   rotate: false
-  xy: 1, 69
+  xy: 1, 5
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 ActiveSmallButton
   rotate: false
-  xy: 269, 142
+  xy: 269, 144
   size: 55, 55
   orig: 55, 55
   offset: 0, 0
   index: -1
 InactiveSmallButton
   rotate: false
-  xy: 353, 357
+  xy: 353, 359
   size: 55, 55
   orig: 55, 55
   offset: 0, 0
   index: -1
 Pedestal
   rotate: false
-  xy: 578, 603
+  xy: 578, 605
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 Archer-Attack-1-0
   rotate: false
-  xy: 772, 756
+  xy: 67, 103
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Attack-1-1
   rotate: false
-  xy: 1, 35
+  xy: 772, 692
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Attack-2-0
   rotate: false
-  xy: 67, 101
+  xy: 353, 325
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Attack-2-1
   rotate: false
-  xy: 353, 323
+  xy: 578, 571
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-1-0
   rotate: false
-  xy: 578, 569
+  xy: 67, 69
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-1-1
   rotate: false
-  xy: 772, 722
+  xy: 353, 291
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-2-0
   rotate: false
-  xy: 806, 756
+  xy: 578, 537
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-2-1
   rotate: false
-  xy: 1, 1
+  xy: 67, 35
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-3-0
   rotate: false
-  xy: 353, 289
+  xy: 67, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Archer-Idle-3-1
   rotate: false
-  xy: 578, 535
+  xy: 353, 257
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-Corner-NE
+  rotate: false
+  xy: 578, 503
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-Corner-NW
+  rotate: false
+  xy: 353, 223
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-Corner-SE
+  rotate: false
+  xy: 578, 469
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-Corner-SW
+  rotate: false
+  xy: 806, 692
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-E
+  rotate: false
+  xy: 101, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-N
+  rotate: false
+  xy: 101, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-NE
+  rotate: false
+  xy: 101, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-NW
+  rotate: false
+  xy: 101, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-S
+  rotate: false
+  xy: 326, 167
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-SE
+  rotate: false
+  xy: 135, 110
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-SW
+  rotate: false
+  xy: 135, 76
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Ash-Lava-W
+  rotate: false
+  xy: 169, 110
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Ash
   rotate: false
-  xy: 772, 688
+  xy: 135, 42
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Bridge-Grass-E
+  rotate: false
+  xy: 169, 76
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Bridge-Grass-W
+  rotate: false
+  xy: 203, 110
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Bridge-Sand-E
+  rotate: false
+  xy: 135, 8
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Bridge-Sand-W
+  rotate: false
+  xy: 169, 42
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Bridge
   rotate: false
-  xy: 806, 722
+  xy: 203, 76
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeBot-Grass-E
+  rotate: false
+  xy: 237, 110
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeBot-Grass-W
+  rotate: false
+  xy: 169, 8
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeBot-Sand-E
+  rotate: false
+  xy: 203, 42
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeBot-Sand-W
+  rotate: false
+  xy: 237, 76
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 BridgeBot
   rotate: false
-  xy: 353, 255
+  xy: 271, 110
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeTop-Grass-E
+  rotate: false
+  xy: 203, 8
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeTop-Grass-W
+  rotate: false
+  xy: 237, 42
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeTop-Sand-E
+  rotate: false
+  xy: 271, 76
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BridgeTop-Sand-W
+  rotate: false
+  xy: 237, 8
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 BridgeTop
   rotate: false
-  xy: 578, 501
+  xy: 271, 42
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-1-0
   rotate: false
-  xy: 806, 688
+  xy: 271, 8
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-1-1
   rotate: false
-  xy: 353, 221
+  xy: 635, 644
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-2-0
   rotate: false
-  xy: 578, 467
+  xy: 669, 644
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Attack-2-1
   rotate: false
-  xy: 35, 35
+  xy: 703, 644
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-1-0
   rotate: false
-  xy: 35, 1
+  xy: 737, 644
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-1-1
   rotate: false
-  xy: 101, 101
+  xy: 628, 610
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-2-0
   rotate: false
-  xy: 326, 165
+  xy: 662, 610
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-2-1
   rotate: false
-  xy: 135, 108
+  xy: 696, 610
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-3-0
   rotate: false
-  xy: 169, 108
+  xy: 730, 610
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Footman-Idle-3-1
   rotate: false
-  xy: 203, 108
+  xy: 387, 325
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-E
+  rotate: false
+  xy: 387, 291
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-N
+  rotate: false
+  xy: 387, 257
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-NE
+  rotate: false
+  xy: 387, 223
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-NW
+  rotate: false
+  xy: 326, 133
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-S
+  rotate: false
+  xy: 861, 923
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-SE
+  rotate: false
+  xy: 895, 923
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-SW
+  rotate: false
+  xy: 929, 923
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Forest-Water-W
+  rotate: false
+  xy: 858, 889
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Forest
   rotate: false
-  xy: 237, 108
+  xy: 858, 855
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Gold
   rotate: false
-  xy: 271, 108
+  xy: 892, 889
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-Corner-NE
+  rotate: false
+  xy: 892, 855
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-Corner-NW
+  rotate: false
+  xy: 926, 889
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-Corner-SE
+  rotate: false
+  xy: 926, 855
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-Corner-SW
+  rotate: false
+  xy: 963, 923
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-E
+  rotate: false
+  xy: 960, 889
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-N
+  rotate: false
+  xy: 960, 855
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-NE
+  rotate: false
+  xy: 578, 435
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-NW
+  rotate: false
+  xy: 410, 417
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-S
+  rotate: false
+  xy: 410, 383
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-SE
+  rotate: false
+  xy: 444, 417
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-SW
+  rotate: false
+  xy: 444, 383
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Sand-W
+  rotate: false
+  xy: 478, 417
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-Corner-NE
+  rotate: false
+  xy: 478, 383
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-Corner-NW
+  rotate: false
+  xy: 512, 417
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-Corner-SE
+  rotate: false
+  xy: 512, 383
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-Corner-SW
+  rotate: false
+  xy: 612, 571
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-E-Sand-N
+  rotate: false
+  xy: 612, 537
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-E-Sand-S
+  rotate: false
+  xy: 612, 503
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-E
+  rotate: false
+  xy: 612, 469
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-N-Sand-E
+  rotate: false
+  xy: 612, 435
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-N-Sand-W
+  rotate: false
+  xy: 646, 576
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-N
+  rotate: false
+  xy: 646, 542
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-NE
+  rotate: false
+  xy: 680, 576
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-NW
+  rotate: false
+  xy: 646, 508
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-S-Sand-E
+  rotate: false
+  xy: 680, 542
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-S-Sand-W
+  rotate: false
+  xy: 714, 576
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-S
+  rotate: false
+  xy: 646, 474
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-SE
+  rotate: false
+  xy: 680, 508
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-SW
+  rotate: false
+  xy: 714, 542
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-W-Sand-N
+  rotate: false
+  xy: 646, 440
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-W-Sand-S
+  rotate: false
+  xy: 680, 474
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Grass-Water-W
+  rotate: false
+  xy: 714, 508
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Grass
   rotate: false
-  xy: 635, 642
+  xy: 680, 440
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-1-0
   rotate: false
-  xy: 669, 642
+  xy: 714, 474
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-1-1
   rotate: false
-  xy: 703, 642
+  xy: 714, 440
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-2-0
   rotate: false
-  xy: 737, 642
+  xy: 748, 576
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Attack-2-1
   rotate: false
-  xy: 628, 608
+  xy: 748, 542
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-1-0
   rotate: false
-  xy: 662, 608
+  xy: 748, 508
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-1-1
   rotate: false
-  xy: 696, 608
+  xy: 748, 474
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-2-0
   rotate: false
-  xy: 730, 608
+  xy: 748, 440
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-2-1
   rotate: false
-  xy: 387, 323
+  xy: 764, 610
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-3-0
   rotate: false
-  xy: 387, 289
+  xy: 771, 644
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Knight-Idle-3-1
   rotate: false
-  xy: 387, 255
+  xy: 805, 658
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Lava
   rotate: false
-  xy: 387, 221
+  xy: 782, 576
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-1-0
   rotate: false
-  xy: 326, 131
+  xy: 782, 542
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-1-1
   rotate: false
-  xy: 861, 921
+  xy: 782, 508
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-2-0
   rotate: false
-  xy: 895, 921
+  xy: 782, 474
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Attack-2-1
   rotate: false
-  xy: 929, 921
+  xy: 782, 440
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-1-0
   rotate: false
-  xy: 858, 887
+  xy: 798, 610
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-1-1
   rotate: false
-  xy: 858, 853
+  xy: 816, 576
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-2-0
   rotate: false
-  xy: 892, 887
+  xy: 816, 542
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-2-1
   rotate: false
-  xy: 892, 853
+  xy: 816, 508
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-3-0
   rotate: false
-  xy: 926, 887
+  xy: 816, 474
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mage-Idle-3-1
   rotate: false
-  xy: 926, 853
+  xy: 816, 440
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 MetalFloor
   rotate: false
-  xy: 963, 921
+  xy: 838, 758
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 MetalWall
   rotate: false
-  xy: 960, 887
+  xy: 305, 99
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Mountain
   rotate: false
-  xy: 960, 853
+  xy: 305, 65
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Plating
   rotate: false
-  xy: 578, 433
+  xy: 305, 31
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-1-0
   rotate: false
-  xy: 410, 415
+  xy: 339, 99
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-1-1
   rotate: false
-  xy: 410, 381
+  xy: 339, 65
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-2-0
   rotate: false
-  xy: 444, 415
+  xy: 339, 31
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Attack-2-1
   rotate: false
-  xy: 444, 381
+  xy: 360, 189
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-1-0
   rotate: false
-  xy: 478, 415
+  xy: 360, 155
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-1-1
   rotate: false
-  xy: 478, 381
+  xy: 394, 189
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-2-0
   rotate: false
-  xy: 512, 415
+  xy: 394, 155
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-2-1
   rotate: false
-  xy: 512, 381
+  xy: 373, 121
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-3-0
   rotate: false
-  xy: 612, 569
+  xy: 373, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Priest-Idle-3-1
   rotate: false
-  xy: 612, 535
+  xy: 373, 53
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-Corner-NE
+  rotate: false
+  xy: 373, 19
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-Corner-NW
+  rotate: false
+  xy: 407, 121
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-Corner-SE
+  rotate: false
+  xy: 407, 87
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-Corner-SW
+  rotate: false
+  xy: 407, 53
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-E
+  rotate: false
+  xy: 407, 19
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-N
+  rotate: false
+  xy: 421, 349
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-NE
+  rotate: false
+  xy: 421, 315
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-NW
+  rotate: false
+  xy: 455, 349
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-S
+  rotate: false
+  xy: 421, 281
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-SE
+  rotate: false
+  xy: 455, 315
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-SW
+  rotate: false
+  xy: 489, 349
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Grass-W
+  rotate: false
+  xy: 421, 247
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-Corner-NE
+  rotate: false
+  xy: 455, 281
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-Corner-NW
+  rotate: false
+  xy: 489, 315
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-Corner-SE
+  rotate: false
+  xy: 455, 247
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-Corner-SW
+  rotate: false
+  xy: 489, 281
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-E
+  rotate: false
+  xy: 489, 247
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-N
+  rotate: false
+  xy: 523, 349
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-NE
+  rotate: false
+  xy: 523, 315
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-NW
+  rotate: false
+  xy: 523, 281
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-S
+  rotate: false
+  xy: 523, 247
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-SE
+  rotate: false
+  xy: 428, 213
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-SW
+  rotate: false
+  xy: 428, 179
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Lava-W
+  rotate: false
+  xy: 462, 213
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-Corner-NE
+  rotate: false
+  xy: 462, 179
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-Corner-NW
+  rotate: false
+  xy: 496, 213
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-Corner-SE
+  rotate: false
+  xy: 496, 179
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-Corner-SW
+  rotate: false
+  xy: 530, 213
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-E
+  rotate: false
+  xy: 530, 179
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-N
+  rotate: false
+  xy: 441, 145
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-NE
+  rotate: false
+  xy: 441, 111
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-NW
+  rotate: false
+  xy: 475, 145
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-S
+  rotate: false
+  xy: 441, 77
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-SE
+  rotate: false
+  xy: 475, 111
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-SW
+  rotate: false
+  xy: 509, 145
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Sand-Water-W
+  rotate: false
+  xy: 441, 43
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Sand
   rotate: false
-  xy: 612, 501
+  xy: 475, 77
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shop
   rotate: false
-  xy: 612, 467
+  xy: 509, 111
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shopkeeper-1
   rotate: false
-  xy: 612, 433
+  xy: 475, 43
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shopkeeper-2
   rotate: false
-  xy: 646, 574
+  xy: 509, 77
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Shopkeeper-3
   rotate: false
-  xy: 646, 540
+  xy: 509, 43
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-1-0
   rotate: false
-  xy: 680, 574
+  xy: 441, 9
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-1-1
   rotate: false
-  xy: 646, 506
+  xy: 475, 9
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-2-0
   rotate: false
-  xy: 680, 540
+  xy: 509, 9
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Attack-2-1
   rotate: false
-  xy: 714, 574
+  xy: 543, 145
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-1-0
   rotate: false
-  xy: 646, 472
+  xy: 543, 111
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-1-1
   rotate: false
-  xy: 680, 506
+  xy: 543, 77
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-2-0
   rotate: false
-  xy: 714, 540
+  xy: 543, 43
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-2-1
   rotate: false
-  xy: 646, 438
+  xy: 543, 9
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-3-0
   rotate: false
-  xy: 680, 472
+  xy: 852, 815
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Spearman-Idle-3-1
   rotate: false
-  xy: 714, 506
+  xy: 886, 821
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Void
   rotate: false
-  xy: 680, 438
+  xy: 920, 821
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Wall
   rotate: false
-  xy: 714, 472
+  xy: 954, 821
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Grass-Corner-NE
+  rotate: false
+  xy: 886, 787
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Grass-Corner-NW
+  rotate: false
+  xy: 920, 787
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Grass-Corner-SE
+  rotate: false
+  xy: 954, 787
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Grass-Corner-SW
+  rotate: false
+  xy: 872, 753
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Grass-NW
+  rotate: false
+  xy: 906, 753
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Grass-SW
+  rotate: false
+  xy: 940, 753
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Grass-W
+  rotate: false
+  xy: 974, 753
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Sand-Corner-NE
+  rotate: false
+  xy: 988, 821
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Sand-Corner-NW
+  rotate: false
+  xy: 988, 787
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Sand-Corner-SE
+  rotate: false
+  xy: 646, 406
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Water-Sand-Corner-SW
+  rotate: false
+  xy: 680, 406
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Water
   rotate: false
-  xy: 714, 438
+  xy: 714, 406
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 WoodFloor
   rotate: false
-  xy: 748, 574
+  xy: 748, 406
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 WoodFloorDam
   rotate: false
-  xy: 748, 540
+  xy: 782, 406
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

@@ -19,7 +19,7 @@ public final class BattlefieldGenerator
 		final XmlReader reader = new XmlReader();
 		final Element tileStats = reader.parse(Gdx.files.internal("TileStats.xml"));
 		final Element battlefieldXml = reader.parse(Gdx.files.internal(battlefieldId + ".tmx"));
-		final Map<Integer, TileType> tilesById = BattlefieldGenerator.GenerateTileKeys(battlefieldXml);
+		final Map<Integer, String> tilesById = BattlefieldGenerator.GenerateTileKeys(battlefieldXml);
 		Element terrainLayer = null;
 		for (final Element e : battlefieldXml.getChildrenByName("layer"))
 		{
@@ -63,7 +63,7 @@ public final class BattlefieldGenerator
 		}
 	}
 
-	private static List<List<Tile>> GenerateBattlefieldTiles(final Element xml, final Map<Integer, TileType> tilesById, final Element tileStats, final int width) throws IOException
+	private static List<List<Tile>> GenerateBattlefieldTiles(final Element xml, final Map<Integer, String> tilesById, final Element tileStats, final int width) throws IOException
 	{
 		int rowCount = 0;
 		int columnCount = 0;
@@ -80,7 +80,7 @@ public final class BattlefieldGenerator
 				row = new ArrayList<Tile>();
 			}
 			final int tileId = e.getInt("gid");
-			final TileType tileType = tilesById.get(tileId);
+			final String tileType = tilesById.get(tileId);
 			final Tile tile = TileBuilder.BuildTile(tileType, tileStats);
 			tile.x = columnCount;
 			tile.y = rowCount;
@@ -117,7 +117,7 @@ public final class BattlefieldGenerator
 		return BattlefieldGenerator.GetSpawns(tileset, terrainLayer, battlefieldXml.getChildByName("layer").getInt("width"));
 	}
 
-	private static Map<Integer, TileType> GenerateTileKeys(final Element xml)
+	private static Map<Integer, String> GenerateTileKeys(final Element xml)
 	{
 		Element tileset = null;
 		for (final Element e : xml.getChildrenByName("tileset"))
@@ -133,14 +133,14 @@ public final class BattlefieldGenerator
 			tiles.add(e);
 		}
 
-		final Map<Integer, TileType> tilesById = new HashMap<Integer, TileType>();
+		final Map<Integer, String> tilesById = new HashMap<Integer, String>();
 		for (final Element tile : tiles)
 		{
 			final int id = tile.getInt("id") + 1;
 			final Element tileInfo = tile.getChildByName("image");
 			final String tileSrc = tileInfo.getAttribute("source");
 			final String tileName = tileSrc.substring(0, tileSrc.indexOf("."));
-			final TileType type = TileType.valueOf(tileName);
+			final String type = tileName;
 			tilesById.put(id, type);
 		}
 		return tilesById;

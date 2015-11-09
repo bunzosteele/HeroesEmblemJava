@@ -1,104 +1,770 @@
 <tiles>
 	<Grass>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>1</MovementCost>
 	    <Altitude>1</Altitude>
 	</Grass>
 	<Mountain>
 	    <DefenseModifier>2</DefenseModifier>
-	    <AccuracyModifier>10</AccuracyModifier>
+	    <EvasionModifier>10</EvasionModifier>
 	    <MovementCost>2</MovementCost>
 	    <Altitude>2</Altitude>
 	</Mountain>
 	<Bridge>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>1</MovementCost>
 	    <Altitude>1</Altitude>
 	</Bridge>
 	<BridgeBot>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>10</MovementCost>
 	    <Altitude>1</Altitude>
 	</BridgeBot>
 	<BridgeTop>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>1</MovementCost>
 	    <Altitude>1</Altitude>
 	</BridgeTop>
 	<Forest>
 	    <DefenseModifier>2</DefenseModifier>
-	    <AccuracyModifier>15</AccuracyModifier>
+	    <EvasionModifier>15</EvasionModifier>
 	    <MovementCost>2</MovementCost>
 	    <Altitude>1</Altitude>
 	</Forest>
 	<MetalFloor>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>1</MovementCost>
 	    <Altitude>1</Altitude>
 	</MetalFloor>
 	<MetalWall>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>1000</MovementCost>
 	    <Altitude>5</Altitude>
 	</MetalWall>
 	<Plating>
 	    <DefenseModifier>1</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>2</MovementCost>
 	    <Altitude>1</Altitude>
 	</Plating>
 	<Sand>
-	    <DefenseModifier>1</DefenseModifier>
-	    <AccuracyModifier>-5</AccuracyModifier>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
 	    <MovementCost>3</MovementCost>
 	    <Altitude>1</Altitude>
 	</Sand>
 	<Ash>
-	    <DefenseModifier>1</DefenseModifier>
-	    <AccuracyModifier>-5</AccuracyModifier>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
 	    <MovementCost>3</MovementCost>
 	    <Altitude>1</Altitude>
 	</Ash>
 	<Wall>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>1000</MovementCost>
 	    <Altitude>5</Altitude>
 	</Wall>
 	<Lava>
 	    <DefenseModifier>1</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>10</MovementCost>
 	    <Altitude>0</Altitude>
 	</Lava>
 	<Water>
 	    <DefenseModifier>1</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>10</MovementCost>
 	    <Altitude>0</Altitude>
 	</Water>
 	<WoodFloor>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>1</MovementCost>
 	    <Altitude>1</Altitude>
 	</WoodFloor>
 	<WoodFloorDam>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>-5</AccuracyModifier>
+	    <EvasionModifier>-5</EvasionModifier>
 	    <MovementCost>1</MovementCost>
 	    <Altitude>1</Altitude>
 	</WoodFloorDam>
 	<Void>
 	    <DefenseModifier>0</DefenseModifier>
-	    <AccuracyModifier>0</AccuracyModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>9000</MovementCost>
 	    <Altitude>9000</Altitude>
 	</Void>
+	<BridgeBot-Grass-E>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeBot-Grass-E>
+	<BridgeBot-Grass-W>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeBot-Grass-W>
+	<BridgeBot-Sand-E>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeBot-Sand-E>
+	<BridgeBot-Sand-W>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeBot-Sand-W>
+	<Bridge-Grass-E>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Bridge-Grass-E>
+	<Bridge-Grass-W>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Bridge-Grass-W>
+	<Bridge-Sand-E>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Bridge-Sand-E>
+	<Bridge-Sand-W>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Bridge-Sand-W>
+	<BridgeTop-Grass-W>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeTop-Grass-W>
+	<BridgeTop-Grass-E>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeTop-Grass-E>
+	<BridgeTop-Sand-W>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeTop-Sand-W>
+	<BridgeTop-Sand-E>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</BridgeTop-Sand-E>
+	<Forest-Water-E>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-E>
+	<Forest-Water-S>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-S>
+	<Forest-Water-W>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-W>
+	<Forest-Water-N>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-N>
+	<Forest-Water-NE>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-NE>
+	<Forest-Water-NW>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-NW>
+	<Forest-Water-SW>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-SW>
+	<Forest-Water-SE>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>15</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>1</Altitude>
+	</Forest-Water-SE>
+	<Grass-Sand-Corner-NE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-Corner-NE>
+	<Grass-Sand-Corner-NW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-Corner-NW>
+	<Grass-Sand-Corner-SW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-Corner-SW>
+	<Grass-Sand-Corner-SE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-Corner-SE>
+	<Grass-Sand-E>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-E>
+	<Grass-Sand-W>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-W>
+	<Grass-Sand-N>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-N>
+	<Grass-Sand-S>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-S>
+	<Grass-Sand-NE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-NE>
+	<Grass-Sand-SE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-SE>
+	<Grass-Sand-SW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-SW>
+	<Grass-Sand-NW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Sand-NW>
+	<Grass-Water-Corner-NE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-Corner-NE>
+	<Grass-Water-Corner-NW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-Corner-NW>
+	<Grass-Water-Corner-SW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-Corner-SW>
+	<Grass-Water-Corner-SE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-Corner-SE>
+	<Grass-Water-E>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-E>
+	<Grass-Water-W>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-W>
+	<Grass-Water-N>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-N>
+	<Grass-Water-S>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-S>
+	<Grass-Water-NE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-NE>
+	<Grass-Water-SE>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-SE>
+	<Grass-Water-SW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-SW>
+	<Grass-Water-NW>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-NW>
+	<Grass-Water-E-Sand-N>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-E-Sand-N>
+	<Grass-Water-S-Sand-E>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-S-Sand-E>
+	<Grass-Water-W-Sand-S>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-W-Sand-S>
+	<Grass-Water-N-Sand-W>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-N-Sand-W>
+	<Grass-Water-W-Sand-N>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-W-Sand-N>
+	<Grass-Water-N-Sand-E>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-N-Sand-E>
+	<Grass-Water-E-Sand-S>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-E-Sand-S>
+	<Grass-Water-S-Sand-W>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Grass-Water-S-Sand-W>
+	<Sand-Grass-Corner-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-Corner-NE>
+	<Sand-Grass-Corner-NW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-Corner-NW>
+	<Sand-Grass-Corner-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-Corner-SE>
+	<Sand-Grass-Corner-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-Corner-SW>
+	<Sand-Grass-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-NE>
+	<Sand-Grass-NW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-NW>
+	<Sand-Grass-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-SE>
+	<Sand-Grass-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-SW>
+	<Sand-Grass-N>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-N>
+	<Sand-Grass-S>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-S>
+	<Sand-Grass-E>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-E>
+	<Sand-Grass-W>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Grass-W>
+	<Sand-Water-Corner-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-Corner-NE>
+	<Sand-Water-Corner-NW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-Corner-NW>
+	<Sand-Water-Corner-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-Corner-SE>
+	<Sand-Water-Corner-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-Corner-SW>
+	<Sand-Water-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-NE>
+	<Sand-Water-NW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-NW>
+	<Sand-Water-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-SE>
+	<Sand-Water-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-SW>
+	<Sand-Water-N>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-N>
+	<Sand-Water-S>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-S>
+	<Sand-Water-E>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-E>
+	<Sand-Water-W>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Water-W>
+	<Sand-Lava-Corner-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-Corner-SE>
+	<Sand-Lava-Corner-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-Corner-SW>
+	<Sand-Lava-Corner-SN>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-Corner-NW>
+	<Sand-Lava-Corner-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-Corner-NE>
+	<Sand-Lava-S>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-S>
+	<Sand-Lava-E>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-E>
+	<Sand-Lava-W>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-W>
+	<Sand-Lava-N>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-N>
+	<Sand-Lava-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-SE>
+	<Sand-Lava-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-SW>
+	<Sand-Lava-NW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-NW>
+	<Sand-Lava-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Sand-Lava-NE>
+	<Water-Grass-Corner-NE>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Grass-Corner-NE>
+	<Water-Grass-Corner-NW>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Grass-Corner-NW>
+	<Water-Grass-Corner-SW>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Grass-Corner-SW>
+	<Water-Grass-Corner-SE>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Grass-Corner-SE>
+	<Water-Sand-Corner-NE>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Sand-Corner-NE>
+	<Water-Sand-Corner-NW>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Sand-Corner-NW>
+	<Water-Sand-Corner-SE>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Sand-Corner-SE>
+	<Water-Sand-Corner-SW>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Sand-Corner-SW>
+	<Water-Grass-NW>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Grass-NW>
+	<Water-Grass-SW>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Grass-SW>
+	<Water-Grass-W>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>10</MovementCost>
+	    <Altitude>0</Altitude>
+	</Water-Grass-W>
+	<Ash-Lava-N>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-N>
+	<Ash-Lava-E>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-E>
+	<Ash-Lava-S>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-S>
+	<Ash-Lava-W>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-W>
+	<Ash-Lava-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-NE>
+	<Ash-Lava-NW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-NW>
+	<Ash-Lava-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-SW>
+	<Ash-Lava-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-SE>
+	<Ash-Lava-Corner-NE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-Corner-NE>
+	<Ash-Lava-Corner-NW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-Corner-NW>
+	<Ash-Lava-Corner-SE>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-Corner-SE>
+	<Ash-Lava-Corner-SW>
+	    <DefenseModifier>-1</DefenseModifier>
+	    <EvasionModifier>-5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>1</Altitude>
+	</Ash-Lava-Corner-SW>
 </tiles>

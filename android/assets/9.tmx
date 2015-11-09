@@ -230,97 +230,163 @@
    <image width="32" height="32" source="Sand-Grass-W.png"/>
   </tile>
   <tile id="76">
-   <image width="32" height="32" source="Sand-Lava-Corner-SE.png"/>
+   <image width="32" height="32" source="Sand-Lava-Corner-NE.png"/>
   </tile>
   <tile id="77">
-   <image width="32" height="32" source="Sand-Lava-Corner-SW.png"/>
+   <image width="32" height="32" source="Sand-Lava-Corner-NW.png"/>
   </tile>
   <tile id="78">
-   <image width="32" height="32" source="Sand-Lava-S.png"/>
+   <image width="32" height="32" source="Sand-Lava-Corner-SE.png"/>
   </tile>
   <tile id="79">
-   <image width="32" height="32" source="Sand-Lava-SE.png"/>
+   <image width="32" height="32" source="Sand-Lava-Corner-SW.png"/>
   </tile>
   <tile id="80">
-   <image width="32" height="32" source="Sand-Lava-SW.png"/>
+   <image width="32" height="32" source="Sand-Lava-E.png"/>
   </tile>
   <tile id="81">
-   <image width="32" height="32" source="Sand-Water-Corner-NE.png"/>
+   <image width="32" height="32" source="Sand-Lava-N.png"/>
   </tile>
   <tile id="82">
-   <image width="32" height="32" source="Sand-Water-Corner-NW.png"/>
+   <image width="32" height="32" source="Sand-Lava-NE.png"/>
   </tile>
   <tile id="83">
-   <image width="32" height="32" source="Sand-Water-Corner-SE.png"/>
+   <image width="32" height="32" source="Sand-Lava-NW.png"/>
   </tile>
   <tile id="84">
-   <image width="32" height="32" source="Sand-Water-Corner-SW.png"/>
+   <image width="32" height="32" source="Sand-Lava-S.png"/>
   </tile>
   <tile id="85">
-   <image width="32" height="32" source="Sand-Water-E.png"/>
+   <image width="32" height="32" source="Sand-Lava-SE.png"/>
   </tile>
   <tile id="86">
-   <image width="32" height="32" source="Sand-Water-N.png"/>
+   <image width="32" height="32" source="Sand-Lava-SW.png"/>
   </tile>
   <tile id="87">
-   <image width="32" height="32" source="Sand-Water-NE.png"/>
+   <image width="32" height="32" source="Sand-Lava-W.png"/>
   </tile>
   <tile id="88">
-   <image width="32" height="32" source="Sand-Water-NW.png"/>
+   <image width="32" height="32" source="Sand-Water-Corner-NE.png"/>
   </tile>
   <tile id="89">
-   <image width="32" height="32" source="Sand-Water-S.png"/>
+   <image width="32" height="32" source="Sand-Water-Corner-NW.png"/>
   </tile>
   <tile id="90">
-   <image width="32" height="32" source="Sand-Water-SE.png"/>
+   <image width="32" height="32" source="Sand-Water-Corner-SE.png"/>
   </tile>
   <tile id="91">
-   <image width="32" height="32" source="Sand-Water-SW.png"/>
+   <image width="32" height="32" source="Sand-Water-Corner-SW.png"/>
   </tile>
   <tile id="92">
-   <image width="32" height="32" source="Sand-Water-W.png"/>
+   <image width="32" height="32" source="Sand-Water-E.png"/>
   </tile>
   <tile id="93">
-   <image width="32" height="32" source="Void.png"/>
+   <image width="32" height="32" source="Sand-Water-N.png"/>
   </tile>
   <tile id="94">
-   <image width="32" height="32" source="Wall.png"/>
+   <image width="32" height="32" source="Sand-Water-NE.png"/>
   </tile>
   <tile id="95">
-   <image width="32" height="32" source="Water.png"/>
+   <image width="32" height="32" source="Sand-Water-NW.png"/>
   </tile>
   <tile id="96">
-   <image width="32" height="32" source="Water-Grass-Corner-NE.png"/>
+   <image width="32" height="32" source="Sand-Water-S.png"/>
   </tile>
   <tile id="97">
-   <image width="32" height="32" source="Water-Grass-Corner-NW.png"/>
+   <image width="32" height="32" source="Sand-Water-SE.png"/>
   </tile>
   <tile id="98">
-   <image width="32" height="32" source="Water-Grass-Corner-SE.png"/>
+   <image width="32" height="32" source="Sand-Water-SW.png"/>
   </tile>
   <tile id="99">
-   <image width="32" height="32" source="Water-Grass-Corner-SW.png"/>
+   <image width="32" height="32" source="Sand-Water-W.png"/>
   </tile>
   <tile id="100">
-   <image width="32" height="32" source="Water-Sand-Corner-NE.png"/>
+   <image width="32" height="32" source="Void.png"/>
   </tile>
   <tile id="101">
-   <image width="32" height="32" source="Water-Sand-Corner-NW.png"/>
+   <image width="32" height="32" source="Wall.png"/>
   </tile>
   <tile id="102">
-   <image width="32" height="32" source="Water-Sand-Corner-SE.png"/>
+   <image width="32" height="32" source="Water.png"/>
   </tile>
   <tile id="103">
-   <image width="32" height="32" source="Water-Sand-Corner-SW.png"/>
+   <image width="32" height="32" source="Water-Grass-Corner-NE.png"/>
   </tile>
   <tile id="104">
-   <image width="32" height="32" source="WoodFloor.png"/>
+   <image width="32" height="32" source="Water-Grass-Corner-NW.png"/>
   </tile>
   <tile id="105">
+   <image width="32" height="32" source="Water-Grass-Corner-SE.png"/>
+  </tile>
+  <tile id="106">
+   <image width="32" height="32" source="Water-Grass-Corner-SW.png"/>
+  </tile>
+  <tile id="107">
+   <image width="32" height="32" source="Water-Grass-NW.png"/>
+  </tile>
+  <tile id="108">
+   <image width="32" height="32" source="Water-Grass-SW.png"/>
+  </tile>
+  <tile id="109">
+   <image width="32" height="32" source="Water-Grass-W.png"/>
+  </tile>
+  <tile id="110">
+   <image width="32" height="32" source="Water-Sand-Corner-NE.png"/>
+  </tile>
+  <tile id="111">
+   <image width="32" height="32" source="Water-Sand-Corner-NW.png"/>
+  </tile>
+  <tile id="112">
+   <image width="32" height="32" source="Water-Sand-Corner-SE.png"/>
+  </tile>
+  <tile id="113">
+   <image width="32" height="32" source="Water-Sand-Corner-SW.png"/>
+  </tile>
+  <tile id="114">
+   <image width="32" height="32" source="WoodFloor.png"/>
+  </tile>
+  <tile id="115">
    <image width="32" height="32" source="WoodFloorDam.png"/>
   </tile>
+  <tile id="116">
+   <image width="32" height="32" source="Ash-Lava-Corner-NE.png"/>
+  </tile>
+  <tile id="117">
+   <image width="32" height="32" source="Ash-Lava-Corner-NW.png"/>
+  </tile>
+  <tile id="118">
+   <image width="32" height="32" source="Ash-Lava-Corner-SE.png"/>
+  </tile>
+  <tile id="119">
+   <image width="32" height="32" source="Ash-Lava-Corner-SW.png"/>
+  </tile>
+  <tile id="120">
+   <image width="32" height="32" source="Ash-Lava-E.png"/>
+  </tile>
+  <tile id="121">
+   <image width="32" height="32" source="Ash-Lava-NE.png"/>
+  </tile>
+  <tile id="122">
+   <image width="32" height="32" source="Ash-Lava-NW.png"/>
+  </tile>
+  <tile id="123">
+   <image width="32" height="32" source="Ash-Lava-SE.png"/>
+  </tile>
+  <tile id="124">
+   <image width="32" height="32" source="Ash-Lava-SW.png"/>
+  </tile>
+  <tile id="125">
+   <image width="32" height="32" source="Ash-Lava-W.png"/>
+  </tile>
+  <tile id="126">
+   <image width="32" height="32" source="Ash-Lava-N.png"/>
+  </tile>
+  <tile id="127">
+   <image width="32" height="32" source="Ash-Lava-S.png"/>
+  </tile>
  </tileset>
- <tileset firstgid="107" name="Spawns" tilewidth="32" tileheight="32">
+ <tileset firstgid="129" name="Spawns" tilewidth="32" tileheight="32">
   <tile id="0">
    <image width="32" height="32" source="EnemySpawn.png"/>
   </tile>
@@ -331,153 +397,155 @@
  <layer name="Terrain" width="16" height="9">
   <data>
    <tile gid="62"/>
+   <tile gid="17"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="72"/>
+   <tile gid="85"/>
+   <tile gid="85"/>
+   <tile gid="85"/>
+   <tile gid="85"/>
+   <tile gid="71"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="17"/>
    <tile gid="62"/>
    <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
+   <tile gid="36"/>
+   <tile gid="85"/>
+   <tile gid="85"/>
+   <tile gid="85"/>
+   <tile gid="86"/>
+   <tile gid="123"/>
+   <tile gid="127"/>
+   <tile gid="127"/>
+   <tile gid="122"/>
+   <tile gid="87"/>
+   <tile gid="85"/>
+   <tile gid="85"/>
+   <tile gid="85"/>
+   <tile gid="37"/>
    <tile gid="17"/>
+   <tile gid="31"/>
+   <tile gid="81"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="121"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="88"/>
+   <tile gid="38"/>
+   <tile gid="31"/>
+   <tile gid="81"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="123"/>
+   <tile gid="118"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="117"/>
+   <tile gid="122"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="88"/>
+   <tile gid="38"/>
+   <tile gid="31"/>
+   <tile gid="81"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="126"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="121"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="88"/>
+   <tile gid="38"/>
+   <tile gid="31"/>
+   <tile gid="81"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="125"/>
+   <tile gid="120"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="119"/>
+   <tile gid="124"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="88"/>
+   <tile gid="38"/>
+   <tile gid="31"/>
+   <tile gid="81"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="126"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="121"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="59"/>
+   <tile gid="88"/>
+   <tile gid="38"/>
    <tile gid="17"/>
-   <tile gid="22"/>
-   <tile gid="22"/>
-   <tile gid="22"/>
-   <tile gid="23"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="89"/>
-   <tile gid="49"/>
-   <tile gid="19"/>
-   <tile gid="62"/>
-   <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="17"/>
-   <tile gid="17"/>
-   <tile gid="18"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="89"/>
+   <tile gid="33"/>
+   <tile gid="82"/>
+   <tile gid="82"/>
+   <tile gid="82"/>
    <tile gid="83"/>
-   <tile gid="38"/>
-   <tile gid="26"/>
-   <tile gid="62"/>
-   <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="14"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="15"/>
+   <tile gid="125"/>
+   <tile gid="128"/>
+   <tile gid="128"/>
+   <tile gid="124"/>
+   <tile gid="84"/>
+   <tile gid="82"/>
+   <tile gid="82"/>
+   <tile gid="82"/>
    <tile gid="34"/>
-   <tile gid="28"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="9"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="10"/>
-   <tile gid="38"/>
    <tile gid="17"/>
    <tile gid="62"/>
-   <tile gid="62"/>
    <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="5"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="6"/>
-   <tile gid="38"/>
-   <tile gid="17"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="43"/>
-   <tile gid="96"/>
-   <tile gid="21"/>
-   <tile gid="20"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="93"/>
-   <tile gid="37"/>
-   <tile gid="26"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="17"/>
-   <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="43"/>
-   <tile gid="96"/>
-   <tile gid="56"/>
-   <tile gid="23"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="92"/>
-   <tile gid="85"/>
-   <tile gid="37"/>
+   <tile gid="32"/>
+   <tile gid="32"/>
+   <tile gid="32"/>
+   <tile gid="75"/>
+   <tile gid="82"/>
+   <tile gid="82"/>
+   <tile gid="82"/>
+   <tile gid="82"/>
+   <tile gid="74"/>
+   <tile gid="32"/>
+   <tile gid="32"/>
+   <tile gid="32"/>
    <tile gid="17"/>
    <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="17"/>
-   <tile gid="26"/>
-   <tile gid="26"/>
-   <tile gid="46"/>
-   <tile gid="43"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="92"/>
-   <tile gid="85"/>
-   <tile gid="38"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="26"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="62"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="96"/>
-   <tile gid="93"/>
-   <tile gid="38"/>
   </data>
  </layer>
  <layer name="Spawns" width="16" height="9">
   <data>
+   <tile gid="129"/>
+   <tile gid="129"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -490,21 +558,24 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="129"/>
+   <tile gid="129"/>
+   <tile gid="129"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="107"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="108"/>
+   <tile gid="130"/>
    <tile gid="0"/>
-   <tile gid="108"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="129"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -514,7 +585,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="108"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -523,15 +593,16 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="107"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -540,7 +611,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="107"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -556,28 +626,23 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="107"/>
-   <tile gid="107"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="108"/>
    <tile gid="0"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="108"/>
-   <tile gid="108"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="107"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="108"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -589,21 +654,26 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="107"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="129"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="129"/>
+   <tile gid="129"/>
+   <tile gid="129"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -613,15 +683,11 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="108"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="129"/>
+   <tile gid="129"/>
   </data>
  </layer>
 </map>
