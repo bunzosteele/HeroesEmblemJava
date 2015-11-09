@@ -22,6 +22,7 @@ public class StockWindow
 	int height;
 	int columnWidth;
 	Sprite backgroundSprite;
+	Sprite pedestalSprite;
 
 	public StockWindow(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -51,16 +52,14 @@ public class StockWindow
 		this.columnWidth = width * 2 / 15;
 		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("WoodFloor");
 		this.backgroundSprite = new Sprite(backgroundRegion);
+		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
+		this.pedestalSprite = new Sprite(pedestalRegion);
 	}
 
 	public void draw()
 	{
-		drawBackground();
-		
+		drawBackground();		
 		int unitOffset = 0;
-		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
-		final Sprite pedestalSprite = new Sprite(pedestalRegion);
-
 		for (final Unit unit : this.state.stock)
 		{
 			if (unitOffset < 4)

@@ -1,0 +1,6 @@
+<Sentences>
+	<0><Text>As a child, </Text><Pronoun /><Text> quickly became famous for</Text><PossesivePronoun /><Attribute /></0>
+	<1><Population /><Text> everywhere</Text><Sentiment /><PossesivePronoun /><Attribute /></1>
+	<2><Population /><Sentiment /><PossesivePronoun /><Attribute /></2>
+	<3><Pronoun /><Text> travelled</Text><GenericLocation /><Text> using</Text><PossesivePronoun /><Attribute /><Text> to entertain</Text><Population /></3>
+</Sentences>

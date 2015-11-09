@@ -1,12 +1,15 @@
 package bunzosteele.heroesemblem.view;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.HighscoreManager;
+import bunzosteele.heroesemblem.model.Units.LocationDto;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitDto;
+import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -27,6 +30,12 @@ public class GameOverScreen extends ScreenAdapter
 	int xOffset;
 	int headerOffset;
 	int idleFrame;
+	Sprite pedestalSprite;
+	Sprite backgroundSprite;
+	Sprite buttonSprite;
+	Sprite inactiveButton;
+	float yOffset;
+	float buttonHeight;
 
 	public GameOverScreen(final HeroesEmblem game, int roundsSurvived, List<UnitDto> graveyard)
 	{
@@ -34,8 +43,14 @@ public class GameOverScreen extends ScreenAdapter
 		this.roundsSurvived = roundsSurvived;
 		this.graveyard = graveyard;
 		this.hero = GetHero(graveyard);
-		this.xOffset = Gdx.graphics.getWidth() / 4;
-		this.headerOffset = 5 * Gdx.graphics.getHeight() / 6;
+		if(this.hero != null){
+			try {
+				this.hero.backStory = UnitGenerator.GenerateStoryEnding(this.hero);
+			} catch (IOException e) {	
+			}
+		}
+		this.xOffset = Gdx.graphics.getWidth() / 8;
+		this.headerOffset = Gdx.graphics.getHeight() - xOffset / 16;
 		Timer.schedule(new Task()
 		{
 			@Override
@@ -48,8 +63,15 @@ public class GameOverScreen extends ScreenAdapter
 				}
 			}
 		}, 0, 1 / 3f);
-		if(game.adsController.isWifiConnected())
-			game.adsController.showBannerAd();
+		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
+		this.pedestalSprite = new Sprite(pedestalRegion);
+		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Grass");
+		backgroundSprite = new Sprite(backgroundRegion);
+		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
+		buttonSprite = new Sprite(buttonRegion);
+		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
+		this.inactiveButton = new Sprite(inactiveRegion);
+		game.adsController.showBannerAd();
 	}
 
 	public void draw()
@@ -58,32 +80,52 @@ public class GameOverScreen extends ScreenAdapter
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.game.batcher.begin();
+		for(int i = 0; i < 33; i++){
+			for(int j = 0; j < 19; j++){
+				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
+			}
+		}
+		this.game.font.getData().setScale(.25f);
 		if(this.hero == null){
-			this.game.font.draw(this.game.batcher, "You resigned before anyone even died.", this.xOffset, this.headerOffset, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "Quitter.", this.xOffset, this.headerOffset - this.game.font.getData().lineHeight, xOffset * 2, 1, false);
+			this.game.font.draw(this.game.batcher, "You resigned before anyone even died.", this.xOffset * 2, this.headerOffset - this.xOffset, xOffset * 4, 1, false);
+			this.game.font.draw(this.game.batcher, "Quitter.", this.xOffset * 3, this.headerOffset - this.game.font.getData().lineHeight - this.xOffset, xOffset * 2, 1, false);
 		}else{
-			this.game.font.draw(this.game.batcher, "Rounds Survived: " + this.roundsSurvived, this.xOffset, this.headerOffset, xOffset * 2, 1, false);
+			this.game.font.draw(this.game.batcher, "Rounds Survived: " + this.roundsSurvived, this.xOffset * 2, this.headerOffset, xOffset * 4, 1, false);
 			final AtlasRegion region = game.textureAtlas.findRegion(this.hero.type + "-Idle-" + idleFrame + "-0");
 			final Sprite sprite = new Sprite(region);
-			this.game.font.draw(this.game.batcher, "Your hero: " + this.hero.name, this.xOffset, this.headerOffset - this.game.font.getData().lineHeight, xOffset * 2, 1, false);
+			this.game.font.draw(this.game.batcher, "Your hero: " + this.hero.name, this.xOffset * 2, this.headerOffset - this.game.font.getData().lineHeight, xOffset * 4, 1, false);
 			this.game.font.getData().setScale(.2f);
-			this.game.batcher.draw(sprite, 2 * this.xOffset - (3 * this.game.font.getData().lineHeight / 2) , this.headerOffset - 6 * this.game.font.getData().lineHeight, 3 * this.game.font.getData().lineHeight, 3 * this.game.font.getData().lineHeight);
-			this.game.font.draw(this.game.batcher, "Level " + this.hero.level + " " + this.hero.type,this.xOffset, this.headerOffset - 7 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "Kills:" + this.hero.unitsKilled, this.xOffset, this.headerOffset - 8 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "Damage:" + this.hero.damageDealt, this.xOffset, this.headerOffset - 9 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "HP:" + this.hero.maximumHealth, this.xOffset, this.headerOffset - 10 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "ATK:" + this.hero.attack, this.xOffset, this.headerOffset - 11 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "DEF:" + this.hero.defense, this.xOffset, this.headerOffset - 12 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "EVP:" + this.hero.evasion, this.xOffset, this.headerOffset - 13 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "ACC:" + this.hero.accuracy, this.xOffset, this.headerOffset - 14 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
-			this.game.font.draw(this.game.batcher, "MOVE:" + this.hero.movement, this.xOffset, this.headerOffset - 15 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
+			this.game.batcher.draw(pedestalSprite, 4 * this.xOffset - (3 * this.game.font.getData().lineHeight / 2) , this.headerOffset - 5 * this.game.font.getData().lineHeight, 3 * this.game.font.getData().lineHeight, 3 * this.game.font.getData().lineHeight);
+			this.game.batcher.draw(sprite, 4 * this.xOffset - (3 * this.game.font.getData().lineHeight / 2) + (this.game.font.getData().lineHeight * 3 / 10) , this.headerOffset - 5 * this.game.font.getData().lineHeight + (this.game.font.getData().lineHeight * 3 / 10), (3 * this.game.font.getData().lineHeight) * 8 / 10, (3 * this.game.font.getData().lineHeight) * 8 / 10);
+			this.game.font.draw(this.game.batcher, "Level " + this.hero.level + " " + this.hero.type, this.xOffset * 2, this.headerOffset - 5 * this.game.font.getData().lineHeight, xOffset * 4, 1, false);
+			this.game.font.draw(this.game.batcher, "Kills:" + this.hero.unitsKilled, this.xOffset * 3, this.headerOffset - 6 * this.game.font.getData().lineHeight, xOffset, 1, false);
+			this.game.font.draw(this.game.batcher, "Damage:" + this.hero.damageDealt, this.xOffset * 4, this.headerOffset - 6 * this.game.font.getData().lineHeight, xOffset, 1, false);
+			this.game.font.draw(this.game.batcher, "HP:" + this.hero.maximumHealth, this.xOffset * 3, this.headerOffset - 7 * this.game.font.getData().lineHeight, xOffset, 1, false);
+			this.game.font.draw(this.game.batcher, "MOVE:" + this.hero.movement, this.xOffset * 4, this.headerOffset - 7 * this.game.font.getData().lineHeight, xOffset, 1, false);
+			this.game.font.draw(this.game.batcher, "ATK:" + this.hero.attack, this.xOffset * 3, this.headerOffset - 8 * this.game.font.getData().lineHeight, xOffset, 1, false);
+			this.game.font.draw(this.game.batcher, "DEF:" + this.hero.defense, this.xOffset * 4, this.headerOffset - 8 * this.game.font.getData().lineHeight, xOffset, 1, false);
+			this.game.font.draw(this.game.batcher, "EVP:" + this.hero.evasion, this.xOffset * 3, this.headerOffset - 9 * this.game.font.getData().lineHeight, xOffset, 1, false);
+			this.game.font.draw(this.game.batcher, "ACC:" + this.hero.accuracy, this.xOffset * 4, this.headerOffset - 9 * this.game.font.getData().lineHeight, xOffset, 1, false);
 			if(this.hero.ability != null){
-				this.game.font.draw(this.game.batcher, "Ability:" + this.hero.ability, this.xOffset, this.headerOffset - 16 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
+				this.game.font.draw(this.game.batcher, "Ability:" + this.hero.ability, this.xOffset * 3, this.headerOffset - 10 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
 			}else{
-				this.game.font.draw(this.game.batcher, "Ability: None", this.xOffset, this.headerOffset - 16 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
+				this.game.font.draw(this.game.batcher, "Ability: None", this.xOffset * 3, this.headerOffset - 10 * this.game.font.getData().lineHeight, xOffset * 2, 1, false);
 			}
-			this.game.font.getData().setScale(.33f);	
+			this.game.font.draw(this.game.batcher, this.hero.backStory, this.xOffset / 2, this.headerOffset - 11 * this.game.font.getData().lineHeight, xOffset * 7, 1, true);
 		}
+		this.game.font.getData().setScale(.25f);
+		this.yOffset = this.headerOffset - 15 * this.game.font.getData().lineHeight;
+		this.buttonHeight = this.game.font.getData().lineHeight * 3 / 2;
+		this.game.batcher.draw(inactiveButton, this.xOffset * 5 / 2, this.yOffset - 2 * this.game.font.getData().lineHeight, this.xOffset * 3, this.buttonHeight);
+		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 4, this.yOffset, this.xOffset * 3 / 2, this.buttonHeight);
+		this.game.batcher.draw(buttonSprite, this.xOffset * 13 / 4, this.yOffset, this.xOffset * 3 / 2, this.buttonHeight);
+		this.game.batcher.draw(buttonSprite, this.xOffset * 23 / 4, this.yOffset, this.xOffset * 3 / 2, this.buttonHeight);
+		this.game.font.draw(this.game.batcher, "Submit Highscore", this.xOffset * 5 / 2, this.yOffset - this.game.font.getData().lineHeight, xOffset * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "(Coming Soon)", this.xOffset * 5 / 2, this.yOffset - 2 * this.game.font.getData().lineHeight, xOffset * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Highscores", this.xOffset * 3 / 4, this.yOffset + this.game.font.getData().lineHeight, xOffset * 3 / 2, 1, false);
+		this.game.font.draw(this.game.batcher, "Main Menu", this.xOffset * 13 / 4, this.yOffset + this.game.font.getData().lineHeight, xOffset * 3 / 2, 1, false);
+		this.game.font.draw(this.game.batcher, "New Game", this.xOffset * 23 / 4, this.yOffset + this.game.font.getData().lineHeight, xOffset * 3 / 2, 1, false);
+		this.game.font.getData().setScale(.33f);
 		this.game.batcher.end();
 	}
 
@@ -103,16 +145,42 @@ public class GameOverScreen extends ScreenAdapter
 
 	public void update() throws IOException
 	{
+		
 		if (Gdx.input.justTouched())
 		{
-			String action = this.game.isQuitting ? "Quit" : "Defeated";
-			Json json = new Json();
-			String parsedGraveyard = json.toJson(this.graveyard);			
-			this.game.analyticsController.RecordEvent("GameOver", action, parsedGraveyard, (long) roundsSurvived);
-			if(this.hero != null)
-				HighscoreManager.RecordGame(roundsSurvived, hero);
-			this.game.setScreen(new MainMenuScreen(this.game));
+			if ((Gdx.input.getX() > this.xOffset * 23 / 4 && Gdx.input.getX() < this.xOffset * 23 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
+			{
+				RecordGame();
+				this.game.setScreen(new ShopScreen(this.game));
+				return;
+			}
+			if ((Gdx.input.getX() > this.xOffset * 13 / 4 && Gdx.input.getX() < this.xOffset * 13 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
+			{
+				RecordGame();
+				this.game.setScreen(new MainMenuScreen(this.game));
+				return;
+			}
+			if ((Gdx.input.getX() > this.xOffset * 3 / 4 && Gdx.input.getX() < this.xOffset * 3 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
+			{
+				RecordGame();
+				this.game.setScreen(new HighscoreScreen(this.game));
+				return;
+			}
+			if ((Gdx.input.getX() > this.xOffset * 5 / 2 && Gdx.input.getX() < this.xOffset * 5 / 2 + this.xOffset * 3) && (Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset))
+			{
+				return;
+			}
+
 		}
+	}
+	
+	private void RecordGame(){
+		String action = this.game.isQuitting ? "Quit" : "Defeated";
+		Json json = new Json();
+		String parsedGraveyard = json.toJson(GetAnalyticsDtos(this.graveyard));			
+		this.game.analyticsController.RecordEvent("GameOver", action, parsedGraveyard, (long) roundsSurvived);
+		if(this.hero != null)
+			HighscoreManager.RecordGame(roundsSurvived, hero);
 	}
 	
 	private UnitDto GetHero(List<UnitDto> graveyard){
@@ -126,5 +194,43 @@ public class GameOverScreen extends ScreenAdapter
 			}
 		}
 		return hero;
+	}
+	
+	private List<AnalyticsDto> GetAnalyticsDtos(List<UnitDto> units){
+		List<AnalyticsDto> analyticsDtos = new ArrayList<AnalyticsDto>();
+		for(UnitDto unit : units){
+			AnalyticsDto analyticsDto = new AnalyticsDto();
+			analyticsDto.type = unit.type;
+			analyticsDto.attack = unit.attack;
+			analyticsDto.defense = unit.defense;
+			analyticsDto.evasion = unit.evasion;
+			analyticsDto.accuracy = unit.accuracy;
+			analyticsDto.movement = unit.movement;
+			analyticsDto.maximumHealth = unit.maximumHealth;
+			analyticsDto.level = unit.level;
+			analyticsDto.ability = unit.ability;
+			analyticsDto.unitsKilled = unit.unitsKilled;
+			analyticsDto.damageDealt = unit.damageDealt;
+			analyticsDto.roundKilled = unit.roundKilled;
+			analyticsDto.locationKilled = unit.locationKilled;
+			analyticsDtos.add(analyticsDto);
+		}
+		return analyticsDtos;
+	}
+	
+	private class AnalyticsDto{
+		public String type;
+		public int attack;
+		public int defense;
+		public int evasion;
+		public int accuracy;
+		public int movement;
+		public int maximumHealth;
+		public int level;
+		public String ability;
+		public int unitsKilled;
+		public int damageDealt;
+		public int roundKilled;
+		public LocationDto locationKilled;
 	}
 }

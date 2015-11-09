@@ -195,6 +195,8 @@ public class BattleState
 		location.y = deceased.y;
 		unitDto.locationKilled = location;
 		unitDto.roundKilled = roundsSurvived + 1;
+		unitDto.isMale = deceased.isMale;
+		unitDto.backStory = deceased.backStory;
 		this.graveyard.add(unitDto);
 	}
 	

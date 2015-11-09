@@ -202,6 +202,7 @@ public class ShopControls
 			this.game.analyticsController.RecordEvent("UnitPurchased", action, parsedUnit, this.state.selected.cost);
 			this.state.gold -= this.state.selected.cost;
 			this.state.selected = null;
+			this.state.isInspecting = false;
 			this.state.stock = UnitGenerator.GenerateStock(this.state.roster, this.game);
 			boolean canBuy = false;
 			for(Unit unit : this.state.stock){
@@ -247,6 +248,7 @@ public class ShopControls
 		if (!isHit)
 		{
 			this.state.selected = null;
+			this.state.isInspecting = false;
 		}
 	}
 

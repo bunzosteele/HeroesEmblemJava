@@ -1,0 +1,100 @@
+seaman
+anesthesiologist
+animal breeder
+animal trainer
+anti-terrorism intelligence agent
+aquarium curator
+coach
+cardiologist
+cook
+crossing guard
+dermatologist
+farm hand
+fashion designer
+fashion model
+artist
+personal trainer
+funeral director
+graphic designer
+gynecologist
+secretary
+mail clerk
+model
+museum curator
+musician
+painter
+parole officer
+patent lawyer
+pathologist
+pediatrician
+plastic surgeon
+plumber
+police officer
+psychiatrist
+professor
+miner
+real estate agent
+referee
+security guard
+carpenter
+ship master
+special forces officer
+speech writer
+steel worker
+substance abuse counselor
+surgeon
+tax collector
+tour guide
+travel agent
+tree trimmer
+veterinarian
+watchmaker
+weather observer
+welder
+biologist
+woodworker
+writer
+zoologist
+soldier
+farmer
+peasant
+guard
+carpenter
+butcher
+shoemaker
+stonemason
+constructor
+slave owner
+slave trader
+private investigator
+scout
+student
+apprentice
+assassin
+alchemist
+bouncer
+redditor
+food critic
+ninja
+merchant
+clown
+fool
+entertainer
+acrobat
+murderer
+arsonist
+shepherd
+hunter
+gatherer
+militant
+retired veteran
+knight
+squire
+ranger
+cleric
+embalmer
+hermit
+racist
+arsonist
+thief
+spy

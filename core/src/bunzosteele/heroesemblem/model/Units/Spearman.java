@@ -14,9 +14,9 @@ import bunzosteele.heroesemblem.model.Units.Abilities.Vault;
 
 public class Spearman extends Unit
 {
-	public Spearman(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed) throws IOException
+	public Spearman(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory) throws IOException
 	{
-		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed);
+		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed, isMale, backStory);
 		this.type = UnitType.Spearman;
 		if (ability == 1)
 		{
@@ -60,7 +60,7 @@ public class Spearman extends Unit
 		}
 		
 		score += tile.defenseModifier * 5;
-		score += tile.accuracyModifier;
+		score += tile.evasionModifier;
 		score += tile.altitude * 2;
 
 		return score;

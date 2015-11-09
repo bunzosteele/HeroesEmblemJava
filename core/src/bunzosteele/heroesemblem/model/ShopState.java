@@ -19,6 +19,7 @@ public class ShopState
 	public List<UnitDto> graveyard;
 	public Unit heroUnit;
 	public HeroesEmblem game;
+	public boolean isInspecting = false;
 
 	public ShopState(HeroesEmblem game) throws IOException
 	{

@@ -16,9 +16,9 @@ import bunzosteele.heroesemblem.model.Units.Abilities.Snipe;
 
 public class Archer extends Unit
 {
-	public Archer(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed) throws IOException
+	public Archer(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory) throws IOException
 	{
-		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed);
+		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed, isMale, backStory);
 		this.type = UnitType.Archer;
 		if (ability == 1)
 		{
@@ -62,7 +62,7 @@ public class Archer extends Unit
 		}
 		
 		score += tile.defenseModifier * 5;
-		score += tile.accuracyModifier;
+		score += tile.evasionModifier;
 		score += tile.altitude * 10;
 
 		return score;

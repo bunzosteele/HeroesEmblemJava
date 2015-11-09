@@ -80,5 +80,6 @@ public class ShopStatusPanel
 	public void processTouch(final float x, final float y)
 	{
 		this.state.selected = null;
+		this.state.isInspecting = false;
 	}
 }

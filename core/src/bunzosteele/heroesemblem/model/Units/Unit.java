@@ -59,8 +59,10 @@ public abstract class Unit implements Ai
 	public static Sound missSound = Gdx.audio.newSound(Gdx.files.internal("miss.wav"));;
 	public static Sound levelSound = Gdx.audio.newSound(Gdx.files.internal("level.wav"));;
 	public float gameSpeed;
+	public boolean isMale;
+	public String backStory;
 
-	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float gameSpeed) throws IOException
+	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory) throws IOException
 	{
 		this.team = team;
 		this.name = name;
@@ -78,6 +80,8 @@ public abstract class Unit implements Ai
 		this.level = 1;
 		this.experienceNeeded = 50;
 		this.gameSpeed = gameSpeed;
+		this.isMale = isMale;
+		this.backStory = backStory;
 	}
 
 	public boolean AddExperience(final int experience)

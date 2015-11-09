@@ -1,6 +1,6 @@
 package bunzosteele.heroesemblem.model.Units;
 
-public class UnitDto{
+public class UnitDto {
 	public String type;
 	public String name;
 	public int attack;
@@ -15,4 +15,6 @@ public class UnitDto{
 	public int damageDealt;
 	public int roundKilled;
 	public LocationDto locationKilled;
+	public boolean isMale;
+	public String backStory;
 }

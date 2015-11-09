@@ -1,13 +1,18 @@
 package bunzosteele.heroesemblem.model.Units;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
@@ -256,25 +261,27 @@ public final class UnitGenerator
 		final int cost = unitStats.getInt("Cost") + costModifier;
 
 		final String name = UnitGenerator.GenerateUnitName(roster);
+		final boolean isMale = UnitGenerator.GenerateUnitGender();
+		final String backStory = UnitGenerator.GenerateUnitBackStory(isMale, name);
 
 		if (type == UnitType.Spearman)
 		{
-			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
+			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Archer)
 		{
-			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
+			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Footman)
 		{
-			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
+			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Knight)
 		{
-			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
+			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Mage)
 		{
-			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
+			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else
 		{
-			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f));
+			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		}
 	}
 
@@ -290,6 +297,104 @@ public final class UnitGenerator
 			name = names.get(roll).getText();
 		}
 		return names.get(roll).getText();
+	}
+	
+	private static boolean GenerateUnitGender(){
+		final Random random = new Random();
+		return random.nextBoolean();
+	}
+	
+	public static String GenerateStoryEnding(UnitDto unit) throws IOException{
+		String initialStory = unit.backStory;
+		boolean isDead = unit.locationKilled.x >= 0;
+		String storyPart = "";
+		if(unit.level < 2){
+			if(isDead){
+				storyPart = "DeadFailure";
+			}else{
+				storyPart = "AliveFailure";
+			}
+		}else if(unit.level < 5){
+			if(isDead){
+				storyPart = "DeadNeutral";
+			}else{
+				storyPart = "AliveNeutral";
+			}	
+		}else{
+			if(isDead){
+				storyPart = "DeadSuccess";
+			}else{
+				storyPart = "AliveSuccess";
+			}	
+		}
+		String ending = GenerateSentence(unit.isMale, unit.name, storyPart);
+		ending = " " + ending.substring(1, 2).toUpperCase() + ending.substring(2);
+		return initialStory + ending;
+	}
+	
+	private static String GenerateUnitBackStory(boolean isMale, String name) throws IOException{
+		String firstSentence =  GenerateSentence(isMale, name, "OnceUponATime").trim();
+		String secondSentence =  GenerateSentence(isMale, name, "AndEveryDay");
+		secondSentence = " " + secondSentence.substring(1, 2).toUpperCase() + secondSentence.substring(2);
+		String thirdSentence =  GenerateSentence(isMale, name, "UntilOneDay");
+		thirdSentence = " " + thirdSentence.substring(1, 2).toUpperCase() + thirdSentence.substring(2);
+		return firstSentence + secondSentence + thirdSentence;
+	}
+	
+	private static String GenerateSentence(boolean isMale, String name, String storyPart) throws IOException{
+		XmlReader reader = new XmlReader();
+		Element xml = reader.parse(Gdx.files.internal(storyPart + ".xml"));
+		Random random = new Random();
+		int roll = random.nextInt(xml.getChildCount());
+		Element sentence = xml.getChild(roll);
+		String sentenceString = "";
+		boolean lastVowel = false;
+		for(int i = sentence.getChildCount() - 1; i >= 0; i--){
+			Element child = sentence.getChild(i);
+			String childName = child.getName();
+			if(childName.equals("Text")){
+				String text = child.getText();
+				sentenceString = " " + text + sentenceString;
+			}else if(childName.equals("Name")){
+				sentenceString = " " + name + sentenceString;
+			}else if(childName.equals("Article")){
+				if(lastVowel){
+					sentenceString = " an" + sentenceString;
+				}else{
+					sentenceString = " a" + sentenceString;
+				}
+				lastVowel = false;
+			}else if(childName.equals("Pronoun")){
+				if(isMale){
+					sentenceString = " he" + sentenceString;
+				}else{
+					sentenceString = " she" + sentenceString;
+				}
+			}else if(childName.equals("PossesivePronoun")){
+				if(isMale){
+					sentenceString = " his" + sentenceString;
+				}else{
+					sentenceString = " her" + sentenceString;
+				}
+			}else{
+				String piece = ReadSentencePiece(child.getName());
+				sentenceString = " " + piece + sentenceString;
+				lastVowel = StartsWithVowel(piece.toLowerCase());
+			}
+		}
+		return sentenceString + ".";
+	}
+	
+	private static boolean StartsWithVowel(String piece){
+		return piece.startsWith("a") || piece.startsWith("e") || piece.startsWith("i") || piece.startsWith("o") || piece.startsWith("u") || piece.startsWith("y"); 
+	}
+	
+	private static String ReadSentencePiece(String reference) throws IOException{
+		FileHandle file  = Gdx.files.internal(reference + ".txt");
+		List<String> options = new ArrayList<String>(Arrays.asList(file.readString().split("\r\n")));
+		Random random = new Random();
+		int roll = random.nextInt(options.size());	
+		return options.get(roll);
 	}
 	
 	private static boolean IsNameTaken(List<Unit> roster, String name){

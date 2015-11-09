@@ -152,6 +152,8 @@ public class BattleScreen extends ScreenAdapter
 		location.y = -1;
 		unitDto.locationKilled = location;
 		unitDto.roundKilled = this.state.roundsSurvived;
+		unitDto.isMale = deceased.isMale;
+		unitDto.backStory = deceased.backStory;
 		return unitDto;
 	}
 

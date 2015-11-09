@@ -25,6 +25,7 @@ public class ShopScreen extends ScreenAdapter
 	StockWindow stockWindow;
 	ShopUnitStatusPanel unitStatus;
 	ShopControls shopControls;
+	ShopUnitInfoPanel unitInfo;
 
 	public ShopScreen(final HeroesEmblem game) throws IOException
 	{
@@ -47,7 +48,11 @@ public class ShopScreen extends ScreenAdapter
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		this.game.batcher.begin();
-		this.stockWindow.draw();
+		if(this.state.isInspecting){
+			this.unitInfo.draw();
+		}else{
+			this.stockWindow.draw();
+		}
 		this.shopStatus.draw();
 		this.unitStatus.draw();
 		this.shopControls.draw();
@@ -57,7 +62,7 @@ public class ShopScreen extends ScreenAdapter
 	private void InitializeShopScreen(final HeroesEmblem game)
 	{
 		this.game = game;
-
+		this.game.isQuitting = false;
 		int sideWidth = Gdx.graphics.getWidth() / 6;
 		int controlHeight = Gdx.graphics.getHeight() / 6;
 		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
@@ -82,6 +87,7 @@ public class ShopScreen extends ScreenAdapter
 		this.stockWindow = new StockWindow(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
 		this.unitStatus = new ShopUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.shopControls = new ShopControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
+		this.unitInfo = new ShopUnitInfoPanel(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
 		MusicManager.PlayShopMusic(this.game.settings.getFloat("musicVolume", .25f));
 	}
 
@@ -141,6 +147,8 @@ public class ShopScreen extends ScreenAdapter
 		location.y = -1;
 		unitDto.locationKilled = location;
 		unitDto.roundKilled = this.state.roundsSurvived;
+		unitDto.isMale = deceased.isMale;
+		unitDto.backStory = deceased.backStory;
 		return unitDto;
 	}
 
@@ -149,7 +157,7 @@ public class ShopScreen extends ScreenAdapter
 	{
 		if (Gdx.input.justTouched())
 		{
-			if (this.stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			if (!this.state.isInspecting && this.stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			} else if (this.shopStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
@@ -161,7 +169,11 @@ public class ShopScreen extends ScreenAdapter
 			} else if (this.shopControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.shopControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (this.state.isInspecting && this.unitInfo.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			{
+				this.unitInfo.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			}
+			
 		}
 	}
 }

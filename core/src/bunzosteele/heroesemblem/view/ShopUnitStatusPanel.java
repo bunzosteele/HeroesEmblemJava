@@ -22,6 +22,8 @@ public class ShopUnitStatusPanel
 	int height;
 	Sprite backdrop;
 	Sprite settingsIcon;
+	Sprite infoOpen;
+	Sprite infoClose;
 
 	public ShopUnitStatusPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -47,6 +49,10 @@ public class ShopUnitStatusPanel
 		this.backdrop = new Sprite(backdropRegion);
 		final AtlasRegion settingsRegion = this.game.textureAtlas.findRegion("settingsIcon");
 		this.settingsIcon = new Sprite(settingsRegion);
+		final AtlasRegion infoOpenRegion = this.game.textureAtlas.findRegion("infoOpen");
+		this.infoOpen = new Sprite(infoOpenRegion);
+		final AtlasRegion infoCloseRegion = this.game.textureAtlas.findRegion("infoClose");
+		this.infoClose = new Sprite(infoCloseRegion);
 	}
 
 	public void draw() throws IOException
@@ -56,6 +62,11 @@ public class ShopUnitStatusPanel
 		this.game.batcher.draw(this.settingsIcon, xOffset + scaledSize * 17 / 8, Gdx.graphics.getHeight() - scaledSize * 7 / 8, scaledSize / 2, scaledSize / 2);
 		if (this.state.selected != null)
 		{
+			if(this.state.isInspecting){
+			this.game.batcher.draw(this.infoClose, xOffset + scaledSize / 4, Gdx.graphics.getHeight() - this.height + scaledSize / 2, scaledSize / 2, scaledSize / 2);
+			}else{
+				this.game.batcher.draw(this.infoOpen, xOffset + scaledSize / 4, Gdx.graphics.getHeight() - this.height + scaledSize / 2, scaledSize / 2, scaledSize / 2);				
+			}
 			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 7 / 4, scaledSize, "Idle", this.currentFrame);
 			if (!this.state.roster.contains(this.state.selected))
 			{
@@ -88,13 +99,21 @@ public class ShopUnitStatusPanel
 	{
 		int clickedX = Gdx.input.getX();
 		int clickedY = Gdx.input.getY();
-		int xBound = xOffset +  (width * 2 / 3);
-		int yBound = (width / 3);
-		if ((clickedX > xBound) && (clickedY < yBound))
+		int xBoundSetting = xOffset +  (width * 2 / 3);
+		int yBoundSetting = (width / 3);
+		if ((clickedX > xBoundSetting) && (clickedY < yBoundSetting))
 		{
 			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen()));
 			return;
 		}
+		int xBoundInfo = xOffset + (width / 3);
+		int yBoundInfo= this.height - (width / 2);
+		if ((clickedX < xBoundInfo) && (clickedY > yBoundInfo) && state.selected != null)
+		{
+			this.state.isInspecting = !this.state.isInspecting;
+			return;
+		}
 		this.state.selected = null;
+		this.state.isInspecting = false;
 	}
 }
