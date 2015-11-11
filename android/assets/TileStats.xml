@@ -768,9 +768,9 @@
 	    <Altitude>1</Altitude>
 	</Ash-Lava-Corner-SW>
 	<Volcano>
-	    <DefenseModifier>2</DefenseModifier>
-	    <EvasionModifier>10</EvasionModifier>
-	    <MovementCost>2</MovementCost>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
 	    <Altitude>2</Altitude>
 	</Volcano>
 	<Lava-Ash-N>
