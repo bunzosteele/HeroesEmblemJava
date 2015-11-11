@@ -30,6 +30,7 @@ public class TutorialBattleSecondScreen extends ScreenAdapter
 	Sprite bridgeSprite;
 	Sprite forestSprite;
 	Sprite mountainSprite;
+	Sprite volcanoSprite;
 	Sprite lavaSprite;
 	Sprite waterSprite;
 	Sprite voidSprite;
@@ -54,6 +55,7 @@ public class TutorialBattleSecondScreen extends ScreenAdapter
 		final AtlasRegion bridgeRegion = this.game.textureAtlas.findRegion("Bridge");
 		final AtlasRegion forestRegion = this.game.textureAtlas.findRegion("Forest");
 		final AtlasRegion mountainRegion = this.game.textureAtlas.findRegion("Mountain");
+		final AtlasRegion volcanoRegion = this.game.textureAtlas.findRegion("Volcano");
 		final AtlasRegion lavaRegion = this.game.textureAtlas.findRegion("Lava");
 		final AtlasRegion waterRegion = this.game.textureAtlas.findRegion("Water");
 		final AtlasRegion voidRegion = this.game.textureAtlas.findRegion("Void");
@@ -73,6 +75,7 @@ public class TutorialBattleSecondScreen extends ScreenAdapter
 		this.bridgeSprite = new Sprite(bridgeRegion);
 		this.forestSprite = new Sprite(forestRegion);
 		this.mountainSprite = new Sprite(mountainRegion);
+		this.volcanoSprite = new Sprite(volcanoRegion);
 		this.lavaSprite = new Sprite(lavaRegion);
 		this.waterSprite = new Sprite(waterRegion);
 		this.voidSprite = new Sprite(voidRegion);
@@ -108,9 +111,10 @@ public class TutorialBattleSecondScreen extends ScreenAdapter
 		this.game.batcher.draw(metalFloorSprite, this.xOffset / 2, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset / 8, this.xOffset / 8, this.xOffset / 8);
 		this.game.batcher.draw(bridgeSprite, this.xOffset * 5 / 8, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset / 8, this.xOffset / 8, this.xOffset / 8);
 		this.game.font.draw(this.game.batcher, "Beneficial", 0, this.yOffset * 3 - this.xOffset / 4 - this.xOffset / 8, (float) this.xOffset, 1, false);
-		this.game.batcher.draw(forestSprite, this.xOffset * 5 / 16, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset * 3 / 8, this.xOffset / 8, this.xOffset / 8);
-		this.game.batcher.draw(mountainSprite, this.xOffset * 7 / 16, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset * 3 / 8, this.xOffset / 8, this.xOffset / 8);
-		this.game.batcher.draw(platingSprite, this.xOffset * 9 / 16, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset * 3 / 8, this.xOffset / 8, this.xOffset / 8);
+		this.game.batcher.draw(volcanoSprite, this.xOffset * 4 / 16, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset * 3 / 8, this.xOffset / 8, this.xOffset / 8);
+		this.game.batcher.draw(forestSprite, this.xOffset * 6 / 16, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset * 3 / 8, this.xOffset / 8, this.xOffset / 8);
+		this.game.batcher.draw(mountainSprite, this.xOffset * 8 / 16, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset * 3 / 8, this.xOffset / 8, this.xOffset / 8);
+		this.game.batcher.draw(platingSprite, this.xOffset * 10 / 16, this.yOffset * 3 - 2 * this.game.font.getData().lineHeight - this.xOffset * 3 / 8, this.xOffset / 8, this.xOffset / 8);
 		this.game.font.draw(this.game.batcher, "Detrimental", 0, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight - this.xOffset / 4, (float) this.xOffset, 1, false);
 		this.game.batcher.draw(sandSprite, this.xOffset * 3 / 8, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight - this.xOffset /2, this.xOffset / 8, this.xOffset / 8);
 		this.game.batcher.draw(ashSprite, this.xOffset / 2, this.yOffset * 3 - 3 * this.game.font.getData().lineHeight - this.xOffset / 2, this.xOffset / 8, this.xOffset / 8);
