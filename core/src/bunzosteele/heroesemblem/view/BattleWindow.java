@@ -8,6 +8,7 @@ import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.CombatHelper;
 import bunzosteele.heroesemblem.model.MovementHelper;
+import bunzosteele.heroesemblem.model.BattleState.Move;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
@@ -210,6 +211,7 @@ public class BattleWindow
 
 								this.state.isAttacking = false;
 								this.state.selected.hasAttacked = true;
+								this.state.ClearUndos();
 								this.state.selected = null;
 								return;
 							}
@@ -234,6 +236,7 @@ public class BattleWindow
 							this.state.isUsingAbility = false;
 							this.state.selected.hasAttacked = true;
 							this.state.selected.ability.exhausted = true;
+							this.state.ClearUndos();
 							this.state.selected = null;			
 							return;
 						} else
@@ -281,10 +284,15 @@ public class BattleWindow
 					if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
 					{
 						this.state.selected.distanceMoved = (Math.abs(this.state.selected.x - tile.x) + Math.abs(this.state.selected.y - tile.y));
+						Move oldLocation = state.new Move();
+						oldLocation.oldX = state.selected.x;
+						oldLocation.oldY = state.selected.y;
+						oldLocation.unit = this.state.selected;
 						this.state.selected.x = tile.x;
 						this.state.selected.y = tile.y;
 						this.state.isMoving = false;
 						this.state.selected.hasMoved = true;
+						this.state.undos.push(oldLocation);
 						return;
 					}
 				}

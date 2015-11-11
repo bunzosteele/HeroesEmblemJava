@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -34,6 +35,7 @@ public class BattleState
 	public int turnCount;
 	public HeroesEmblem game;
 	public List<UnitDto> graveyard;
+	public Stack<Move> undos;
 
 	public BattleState(final ShopState shopState) throws IOException
 	{
@@ -65,6 +67,7 @@ public class BattleState
 		}
 		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.roster, this.game);
 		this.graveyard = shopState.graveyard;
+		this.undos = new Stack<Move>();
 		this.SpawnUnits(this.roster, playerSpawns);
 		this.SpawnUnits(this.enemies, enemySpawns);
 		this.StartBattle();
@@ -127,6 +130,16 @@ public class BattleState
 			return false;
 		}
 	}
+	
+	public boolean CanUndo(){
+		return this.selected != null && this.undos.size() > 0 && this.selected == this.undos.peek().unit;
+	}
+	
+	public void ClearUndos(){
+		while(this.undos.size() > 0){
+			this.undos.pop();
+		}
+	}
 
 	public void CleanBoard()
 	{
@@ -164,11 +177,13 @@ public class BattleState
 	public void EndBattle()
 	{
 		WipeUnitVariables();
+		ClearUndos();
 	}
 	
 	public void StartBattle()
 	{
-		WipeUnitVariables();		
+		WipeUnitVariables();
+		ClearUndos();
 	}
 	
 	public void SaveGraveyard(Unit deceased){
@@ -237,6 +252,7 @@ public class BattleState
 		this.isMoving = false;
 		this.isUsingAbility = false;
 		this.selected = null;
+		ClearUndos();
 		for (final Unit unit : this.CurrentPlayerUnits())
 		{
 			unit.hasMoved = false;
@@ -281,5 +297,11 @@ public class BattleState
 			unit.y = spawn.y;
 			spawns.remove(spawn);
 		}
+	}
+	
+	public class Move{
+		public Unit unit;
+		public int oldX;
+		public int oldY;
 	}
 }

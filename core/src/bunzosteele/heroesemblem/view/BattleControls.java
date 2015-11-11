@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.BattleState;
+import bunzosteele.heroesemblem.model.BattleState.Move;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.Gdx;
@@ -29,6 +30,7 @@ public class BattleControls
 	Sprite activeButton;
 	Sprite emphasisButton;
 	Sprite button;
+	Sprite undoButton;
 
 	public BattleControls(final HeroesEmblem game, final BattleState state, final int height, final int endOffset, final int endWidth)
 	{
@@ -64,6 +66,8 @@ public class BattleControls
 		this.emphasisButton = new Sprite(emphasisRegion);
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");
 		this.button = new Sprite(buttonRegion);
+		final AtlasRegion undoButton = this.game.textureAtlas.findRegion("UndoButton");
+		this.undoButton = new Sprite(undoButton);
 	}
 
 	public void draw()
@@ -151,7 +155,11 @@ public class BattleControls
 	private void drawMove()
 	{
 		this.game.font.setColor(Color.WHITE);
-		this.game.font.draw(this.game.batcher, "Move", this.xOffset, this.yOffset + ((3 * this.height) / 5), this.largeButtonWidth, 1, false);
+		if(this.state.CanUndo()){
+			this.game.font.draw(this.game.batcher, "Undo", this.xOffset, this.yOffset + ((3 * this.height) / 5), this.largeButtonWidth, 1, false);
+		}else{
+			this.game.font.draw(this.game.batcher, "Move", this.xOffset, this.yOffset + ((3 * this.height) / 5), this.largeButtonWidth, 1, false);
+		}
 	}
 
 	private void drawMoveBackground()
@@ -164,6 +172,8 @@ public class BattleControls
 			}else{
 				this.game.batcher.draw(activeButton, this.xOffset, this.yOffset, this.largeButtonWidth, this.height);
 			}
+		}else if(this.state.CanUndo()){
+			this.game.batcher.draw(undoButton, this.xOffset, this.yOffset, this.largeButtonWidth, this.height);
 		}else{
 			this.game.batcher.draw(inactiveButton, this.xOffset, this.yOffset, this.largeButtonWidth, this.height);
 		}
@@ -226,7 +236,16 @@ public class BattleControls
 	{
 		this.state.isAttacking = false;
 		this.state.isUsingAbility = false;
-		if (this.state.CanMove())
+		if(this.state.CanUndo()){
+			Move previous = this.state.undos.pop();
+			this.state.selected.x = previous.oldX;
+			this.state.selected.y = previous.oldY;
+			this.state.selected.hasMoved = false;
+			if(this.state.undos.size() > 0){
+				Move nextUndo = this.state.undos.peek();
+				this.state.selected = nextUndo.unit;
+			}
+		}else if (this.state.CanMove())
 		{
 			this.state.isMoving = !this.state.isMoving;
 		}
