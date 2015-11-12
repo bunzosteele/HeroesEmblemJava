@@ -218,7 +218,7 @@ public class HighscoreScreen extends ScreenAdapter
 	}
 	
 	private boolean checkLegendTouch(int x, int y){
-		if(this.selected >= 0 && this.highscores.highscores.get(selected).heroUnit.backStory != null){
+		if(this.selected >= 0 && this.highscores != null && this.highscores.highscores.get(selected) != null && this.highscores.highscores.get(selected).heroUnit.backStory != null){
 			if(x >= this.xOffset * 13 / 4 && x <= this.xOffset * 13 / 4 + this.xOffset / 2 && y >= this.legendHeight && y <= this.legendHeight + this.buttonHeight){
 				this.readingLegend = !this.readingLegend;
 				return true;
