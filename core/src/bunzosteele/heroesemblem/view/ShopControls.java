@@ -199,7 +199,7 @@ public class ShopControls
 			}
 			Json json = new Json();
 			String parsedUnit = json.toJson(unitDto);
-			this.game.analyticsController.RecordEvent("UnitPurchased", action, parsedUnit, this.state.selected.cost);
+			this.game.gameServicesController.RecordAnalyticsEvent("UnitPurchased", action, parsedUnit, this.state.selected.cost);
 			this.state.gold -= this.state.selected.cost;
 			this.state.selected = null;
 			this.state.isInspecting = false;

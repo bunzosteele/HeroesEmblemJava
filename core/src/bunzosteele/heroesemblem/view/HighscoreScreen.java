@@ -94,8 +94,10 @@ public class HighscoreScreen extends ScreenAdapter
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, headerOffset, this.xOffset, this.buttonHeight);
 		this.game.font.draw(this.game.batcher, "Main Menu", this.xOffset * 3 - this.game.font.getData().lineHeight, headerOffset + this.buttonHeight - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.66f);
-		this.game.font.draw(this.game.batcher, "Highscores", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
+		this.game.font.draw(this.game.batcher, "Highscores", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight / 2, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
+		this.game.batcher.draw(buttonSprite, this.xOffset / 2, this.yOffset * 3 - this.buttonHeight * 1 / 6, this.xOffset * 2, this.buttonHeight * 2 / 3);
+		this.game.font.draw(this.game.batcher, "View Leaderboards", this.xOffset / 2, this.yOffset * 3 + this.buttonHeight * 3 / 12, xOffset * 2, 1, false);
 		if(!this.readingLegend){
 			this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.tableRowHeight * 2 + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
 			this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.tableRowHeight + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
@@ -185,46 +187,48 @@ public class HighscoreScreen extends ScreenAdapter
 		if (Gdx.input.justTouched())
 		{
 			int flippedY = Gdx.graphics.getHeight() - Gdx.input.getY();
-			if(flippedY >= this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight)
-			{
-				checkMainMenuTouch(Gdx.input.getX(), flippedY);
+			int x = Gdx.input.getX();
+			if((x >= this.xOffset * 3 - this.game.font.getData().lineHeight && x <= (this.xOffset * 3 - this.game.font.getData().lineHeight) + this.xOffset) && (flippedY >= this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight && flippedY <= this.yOffset * 4 - this.game.font.getData().lineHeight)){
+				mainMenuTouch();
 				return;
-			}else{
-				if( !checkLegendTouch(Gdx.input.getX(), flippedY) && !this.readingLegend)
-					checkHeroTouch(Gdx.input.getX(), flippedY);
+			}else if(x >= 2 * this.xOffset + this.pedestalSize && x <= 2 * this.xOffset + 2 * this.pedestalSize){
+				checkHeroTouch(x, flippedY);
+				return;
+			}else if(this.selected >= 0 && this.highscores != null && this.highscores.highscores.size() > selected && this.highscores.highscores.get(selected) != null && this.highscores.highscores.get(selected).heroUnit.backStory != null && x >= this.xOffset * 13 / 4 && x <= this.xOffset * 13 / 4 + this.xOffset / 2 && flippedY >= this.legendHeight && flippedY <= this.legendHeight + this.buttonHeight){
+				legendTouch();
+				return;
+			}else if(x >= xOffset /2 && x <= xOffset / 2 + 2 * xOffset && flippedY >= this.yOffset * 3 - this.buttonHeight * 1 / 6 && flippedY <= this.yOffset * 3 - this.buttonHeight * 1 / 6 + this.buttonHeight * 2 / 3){
+				leaderboardTouch();
+				return;
 			}
+			
+			this.selected = -1;
+			this.readingLegend = false;
 		}
 	}
 
-	private void checkMainMenuTouch(int x, int y){
-		if((x >= this.xOffset * 3 - this.game.font.getData().lineHeight && x <= (this.xOffset * 3 - this.game.font.getData().lineHeight) + this.xOffset) && (y >= this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight && y <= this.yOffset * 4 - this.game.font.getData().lineHeight))
+	private void mainMenuTouch(){
 		this.game.setScreen(new MainMenuScreen(this.game));
 	}
 	
 	private void checkHeroTouch(int x, int y){
-		if(x >= 2 * this.xOffset + this.pedestalSize && x <= 2 * this.xOffset + 2 *this.pedestalSize){
+		if(!readingLegend){
 			if(y >= this.game.font.getData().lineHeight * 3 / 2 && y <= (this.game.font.getData().lineHeight * 3 / 2) + this.pedestalSize){
 				this.selected = 2;
 			}else if(y >= this.tableRowHeight + this.game.font.getData().lineHeight * 3 / 2 && y <= (this.tableRowHeight + this.game.font.getData().lineHeight * 3 / 2) + this.pedestalSize){
 				this.selected = 1;
 			}else if(y >= this.tableRowHeight * 2 + this.game.font.getData().lineHeight * 3 / 2 && y <= (this.tableRowHeight * 2 + this.game.font.getData().lineHeight * 3 / 2) + this.pedestalSize){
 				this.selected = 0;
-			}else{
-				this.selected = -1;
 			}
-		}else{
-			this.selected = -1;
 		}
 	}
 	
-	private boolean checkLegendTouch(int x, int y){
-		if(this.selected >= 0 && this.highscores != null && this.highscores.highscores.get(selected) != null && this.highscores.highscores.get(selected).heroUnit.backStory != null){
-			if(x >= this.xOffset * 13 / 4 && x <= this.xOffset * 13 / 4 + this.xOffset / 2 && y >= this.legendHeight && y <= this.legendHeight + this.buttonHeight){
-				this.readingLegend = !this.readingLegend;
-				return true;
-			}
-		}
-		return false;
+	private void legendTouch(){
+		this.readingLegend = !this.readingLegend;
+	}
+	
+	private void leaderboardTouch(){
+		this.game.gameServicesController.ViewLeaderboard();
 	}
 	
 

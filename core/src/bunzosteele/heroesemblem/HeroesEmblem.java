@@ -20,25 +20,26 @@ public class HeroesEmblem extends Game
 	public TextureAtlas textureAtlas;
 	public Preferences settings;
 	public AdsController adsController;
-	public AnalyticsController analyticsController;
+	public GameServicesController gameServicesController;
 	public boolean isQuitting = false;
 	
-	public HeroesEmblem(AdsController adsController, AnalyticsController analyticsController){
+	public HeroesEmblem(AdsController adsController, GameServicesController analyticsController){
             if (adsController != null) {
                 this.adsController = adsController;
             } else {
                 this.adsController = new DummyAdsController();
             }
             if (analyticsController != null) {
-                this.analyticsController = analyticsController;
+                this.gameServicesController = analyticsController;
             } else {
-                this.analyticsController = new DummyAnalyticsController();
+                this.gameServicesController = new DummyGameServicesController();
             }
 	}
 
 	@Override
 	public void create()
 	{
+		Gdx.input.setCatchBackKey(true);
 		this.batcher = new SpriteBatch();
 		this.shapeRenderer = new ShapeRenderer();
 		final FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("madness.ttf"));
