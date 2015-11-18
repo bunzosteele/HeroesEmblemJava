@@ -15,13 +15,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class SettingsScreen extends ScreenAdapter
+public class SettingsScreen extends MenuScreen
 {
-	HeroesEmblem game;
 	Sprite buttonSprite;
 	Sprite activeSmallButtonSprite;
 	Sprite inactiveSmallButtonSprite;
-	Sprite backgroundSprite;
 	int xOffset;
 	int yOffset;
 	int buttonHeight;
@@ -37,39 +35,30 @@ public class SettingsScreen extends ScreenAdapter
 	
 	public SettingsScreen(final HeroesEmblem game)
 	{
-		this.game = game;
+		super(game);
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
 		final AtlasRegion activeSmallButtonRegion = this.game.textureAtlas.findRegion("ActiveSmallButton");
 		final AtlasRegion inactiveSmallButtonRegion = this.game.textureAtlas.findRegion("InactiveSmallButton");
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Grass");
 		this.buttonHeight = Gdx.graphics.getHeight() / 6;
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.activeSmallButtonSprite = new Sprite(activeSmallButtonRegion);
 		this.inactiveSmallButtonSprite = new Sprite(inactiveSmallButtonRegion);
-		this.backgroundSprite = new Sprite(backgroundRegion);
 		this.smallButtonSize = this.game.font.getData().lineHeight * 2;
 		game.adsController.hideBannerAd();
 	}
 
 	public void draw()
 	{
-		final GL20 gl = Gdx.gl;
-		gl.glClearColor(0, 0, 0, 1);
-		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		if(this.erasingHighscores){
-			this.game.shapeRenderer.begin(ShapeType.Filled);
-			this.game.shapeRenderer.setColor(0f, 0f, 0f, .5f);
-			this.game.shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			this.game.shapeRenderer.end();
-		}
+		super.setupDraw();
 		this.game.batcher.begin();
-		for(int i = 0; i < 33; i++){
-			for(int j = 0; j < 19; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
-			}
-		}
+		drawContent();
+		this.game.batcher.end();
+	}
+	
+	private void drawContent(){
+		super.drawBackground();
 		this.game.batcher.draw(inactiveSmallButtonSprite, this.xOffset * 3 / 2, this.yOffset * 3 - 9 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);
 		this.game.batcher.draw(inactiveSmallButtonSprite, (this.xOffset * 3 / 2) + 3 * this.game.font.getData().lineHeight, this.yOffset * 3 - 9 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);	
 		this.game.batcher.draw(inactiveSmallButtonSprite, (this.xOffset * 3 / 2) + 6 * this.game.font.getData().lineHeight, this.yOffset * 3 - 9 * this.game.font.getData().lineHeight / 4, smallButtonSize, smallButtonSize);	
@@ -129,11 +118,7 @@ public class SettingsScreen extends ScreenAdapter
 			this.game.font.draw(this.game.batcher, "Quit Game", this.xOffset, this.game.font.getData().lineHeight * 7 / 4, (float) this.xOffset * 2, 1, false);
 		}
 		if(this.erasingHighscores){
-			for(int i = 0; i < 33; i++){
-				for(int j = 0; j < 19; j++){
-					this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
-				}
-			}
+			super.drawBackground();
 			this.game.font.getData().setScale(.66f);
 			if(this.previousScreen == null){
 				this.game.font.draw(this.game.batcher, "Erase Highscores?", this.xOffset, this.yOffset * 3, (float) this.xOffset * 2, 1, false);
@@ -145,8 +130,7 @@ public class SettingsScreen extends ScreenAdapter
 			this.game.batcher.draw(buttonSprite, this.xOffset * 9 / 4, this.yOffset * 3 / 2, this.xOffset, this.buttonHeight);
 			this.game.font.draw(this.game.batcher, "Yes", this.xOffset * 3 / 4, this.yOffset * 5 / 2 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 			this.game.font.draw(this.game.batcher, "No", this.xOffset * 9 / 4, this.yOffset * 5 / 2 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
-		}
-		this.game.batcher.end();
+		}	
 	}
 
 	@Override

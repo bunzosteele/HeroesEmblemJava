@@ -1,6 +1,11 @@
 package bunzosteele.heroesemblem.view;
 
 import java.io.IOException;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.MusicManager;
@@ -11,49 +16,36 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
-public class MainMenuScreen extends ScreenAdapter
+public class MainMenuScreen extends MenuScreen
 {
-	HeroesEmblem game;
 	Sprite buttonSprite;
-	Sprite blueTeamSprite;
-	Sprite redTeamSprite;
-	Sprite backgroundSprite;
 	int xOffset;
 	int yOffset;
 	int buttonHeight;
 
 	public MainMenuScreen(final HeroesEmblem game)
 	{
-		this.game = game;
+		super(game);
 		this.game.isQuitting = false;
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
-		final AtlasRegion blueRegion = this.game.textureAtlas.findRegion("BlueTeam");
-		final AtlasRegion redRegion = this.game.textureAtlas.findRegion("RedTeam");
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Grass");
 		buttonHeight = Gdx.graphics.getHeight() / 6;
 		xOffset = (Gdx.graphics.getWidth()) / 4;
 		yOffset = Gdx.graphics.getHeight() / 4;
 		buttonSprite = new Sprite(buttonRegion);
-		blueTeamSprite = new Sprite(blueRegion);
-		redTeamSprite = new Sprite(redRegion);
-		backgroundSprite = new Sprite(backgroundRegion);
 		MusicManager.PlayMenuMusic(this.game.settings.getFloat("musicVolume", .25f));
 		game.adsController.showBannerAd();
 	}
 
 	public void draw()
 	{
-		final GL20 gl = Gdx.gl;
-		gl.glClearColor(0, 0, 0, 1);
-		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.setupDraw();
 		this.game.batcher.begin();
-		for(int i = 0; i < 33; i++){
-			for(int j = 0; j < 19; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
-			}
-		}
-		this.game.batcher.draw(blueTeamSprite, this.xOffset / 4, this.yOffset * 2, this.xOffset, this.xOffset * 66 / 130);
-		this.game.batcher.draw(redTeamSprite, this.xOffset * 11 / 4, this.yOffset * 2, this.xOffset, this.xOffset * 62 / 129);
+		drawContent();
+		this.game.batcher.end();
+	}
+	
+	private void drawContent(){
+		super.drawBackground();
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 2, this.yOffset * 2, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset / 4, this.yOffset, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 2, this.yOffset, this.xOffset, this.buttonHeight);
@@ -65,7 +57,76 @@ public class MainMenuScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Settings", this.xOffset / 4, this.yOffset + (buttonHeight - this.game.font.getData().lineHeight), (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Highscores", this.xOffset * 3 / 2, this.yOffset + (buttonHeight - this.game.font.getData().lineHeight), (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Tutorial", this.xOffset * 11 / 4, this.yOffset + (buttonHeight - this.game.font.getData().lineHeight), (float) this.xOffset, 1, false);
-		this.game.batcher.end();
+		drawBlueUnits();
+		drawRedUnits();
+	}
+	
+	private void drawBlueUnits(){
+		int scaledSize = Gdx.graphics.getHeight() / 11;
+		final AtlasRegion miregion = game.textureAtlas.findRegion("Mage-Idle-" + idleFrame + "-0");
+		final Sprite misprite = new Sprite(miregion);	
+		final AtlasRegion maregion = game.textureAtlas.findRegion("Mage-Attack-" + attackFrame + "-0");
+		final Sprite masprite = new Sprite(maregion);	
+		final AtlasRegion airegion = game.textureAtlas.findRegion("Archer-Idle-" + idleFrame + "-0");
+		final Sprite aisprite = new Sprite(airegion);	
+		final AtlasRegion aaregion = game.textureAtlas.findRegion("Archer-Attack-" + attackFrame + "-0");
+		final Sprite aasprite = new Sprite(aaregion);	
+		final AtlasRegion karegion = game.textureAtlas.findRegion("Knight-Attack-" + attackFrame + "-0");
+		final Sprite kasprite = new Sprite(karegion);	
+		final AtlasRegion firegion = game.textureAtlas.findRegion("Footman-Idle-" + idleFrame + "-0");
+		final Sprite fisprite = new Sprite(firegion);	
+		final AtlasRegion siregion = game.textureAtlas.findRegion("Spearman-Idle-" + idleFrame + "-0");
+		final Sprite sisprite = new Sprite(siregion);	
+		final AtlasRegion paregion = game.textureAtlas.findRegion("Priest-Attack-" + attackFrame + "-0");
+		final Sprite pasprite = new Sprite(paregion);	
+		this.game.batcher.draw(aasprite, this.xOffset / 2 + scaledSize / 2, this.yOffset * 2 + scaledSize * 3 / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(aasprite, this.xOffset / 2 + scaledSize * 3 / 2, this.yOffset * 2 + scaledSize * 5 / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(masprite, this.xOffset / 3, this.yOffset * 2 + scaledSize * 6 / 5, scaledSize, scaledSize);
+		this.game.batcher.draw(aisprite, this.xOffset / 2 + scaledSize, this.yOffset * 2 + scaledSize / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(misprite, this.xOffset / 2, this.yOffset * 2 + scaledSize / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(misprite, this.xOffset / 4, this.yOffset * 2 + scaledSize / 3, scaledSize, scaledSize);
+		this.game.batcher.draw(aisprite, this.xOffset / 4 + scaledSize / 2, this.yOffset * 2 - scaledSize / 3, scaledSize, scaledSize);
+		this.game.batcher.draw(aisprite, this.xOffset / 2 + scaledSize / 2, this.yOffset * 2 - scaledSize / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(fisprite, this.xOffset * 4 / 5 + scaledSize / 2, this.yOffset * 2 + scaledSize / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(fisprite, this.xOffset * 4 / 5, this.yOffset * 2 - scaledSize / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(sisprite, this.xOffset * 4 / 5 + scaledSize, this.yOffset * 2 + scaledSize * 4 / 5, scaledSize, scaledSize);
+		this.game.batcher.draw(kasprite, this.xOffset + scaledSize * 3 / 4, this.yOffset * 2 + scaledSize / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(fisprite, this.xOffset + scaledSize / 3, this.yOffset * 2 - scaledSize / 5, scaledSize, scaledSize);
+		this.game.batcher.draw(pasprite, scaledSize, this.yOffset * 2 - scaledSize / 3, scaledSize, scaledSize);
+	}
+	
+	private void drawRedUnits(){
+		int scaledSize = Gdx.graphics.getHeight() / 11;
+		final AtlasRegion miregion = game.textureAtlas.findRegion("Mage-Idle-" + idleFrame + "-1");
+		final Sprite misprite = new Sprite(miregion);	
+		final AtlasRegion maregion = game.textureAtlas.findRegion("Mage-Attack-" + attackFrame + "-1");
+		final Sprite masprite = new Sprite(maregion);	
+		final AtlasRegion airegion = game.textureAtlas.findRegion("Archer-Idle-" + idleFrame + "-1");
+		final Sprite aisprite = new Sprite(airegion);	
+		final AtlasRegion aaregion = game.textureAtlas.findRegion("Archer-Attack-" + attackFrame + "-1");
+		final Sprite aasprite = new Sprite(aaregion);	
+		final AtlasRegion karegion = game.textureAtlas.findRegion("Knight-Attack-" + attackFrame + "-1");
+		final Sprite kasprite = new Sprite(karegion);	
+		final AtlasRegion firegion = game.textureAtlas.findRegion("Footman-Idle-" + idleFrame + "-1");
+		final Sprite fisprite = new Sprite(firegion);	
+		final AtlasRegion siregion = game.textureAtlas.findRegion("Spearman-Idle-" + idleFrame + "-1");
+		final Sprite sisprite = new Sprite(siregion);	
+		final AtlasRegion paregion = game.textureAtlas.findRegion("Priest-Attack-" + attackFrame + "-1");
+		final Sprite pasprite = new Sprite(paregion);
+		this.game.batcher.draw(aasprite, this.xOffset * 4 - (this.xOffset / 2 + scaledSize * 3 / 2), this.yOffset * 2 + scaledSize * 3 / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(aasprite, this.xOffset * 4 - (this.xOffset / 2 + scaledSize * 5 / 2), this.yOffset * 2 + scaledSize * 5 / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(masprite, this.xOffset * 4 - (this.xOffset / 3 + scaledSize), this.yOffset * 2 + scaledSize * 6 / 5, scaledSize, scaledSize);
+		this.game.batcher.draw(aisprite, this.xOffset * 4 - (this.xOffset / 2 + 2 * scaledSize), this.yOffset * 2 + scaledSize / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(misprite, this.xOffset * 4 - (this.xOffset / 2 + scaledSize), this.yOffset * 2 + scaledSize / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(misprite, this.xOffset * 4 - (this.xOffset / 4 + scaledSize), this.yOffset * 2 + scaledSize / 3, scaledSize, scaledSize);
+		this.game.batcher.draw(aisprite, this.xOffset * 4 - (this.xOffset / 4 + scaledSize * 3 / 2), this.yOffset * 2 - scaledSize / 3, scaledSize, scaledSize);
+		this.game.batcher.draw(aisprite, this.xOffset * 4 - (this.xOffset / 2 + scaledSize * 3 / 2), this.yOffset * 2 - scaledSize / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(fisprite, this.xOffset * 4 - (this.xOffset * 4 / 5 + scaledSize * 3 / 2), this.yOffset * 2 + scaledSize / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(fisprite, this.xOffset * 4 - (this.xOffset * 4 / 5 + scaledSize), this.yOffset * 2 - scaledSize / 4, scaledSize, scaledSize);
+		this.game.batcher.draw(sisprite, this.xOffset * 4 - (this.xOffset * 4 / 5 + 2 * scaledSize), this.yOffset * 2 + scaledSize * 4 / 5, scaledSize, scaledSize);
+		this.game.batcher.draw(kasprite, this.xOffset * 4 - (this.xOffset + scaledSize * 7 / 4), this.yOffset * 2 + scaledSize / 2, scaledSize, scaledSize);
+		this.game.batcher.draw(fisprite, this.xOffset * 4 - (this.xOffset + scaledSize * 4 / 3), this.yOffset * 2 - scaledSize / 5, scaledSize, scaledSize);
+		this.game.batcher.draw(pasprite, this.xOffset * 4 - scaledSize * 2, this.yOffset * 2 - scaledSize / 3, scaledSize, scaledSize);
 	}
 
 	@Override

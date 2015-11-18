@@ -46,7 +46,6 @@ public class ShopScreen extends ScreenAdapter
 		final GL20 gl = Gdx.gl;
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		this.game.batcher.begin();
 		if(this.state.isInspecting){
 			this.unitInfo.draw();

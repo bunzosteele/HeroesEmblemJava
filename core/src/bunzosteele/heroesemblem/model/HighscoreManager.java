@@ -14,11 +14,11 @@ import bunzosteele.heroesemblem.model.Units.UnitType;
 
 public class HighscoreManager
 {
-	public static void RecordGame(int roundsSurvived, UnitDto hero){
-		HighscoreDto score = HighscoreManager.GetHighscoreDto(roundsSurvived, hero);
+	public static void RecordGame(int score, UnitDto hero){
+		HighscoreDto newHighscore = HighscoreManager.GetHighscoreDto(score, hero);
 		HighscoresDto highscores = GetExistingHighscores();
 		List<HighscoreDto> newHighscores = new ArrayList<HighscoreDto>();
-		HighscoreDto currentScore = score;
+		HighscoreDto currentScore = newHighscore;
 		if(highscores != null){
 			for(HighscoreDto highscore : highscores.highscores){
 				if(highscore.roundsSurvived > currentScore.roundsSurvived){
@@ -59,7 +59,15 @@ public class HighscoreManager
 	public static HighscoresDto GetExistingHighscores(){
 		String scoresString = ReadHighscores();
 		Json json = new Json();
-		return json.fromJson(HighscoreManager.HighscoresDto.class, scoresString);
+		HighscoresDto scores = json.fromJson(HighscoreManager.HighscoresDto.class, scoresString);
+		if(scores != null){
+			for(HighscoreDto highscore : scores.highscores){
+				if(highscore.score == 0){
+					highscore.score = highscore.roundsSurvived * 100 + highscore.heroUnit.unitsKilled;
+				}
+			}
+		}
+		return scores;
 	}
 	
 	public static void EraseHighscores(){
@@ -82,11 +90,11 @@ public class HighscoreManager
 		return "";
 	}	
 	
-	private static HighscoreDto GetHighscoreDto(int roundsSurvived, UnitDto hero){
-		HighscoreDto score = new HighscoreDto();
-		score.roundsSurvived = roundsSurvived;
-		score.heroUnit = hero;
-		return score;
+	private static HighscoreDto GetHighscoreDto(int score, UnitDto hero){
+		HighscoreDto highscore = new HighscoreDto();
+		highscore.score = score;
+		highscore.heroUnit = hero;
+		return highscore;
 	}
 	
 	public static class HighscoresDto{
@@ -95,6 +103,7 @@ public class HighscoreManager
 	
 	public static class HighscoreDto{
 		public int roundsSurvived;
+		public int score;
 		public UnitDto heroUnit;
 	}
 	

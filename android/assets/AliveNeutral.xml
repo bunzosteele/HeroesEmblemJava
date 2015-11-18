@@ -1,5 +1,6 @@
 <Sentences>
 	<0><Text> After many battles, </Text><Name /><Text> realized the mission was more effort than it was worth, and</Text><Pronoun /><Text> went home</Text></0>
 	<1><Name /><Text> fought tirelessly, until</Text><Pronoun /><Text> got tired and decided to call it a day</Text></1>
-	<2><Text> While</Text><Name /><Text> desperately wanted to keep fighting, </Text><PossesivePronoun /><Attribute /><Text> forced him to abandon</Text><PossesivePronoun /><Text> quest</Text></2>
+	<2><Text> While</Text><Name /><Text> desperately wanted to keep fighting, </Text><Pronoun /><Text> was forced by </Text><PossesivePronoun /><Attribute /><Text> to abandon</Text><PossesivePronoun /><Text> quest</Text></2>
+	<3><Text> Weary of fighting, </Text><Name /><Text> decided to return home</Text></3>
 </Sentences>

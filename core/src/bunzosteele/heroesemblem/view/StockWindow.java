@@ -89,9 +89,9 @@ public class StockWindow
 
 	public void drawBackground()
 	{
-		for(int i = 0; i < 33; i++){
-			for(int j = 0; j < 19; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 12; j++){
+				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 19) * i, (Gdx.graphics.getHeight() / 11) * j, (Gdx.graphics.getWidth() / 19), (Gdx.graphics.getHeight() / 11));
 			}
 		}
 	}

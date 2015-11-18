@@ -14,11 +14,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class TutorialBattleThirdScreen extends ScreenAdapter
+public class TutorialBattleThirdScreen extends MenuScreen
 {
-	HeroesEmblem game;
 	Sprite buttonSprite;
-	Sprite backgroundSprite;
 	Sprite exampleSprite;
 	int xOffset;
 	int yOffset;
@@ -27,30 +25,26 @@ public class TutorialBattleThirdScreen extends ScreenAdapter
 
 	public TutorialBattleThirdScreen(final HeroesEmblem game)
 	{
-		this.game = game;
+		super(game);
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Grass");
 		this.buttonHeight = Gdx.graphics.getHeight() / 6;
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
-		this.backgroundSprite = new Sprite(backgroundRegion);
 		exampleRatio = (float) 87 / 858;
 		game.adsController.hideBannerAd();
 	}
 
 	public void draw()
 	{
-		this.game.font.getData().setScale(.33f);
-		final GL20 gl = Gdx.gl;
-		gl.glClearColor(0, 0, 0, 1);
-		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.setupDraw();
 		this.game.batcher.begin();
-		for(int i = 0; i < 33; i++){
-			for(int j = 0; j < 19; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
-			}
-		}
+		drawContent();
+		this.game.batcher.end();
+	}
+	
+	private void drawContent(){
+		super.drawBackground();
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
 		this.game.font.getData().setScale(.60f);
@@ -60,7 +54,6 @@ public class TutorialBattleThirdScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.20f);
 		this.game.font.draw(this.game.batcher, "Elevated terrain can block the line of sight of ranged units, unless they too are elevated.\n\nDefeating enemies gives you experience. Use experience to level up.\n\nGold earned each battle increases with the difficulty of the battle, and the average level of your army.\n\nActive combat abilities cannot miss.", this.xOffset / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.batcher.end();
 	}
 
 	@Override

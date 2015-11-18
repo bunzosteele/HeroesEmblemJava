@@ -19,12 +19,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
-public class HighscoreScreen extends ScreenAdapter
+public class HighscoreScreen extends MenuScreen
 {
-	HeroesEmblem game;
 	Sprite buttonSprite;
 	Sprite pedestalSprite;
-	Sprite backgroundSprite;
 	Sprite activeButton;
 	Sprite inactiveButton;
 	HighscoresDto highscores;
@@ -34,18 +32,15 @@ public class HighscoreScreen extends ScreenAdapter
 	float tableRowHeight;
 	float pedestalSize;
 	int buttonHeight;
-	int idleFrame;
-	int attackFrame;
 	int selected;
 	boolean readingLegend = false;
 	float legendHeight;
 
 	public HighscoreScreen(final HeroesEmblem game)
 	{
-		this.game = game;
+		super(game);
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
 		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Grass");
 		this.buttonHeight = Gdx.graphics.getHeight() / 6;
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
@@ -54,7 +49,6 @@ public class HighscoreScreen extends ScreenAdapter
 		this.pedestalSize = this.tableRowHeight - this.game.font.getData().lineHeight;
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.pedestalSprite = new Sprite(pedestalRegion);
-		this.backgroundSprite = new Sprite(backgroundRegion);
 		final AtlasRegion activeRegion = this.game.textureAtlas.findRegion("ActiveButton");
 		this.activeButton = new Sprite(activeRegion);
 		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
@@ -62,35 +56,18 @@ public class HighscoreScreen extends ScreenAdapter
 		this.highscores = HighscoreManager.GetExistingHighscores();
 		MusicManager.PlayMenuMusic(this.game.settings.getFloat("musicVolume", .25f));
 		this.selected = -1;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
-			{
-				++idleFrame;
-				++attackFrame;
-				if (attackFrame > 2){
-					attackFrame = 1;
-				}
-				if (idleFrame > 3)
-				{
-					idleFrame = 1;
-				}
-			}
-		}, 0, 1 / 3f);
 	}
 
 	public void draw()
 	{
-		final GL20 gl = Gdx.gl;
-		gl.glClearColor(0, 0, 0, 1);
-		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.setupDraw();
 		this.game.batcher.begin();
-		for(int i = 0; i < 33; i++){
-			for(int j = 0; j < 19; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
-			}
-		}
+		drawContent();
+		this.game.batcher.end();
+	}
+	
+	private void drawContent(){
+		super.drawBackground();
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, headerOffset, this.xOffset, this.buttonHeight);
 		this.game.font.draw(this.game.batcher, "Main Menu", this.xOffset * 3 - this.game.font.getData().lineHeight, headerOffset + this.buttonHeight - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.66f);
@@ -113,7 +90,7 @@ public class HighscoreScreen extends ScreenAdapter
 				int heightOffset = 0;
 				for(HighscoreDto highscore : highscores.highscores){
 					this.game.font.getData().setScale(.66f);
-					this.game.font.draw(this.game.batcher, "" + highscore.roundsSurvived, this.xOffset, this.tableRowHeight * (3 - heightOffset), (float) this.xOffset, 1, false);
+					this.game.font.draw(this.game.batcher, "" + highscore.score, this.xOffset, this.tableRowHeight * (3 - heightOffset), (float) this.xOffset, 1, false);
 					this.game.font.getData().setScale(.33f);
 					if(heightOffset == selected){
 						final AtlasRegion region = game.textureAtlas.findRegion(highscore.heroUnit.type + "-Attack-" + attackFrame + "-0");
@@ -164,8 +141,6 @@ public class HighscoreScreen extends ScreenAdapter
 				this.game.font.getData().setScale(.33f);
 			}
 		}
-		
-		this.game.batcher.end();
 	}
 
 	@Override

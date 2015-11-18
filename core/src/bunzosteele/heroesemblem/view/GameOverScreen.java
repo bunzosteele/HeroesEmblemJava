@@ -21,18 +21,15 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
-public class GameOverScreen extends ScreenAdapter
+public class GameOverScreen extends MenuScreen
 {
-	HeroesEmblem game;
 	int roundsSurvived;
 	List<UnitDto> graveyard;
 	UnitDto hero;
 	int xOffset;
 	int headerOffset;
-	int idleFrame;
 	int score;
 	Sprite pedestalSprite;
-	Sprite backgroundSprite;
 	Sprite buttonSprite;
 	Sprite inactiveButton;
 	float yOffset;
@@ -41,7 +38,7 @@ public class GameOverScreen extends ScreenAdapter
 
 	public GameOverScreen(final HeroesEmblem game, int roundsSurvived, List<UnitDto> graveyard)
 	{
-		this.game = game;
+		super(game);
 		this.roundsSurvived = roundsSurvived;
 		this.graveyard = graveyard;
 		this.hero = GetHero(graveyard);
@@ -53,22 +50,8 @@ public class GameOverScreen extends ScreenAdapter
 		}
 		this.xOffset = Gdx.graphics.getWidth() / 8;
 		this.headerOffset = Gdx.graphics.getHeight() - xOffset / 16;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
-			{
-				++idleFrame;
-				if (idleFrame > 3)
-				{
-					idleFrame = 1;
-				}
-			}
-		}, 0, 1 / 3f);
 		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
 		this.pedestalSprite = new Sprite(pedestalRegion);
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Grass");
-		backgroundSprite = new Sprite(backgroundRegion);
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
 		buttonSprite = new Sprite(buttonRegion);
 		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
@@ -78,19 +61,20 @@ public class GameOverScreen extends ScreenAdapter
 		for(UnitDto unit : graveyard){
 			score += unit.unitsKilled;
 		}
+		if(score > 0)
+			RecordGame();
 	}
 
 	public void draw()
 	{
-		final GL20 gl = Gdx.gl;
-		gl.glClearColor(0, 0, 0, 1);
-		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.setupDraw();
 		this.game.batcher.begin();
-		for(int i = 0; i < 33; i++){
-			for(int j = 0; j < 19; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
-			}
-		}
+		drawContent();
+		this.game.batcher.end();
+	}
+	
+	private void drawContent(){
+		super.drawBackground();
 		this.game.font.getData().setScale(.25f);
 		if(this.hero == null){
 			this.game.font.draw(this.game.batcher, "You resigned before anyone even died.", this.xOffset * 2, this.headerOffset - this.xOffset, xOffset * 4, 1, false);
@@ -138,7 +122,6 @@ public class GameOverScreen extends ScreenAdapter
 		this.game.font.draw(this.game.batcher, "Main Menu", this.xOffset * 13 / 4, this.yOffset + this.game.font.getData().lineHeight, xOffset * 3 / 2, 1, false);
 		this.game.font.draw(this.game.batcher, "New Game", this.xOffset * 23 / 4, this.yOffset + this.game.font.getData().lineHeight, xOffset * 3 / 2, 1, false);
 		this.game.font.getData().setScale(.33f);
-		this.game.batcher.end();
 	}
 
 	@Override
@@ -162,19 +145,16 @@ public class GameOverScreen extends ScreenAdapter
 		{
 			if ((Gdx.input.getX() > this.xOffset * 23 / 4 && Gdx.input.getX() < this.xOffset * 23 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
 			{
-				RecordGame();
 				this.game.setScreen(new ShopScreen(this.game));
 				return;
 			}
 			if ((Gdx.input.getX() > this.xOffset * 13 / 4 && Gdx.input.getX() < this.xOffset * 13 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
 			{
-				RecordGame();
 				this.game.setScreen(new MainMenuScreen(this.game));
 				return;
 			}
 			if ((Gdx.input.getX() > this.xOffset * 3 / 4 && Gdx.input.getX() < this.xOffset * 3 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
 			{
-				RecordGame();
 				this.game.setScreen(new HighscoreScreen(this.game));
 				return;
 			}
@@ -198,7 +178,7 @@ public class GameOverScreen extends ScreenAdapter
 		String parsedGraveyard = json.toJson(GetAnalyticsDtos(this.graveyard));			
 		this.game.gameServicesController.RecordAnalyticsEvent("GameOver", action, parsedGraveyard, (long) roundsSurvived);
 		if(this.hero != null)
-			HighscoreManager.RecordGame(roundsSurvived, hero);
+			HighscoreManager.RecordGame(score, hero);
 	}
 	
 	private boolean CanSubmitScore(){

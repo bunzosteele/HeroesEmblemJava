@@ -14,11 +14,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class TutorialShopSecondScreen extends ScreenAdapter
+public class TutorialShopSecondScreen extends MenuScreen
 {
-	HeroesEmblem game;
 	Sprite buttonSprite;
-	Sprite backgroundSprite;
 	Sprite exampleSprite;
 	int xOffset;
 	int yOffset;
@@ -27,15 +25,13 @@ public class TutorialShopSecondScreen extends ScreenAdapter
 
 	public TutorialShopSecondScreen(final HeroesEmblem game)
 	{
-		this.game = game;
+		super(game);
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Grass");
 		final AtlasRegion exampleRegion = this.game.textureAtlas.findRegion("UnitStatusExample");
 		this.buttonHeight = Gdx.graphics.getHeight() / 6;
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
-		this.backgroundSprite = new Sprite(backgroundRegion);
 		this.exampleSprite = new Sprite(exampleRegion);
 		exampleRatio = (float) 150 / 396;
 		game.adsController.hideBannerAd();
@@ -43,16 +39,14 @@ public class TutorialShopSecondScreen extends ScreenAdapter
 
 	public void draw()
 	{
-		this.game.font.getData().setScale(.33f);
-		final GL20 gl = Gdx.gl;
-		gl.glClearColor(0, 0, 0, 1);
-		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.setupDraw();
 		this.game.batcher.begin();
-		for(int i = 0; i < 33; i++){
-			for(int j = 0; j < 19; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 32) * i, (Gdx.graphics.getHeight() / 18) * j, (Gdx.graphics.getWidth() / 32), (Gdx.graphics.getHeight() / 18));
-			}
-		}
+		drawContent();
+		this.game.batcher.end();
+	}
+	
+	private void drawContent(){
+		super.drawBackground();
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 5 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
@@ -65,7 +59,6 @@ public class TutorialShopSecondScreen extends ScreenAdapter
 		this.game.font.getData().setScale(.20f);
 		this.game.font.draw(this.game.batcher, "Here, you can see the selected unit's stats.\nThe cost of the unit is in the upper right corner.\nBoosted stats are shown in gold.\nReduced stats are shown in red.\nYou can see how much gold you have remaining above the 'Buy' button in the shop.", this.xOffset, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
 		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, this.yOffset * 2 * exampleRatio, this.yOffset * 2);
-		this.game.batcher.end();
 	}
 
 	@Override
