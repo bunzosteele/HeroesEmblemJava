@@ -20,8 +20,8 @@ public class MenuScreen extends ScreenAdapter {
 	Sprite backgroundSprite;
 	Sprite altBackgroundSprite;
 	Map<Integer, Integer> alternateCoordinates;
-	int idleFrame;
-	int attackFrame;
+	int idleFrame = 1;
+	int attackFrame = 1;
 	
 	public MenuScreen(HeroesEmblem game){
 		this.game = game;
