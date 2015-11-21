@@ -85,7 +85,7 @@ public class BattleWindow
 	private void drawHealthBar(final Unit unit)
 	{
 		final float healthPercent = unit.currentHealth / (float) unit.maximumHealth;
-		if (healthPercent > 0)
+		if ((healthPercent > 0) && (healthPercent < 1))
 		{
 			Color color;
 			if (healthPercent > .7)
