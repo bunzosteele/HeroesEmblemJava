@@ -69,22 +69,6 @@ public class ShopScreen extends ScreenAdapter
 		int controlHeight = Gdx.graphics.getHeight() / 6;
 		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
 		int windowHeight = Gdx.graphics.getHeight() - controlHeight;
-		final double desiredRatio = 9 / (double) 16;
-		double actualRatio = windowHeight / (double) windowWidth;
-		while (actualRatio != desiredRatio)
-		{
-			if (actualRatio > desiredRatio)
-			{
-				windowHeight--;
-				controlHeight++;
-				actualRatio = windowHeight / (double) windowWidth;
-			} else
-			{
-				windowWidth--;
-				sideWidth++;
-				actualRatio = windowHeight / (double) windowWidth;
-			}
-		}
 		this.shopStatus = new ShopStatusPanel(game, this.state, sideWidth, windowHeight, controlHeight);
 		this.stockWindow = new StockWindow(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
 		this.unitStatus = new ShopUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
