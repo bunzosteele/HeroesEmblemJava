@@ -26,6 +26,7 @@ public class ShopScreen extends ScreenAdapter
 	ShopUnitStatusPanel unitStatus;
 	ShopControls shopControls;
 	ShopUnitInfoPanel unitInfo;
+	ShopkeeperPanel shopkeeperPanel;
 
 	public ShopScreen(final HeroesEmblem game) throws IOException
 	{
@@ -49,6 +50,8 @@ public class ShopScreen extends ScreenAdapter
 		this.game.batcher.begin();
 		if(this.state.isInspecting){
 			this.unitInfo.draw();
+		}else if(this.state.isShopkeeperPanelDisplayed){
+			this.shopkeeperPanel.draw();
 		}else{
 			this.stockWindow.draw();
 		}
@@ -87,6 +90,7 @@ public class ShopScreen extends ScreenAdapter
 		this.unitStatus = new ShopUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.shopControls = new ShopControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
 		this.unitInfo = new ShopUnitInfoPanel(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
+		this.shopkeeperPanel= new ShopkeeperPanel(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
 		MusicManager.PlayShopMusic(this.game.settings.getFloat("musicVolume", .25f));
 	}
 
@@ -156,10 +160,10 @@ public class ShopScreen extends ScreenAdapter
 	{
 		if (Gdx.input.justTouched())
 		{
-			if (!this.state.isInspecting && this.stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			if (!this.state.isInspecting && !this.state.isShopkeeperPanelDisplayed && this.stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			} else if (this.shopStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			}else if (this.shopStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.shopStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			} else if (this.unitStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
@@ -171,6 +175,9 @@ public class ShopScreen extends ScreenAdapter
 			} else if (this.state.isInspecting && this.unitInfo.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.unitInfo.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (this.state.isShopkeeperPanelDisplayed && this.unitInfo.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			{
+				this.shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			}
 			
 		}

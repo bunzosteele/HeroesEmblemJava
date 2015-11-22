@@ -25,6 +25,7 @@ public class BattleState
 	public Unit selected;
 	public int gold;
 	public int roundsSurvived;
+	public int perksPurchased;
 	public int difficulty;
 	public int battlefieldId;
 	public List<List<Tile>> battlefield;
@@ -43,15 +44,13 @@ public class BattleState
 		this.turnCount = 1;
 		this.currentPlayer = 0;
 		this.roundsSurvived = shopState.roundsSurvived;
+		this.perksPurchased = shopState.perksPurchased;
 		this.difficulty = (int) Math.pow(2, roundsSurvived);
 		this.roster = shopState.roster;
 		this.selected = null;
 		this.gold = shopState.gold;
-		final Random random = new Random();
-		int maxMap = BattlefieldGenerator.DetectMaximumMap();
-		int minMap = BattlefieldGenerator.DetectMinimumMap();	
-		this.battlefieldId = (random.nextInt(difficulty + Math.abs(minMap)) % (maxMap + Math.abs(minMap) + 1)) + minMap;
-		this.battlefield = BattlefieldGenerator.GenerateBattlefield(battlefieldId);
+		this.battlefieldId = shopState.nextBattlefieldId;
+		this.battlefield = shopState.nextBattlefield;
 		final List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
 		final List<Spawn> playerSpawns = new ArrayList<Spawn>();
 		final List<Spawn> enemySpawns = new ArrayList<Spawn>();
@@ -65,7 +64,11 @@ public class BattleState
 				enemySpawns.add(spawn);
 			}
 		}
-		this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.roster, this.game);
+		if(this.perksPurchased > 3 && battlefieldId < 0){
+			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty, this.roster, this.game);	
+		}else{
+			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.roster, this.game);
+		}
 		this.graveyard = shopState.graveyard;
 		this.undos = new Stack<Move>();
 		this.SpawnUnits(this.roster, playerSpawns);

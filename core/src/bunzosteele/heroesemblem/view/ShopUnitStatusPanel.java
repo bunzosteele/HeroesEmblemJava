@@ -115,5 +115,6 @@ public class ShopUnitStatusPanel
 		}
 		this.state.selected = null;
 		this.state.isInspecting = false;
+		this.state.isShopkeeperPanelDisplayed = false;
 	}
 }

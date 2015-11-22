@@ -41,7 +41,7 @@ public final class UnitGenerator
 	private static int GenerateAccuracyBonus()
 	{
 		final Random random = new Random();
-		final int roll = random.nextInt(21) - 1;
+		final int roll = random.nextInt(21) - 10;
 		return roll;
 	}
 
@@ -112,7 +112,7 @@ public final class UnitGenerator
 	public static List<Unit> GenerateEnemies(final int maxEnemies, final int difficulty, List<Unit> roster, HeroesEmblem game) throws IOException
 	{
 		final List<Unit> enemies = new ArrayList<Unit>();
-		enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), roster, game));
+		enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), roster, game, 0));
 		int remainingPoints = difficulty;
 		final Random random = new Random();
 		while (remainingPoints > 0)
@@ -126,7 +126,7 @@ public final class UnitGenerator
 					enemies.get(levelUpRoll).AddExperience(50);
 				} else
 				{
-					enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), roster, game));
+					enemies.add(UnitGenerator.GenerateUnit(1, UnitGenerator.GenerateUnitType(), roster, game, 0));
 				}
 			} else
 			{
@@ -210,76 +210,118 @@ public final class UnitGenerator
 		return 0;
 	}
 
-	public static List<Unit> GenerateStock(List<Unit> roster, HeroesEmblem game) throws IOException
+	public static List<Unit> GenerateStock(List<Unit> roster, HeroesEmblem game, int trainingLevel) throws IOException
 	{
 		final List<Unit> stock = new ArrayList<Unit>();
 		while (stock.size() < 8)
 		{
 			final UnitType unitType = UnitGenerator.GenerateUnitType();
-			stock.add(UnitGenerator.GenerateUnit(0, unitType, roster, game));
+			stock.add(UnitGenerator.GenerateUnit(0, unitType, roster, game, trainingLevel));
 		}
 		return stock;
 	}
 
-	public static Unit GenerateUnit(final int team, final UnitType type, List<Unit> roster, final HeroesEmblem game) throws IOException
+	public static Unit GenerateUnit(final int team, final UnitType type, List<Unit> roster, final HeroesEmblem game, int trainingLevel) throws IOException
 	{
 		UnitGenerator.id++;
 		int costModifier = 0;
+		int majorStatModifier = 60;
+		int minorStatModifier = 10;
+		int healthModifier = 25;
+		int abilityModifier = 300;
 		final int attackBonus = UnitGenerator.GenerateAttackBonus();
-		costModifier += attackBonus * 50;
+		costModifier += attackBonus * majorStatModifier;
 		final int defenseBonus = UnitGenerator.GenerateDefenseBonus();
-		costModifier += defenseBonus * 50;
+		costModifier += defenseBonus * majorStatModifier;
 		final int evasionBonus = UnitGenerator.GenerateEvasionBonus();
-		costModifier += evasionBonus * 10;
+		costModifier += evasionBonus * minorStatModifier;
 		final int accuracyBonus = UnitGenerator.GenerateAccuracyBonus();
-		costModifier += accuracyBonus * 5;
+		costModifier += accuracyBonus * minorStatModifier;
 		final int movementBonus = UnitGenerator.GenerateMovementBonus();
-		costModifier += movementBonus * 100;
+		costModifier += movementBonus * majorStatModifier;
 		final int healthBonus = UnitGenerator.GenerateHealthBonus();
-		costModifier += healthBonus * 25;
+		costModifier += healthBonus * healthModifier;
 		final int ability = UnitGenerator.GenerateAbility(team);
-		costModifier += ability * 250;
-		if (ability == 0)
-		{
-			costModifier -= 250;
+		if(ability > 0){
+			costModifier += abilityModifier;
+			if(ability > 1){
+				costModifier += abilityModifier / 2;
+			}
 		}
 
 		final XmlReader reader = new XmlReader();
 		final Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
 		final Element unitStats = xml.getChildByName(type.toString());
-		final int attack = unitStats.getInt("Attack") + attackBonus;
-		final int defense = unitStats.getInt("Defense") + defenseBonus;
-		final int evasion = unitStats.getInt("Evasion") + evasionBonus;
-		final int accuracy = unitStats.getInt("Accuracy") + accuracyBonus;
-		final int movement = unitStats.getInt("Movement") + movementBonus;
-		final int maximumHealth = unitStats.getInt("MaximumHealth") + healthBonus;
+		int baseAttack = unitStats.getInt("Attack");
+		int baseDefense = unitStats.getInt("Defense");
+		int baseEvasion = unitStats.getInt("Evasion");
+		int baseAccuracy = unitStats.getInt("Accuracy");
+		int baseMovement = unitStats.getInt("Movement");
+		int baseMaxHealth = unitStats.getInt("MaximumHealth");
+		int baseCost = unitStats.getInt("Cost");
+		final int attack = baseAttack + attackBonus;
+		final int defense = baseDefense + defenseBonus;
+		final int evasion = baseEvasion + evasionBonus;
+		final int accuracy = baseAccuracy + accuracyBonus;
+		final int movement = baseMovement + movementBonus;
+		final int maximumHealth = baseMaxHealth + healthBonus;
 		final int maximumRange = unitStats.getInt("MaximumRange");
-		final int minimumRange = unitStats.getInt("MinimumRange");
-		final int cost = unitStats.getInt("Cost") + costModifier;
-
+		final int minimumRange = unitStats.getInt("MinimumRange");	
+		int cost = baseCost + costModifier;
+		if(cost < 100){
+			cost = 100;
+		}
 		final String name = UnitGenerator.GenerateUnitName(roster);
 		final boolean isMale = UnitGenerator.GenerateUnitGender();
 		final String backStory = UnitGenerator.GenerateUnitBackStory(isMale, name);
 
+		Unit newUnit;
 		if (type == UnitType.Spearman)
 		{
-			return new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
+			newUnit = new Spearman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Archer)
 		{
-			return new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
+			newUnit = new Archer(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Footman)
 		{
-			return new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
+			newUnit = new Footman(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Knight)
 		{
-			return new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
+			newUnit = new Knight(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else if (type == UnitType.Mage)
 		{
-			return new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
+			newUnit = new Mage(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		} else
 		{
-			return new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
+			newUnit = new Priest(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, ability, cost, UnitGenerator.id, game.settings.getFloat("cpuSpeed", 1.1f), isMale, backStory);
 		}
+		
+		if(trainingLevel > 0){
+			while(newUnit.level <= trainingLevel){
+				newUnit.giveExperience(50);
+			}
+			int newCost = baseCost;
+			int finalHealthBonus = newUnit.maximumHealth - baseMaxHealth;
+			newCost += finalHealthBonus * healthModifier;
+			int finalAttackBonus  = newUnit.attack - baseAttack;
+			newCost += finalAttackBonus * majorStatModifier;
+			int finalDefenseBonus = newUnit.defense - baseDefense;
+			newCost += finalDefenseBonus * majorStatModifier;
+			int finalEvasionBonus = newUnit.evasion - baseEvasion;
+			newCost += finalEvasionBonus * minorStatModifier;
+			int finalAccuracyBonus = newUnit.accuracy - baseAccuracy;
+			newCost += finalAccuracyBonus * minorStatModifier;
+			int finalMovementBonus = newUnit.movement - baseMovement;
+			newCost += finalMovementBonus * majorStatModifier;
+			if(ability > 0){
+				newCost += abilityModifier;
+				if(ability > 1){
+					newCost += abilityModifier / 2;
+				}
+			}
+			newUnit.cost = newCost;
+		}
+		return newUnit;
 	}
 
 	private static String GenerateUnitName(List<Unit> roster) throws IOException

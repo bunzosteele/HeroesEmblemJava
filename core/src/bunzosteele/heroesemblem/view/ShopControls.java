@@ -34,6 +34,7 @@ public class ShopControls
 	Sprite activeButton;
 	Sprite emphasisButton;
 	Sprite backdrop;
+	Sprite blueSelect;
 
 	public ShopControls(final HeroesEmblem game, final ShopState state, final int buttonWidth, final int rosterWidth, final int height)
 	{
@@ -69,6 +70,8 @@ public class ShopControls
 		this.emphasisButton = new Sprite(emphasisRegion);
 		final AtlasRegion backdropRegion = this.game.textureAtlas.findRegion("BackdropBottom");
 		this.backdrop = new Sprite(backdropRegion);
+		final AtlasRegion blueSelectRegion = this.game.textureAtlas.findRegion("BlueSelect");
+		this.blueSelect = new Sprite(blueSelectRegion);
 	}
 
 	private boolean canPurchaseSelected()
@@ -118,17 +121,9 @@ public class ShopControls
 	}
 
 	private void drawCompleteBackground()
-	{
-		boolean canAffordMoreUnits = false;
-		for (final Unit unit : this.state.stock)
-		{
-			if (unit.cost < this.state.gold)
-			{
-				canAffordMoreUnits = true;
-			}
-		}		
+	{	
 		if(this.canStartGame()){
-			if (!canAffordMoreUnits || (this.state.roster.size() >= 8))
+			if (!state.CanBuy())
 			{
 				this.game.batcher.draw(emphasisButton, this.buttonWidth + this.rosterWidth, this.yOffset, this.buttonWidth, this.height);
 			}else{
@@ -149,6 +144,7 @@ public class ShopControls
 		{
 			if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
 			{
+				this.game.batcher.draw(blueSelect, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset),  (this.height - columnWidth) / 2, columnWidth, columnWidth);
 				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, "Attack", this.attackFrame);
 			} else
 			{
@@ -179,37 +175,8 @@ public class ShopControls
 	{
 		if (this.canPurchaseSelected())
 		{
-			this.state.roster.add(this.state.selected);
-			if(this.state.roster.size() == 1){
-				this.state.heroUnit = this.state.selected;
-			}
-			String action = "" + this.state.roundsSurvived;
-			UnitDto unitDto = new UnitDto();
-			unitDto.type = this.state.selected.type.toString();
-			unitDto.attack = this.state.selected.attack;
-			unitDto.defense = this.state.selected.defense;
-			unitDto.evasion = this.state.selected.evasion;
-			unitDto.accuracy = this.state.selected.accuracy;
-			unitDto.movement = this.state.selected.movement;
-			unitDto.maximumHealth = this.state.selected.maximumHealth;
-			if(this.state.selected.ability == null){
-				unitDto.ability = "None";
-			}else{
-				unitDto.ability = this.state.selected.ability.displayName;
-			}
-			Json json = new Json();
-			String parsedUnit = json.toJson(unitDto);
-			this.game.gameServicesController.RecordAnalyticsEvent("UnitPurchased", action, parsedUnit, this.state.selected.cost);
-			this.state.gold -= this.state.selected.cost;
-			this.state.selected = null;
-			this.state.isInspecting = false;
-			this.state.stock = UnitGenerator.GenerateStock(this.state.roster, this.game);
-			boolean canBuy = false;
-			for(Unit unit : this.state.stock){
-				if (unit.cost < this.state.gold)
-					canBuy = true;
-			}			
-			if(canBuy){
+			this.state.BuyUnit();		
+			if(this.state.CanBuy()){
 				ShopControls.buySound.play(this.game.settings.getFloat("sfxVolume", .5f));
 			}else{
 				ShopControls.finalBuySound.play(this.game.settings.getFloat("sfxVolume", .5f));
@@ -249,6 +216,7 @@ public class ShopControls
 		{
 			this.state.selected = null;
 			this.state.isInspecting = false;
+			this.state.isShopkeeperPanelDisplayed = false;
 		}
 	}
 

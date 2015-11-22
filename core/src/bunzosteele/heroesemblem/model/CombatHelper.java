@@ -57,8 +57,8 @@ public final class CombatHelper
 				friendlies.add(unit);
 			}
 		}
-		maxOptions = CombatHelper.GetAttackOptionsCore(x, y, friendlies, state.enemies, state.battlefield.get(y).get(x).altitude, state.battlefield, maxOptions, attacker.maximumRange, 0);
-		minOptions = CombatHelper.GetAttackOptionsCore(x, y, friendlies, state.enemies, state.battlefield.get(y).get(x).altitude, state.battlefield, minOptions, attacker.minimumRange, 0);
+		maxOptions = CombatHelper.GetAttackOptionsCore(x, y, attacker, friendlies, state.enemies, state.battlefield.get(y).get(x).altitude, state.battlefield, maxOptions, attacker.maximumRange, 0);
+		minOptions = CombatHelper.GetAttackOptionsCore(x, y, attacker, friendlies, state.enemies, state.battlefield.get(y).get(x).altitude, state.battlefield, minOptions, attacker.minimumRange, 0);
 		maxOptions.removeAll(minOptions);
 		return maxOptions;
 	}
@@ -126,20 +126,20 @@ public final class CombatHelper
 				friendlies.add(unit);
 			}
 		}
-		maxOptions = CombatHelper.GetAttackOptionsCore(attackingUnit.x, attackingUnit.y, friendlies, state.enemies, state.battlefield.get(attackingUnit.y).get(attackingUnit.x).altitude, state.battlefield, maxOptions, attackingUnit.maximumRange, 0);
-		minOptions = CombatHelper.GetAttackOptionsCore(attackingUnit.x, attackingUnit.y, friendlies, state.enemies,  state.battlefield.get(attackingUnit.y).get(attackingUnit.x).altitude, state.battlefield, minOptions, attackingUnit.minimumRange, 0);
+		maxOptions = CombatHelper.GetAttackOptionsCore(attackingUnit.x, attackingUnit.y, attackingUnit, friendlies, state.enemies, state.battlefield.get(attackingUnit.y).get(attackingUnit.x).altitude, state.battlefield, maxOptions, attackingUnit.maximumRange, 0);
+		minOptions = CombatHelper.GetAttackOptionsCore(attackingUnit.x, attackingUnit.y, attackingUnit, friendlies, state.enemies,  state.battlefield.get(attackingUnit.y).get(attackingUnit.x).altitude, state.battlefield, minOptions, attackingUnit.minimumRange, 0);
 		maxOptions.removeAll(minOptions);
 		return maxOptions;
 	}
 
-	public static HashSet<Tile> GetAttackOptionsCore(final int x, final int y, final List<Unit> friendlyUnits, final List<Unit> enemies, final int initialAltitude, final List<List<Tile>> battlefield, final HashSet<Tile> options, final int range, final int distance)
+	public static HashSet<Tile> GetAttackOptionsCore(final int x, final int y, Unit attackingUnit, final List<Unit> friendlyUnits, final List<Unit> enemies, final int initialAltitude, final List<List<Tile>> battlefield, final HashSet<Tile> options, final int range, final int distance)
 	{
 		if (!CombatHelper.isInBounds(x, y, battlefield) || (distance > range))
 		{
 			return options;
 		}
 
-		if (!CombatHelper.isOccupied(x, y, friendlyUnits))
+		if (!CombatHelper.isOccupied(x, y, friendlyUnits) && !CombatHelper.isObstructed(x, y, attackingUnit.x, attackingUnit.y, initialAltitude, battlefield))
 		{
 			final Tile newOption = battlefield.get(y).get(x);
 			options.add(newOption);
@@ -152,19 +152,19 @@ public final class CombatHelper
 
 		if (CombatHelper.isInBounds(x, y - 1, battlefield))
 		{
-			CombatHelper.GetAttackOptionsCore(x, y - 1, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
+			CombatHelper.GetAttackOptionsCore(x, y - 1, attackingUnit, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
 		}
 		if (CombatHelper.isInBounds(x + 1, y, battlefield))
 		{
-			CombatHelper.GetAttackOptionsCore(x + 1, y, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
+			CombatHelper.GetAttackOptionsCore(x + 1, y, attackingUnit, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
 		}
 		if (CombatHelper.isInBounds(x, y + 1, battlefield))
 		{
-			CombatHelper.GetAttackOptionsCore(x, y + 1, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
+			CombatHelper.GetAttackOptionsCore(x, y + 1, attackingUnit, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
 		}
 		if (CombatHelper.isInBounds(x - 1, y, battlefield))
 		{
-			CombatHelper.GetAttackOptionsCore(x - 1, y, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
+			CombatHelper.GetAttackOptionsCore(x - 1, y, attackingUnit, friendlyUnits, enemies, initialAltitude, battlefield, options, range, distance + 1);
 		}
 
 		return options;
@@ -189,5 +189,32 @@ public final class CombatHelper
 			}
 		}
 		return occupied;
+	}
+	
+	private static boolean isObstructed(int currentX, int currentY, int originX, int originY, int initialAltitude, List<List<Tile>> battlefield){
+		int dX = currentX - originX;
+		int dY = currentY - originY;
+		if(dX != 0 || dY != 0){
+			if(dX != 0 && dY != 0 && Math.abs(dX) != Math.abs(dY)){
+				return false;
+			}else{
+				while(dX != 0 || dY != 0){
+					if(dX > 0)
+						dX -= 1;
+					if(dX < 0)
+						dX += 1;
+					if(dY > 0)
+						dY -= 1;
+					if(dY < 0)
+						dY += 1;
+					if(dX != 0 || dY != 0){
+						Tile tile = battlefield.get(originY + dY).get(originX + dX);
+						if(tile.altitude > initialAltitude)
+							return true;
+					}				
+				}
+			}			
+		}
+		return false;
 	}
 }

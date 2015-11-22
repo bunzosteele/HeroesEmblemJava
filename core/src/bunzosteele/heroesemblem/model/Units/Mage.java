@@ -35,7 +35,7 @@ public class Mage extends Unit
 	{
 		int score = 0;
 		int costToCombat = AiHelper.GetCostToCombat(tile, state, this);
-		score += (800 - costToCombat * 8);
+		score += (1000 - costToCombat * 10);
 		if(costToCombat == 0){
 			HashSet<Unit> attackableUnits = CombatHelper.GetAttackableTargets(tile.x, tile.y, this, state);
 			if(attackableUnits.size() > 0){

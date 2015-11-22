@@ -60,7 +60,7 @@ public class BattleUnitStatusPanel
 			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, "Attack", this.currentFrame);
 			if (!this.state.roster.contains(this.state.selected))
 			{
-				UnitRenderer.DrawEnemyStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+				UnitRenderer.DrawEnemyStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize, this.state.perksPurchased > 1);
 			} else
 			{
 				UnitRenderer.DrawOwnedStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);

@@ -33,7 +33,7 @@ public class TutorialShopSecondScreen extends MenuScreen
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.exampleSprite = new Sprite(exampleRegion);
-		exampleRatio = (float) 150 / 396;
+		exampleRatio = (float) 224 / 593;
 		game.adsController.hideBannerAd();
 	}
 
@@ -57,7 +57,7 @@ public class TutorialShopSecondScreen extends MenuScreen
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset/2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.20f);
-		this.game.font.draw(this.game.batcher, "Here, you can see the selected unit's stats.\nThe cost of the unit is in the upper right corner.\nBoosted stats are shown in gold.\nReduced stats are shown in red.\nYou can see how much gold you have remaining above the 'Buy' button in the shop.", this.xOffset, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
+		this.game.font.draw(this.game.batcher, "Here, you can see the selected unit's stats.\nThe cost of the unit is in the upper right corner.\nBoosted stats are shown in gold.\nReduced stats are shown in red.\nYou can see how much gold you have remaining above the 'Buy' button in the shop.\n Press the gear icon in the upper right corner to open settings.\n Press the icon in the bottom left corner to open more details.", this.xOffset, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
 		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, this.yOffset * 2 * exampleRatio, this.yOffset * 2);
 	}
 

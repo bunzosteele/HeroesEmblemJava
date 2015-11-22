@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 public final class UnitRenderer
 {
 
-	public static void DrawEnemyStats(final HeroesEmblem game, final Unit unit, final int initialX, final int initialY, final int scaledSize) throws IOException
+	public static void DrawEnemyStats(final HeroesEmblem game, final Unit unit, final int initialX, final int initialY, final int scaledSize, boolean hasSpies) throws IOException
 	{
 		game.font.setColor(Color.WHITE);
 		game.font.getData().setScale(.18f);
@@ -24,6 +24,14 @@ public final class UnitRenderer
 		game.font.getData().setScale(.20f);
 		game.font.draw(game.batcher, "HP: " + unit.currentHealth + "/" + unit.maximumHealth, initialX, initialY - 2 * game.font.getData().lineHeight);
 		game.font.draw(game.batcher, "LVL: " + unit.level, initialX, initialY - (3 * game.font.getData().lineHeight));
+		if(hasSpies){
+			game.font.draw(game.batcher, "ATK: " + unit.attack, initialX, initialY - (4 * game.font.getData().lineHeight));
+			game.font.draw(game.batcher, "DEF: " + unit.defense, initialX, initialY - (5 * game.font.getData().lineHeight));
+			game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - (6 * game.font.getData().lineHeight));
+			game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - (7 * game.font.getData().lineHeight));
+			game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - (8 * game.font.getData().lineHeight));		
+		}
+		
 		game.font.getData().setScale(.33f);
 	}
 

@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class TutorialShopThirdScreen extends MenuScreen
+public class TutorialShopFourthScreen extends MenuScreen
 {
 	Sprite buttonSprite;
 	Sprite exampleSprite;
@@ -23,17 +23,17 @@ public class TutorialShopThirdScreen extends MenuScreen
 	int buttonHeight;
 	float exampleRatio;
 
-	public TutorialShopThirdScreen(final HeroesEmblem game)
+	public TutorialShopFourthScreen(final HeroesEmblem game)
 	{
 		super(game);
 		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
-		final AtlasRegion exampleRegion = this.game.textureAtlas.findRegion("ShopControlsExample");
+		final AtlasRegion exampleRegion = this.game.textureAtlas.findRegion("PerksExample");
 		this.buttonHeight = Gdx.graphics.getHeight() / 6;
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.exampleSprite = new Sprite(exampleRegion);
-		exampleRatio = (float) 87 / 858;
+		exampleRatio = (float) 309 / 580;
 		game.adsController.hideBannerAd();
 	}
 
@@ -48,17 +48,15 @@ public class TutorialShopThirdScreen extends MenuScreen
 	private void drawContent(){
 		super.drawBackground();
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
-		this.game.batcher.draw(buttonSprite, this.xOffset * 5 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
-		this.game.batcher.draw(buttonSprite, this.xOffset / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
+		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
 		this.game.font.getData().setScale(.60f);
 		this.game.font.draw(this.game.batcher, "Shop", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
-		this.game.font.draw(this.game.batcher, "Previous", this.xOffset/2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
-		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 5 / 2 , this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
+		this.game.font.draw(this.game.batcher, "Previous", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.20f);
-		this.game.font.draw(this.game.batcher, "Press the 'Buy' button to purchase the selected unit.\nPress the 'Complete' button to go to battle!\nYour team can also be viewed by selecting the unit from the roster at the bottom of the screen.\n You can have up to 8 units in your party.", this.xOffset / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, 3 * this.xOffset, 1, true);
-		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, 3 * this.xOffset, 3 * this.xOffset * exampleRatio);
+		this.game.font.draw(this.game.batcher, "Perks give your team permanent bonuses to help you gain a tactical advantage.\n Perks are unlocked in order, and you can unlock one perk for each time you have visited the shop.", this.xOffset * 3 / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, this.xOffset * 21 / 10, 1, true);
+		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, this.yOffset * 2 * exampleRatio, this.yOffset * 2);
 	}
 
 	@Override
@@ -88,7 +86,6 @@ public class TutorialShopThirdScreen extends MenuScreen
 			if(flippedY <= this.yOffset)
 			{
 				checkPreviousTouch(Gdx.input.getX(), flippedY);
-				checkNextTouch(Gdx.input.getX(), flippedY);
 				return;
 			}		
 		}
@@ -100,18 +97,10 @@ public class TutorialShopThirdScreen extends MenuScreen
 	}
 	
 	private void checkPreviousTouch(int x, int y){
-		if((x >= (this.xOffset/2))
-				&& (x <= (this.xOffset/2) + this.xOffset)
+		if((x >= (this.xOffset * 3 / 2))
+				&& (x <= (this.xOffset * 3 / 2) + this.xOffset)
 				&& (y <= this.yOffset)
 				&& (y >= this.yOffset - this.buttonHeight))
-			this.game.setScreen(new TutorialShopSecondScreen(this.game));
-	}
-	
-	private void checkNextTouch(int x, int y){
-		if((x >= (this.xOffset * 5 / 2))
-				&& (x <= (this.xOffset * 5 / 2) + this.xOffset)
-				&& (y <= this.yOffset)
-				&& (y >= this.yOffset - this.buttonHeight))
-			this.game.setScreen(new TutorialShopFourthScreen(this.game));
+			this.game.setScreen(new TutorialShopThirdScreen(this.game));
 	}
 }

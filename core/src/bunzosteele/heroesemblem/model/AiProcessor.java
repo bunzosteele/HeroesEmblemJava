@@ -43,6 +43,7 @@ public class AiProcessor
 				this.state.EndTurn();
 				return;
 			}else{
+				state.selected = unitsToAttack.get(0);
 				AiHelper.ExecuteAction(state, unitsToAttack.get(0), volume);
 			}
 		}else{			
@@ -83,15 +84,23 @@ public class AiProcessor
 			}
 			
 			if(!unitsToMove.contains(highestPriorityUnit)){
-				if(!highestPriorityUnit.hasAttacked)
+				if(!highestPriorityUnit.hasAttacked){
+					state.selected = highestPriorityUnit;
 					AiHelper.ExecuteAction(state, highestPriorityUnit, volume);	
-				if(!highestPriorityUnit.hasMoved)
+				}
+				if(!highestPriorityUnit.hasMoved){
+					state.selected = highestPriorityUnit;
 					AiHelper.ExecuteMove(destination, highestPriorityUnit);
+				}
 			}else{	
-				if(!highestPriorityUnit.hasMoved)
+				if(!highestPriorityUnit.hasMoved){
+					state.selected = highestPriorityUnit;
 					AiHelper.ExecuteMove(destination, highestPriorityUnit);
-				if(!highestPriorityUnit.hasAttacked)
+				}
+				if(!highestPriorityUnit.hasAttacked){
+					state.selected = highestPriorityUnit;
 					AiHelper.ExecuteAction(state, highestPriorityUnit, volume);
+				}
 			}
 		}
 	}

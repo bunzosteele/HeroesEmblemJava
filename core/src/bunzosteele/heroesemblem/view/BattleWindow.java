@@ -13,7 +13,6 @@ import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -34,6 +33,8 @@ public class BattleWindow
 	int height;
 	int tileWidth;
 	int tileHeight;
+	Sprite blueSelect;
+	Sprite redSelect;
 
 	public BattleWindow(final HeroesEmblem game, final BattleState state, final int width, final int height, final int yOffset)
 	{
@@ -57,6 +58,10 @@ public class BattleWindow
 		this.height = height;
 		this.tileWidth = width / 16;
 		this.tileHeight = height / 9;
+		final AtlasRegion blueSelectRegion = this.game.textureAtlas.findRegion("BlueSelect");
+		this.blueSelect = new Sprite(blueSelectRegion);
+		final AtlasRegion redSelectRegion = this.game.textureAtlas.findRegion("RedSelect");
+		this.redSelect = new Sprite(redSelectRegion);
 	}
 
 	public void draw()
@@ -100,7 +105,7 @@ public class BattleWindow
 			}
 
 			this.game.shapeRenderer.setColor(color);
-			this.game.shapeRenderer.rect((unit.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth * healthPercent, this.tileHeight / 10);
+			this.game.shapeRenderer.rect((unit.x * this.tileWidth) + this.xOffset + (this.tileWidth * .21875f), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), (this.tileWidth - (this.tileWidth * .4375f)) * healthPercent, this.tileHeight / 10);
 		}
 	}
 
@@ -146,10 +151,6 @@ public class BattleWindow
 				this.drawHighlight(tile.x, tile.y, this.state.selected.ability.abilityColor);
 			}
 		}
-		if(this.state.selected != null){
-			final Color color = new Color(.35f, .35f, .55f, .3f);
-			this.drawHighlight(this.state.selected.x, this.state.selected.y, color);
-		}
 	}
 
 	private void drawUnits()
@@ -162,6 +163,13 @@ public class BattleWindow
 			} else
 			{
 				UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, "Idle", this.idleFrame, this.state.IsTapped(unit));
+			}
+			if(state.selected != null && state.selected.equals(unit)){
+				if(unit.team == 0){
+					this.game.batcher.draw(blueSelect, this.xOffset + (this.tileWidth * unit.x), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth, this.tileHeight);
+				}else{
+					this.game.batcher.draw(redSelect, this.xOffset + (this.tileWidth * unit.x), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth, this.tileHeight);					
+				}
 			}
 		}
 	}

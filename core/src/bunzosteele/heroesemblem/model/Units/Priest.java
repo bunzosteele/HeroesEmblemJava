@@ -36,8 +36,8 @@ public class Priest extends Unit
 	{
 		int score = 0;
 		int costToCombat = AiHelper.GetCostToCombat(tile, state, this);
-		score += (400 - costToCombat * 4);
-		score += (500 - AiHelper.GetCostToHeal(tile, state, this) * 5);
+		score += (500 - costToCombat * 5);
+		score += (1000 - AiHelper.GetCostToHeal(tile, state, this) * 10);
 		if(costToCombat == 0){
 			HashSet<Unit> attackableUnits = CombatHelper.GetAttackableTargets(tile.x, tile.y, this, state);
 			if(attackableUnits.size() > 0){
