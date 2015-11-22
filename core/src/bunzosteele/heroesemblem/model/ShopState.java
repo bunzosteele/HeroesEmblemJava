@@ -154,6 +154,7 @@ public class ShopState
 	
 	public void BuyPerk() throws IOException{
 		this.gold -= GetNextPerkCost();
+		this.game.gameServicesController.RecordAnalyticsEvent("PerkPurchased", "Perk:" + this.perksPurchased, "Round:" + this.roundsSurvived, GetNextPerkCost());
 		this.perksPurchased++;
 		if(GetTrainingPerkLevel() > 0)
 			this.stock = UnitGenerator.GenerateStock(this.roster, this.game, this.GetTrainingPerkLevel());
