@@ -55,7 +55,7 @@ public class TutorialShopFourthScreen extends MenuScreen
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Previous", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.20f);
-		this.game.font.draw(this.game.batcher, "Perks give your team permanent bonuses to help you gain a tactical advantage.\n Perks are unlocked in order, and you can unlock one perk for each time you have visited the shop.", this.xOffset * 3 / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, this.xOffset * 21 / 10, 1, true);
+		this.game.font.draw(this.game.batcher, "Perks give your team persistent bonuses to help you gain a tactical advantage.\n Perks are unlocked in order, and you can unlock one perk for each time you have visited the shop.\n", this.xOffset * 3 / 2, this.yOffset * 3 - 1 * this.game.font.getData().lineHeight, this.xOffset * 21 / 10, 1, true);
 		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5, this.yOffset * 2 * exampleRatio, this.yOffset * 2);
 	}
 
