@@ -55,7 +55,7 @@ public class ShopState
 		this.roster = battleState.roster;
 		this.stock = UnitGenerator.GenerateStock(this.roster, battleState.game, this.GetTrainingPerkLevel());
 		this.selected = null;
-		int bonusGold = 300 + battleState.difficulty * 25;
+		int bonusGold = 500 + battleState.difficulty * 15;
 		int totalLevel = 0;
 		for(Unit unit : roster){
 			totalLevel+= unit.level;
