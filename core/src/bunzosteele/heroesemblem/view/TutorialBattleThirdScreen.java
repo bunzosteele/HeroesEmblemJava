@@ -8,6 +8,7 @@ import bunzosteele.heroesemblem.model.MusicManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -85,6 +86,8 @@ public class TutorialBattleThirdScreen extends MenuScreen
 				checkPreviousTouch(Gdx.input.getX(), flippedY);
 				return;
 			}		
+		}else if(Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyPressed(Keys.BACKSPACE)){
+			this.game.setScreen(new MainMenuScreen(this.game));
 		}
 	}
 

@@ -11,6 +11,7 @@ import bunzosteele.heroesemblem.model.Units.UnitDto;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -162,8 +163,9 @@ public class ShopScreen extends ScreenAdapter
 			} else if (this.state.isShopkeeperPanelDisplayed && this.unitInfo.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}
-			
+			}	
+		}else if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsScreen.backEnabled){
+			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen(), true));
 		}
 	}
 }

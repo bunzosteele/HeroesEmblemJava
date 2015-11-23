@@ -144,11 +144,15 @@ public class BattleControls
 
 	private void drawEndBackground()
 	{
-		if (!this.hasActions())
-		{
-			this.game.batcher.draw(emphasisButton, this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
+		if(this.state.currentPlayer == 0){
+			if (!this.hasActions())
+			{
+				this.game.batcher.draw(emphasisButton, this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
+			}else{
+				this.game.batcher.draw(button, this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
+			}
 		}else{
-			this.game.batcher.draw(button, this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
+			this.game.batcher.draw(inactiveButton, this.xOffset + (3 * this.largeButtonWidth), this.yOffset, this.smallButtonWidth, this.height);
 		}
 	}
 

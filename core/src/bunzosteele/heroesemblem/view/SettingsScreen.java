@@ -7,6 +7,8 @@ import bunzosteele.heroesemblem.model.HighscoreManager;
 import bunzosteele.heroesemblem.model.MusicManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Sound;
@@ -14,6 +16,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class SettingsScreen extends MenuScreen
 {
@@ -27,10 +31,21 @@ public class SettingsScreen extends MenuScreen
 	public static Sound sfxDemo = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
 	boolean erasingHighscores = false;
 	Screen previousScreen = null;
+	static boolean backEnabled = true;
 
-	public SettingsScreen(final HeroesEmblem game, final Screen previousScreen){
+	public SettingsScreen(final HeroesEmblem game, final Screen previousScreen, boolean isQuitting){
 		this(game);
 		this.previousScreen = previousScreen;
+		erasingHighscores = isQuitting;
+		SettingsScreen.backEnabled = false;
+		Timer.schedule(new Task()
+		{
+			@Override
+			public void run()
+			{
+				SettingsScreen.backEnabled = true;
+			}
+		}, 1 / 3f);
 	}
 	
 	public SettingsScreen(final HeroesEmblem game)
@@ -177,6 +192,21 @@ public class SettingsScreen extends MenuScreen
 				}
 				checkEraseHighscoresTouch(Gdx.input.getX(), flippedY);
 			}
+		}else if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsScreen.backEnabled){
+			if(this.previousScreen == null){
+				this.game.setScreen(new MainMenuScreen(this.game));
+			}else{
+				SettingsScreen.backEnabled = false;
+				Timer.schedule(new Task()
+				{
+					@Override
+					public void run()
+					{
+						SettingsScreen.backEnabled = true;
+					}
+				}, 1 / 3f);
+				this.game.setScreen(previousScreen);
+			}
 		}
 	}
 	
@@ -300,6 +330,4 @@ public class SettingsScreen extends MenuScreen
 		}
 
 	}
-	
-
 }

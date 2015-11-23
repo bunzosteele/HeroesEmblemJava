@@ -13,6 +13,7 @@ import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -169,6 +170,8 @@ public class GameOverScreen extends MenuScreen
 			{
 				this.game.gameServicesController.ViewLeaderboard();
 			}
+		}else if(Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyPressed(Keys.BACKSPACE)){
+			this.game.setScreen(new MainMenuScreen(this.game));
 		}
 	}
 	

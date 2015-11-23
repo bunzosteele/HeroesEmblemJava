@@ -17,6 +17,7 @@ import bunzosteele.heroesemblem.model.Units.LocationDto;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
+import bunzosteele.heroesemblem.view.ShopControls;
 
 public class BattleState
 {
@@ -266,6 +267,7 @@ public class BattleState
 		if (this.currentPlayer == 0)
 		{
 			this.turnCount++;
+			Gdx.audio.newSound(Gdx.files.internal("newturn.wav")).play(this.game.settings.getFloat("sfxVolume", .5f));
 		}
 	}
 

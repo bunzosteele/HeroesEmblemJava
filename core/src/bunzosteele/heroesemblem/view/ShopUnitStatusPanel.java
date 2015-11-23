@@ -103,7 +103,7 @@ public class ShopUnitStatusPanel
 		int yBoundSetting = (width / 3);
 		if ((clickedX > xBoundSetting) && (clickedY < yBoundSetting))
 		{
-			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen()));
+			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen(), false));
 			return;
 		}
 		int xBoundInfo = xOffset + (width / 3);

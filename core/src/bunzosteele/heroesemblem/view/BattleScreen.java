@@ -13,6 +13,7 @@ import bunzosteele.heroesemblem.model.Units.UnitDto;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -159,6 +160,9 @@ public class BattleScreen extends ScreenAdapter
 
 	public void update() throws IOException
 	{		
+		if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsScreen.backEnabled){
+			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen(), true));
+		}
 		this.state.CleanBoard();
 		if (this.state.roster.size() == 0)
 		{

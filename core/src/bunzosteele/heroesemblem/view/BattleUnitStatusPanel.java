@@ -97,7 +97,7 @@ public class BattleUnitStatusPanel
 		int yBound = (width / 3);
 		if ((clickedX > xBound) && (clickedY < yBound))
 		{
-			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen()));
+			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen(), false));
 			return;
 		}
 		this.state.selected = null;
