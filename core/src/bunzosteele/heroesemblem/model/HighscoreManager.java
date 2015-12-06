@@ -1,6 +1,7 @@
 package bunzosteele.heroesemblem.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -21,10 +22,9 @@ public class HighscoreManager
 		HighscoreDto currentScore = newHighscore;
 		if(highscores != null){
 			for(HighscoreDto highscore : highscores.highscores){
-				if(highscore.roundsSurvived > currentScore.roundsSurvived){
+				if(highscore.compareTo(currentScore) > 0){
 					newHighscores.add(highscore);
-				}
-				else if(highscore.roundsSurvived == currentScore.roundsSurvived){
+				}else if(highscore.compareTo(currentScore) == 0){
 					if(highscore.heroUnit.level > currentScore.heroUnit.level){
 						newHighscores.add(highscore);
 					}
@@ -47,9 +47,12 @@ public class HighscoreManager
 			}
 		}
 		newHighscores.add(currentScore);
+		Collections.sort(newHighscores);
+		Collections.reverse(newHighscores);
 		if(newHighscores.size() > 3)
 			newHighscores.remove(3);
 		
+
 		HighscoresDto newHighscoresDto = new HighscoresDto();
 		newHighscoresDto.highscores = newHighscores;
 		Json json = new Json();
@@ -101,10 +104,15 @@ public class HighscoreManager
 		public List<HighscoreDto> highscores;
 	}
 	
-	public static class HighscoreDto{
+	public static class HighscoreDto implements Comparable<HighscoreDto>{
 		public int roundsSurvived;
 		public int score;
 		public UnitDto heroUnit;
+		
+		@Override
+		public int compareTo(HighscoreDto other) {
+			return this.score - other.score;
+		}
 	}
 	
 	private static final String fileName = "heroesemblem.sav";

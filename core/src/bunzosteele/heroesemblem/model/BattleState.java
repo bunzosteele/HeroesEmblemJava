@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
+import bunzosteele.heroesemblem.model.SaveManager.StateDto;
 import bunzosteele.heroesemblem.model.Battlefield.BattlefieldGenerator;
 import bunzosteele.heroesemblem.model.Battlefield.Spawn;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -65,8 +66,18 @@ public class BattleState
 				enemySpawns.add(spawn);
 			}
 		}
-		if(this.perksPurchased > 3 && battlefieldId < 0){
-			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty, this.roster, this.game);	
+		if(this.perksPurchased > 3){
+			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - 7, this.roster, this.game);	
+			for(Unit enemy : this.enemies){
+				final Random random = new Random();
+				int sabotageRoll = random.nextInt(31);
+				sabotageRoll = sabotageRoll - 21;
+				if(sabotageRoll > 0){
+					enemy.currentHealth -= sabotageRoll;
+					if(enemy.currentHealth < 1)
+						enemy.currentHealth = 1;
+				}
+			}
 		}else{
 			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - battlefieldId, this.roster, this.game);
 		}
@@ -75,6 +86,24 @@ public class BattleState
 		this.SpawnUnits(this.roster, playerSpawns);
 		this.SpawnUnits(this.enemies, enemySpawns);
 		this.StartBattle();
+	}
+
+	public BattleState(HeroesEmblem game, StateDto stateDto) throws IOException
+	{
+		this.game = game;
+		this.turnCount = 1;
+		this.currentPlayer = 0;
+		this.roundsSurvived = stateDto.roundsSurvived;
+		this.perksPurchased = stateDto.perksPurchased;
+		this.difficulty = (int) Math.pow(2, roundsSurvived);
+		this.roster = SaveManager.MapUnits(stateDto.roster);
+		this.selected = null;
+		this.gold = stateDto.gold;
+		this.battlefieldId = stateDto.battlefieldId;
+		this.battlefield = SaveManager.MapTiles(stateDto.battlefield);
+		this.enemies = SaveManager.MapUnits(stateDto.enemies);
+		this.graveyard = stateDto.graveyard;
+		this.undos = stateDto.undos;
 	}
 
 	public List<Unit> AllUnits()
@@ -136,7 +165,7 @@ public class BattleState
 	}
 	
 	public boolean CanUndo(){
-		return this.selected != null && this.undos.size() > 0 && this.selected == this.undos.peek().unit;
+		return this.selected != null && this.undos.size() > 0 && this.selected.id == this.undos.peek().unitId;
 	}
 	
 	public void ClearUndos(){
@@ -225,7 +254,7 @@ public class BattleState
 			if (unit.ability != null)
 			{
 				unit.ability.exhausted = false;
-				unit.ability.targets = new ArrayList<Unit>();
+				unit.ability.targets = new ArrayList<Integer>();
 			}
 			unit.isAttacking = false;
 			unit.isDying = false;
@@ -236,7 +265,7 @@ public class BattleState
 			unit.experienceFrame = 1;
 			unit.damageFrame = 1;
 			unit.healFrame = 1;
-			unit.attackFrame = 1;
+			unit.attackFrame = 0;
 			unit.missedFrame = 1;
 			unit.deathFrame = 10;
 			unit.distanceMoved = 0;
@@ -262,12 +291,18 @@ public class BattleState
 			unit.hasMoved = false;
 			unit.hasAttacked = false;
 			unit.distanceMoved = 0;
+			if(unit.ability != null)
+				unit.ability.ResetAbility();
 		}
 		this.currentPlayer = (this.currentPlayer + 1) % 2;
 		if (this.currentPlayer == 0)
 		{
 			this.turnCount++;
 			Gdx.audio.newSound(Gdx.files.internal("newturn.wav")).play(this.game.settings.getFloat("sfxVolume", .5f));
+		}else{
+			for(Unit enemy : this.enemies){
+				enemy.movementOptions = null;
+			}
 		}
 	}
 
@@ -302,11 +337,5 @@ public class BattleState
 			unit.y = spawn.y;
 			spawns.remove(spawn);
 		}
-	}
-	
-	public class Move{
-		public Unit unit;
-		public int oldX;
-		public int oldY;
 	}
 }

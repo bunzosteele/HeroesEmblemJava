@@ -1,14 +1,18 @@
 package bunzosteele.heroesemblem.view;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.Units.UnitType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
@@ -30,8 +34,7 @@ public final class UnitRenderer
 			game.font.draw(game.batcher, "EVP: " + unit.evasion, initialX, initialY - (6 * game.font.getData().lineHeight));
 			game.font.draw(game.batcher, "ACC: " + unit.accuracy, initialX, initialY - (7 * game.font.getData().lineHeight));
 			game.font.draw(game.batcher, "MOVE: " + unit.movement, initialX, initialY - (8 * game.font.getData().lineHeight));		
-		}
-		
+		}	
 		game.font.getData().setScale(.33f);
 	}
 
@@ -170,20 +173,18 @@ public final class UnitRenderer
 		game.font.getData().setScale(.33f);
 	}
 
-
-	public static void DrawUnit(final HeroesEmblem game, final Unit unit, final int x, final int y, final int scaledSize, final String animation, final int frame)
+	public static void DrawUnit(final HeroesEmblem game, final Unit unit, final int x, final int y, final int scaledSize, final String animation, final boolean tapped)
 	{
-		UnitRenderer.DrawUnit(game, unit, x, y, scaledSize, animation, frame, false);
-	}
-
-	public static void DrawUnit(final HeroesEmblem game, final Unit unit, final int x, final int y, final int scaledSize, final String animation, final int frame, final boolean tapped)
-	{
-		int animationFrame = frame;
-		if (tapped)
+		int animationFrame = 0;
+		if (!tapped)
 		{
-			animationFrame = 1;
+			if(animation.equals("Idle")){
+				animationFrame = unit.idleFrame;
+			}else{
+				animationFrame = unit.attackFrame;
+			}
 		}
-		final AtlasRegion region = game.textureAtlas.findRegion(unit.type + "-" + animation + "-" + animationFrame + "-" + unit.team);
+		final AtlasRegion region = UnitSheets.get(unit.type).findRegion(animation + "-" + unit.team + "-" + animationFrame);
 		final Sprite sprite = new Sprite(region);
 		if (unit.isTakingDamage)
 		{
@@ -334,5 +335,18 @@ public final class UnitRenderer
 		{
 			font.setColor(new Color(255, 0, 0, 1));
 		}
+	}
+	
+	public static Map<UnitType, TextureAtlas> UnitSheets = CreateUnitSheets();
+	
+	private static Map<UnitType, TextureAtlas> CreateUnitSheets(){
+		Map<UnitType, TextureAtlas> unitSheets = new HashMap<UnitType, TextureAtlas>();
+		unitSheets.put(UnitType.Archer, new TextureAtlas(Gdx.files.internal("Archer.pack")));
+		unitSheets.put(UnitType.Footman, new TextureAtlas(Gdx.files.internal("Footman.pack")));
+		unitSheets.put(UnitType.Knight, new TextureAtlas(Gdx.files.internal("Knight.pack")));
+		unitSheets.put(UnitType.Mage, new TextureAtlas(Gdx.files.internal("Mage.pack")));
+		unitSheets.put(UnitType.Priest, new TextureAtlas(Gdx.files.internal("Priest.pack")));
+		unitSheets.put(UnitType.Spearman, new TextureAtlas(Gdx.files.internal("Spearman.pack")));
+		return unitSheets;
 	}
 }

@@ -15,7 +15,6 @@ public class ShopUnitStatusPanel
 {
 	HeroesEmblem game;
 	ShopState state;
-	int currentFrame = 1;
 	int xOffset;
 	int yOffset;
 	int width;
@@ -29,18 +28,6 @@ public class ShopUnitStatusPanel
 	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
-			{
-				ShopUnitStatusPanel.this.currentFrame++;
-				if (ShopUnitStatusPanel.this.currentFrame > 3)
-				{
-					ShopUnitStatusPanel.this.currentFrame = 1;
-				}
-			}
-		}, 0, 1 / 3.0f);
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		this.width = width;
@@ -67,7 +54,7 @@ public class ShopUnitStatusPanel
 			}else{
 				this.game.batcher.draw(this.infoOpen, xOffset + scaledSize / 4, Gdx.graphics.getHeight() - this.height + scaledSize / 2, scaledSize / 2, scaledSize / 2);				
 			}
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 7 / 4, scaledSize, "Idle", this.currentFrame);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 7 / 4, scaledSize, "Idle", false);
 			if (!this.state.roster.contains(this.state.selected))
 			{
 				UnitRenderer.DrawStockStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 6 / 4, scaledSize);

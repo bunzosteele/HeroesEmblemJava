@@ -3,6 +3,7 @@ package bunzosteele.heroesemblem.view;
 import java.io.IOException;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
+import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.MusicManager;
 import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.model.Units.LocationDto;
@@ -32,13 +33,23 @@ public class ShopScreen extends ScreenAdapter
 	public ShopScreen(final HeroesEmblem game) throws IOException
 	{
 		this.state = new ShopState(game);
+		game.shopState = this.state;
 		this.InitializeShopScreen(game);
 		game.adsController.hideBannerAd();
 	}
 
-	public ShopScreen(final HeroesEmblem game, final ShopState state)
+	public ShopScreen(final HeroesEmblem game, final BattleState state) throws IOException
 	{
-		this.state = state;
+		this.state = new ShopState(state);
+		game.shopState = this.state;
+		this.InitializeShopScreen(game);
+		game.adsController.hideBannerAd();
+	}
+	
+	public ShopScreen(final HeroesEmblem game, final ShopState shopState) throws IOException
+	{
+		this.state = shopState;
+		game.shopState = this.state;
 		this.InitializeShopScreen(game);
 		game.adsController.hideBannerAd();
 	}

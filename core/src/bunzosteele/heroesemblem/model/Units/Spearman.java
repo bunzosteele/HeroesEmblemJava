@@ -9,6 +9,7 @@ import bunzosteele.heroesemblem.model.AiHelper;
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.CombatHelper;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
+import bunzosteele.heroesemblem.model.Units.Abilities.Ability;
 import bunzosteele.heroesemblem.model.Units.Abilities.Thrust;
 import bunzosteele.heroesemblem.model.Units.Abilities.Vault;
 
@@ -28,6 +29,14 @@ public class Spearman extends Unit
 		{
 			this.ability = null;
 		}
+	}
+	
+	public Spearman(UnitDto unitDto) throws IOException{
+		super(unitDto.team, unitDto.name, unitDto.attack, unitDto.defense, unitDto.evasion, unitDto.accuracy, unitDto.movement, unitDto.maximumHealth, unitDto.maximumRange, unitDto.minimumRange, unitDto.cost, unitDto.id, unitDto.gameSpeed, unitDto.isMale, unitDto.backStory, unitDto.x, unitDto.y, unitDto.level, unitDto.unitsKilled, unitDto.damageDealt, unitDto.currentHealth, unitDto.experience, unitDto.experienceNeeded, unitDto.distanceMoved, unitDto.hasMoved, unitDto.hasAttacked);
+		this.type = UnitType.Spearman;
+		maxAttackFrame = 1;
+		maxIdleFrame = 2;
+		this.ability = Ability.GenerateAbilityByName(unitDto.ability, unitDto.isAbilityExhausted, unitDto.canUseAbility, unitDto.abilityTargets);
 	}
 
 	@Override

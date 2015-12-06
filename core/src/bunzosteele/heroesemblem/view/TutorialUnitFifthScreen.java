@@ -5,6 +5,7 @@ import java.io.IOException;
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.HighscoreManager;
 import bunzosteele.heroesemblem.model.MusicManager;
+import bunzosteele.heroesemblem.model.Units.UnitType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -45,7 +46,7 @@ public class TutorialUnitFifthScreen extends MenuScreen
 	
 	private void drawContent(){
 		super.drawBackground();
-		final AtlasRegion region = game.textureAtlas.findRegion("Mage-Idle-" + idleFrame + "-0");
+		final AtlasRegion region = UnitRenderer.UnitSheets.get(UnitType.Mage).findRegion("Idle-0-" + idleFrame);
 		final Sprite sprite = new Sprite(region);	
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 5 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);

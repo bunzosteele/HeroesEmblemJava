@@ -19,6 +19,12 @@ public class PowerShot extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(1f, 0f, 0f, .5f);
+		this.isAction = true;
+	}
+	
+	public PowerShot(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.exhausted = exhausted;
 	}
 
 	@Override
@@ -62,8 +68,10 @@ public class PowerShot extends Ability
 					unit.dealDamage(executor.attack);
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
-					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveGraveyard(unit);
+					if(unit.checkDeath()){
+						unit.killUnit(executor, state.roundsSurvived);
+						if(unit.team == 0)
+							state.SaveGraveyard(unit);
 					}
 				}
 			}

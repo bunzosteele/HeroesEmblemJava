@@ -16,7 +16,6 @@ public class BattleUnitStatusPanel
 {
 	HeroesEmblem game;
 	BattleState state;
-	int currentFrame = 1;
 	int xOffset;
 	int yOffset;
 	int width;
@@ -28,18 +27,6 @@ public class BattleUnitStatusPanel
 	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
-			{
-				BattleUnitStatusPanel.this.currentFrame++;
-				if (BattleUnitStatusPanel.this.currentFrame > 2)
-				{
-					BattleUnitStatusPanel.this.currentFrame = 1;
-				}
-			}
-		}, 0, 1 / 3.0f);
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		this.width = width;
@@ -57,7 +44,7 @@ public class BattleUnitStatusPanel
 		this.game.batcher.draw(this.settingsIcon, xOffset + scaledSize * 17 / 8, Gdx.graphics.getHeight() - scaledSize * 7 / 8, scaledSize / 2, scaledSize / 2);
 		if (this.state.selected != null)
 		{
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, "Attack", this.currentFrame);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, "Attack", false);
 			if (!this.state.roster.contains(this.state.selected))
 			{
 				UnitRenderer.DrawEnemyStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize, this.state.perksPurchased > 1);

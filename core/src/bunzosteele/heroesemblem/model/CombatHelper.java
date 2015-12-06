@@ -213,7 +213,7 @@ public final class CombatHelper
 							return true;
 					}				
 				}
-			}			
+			}
 		}
 		return false;
 	}

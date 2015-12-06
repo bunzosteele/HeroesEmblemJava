@@ -26,6 +26,9 @@ public final class AiHelper
 			Attack(state, unit, volume);
 		}
 		unit.hasAttacked = true;
+		for(Unit enemy : state.enemies){
+			enemy.movementOptions = null;
+		}
 	}
 
 	public static HashSet<Unit> GetUnitsThatCanAttackTile(BattleState state, Tile tile){
@@ -67,8 +70,10 @@ public final class AiHelper
 			{
 				Unit.hitSound.play(volume);
 				target.startDamage();
-				if(target.checkDeath(unit) && target.team == 0){
-					state.SaveGraveyard(target);
+				if(target.checkDeath()){
+					target.killUnit(unit, state.roundsSurvived);
+					if(target.team == 0)
+						state.SaveGraveyard(target);
 				}
 			} else
 			{
@@ -106,13 +111,18 @@ public final class AiHelper
 	}
 
 	public static Map<Tile, Integer> GetMovementOptions(BattleState state, Unit unit){
-		Map<Tile, Integer> optionsWithScore = new HashMap<Tile, Integer>();
-		HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit);
-		for(Tile tile : options){
-			int score = unit.GetTileScore(tile, state);
-			optionsWithScore.put(tile, score);
+		if(unit.movementOptions == null){
+			Map<Tile, Integer> optionsWithScore = new HashMap<Tile, Integer>();
+			HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit);
+			for(Tile tile : options){
+				int score = unit.GetTileScore(tile, state);
+				optionsWithScore.put(tile, score);
+			}
+			unit.movementOptions = optionsWithScore;
+			return optionsWithScore;
+		}else{
+			return unit.movementOptions;
 		}
-		return optionsWithScore;
 	}
 	
 	public static Tile GetDestination(BattleState state, Unit unit, int priority){

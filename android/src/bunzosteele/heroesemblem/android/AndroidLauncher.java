@@ -1,5 +1,7 @@
 package bunzosteele.heroesemblem.android;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -46,6 +48,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	boolean isViewing = false;
 	boolean isResolvingConnectionFailure;
 	int scoreToSubmit = -1;
+	HeroesEmblem game;
 	
 	private static final int RC_UNUSED = 5001;
     private static final int RC_SIGN_IN = 9001;
@@ -54,7 +57,8 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		View gameView = initializeForView(new HeroesEmblem(this, this), config);
+		this.game = new HeroesEmblem(this, this);
+		View gameView = initializeForView(this.game, config);
 		setupAds();
 		RelativeLayout layout = new RelativeLayout(this);
 		layout.addView(gameView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -119,6 +123,12 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		super.onDestroy();
 		this.finish();
 		android.os.Process.killProcess(android.os.Process.myPid()); 
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState){
+		this.game.SaveData();
+		super.onSaveInstanceState(savedInstanceState);
 	}
 	
 	@Override

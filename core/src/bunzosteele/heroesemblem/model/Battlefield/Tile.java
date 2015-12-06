@@ -20,4 +20,14 @@ public class Tile
 		this.movementCost = movementCost;
 		this.altitude = altitude;
 	}
+	
+	public Tile(TileDto tileDto){
+		this.type = tileDto.type;
+		this.defenseModifier = tileDto.defenseModifier;
+		this.evasionModifier = tileDto.evasionModifier;
+		this.movementCost = tileDto.movementCost;
+		this.altitude = tileDto.altitude;
+		this.x = tileDto.x;
+		this.y = tileDto.y;
+	}
 }

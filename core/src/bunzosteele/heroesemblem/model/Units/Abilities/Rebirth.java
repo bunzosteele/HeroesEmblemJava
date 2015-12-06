@@ -21,6 +21,12 @@ public class Rebirth extends Ability
 		this.isTargeted = true;
 		this.abilityColor = new Color(0f, 1f, 0f, .5f);
 		this.areTargetsPersistent = true;
+		this.isAction = true;
+	}
+	
+	public Rebirth(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.targets = abilityTargets;
 	}
 
 	@Override
@@ -49,15 +55,23 @@ public class Rebirth extends Ability
 	{
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
-			if ((unit.x == targetTile.x) && (unit.y == targetTile.y) && unit.currentHealth != unit.maximumHealth && !this.targets.contains(unit))
+			if ((unit.x == targetTile.x) && (unit.y == targetTile.y) && unit.currentHealth != unit.maximumHealth && !this.targets.contains(unit.id))
 			{
 				executor.startAttack();
-				final int heal = unit.maximumHealth - unit.currentHealth;
-				unit.experience = 0;
+				int heal = unit.maximumHealth - unit.currentHealth;
+				
+				if(executor.attack * 4 < heal){
+					heal = executor.attack * 4;
+				}
+				
+				unit.experience -= heal;
+				if(unit.experience < 0)
+					unit.experience = 0;
+				
 				executor.giveExperience(heal);
 				unit.healDamage(heal);
 				unit.startHeal();
-				this.targets.add(unit);
+				this.targets.add(unit.id);
 				return true;
 			}
 		}

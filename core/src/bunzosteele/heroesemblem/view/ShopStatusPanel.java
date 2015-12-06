@@ -17,7 +17,7 @@ public class ShopStatusPanel
 {
 	HeroesEmblem game;
 	ShopState state;
-	int currentFrame = 1;
+	int currentFrame = 0;
 	int xOffset;
 	int yOffset;
 	int width;
@@ -37,9 +37,9 @@ public class ShopStatusPanel
 			public void run()
 			{
 				ShopStatusPanel.this.currentFrame++;
-				if (ShopStatusPanel.this.currentFrame > 3)
+				if (ShopStatusPanel.this.currentFrame > 2)
 				{
-					ShopStatusPanel.this.currentFrame = 1;
+					ShopStatusPanel.this.currentFrame = 0;
 				}
 			}
 		}, 0, 1 / 3.0f);
@@ -73,12 +73,6 @@ public class ShopStatusPanel
 		this.game.font.getData().setScale(.33f);
 		this.game.batcher.draw(goldSprite, scaledSize / 4, yOffset + scaledSize / 4, scaledSize * 3 / 4, scaledSize * 3 / 4);
 		this.game.font.draw(this.game.batcher, "" + this.state.gold, scaledSize * 11 / 10, this.yOffset + this.game.font.getData().lineHeight * 4 / 3, this.width - scaledSize * 6 / 4, 1, false);
-		/*
-		if(this.state.isShopkeeperPanelDisplayed){
-			this.game.batcher.draw(this.infoClose, xOffset + scaledSize * 2, Gdx.graphics.getHeight() -  scaledSize, scaledSize / 2, scaledSize / 2);
-		}else{
-			this.game.batcher.draw(this.infoOpen, xOffset + scaledSize * 2, Gdx.graphics.getHeight() -  scaledSize, scaledSize / 2, scaledSize / 2);				
-		}*/
 		if(this.state.perksPurchased > 0)	
 			drawMap();
 	}

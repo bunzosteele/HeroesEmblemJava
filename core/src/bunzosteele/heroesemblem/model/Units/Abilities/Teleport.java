@@ -21,6 +21,12 @@ public class Teleport extends Ability
 		this.isTargeted = true;
 		this.abilityColor = new Color(.5f, 0f, .5f, .5f);
 		this.isMultiInput = true;
+		this.isAction = true;
+	}
+	
+	public Teleport(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.exhausted = exhausted;
 	}
 
 	@Override
@@ -48,7 +54,7 @@ public class Teleport extends Ability
 			{
 				if ((targetTile.x == unit.x) && (targetTile.y == unit.y))
 				{
-					this.targets.add(unit);
+					this.targets.add(unit.id);
 				}
 			}
 			return false;
@@ -56,14 +62,22 @@ public class Teleport extends Ability
 		{
 			if (!this.GetTargetTiles(state, executor).contains(targetTile))
 			{
-				this.targets = new ArrayList<Unit>();
+				this.targets = new ArrayList<Integer>();
 				return false;
 			} else
 			{
-				executor.startAttack();
-				this.targets.get(0).x = targetTile.x;
-				this.targets.get(0).y = targetTile.y;
-				return true;
+				Unit target = null;
+				for(Unit unit : state.AllUnits()){
+					if (unit.id == this.targets.get(0))
+						target = unit;
+				}
+				if (target != null){
+					executor.startAttack();
+					target.x = targetTile.x;
+					target.y = targetTile.y;
+					return true;
+				}
+				return false;
 			}
 		}
 	}
@@ -90,7 +104,12 @@ public class Teleport extends Ability
 			{
 				for (final Tile tile : row)
 				{
-					if (tile.movementCost <= this.targets.get(0).movement)
+					Unit target = null;
+					for(Unit unit : state.AllUnits()){
+						if (unit.id == this.targets.get(0))
+							target = unit;
+					}
+					if (target != null && tile.movementCost <= target.movement)
 					{
 						targets.add(tile);
 					}

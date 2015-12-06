@@ -13,15 +13,15 @@ import com.badlogic.gdx.graphics.Color;
 
 public abstract class Ability
 {
-
 	public String displayName;
 	public boolean isActive;
 	public boolean isTargeted;
 	public Color abilityColor;
 	public boolean exhausted;
 	public boolean isMultiInput;
-	public List<Unit> targets = new ArrayList<Unit>();
+	public List<Integer> targets = new ArrayList<Integer>();
 	public boolean areTargetsPersistent;
+	public boolean isAction;
 
 	public int AttackModifier(final Unit attacker)
 	{
@@ -54,6 +54,13 @@ public abstract class Ability
 	public boolean IsBlockingDamage()
 	{
 		return false;
+	}
+	
+	public boolean IsAction(){
+		return this.isAction;
+	}
+	
+	public void ResetAbility(){
 	}
 
 	protected boolean isEmpty(final int x, final int y, final List<Unit> units)
@@ -89,5 +96,35 @@ public abstract class Ability
 	
 	public void PlaySound(float volume){
 		
+	}
+	
+	public static Ability GenerateAbilityByName(String abilityName, boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		if(abilityName.equals("Block"))
+			return new Block(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Lightning"))
+			return new ChainLightning(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Heal"))
+			return new Heal(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Joust"))
+			return new Joust(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Power Shot"))
+			return new PowerShot(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Rebirth"))
+			return new Rebirth(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Scholar"))
+			return new Scholar(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Shield Bash"))
+			return new ShieldBash(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Snipe"))
+			return new Snipe(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Sturdy"))
+			return new Sturdy(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Teleport"))
+			return new Teleport(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Thrust"))
+			return new Thrust(exhausted, canUse, abilityTargets);
+		if(abilityName.equals("Vault"))
+			return new Vault(exhausted, canUse, abilityTargets);
+		return null;
 	}
 }

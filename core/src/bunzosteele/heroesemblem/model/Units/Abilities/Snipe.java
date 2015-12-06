@@ -1,6 +1,7 @@
 package bunzosteele.heroesemblem.model.Units.Abilities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import bunzosteele.heroesemblem.model.BattleState;
@@ -19,6 +20,12 @@ public class Snipe extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(1f, 0f, 0f, .5f);
+		this.isAction = true;
+	}
+	
+	public Snipe(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.exhausted = exhausted;
 	}
 
 	@Override
@@ -60,8 +67,10 @@ public class Snipe extends Ability
 					unit.dealDamage(damage);
 					executor.damageDealt += damage;
 					unit.startDamage();
-					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveGraveyard(unit);
+					if(unit.checkDeath()){
+						unit.killUnit(executor, state.roundsSurvived);
+						if(unit.team == 0)
+							state.SaveGraveyard(unit);
 					}
 					return true;
 				}

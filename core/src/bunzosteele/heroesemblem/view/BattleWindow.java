@@ -7,8 +7,8 @@ import java.util.List;
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.CombatHelper;
+import bunzosteele.heroesemblem.model.Move;
 import bunzosteele.heroesemblem.model.MovementHelper;
-import bunzosteele.heroesemblem.model.BattleState.Move;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
@@ -25,8 +25,6 @@ public class BattleWindow
 	HeroesEmblem game;
 	BattleState state;
 	Texture img;
-	int idleFrame = 1;
-	int attackFrame = 1;
 	int xOffset;
 	int yOffset;
 	int width;
@@ -40,18 +38,6 @@ public class BattleWindow
 	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
-			{
-				BattleWindow.this.idleFrame++;
-				if (BattleWindow.this.idleFrame > 3)
-				{
-					BattleWindow.this.idleFrame = 1;
-				}
-			}
-		}, 0, 1 / 3f);
 		this.xOffset = 0;
 		this.yOffset = yOffset;
 		this.width = width;
@@ -159,10 +145,10 @@ public class BattleWindow
 		{
 			if (unit.isAttacking)
 			{
-				UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, "Attack", unit.attackFrame);
+				UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, "Attack", false);
 			} else
 			{
-				UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, "Idle", this.idleFrame, this.state.IsTapped(unit));
+				UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, "Idle", this.state.IsTapped(unit));
 			}
 			if(state.selected != null && state.selected.equals(unit)){
 				if(unit.team == 0){
@@ -210,7 +196,10 @@ public class BattleWindow
 										Unit.deathSound.play(this.game.settings.getFloat("sfxVolume", .5f));
 									}
 									enemy.startDamage();
-									enemy.checkDeath(this.state.selected);
+									if(enemy.checkDeath()){
+										enemy.killUnit(this.state.selected, this.state.roundsSurvived);
+										state.SaveGraveyard(enemy);
+									}
 								} else
 								{
 									Unit.missSound.play(this.game.settings.getFloat("sfxVolume", .5f));
@@ -220,7 +209,8 @@ public class BattleWindow
 								this.state.isAttacking = false;
 								this.state.selected.hasAttacked = true;
 								this.state.ClearUndos();
-								this.state.selected = null;
+								if(this.state.IsTapped(this.state.selected))
+									this.state.selected = null;
 								return;
 							}
 						}
@@ -242,17 +232,20 @@ public class BattleWindow
 						{
 							this.state.selected.ability.PlaySound(this.game.settings.getFloat("sfxVolume", .5f));
 							this.state.isUsingAbility = false;
-							this.state.selected.hasAttacked = true;
+							if(this.state.selected.ability.IsAction())
+								this.state.selected.hasAttacked = true;
 							this.state.selected.ability.exhausted = true;
 							this.state.ClearUndos();
-							this.state.selected = null;			
+							if(this.state.IsTapped(this.state.selected))
+								this.state.selected = null;		
 							return;
 						} else
 						{
-							if (!this.state.selected.ability.isMultiInput || (this.state.selected.ability == null))
+							if (!this.state.selected.ability.isMultiInput)
 							{
 								this.state.isUsingAbility = false;
-								this.state.selected = null;
+								if(this.state.IsTapped(this.state.selected))
+									this.state.selected = null;
 							} else
 							{
 								return;
@@ -271,7 +264,7 @@ public class BattleWindow
 				{
 					if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
 					{
-						this.state.selected.ability.targets = new ArrayList<Unit>();
+						this.state.selected.ability.targets = new ArrayList<Integer>();
 					}
 					this.state.selected = unit;
 					this.state.isMoving = false;
@@ -292,10 +285,10 @@ public class BattleWindow
 					if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
 					{
 						this.state.selected.distanceMoved = (Math.abs(this.state.selected.x - tile.x) + Math.abs(this.state.selected.y - tile.y));
-						Move oldLocation = state.new Move();
+						Move oldLocation = new Move();
 						oldLocation.oldX = state.selected.x;
 						oldLocation.oldY = state.selected.y;
-						oldLocation.unit = this.state.selected;
+						oldLocation.unitId = this.state.selected.id;
 						this.state.selected.x = tile.x;
 						this.state.selected.y = tile.y;
 						this.state.isMoving = false;
@@ -309,7 +302,7 @@ public class BattleWindow
 
 		if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
 		{
-			this.state.selected.ability.targets = new ArrayList<Unit>();
+			this.state.selected.ability.targets = new ArrayList<Integer>();
 		}
 
 		this.state.selected = null;

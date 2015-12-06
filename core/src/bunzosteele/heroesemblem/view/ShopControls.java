@@ -21,8 +21,6 @@ public class ShopControls
 {
 	HeroesEmblem game;
 	ShopState state;
-	int idleFrame = 1;
-	int attackFrame = 1;
 	int xOffset;
 	int yOffset;
 	int buttonWidth;
@@ -40,23 +38,6 @@ public class ShopControls
 	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
-			{
-				ShopControls.this.idleFrame++;
-				ShopControls.this.attackFrame++;
-				if (ShopControls.this.idleFrame > 3)
-				{
-					ShopControls.this.idleFrame = 1;
-				}
-				if (ShopControls.this.attackFrame > 2)
-				{
-					ShopControls.this.attackFrame = 1;
-				}
-			}
-		}, 0, 1 / 3.0f);
 		this.xOffset = 0;
 		this.yOffset = 0;
 		this.buttonWidth = buttonWidth;
@@ -145,10 +126,10 @@ public class ShopControls
 			if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
 			{
 				this.game.batcher.draw(blueSelect, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset),  (this.height - columnWidth) / 2, columnWidth, columnWidth);
-				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, "Attack", this.attackFrame);
+				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, "Attack", false);
 			} else
 			{
-				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, "Idle", this.idleFrame);
+				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, "Idle", false);
 			}
 			unitOffset++;
 		}
@@ -188,6 +169,7 @@ public class ShopControls
 	{
 		if (this.canStartGame())
 		{
+			game.shopState = null;
 			this.game.setScreen(new BattleScreen(this.game, this.state));
 			return;
 		}

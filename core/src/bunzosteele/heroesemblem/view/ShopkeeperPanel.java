@@ -16,7 +16,7 @@ public class ShopkeeperPanel
 {
 	HeroesEmblem game;
 	ShopState state;
-	int currentFrame = 1;
+	int currentFrame = 0;
 	int xOffset;
 	int yOffset;
 	int width;
@@ -38,9 +38,9 @@ public class ShopkeeperPanel
 			public void run()
 			{
 				ShopkeeperPanel.this.currentFrame++;
-				if (ShopkeeperPanel.this.currentFrame > 3)
+				if (ShopkeeperPanel.this.currentFrame > 2)
 				{
-					ShopkeeperPanel.this.currentFrame = 1;
+					ShopkeeperPanel.this.currentFrame = 0;
 				}
 			}
 		}, 0, 1 / 3f);
@@ -98,7 +98,7 @@ public class ShopkeeperPanel
 		case 3:
 			this.game.font.draw(this.game.batcher, "Sabotage", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
 			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "Prevents your enemies from bringing extra reinforcements when you have advantageous terrain.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
+			this.game.font.draw(this.game.batcher, "Prevents your enemies from bringing extra reinforcements when you have advantageous terrain. Enemies may arrive to battle damaged.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
 			this.game.font.getData().setScale(.33f);
 			break;
 		case 4:

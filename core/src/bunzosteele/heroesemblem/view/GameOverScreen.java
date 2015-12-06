@@ -10,6 +10,7 @@ import bunzosteele.heroesemblem.model.Units.LocationDto;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
+import bunzosteele.heroesemblem.model.Units.UnitType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -83,7 +84,7 @@ public class GameOverScreen extends MenuScreen
 		}else{
 			this.game.font.draw(this.game.batcher, "Rounds Survived: " + this.roundsSurvived, this.xOffset * 2, this.headerOffset, xOffset * 4, 1, false);
 			this.game.font.draw(this.game.batcher, "Final Score: " + this.score, this.xOffset * 2, this.headerOffset - this.game.font.getData().lineHeight, xOffset * 4, 1, false);
-			final AtlasRegion region = game.textureAtlas.findRegion(this.hero.type + "-Idle-" + idleFrame + "-0");
+			final AtlasRegion region = UnitRenderer.UnitSheets.get(UnitType.valueOf(this.hero.type)).findRegion("Idle-0-" + idleFrame);
 			final Sprite sprite = new Sprite(region);
 			this.game.font.draw(this.game.batcher, "Your hero: " + this.hero.name, this.xOffset * 2, this.headerOffset - 2 * this.game.font.getData().lineHeight, xOffset * 4, 1, false);
 			this.game.font.getData().setScale(.2f);

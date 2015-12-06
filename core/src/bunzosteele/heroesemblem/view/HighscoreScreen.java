@@ -94,12 +94,12 @@ public class HighscoreScreen extends MenuScreen
 					this.game.font.draw(this.game.batcher, "" + highscore.score, this.xOffset, this.tableRowHeight * (3 - heightOffset), (float) this.xOffset, 1, false);
 					this.game.font.getData().setScale(.33f);
 					if(heightOffset == selected){
-						final AtlasRegion region = game.textureAtlas.findRegion(highscore.heroUnit.type + "-Attack-" + attackFrame + "-0");
+						final AtlasRegion region = UnitRenderer.UnitSheets.get(UnitType.valueOf(highscore.heroUnit.type)).findRegion("Idle-0-" + idleFrame);
 						final Sprite sprite = new Sprite(region);
 						this.game.batcher.draw(sprite, 2 * this.xOffset + this.pedestalSize+ pedestalSize / 10,  (3 - heightOffset - 1) * this.tableRowHeight + pedestalSize / 10 + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize * 8 / 10, this.pedestalSize * 8 / 10);
 					}
 					else{
-						final AtlasRegion region = game.textureAtlas.findRegion(highscore.heroUnit.type + "-Idle-" + idleFrame + "-0");
+						final AtlasRegion region = UnitRenderer.UnitSheets.get(UnitType.valueOf(highscore.heroUnit.type)).findRegion("Idle-0-" + idleFrame);
 						final Sprite sprite = new Sprite(region);
 						this.game.batcher.draw(sprite, 2 * this.xOffset + this.pedestalSize + pedestalSize / 10,  (3 - heightOffset - 1) * this.tableRowHeight + pedestalSize / 10 + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize * 8 / 10, this.pedestalSize * 8 / 10);
 					}

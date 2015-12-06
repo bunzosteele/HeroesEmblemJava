@@ -1,5 +1,6 @@
 package bunzosteele.heroesemblem.model.Units.Abilities;
 
+import java.util.List;
 import java.util.Random;
 
 public class Block extends Ability
@@ -9,6 +10,11 @@ public class Block extends Ability
 		this.displayName = "Block";
 		this.isActive = false;
 		this.isTargeted = false;
+		this.isAction = false;
+	}
+	
+	public Block(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
 	}
 
 	@Override

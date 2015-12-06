@@ -5,22 +5,19 @@ import java.util.ArrayList;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.BattleState;
-import bunzosteele.heroesemblem.model.BattleState.Move;
+import bunzosteele.heroesemblem.model.Move;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
+
 
 public class BattleControls
 {
 	HeroesEmblem game;
 	BattleState state;
-	int idleFrame = 1;
-	int attackFrame = 1;
 	int xOffset;
 	int yOffset;
 	int largeButtonWidth;
@@ -36,23 +33,6 @@ public class BattleControls
 	{
 		this.game = game;
 		this.state = state;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
-			{
-				BattleControls.this.idleFrame++;
-				BattleControls.this.attackFrame++;
-				if (BattleControls.this.idleFrame > 3)
-				{
-					BattleControls.this.idleFrame = 1;
-				}
-				if (BattleControls.this.attackFrame > 2)
-				{
-					BattleControls.this.attackFrame = 1;
-				}
-			}
-		}, 0, 1 / 3.0f);
 		this.xOffset = 0;
 		this.yOffset = 0;
 		this.largeButtonWidth = endOffset / 3;
@@ -216,7 +196,7 @@ public class BattleControls
 			this.state.isUsingAbility = !this.state.isUsingAbility;
 			if (!this.state.selected.ability.areTargetsPersistent)
 			{
-				this.state.selected.ability.targets = new ArrayList<Unit>();
+				this.state.selected.ability.targets = new ArrayList<Integer>();
 			}
 		}
 	}
@@ -247,7 +227,10 @@ public class BattleControls
 			this.state.selected.hasMoved = false;
 			if(this.state.undos.size() > 0){
 				Move nextUndo = this.state.undos.peek();
-				this.state.selected = nextUndo.unit;
+				for(Unit unit : this.state.AllUnits()){
+					if(unit.id == nextUndo.unitId)
+						this.state.selected = unit;
+				}
 			}
 		}else if (this.state.CanMove())
 		{

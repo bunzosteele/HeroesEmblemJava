@@ -5,6 +5,7 @@ import java.io.IOException;
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.HighscoreManager;
 import bunzosteele.heroesemblem.model.MusicManager;
+import bunzosteele.heroesemblem.model.Units.UnitType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -45,7 +46,7 @@ public class TutorialUnitSecondScreen extends MenuScreen
 	
 	private void drawContent(){
 		super.drawBackground();
-		final AtlasRegion region = game.textureAtlas.findRegion("Spearman-Idle-" + idleFrame + "-0");
+		final AtlasRegion region = UnitRenderer.UnitSheets.get(UnitType.Spearman).findRegion("Idle-0-" + idleFrame);
 		final Sprite sprite = new Sprite(region);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight, this.xOffset, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 5 / 2, this.yOffset - this.buttonHeight, this.xOffset, this.buttonHeight);
@@ -60,7 +61,7 @@ public class TutorialUnitSecondScreen extends MenuScreen
 		this.game.font.getData().setScale(.20f);
 		this.game.batcher.draw(sprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 5,  this.xOffset, this.xOffset);
 		this.game.font.draw(this.game.batcher, "Spearman is fast and evasive.\nIt can attack from a range.", this.xOffset * 3 / 2, this.yOffset * 3, 2 * this.xOffset, 1, true);
-		this.game.font.draw(this.game.batcher, "    Vault: Leap over obstacles to a nearby space.\n    Thrust: Advance against an enemy, crushing all in the way. Once per combat.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
+		this.game.font.draw(this.game.batcher, "    Vault: Leap over obstacles to a nearby space. Can be used in addition to movement and attacking. \n    Thrust: Advance against an enemy, crushing all in the way. Once per combat.", this.xOffset * 3 / 2, this.yOffset * 3 - 5 * this.game.font.getData().lineHeight, this.xOffset * 5 / 2, -1, true);
 	}
 
 	@Override

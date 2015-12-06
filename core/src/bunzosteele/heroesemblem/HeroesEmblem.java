@@ -1,10 +1,16 @@
 package bunzosteele.heroesemblem;
 
+import java.io.IOException;
+
+import bunzosteele.heroesemblem.model.BattleState;
+import bunzosteele.heroesemblem.model.SaveManager;
+import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.view.SplashScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -22,6 +28,8 @@ public class HeroesEmblem extends Game
 	public AdsController adsController;
 	public GameServicesController gameServicesController;
 	public boolean isQuitting = false;
+	public BattleState battleState = null;
+	public ShopState shopState = null;
 	
 	public HeroesEmblem(AdsController adsController, GameServicesController analyticsController){
             if (adsController != null) {
@@ -47,14 +55,34 @@ public class HeroesEmblem extends Game
 		parameter.size = Gdx.graphics.getHeight() / 4;
 		this.font = generator.generateFont(parameter);
 		generator.dispose();
-		this.textureAtlas = new TextureAtlas(Gdx.files.internal("HeroesEmblem.pack"));
+		FileHandle textureFile = Gdx.files.internal("HeroesEmblem.pack");
+		this.textureAtlas = new TextureAtlas(textureFile);
 		settings = Gdx.app.getPreferences("HeroesEmblemSettings");
-		this.setScreen(new SplashScreen(this));
+		boolean dataLoaded = false;
+		try {
+			dataLoaded = this.LoadData();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(!dataLoaded)
+			this.setScreen(new SplashScreen(this));
 	}
 
 	@Override
 	public void render()
 	{
 		super.render();
+	}
+	
+	public void SaveData(){
+		if(this.battleState != null){
+			SaveManager.SaveGame(this.battleState);
+		}else if(this.shopState != null){
+			SaveManager.SaveGame(this.shopState);
+		}
+	}
+	
+	public boolean LoadData() throws IOException{
+		return SaveManager.LoadGame(this);
 	}
 }

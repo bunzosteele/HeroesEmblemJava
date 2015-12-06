@@ -1,6 +1,7 @@
 package bunzosteele.heroesemblem.model.Units.Abilities;
 
 import java.util.HashSet;
+import java.util.List;
 
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -12,22 +13,27 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Vault extends Ability
 {
+	boolean hasVaulted = false;
+	
 	public Vault()
 	{
 		this.displayName = "Vault";
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(0f, 0f, 1f, .5f);
+		this.isAction = false;
+	}
+	
+	public Vault(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.hasVaulted = canUse;
 	}
 
 	@Override
 	public boolean CanUse(final BattleState state, final Unit originUnit)
 	{
-		if (originUnit.hasAttacked)
-		{
+		if(this.hasVaulted)
 			return false;
-		}
-
 		return this.GetTargetTiles(state, originUnit).size() > 0;
 	}
 
@@ -38,6 +44,7 @@ public class Vault extends Ability
 		{
 			executor.x = targetTile.x;
 			executor.y = targetTile.y;
+			this.hasVaulted = true;
 			return true;
 		}
 		return false;
@@ -58,6 +65,11 @@ public class Vault extends Ability
 			}
 		}
 		return targets;
+	}
+	
+	@Override
+	public void ResetAbility(){
+		this.hasVaulted = false;
 	}
 
 	private boolean isValidTarget(final int x, final int y, final BattleState state)

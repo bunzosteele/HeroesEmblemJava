@@ -19,6 +19,12 @@ public class Thrust extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(1f, 0f, 0f, .5f);
+		this.isAction = true;
+	}
+	
+	public Thrust(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.exhausted = exhausted;
 	}
 
 	@Override
@@ -71,8 +77,10 @@ public class Thrust extends Ability
 					unit.dealDamage(executor.attack);
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
-					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveGraveyard(unit);
+					if(unit.checkDeath()){
+						unit.killUnit(executor, state.roundsSurvived);
+						if(unit.team == 0)
+							state.SaveGraveyard(unit);
 					}
 				} else if (this.isInBounds(nextX, nextY, state.battlefield) && !this.isEmpty(nextX, nextY, state.AllUnits()))
 				{
@@ -80,8 +88,10 @@ public class Thrust extends Ability
 					unit.dealDamage(executor.attack);
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
-					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveGraveyard(unit);
+					if(unit.checkDeath()){
+						unit.killUnit(executor, state.roundsSurvived);
+						if(unit.team == 0)
+							state.SaveGraveyard(unit);
 					}
 					for (final Unit nextUnit : state.AllUnits())
 					{
@@ -90,8 +100,10 @@ public class Thrust extends Ability
 							nextUnit.dealDamage(executor.attack / 2);
 							executor.damageDealt += executor.attack / 2;
 							nextUnit.startDamage();
-							if(nextUnit.checkDeath(executor) && nextUnit.team == 0){
-								state.SaveGraveyard(nextUnit);
+							if(nextUnit.checkDeath()){
+								nextUnit.killUnit(executor, state.roundsSurvived);
+								if(nextUnit.team == 0)
+									state.SaveGraveyard(nextUnit);
 							}
 						}
 					}
@@ -101,8 +113,10 @@ public class Thrust extends Ability
 					unit.dealDamage(executor.attack * 2);
 					executor.damageDealt += executor.attack * 2;
 					unit.startDamage();
-					if(unit.checkDeath(executor) && unit.team == 0){
-						state.SaveGraveyard(unit);
+					if(unit.checkDeath()){
+						unit.killUnit(executor, state.roundsSurvived);
+						if(unit.team == 0)
+							state.SaveGraveyard(unit);
 					}
 				}
 				return true;

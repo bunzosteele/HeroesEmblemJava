@@ -8,6 +8,7 @@ import java.util.Random;
 import com.badlogic.gdx.utils.Json;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
+import bunzosteele.heroesemblem.model.SaveManager.StateDto;
 import bunzosteele.heroesemblem.model.Battlefield.BattlefieldGenerator;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
@@ -24,7 +25,6 @@ public class ShopState
 	public int perksPurchased;
 	public int rerollCount;
 	public List<UnitDto> graveyard;
-	public Unit heroUnit;
 	public HeroesEmblem game;
 	public boolean isInspecting = false;
 	public boolean isShopkeeperPanelDisplayed = false;
@@ -55,7 +55,7 @@ public class ShopState
 		this.roster = battleState.roster;
 		this.stock = UnitGenerator.GenerateStock(this.roster, battleState.game, this.GetTrainingPerkLevel());
 		this.selected = null;
-		int bonusGold = 300 + battleState.difficulty * 25;
+		int bonusGold = 400 + battleState.difficulty * 20;
 		int totalLevel = 0;
 		for(Unit unit : roster){
 			totalLevel+= unit.level;
@@ -88,11 +88,23 @@ public class ShopState
 		}
 	}
 	
+	public ShopState(HeroesEmblem game, StateDto stateDto) throws IOException
+	{
+		this.game = game;
+		this.roster = SaveManager.MapUnits(stateDto.roster);
+		this.stock = SaveManager.MapUnits(stateDto.stock);
+		this.selected = null;
+		this.gold = stateDto.gold;
+		this.roundsSurvived = stateDto.roundsSurvived;
+		this.graveyard = stateDto.graveyard;
+		this.perksPurchased = stateDto.perksPurchased;
+		this.nextBattlefieldId = stateDto.battlefieldId;
+		this.nextBattlefield = SaveManager.MapTiles(stateDto.battlefield);
+		this.rerollCount = stateDto.rerollCount;
+	}
+	
 	public void BuyUnit() throws IOException{
 		this.roster.add(this.selected);
-		if(this.roster.size() == 1){
-			this.heroUnit = this.selected;
-		}
 		String action = "" + this.roundsSurvived;
 		UnitDto unitDto = new UnitDto();
 		unitDto.type = this.selected.type.toString();

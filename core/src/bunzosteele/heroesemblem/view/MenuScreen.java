@@ -22,8 +22,8 @@ public class MenuScreen extends ScreenAdapter {
 	Sprite backgroundSprite;
 	Sprite altBackgroundSprite;
 	Map<Integer, Integer> alternateCoordinates;
-	int idleFrame = 1;
-	int attackFrame = 1;
+	int idleFrame = 0;
+	int attackFrame = 0;
 	
 	public MenuScreen(HeroesEmblem game){
 		this.game = game;
@@ -49,12 +49,12 @@ public class MenuScreen extends ScreenAdapter {
 			{
 				++idleFrame;
 				++attackFrame;
-				if (attackFrame > 2){
-					attackFrame = 1;
+				if (attackFrame > 1){
+					attackFrame = 0;
 				}
-				if (idleFrame > 3)
+				if (idleFrame > 2)
 				{
-					idleFrame = 1;
+					idleFrame = 0;
 				}
 			}
 		}, 0, 1 / 3f);

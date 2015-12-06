@@ -36,6 +36,19 @@ public class BattleScreen extends ScreenAdapter
 	{
 		this.state = new BattleState(shopState);
 		this.game = game;
+		game.battleState = this.state;
+		InitializeBattleScreen();
+	}
+	
+	public BattleScreen(final HeroesEmblem game, final BattleState battleState) throws IOException
+	{
+		this.state = battleState;
+		this.game = game;
+		game.battleState = this.state;
+		InitializeBattleScreen();
+	}
+	
+	private void InitializeBattleScreen(){
 		int sideWidth = Gdx.graphics.getWidth() / 6;
 		int controlHeight = Gdx.graphics.getHeight() / 6;
 		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
@@ -166,11 +179,13 @@ public class BattleScreen extends ScreenAdapter
 		this.state.CleanBoard();
 		if (this.state.roster.size() == 0)
 		{
+			game.shopState = null;
 			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived, this.state.graveyard));
 		}else if (this.state.enemies.size() == 0)
 		{
 			this.state.EndBattle();
-			this.game.setScreen(new ShopScreen(this.game, new ShopState(this.state)));
+			game.battleState = null;
+			this.game.setScreen(new ShopScreen(this.game, this.state));
 		}else if(this.state.currentPlayer > 0){
 			if(!spoofAiThinking){
 				spoofAiThinking = true;

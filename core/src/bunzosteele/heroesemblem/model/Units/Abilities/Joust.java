@@ -1,5 +1,7 @@
 package bunzosteele.heroesemblem.model.Units.Abilities;
 
+import java.util.List;
+
 import bunzosteele.heroesemblem.model.Units.Unit;
 
 public class Joust extends Ability
@@ -9,6 +11,11 @@ public class Joust extends Ability
 		this.displayName = "Joust";
 		this.isActive = false;
 		this.isTargeted = false;
+		this.isAction = false;
+	}
+	
+	public Joust(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.util.Random;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.MusicManager;
+import bunzosteele.heroesemblem.model.Units.UnitType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -63,21 +64,21 @@ public class MainMenuScreen extends MenuScreen
 	
 	private void drawBlueUnits(){
 		int scaledSize = Gdx.graphics.getHeight() / 11;
-		final AtlasRegion miregion = game.textureAtlas.findRegion("Mage-Idle-" + idleFrame + "-0");
+		final AtlasRegion miregion = UnitRenderer.UnitSheets.get(UnitType.Mage).findRegion("Idle-0-" + idleFrame);
 		final Sprite misprite = new Sprite(miregion);	
-		final AtlasRegion maregion = game.textureAtlas.findRegion("Mage-Attack-" + attackFrame + "-0");
+		final AtlasRegion maregion = UnitRenderer.UnitSheets.get(UnitType.Mage).findRegion("Attack-0-" + attackFrame);
 		final Sprite masprite = new Sprite(maregion);	
-		final AtlasRegion airegion = game.textureAtlas.findRegion("Archer-Idle-" + idleFrame + "-0");
+		final AtlasRegion airegion = UnitRenderer.UnitSheets.get(UnitType.Archer).findRegion("Idle-0-" + idleFrame);
 		final Sprite aisprite = new Sprite(airegion);	
-		final AtlasRegion aaregion = game.textureAtlas.findRegion("Archer-Attack-" + attackFrame + "-0");
+		final AtlasRegion aaregion = UnitRenderer.UnitSheets.get(UnitType.Archer).findRegion("Attack-0-" + attackFrame);
 		final Sprite aasprite = new Sprite(aaregion);	
-		final AtlasRegion karegion = game.textureAtlas.findRegion("Knight-Attack-" + attackFrame + "-0");
+		final AtlasRegion karegion = UnitRenderer.UnitSheets.get(UnitType.Knight).findRegion("Attack-0-" + attackFrame);
 		final Sprite kasprite = new Sprite(karegion);	
-		final AtlasRegion firegion = game.textureAtlas.findRegion("Footman-Idle-" + idleFrame + "-0");
+		final AtlasRegion firegion = UnitRenderer.UnitSheets.get(UnitType.Footman).findRegion("Idle-0-" + idleFrame);
 		final Sprite fisprite = new Sprite(firegion);	
-		final AtlasRegion siregion = game.textureAtlas.findRegion("Spearman-Idle-" + idleFrame + "-0");
+		final AtlasRegion siregion = UnitRenderer.UnitSheets.get(UnitType.Spearman).findRegion("Idle-0-" + idleFrame);
 		final Sprite sisprite = new Sprite(siregion);	
-		final AtlasRegion paregion = game.textureAtlas.findRegion("Priest-Attack-" + attackFrame + "-0");
+		final AtlasRegion paregion = UnitRenderer.UnitSheets.get(UnitType.Priest).findRegion("Attack-0-" + attackFrame);
 		final Sprite pasprite = new Sprite(paregion);	
 		this.game.batcher.draw(aasprite, this.xOffset / 2 + scaledSize / 2, this.yOffset * 2 + scaledSize * 3 / 2, scaledSize, scaledSize);
 		this.game.batcher.draw(aasprite, this.xOffset / 2 + scaledSize * 3 / 2, this.yOffset * 2 + scaledSize * 5 / 4, scaledSize, scaledSize);
@@ -97,21 +98,21 @@ public class MainMenuScreen extends MenuScreen
 	
 	private void drawRedUnits(){
 		int scaledSize = Gdx.graphics.getHeight() / 11;
-		final AtlasRegion miregion = game.textureAtlas.findRegion("Mage-Idle-" + idleFrame + "-1");
+		final AtlasRegion miregion = UnitRenderer.UnitSheets.get(UnitType.Mage).findRegion("Idle-1-" + idleFrame);
 		final Sprite misprite = new Sprite(miregion);	
-		final AtlasRegion maregion = game.textureAtlas.findRegion("Mage-Attack-" + attackFrame + "-1");
+		final AtlasRegion maregion = UnitRenderer.UnitSheets.get(UnitType.Mage).findRegion("Attack-1-" + attackFrame);
 		final Sprite masprite = new Sprite(maregion);	
-		final AtlasRegion airegion = game.textureAtlas.findRegion("Archer-Idle-" + idleFrame + "-1");
+		final AtlasRegion airegion = UnitRenderer.UnitSheets.get(UnitType.Archer).findRegion("Idle-1-" + idleFrame);
 		final Sprite aisprite = new Sprite(airegion);	
-		final AtlasRegion aaregion = game.textureAtlas.findRegion("Archer-Attack-" + attackFrame + "-1");
+		final AtlasRegion aaregion = UnitRenderer.UnitSheets.get(UnitType.Archer).findRegion("Attack-1-" + attackFrame);
 		final Sprite aasprite = new Sprite(aaregion);	
-		final AtlasRegion karegion = game.textureAtlas.findRegion("Knight-Attack-" + attackFrame + "-1");
+		final AtlasRegion karegion = UnitRenderer.UnitSheets.get(UnitType.Knight).findRegion("Attack-1-" + attackFrame);
 		final Sprite kasprite = new Sprite(karegion);	
-		final AtlasRegion firegion = game.textureAtlas.findRegion("Footman-Idle-" + idleFrame + "-1");
+		final AtlasRegion firegion = UnitRenderer.UnitSheets.get(UnitType.Footman).findRegion("Idle-1-" + idleFrame);
 		final Sprite fisprite = new Sprite(firegion);	
-		final AtlasRegion siregion = game.textureAtlas.findRegion("Spearman-Idle-" + idleFrame + "-1");
+		final AtlasRegion siregion = UnitRenderer.UnitSheets.get(UnitType.Spearman).findRegion("Idle-1-" + idleFrame);
 		final Sprite sisprite = new Sprite(siregion);	
-		final AtlasRegion paregion = game.textureAtlas.findRegion("Priest-Attack-" + attackFrame + "-1");
+		final AtlasRegion paregion = UnitRenderer.UnitSheets.get(UnitType.Priest).findRegion("Attack-1-" + attackFrame);
 		final Sprite pasprite = new Sprite(paregion);
 		this.game.batcher.draw(aasprite, this.xOffset * 4 - (this.xOffset / 2 + scaledSize * 3 / 2), this.yOffset * 2 + scaledSize * 3 / 2, scaledSize, scaledSize);
 		this.game.batcher.draw(aasprite, this.xOffset * 4 - (this.xOffset / 2 + scaledSize * 5 / 2), this.yOffset * 2 + scaledSize * 5 / 4, scaledSize, scaledSize);

@@ -1,5 +1,7 @@
 package bunzosteele.heroesemblem.model.Units;
 
+import java.util.List;
+
 public class UnitDto {
 	public String type;
 	public String name;
@@ -17,4 +19,22 @@ public class UnitDto {
 	public LocationDto locationKilled;
 	public boolean isMale;
 	public String backStory;
+	
+	public int team;
+	public int currentHealth;
+	public int experience;
+	public int experienceNeeded;
+	public int cost;
+	public int id;
+	public int x;
+	public int y;
+	public int maximumRange;
+	public int minimumRange;
+	public int distanceMoved;
+	public boolean hasMoved;
+	public boolean hasAttacked;
+	public float gameSpeed;
+	public boolean isAbilityExhausted;
+	public boolean canUseAbility;
+	public List<Integer> abilityTargets;
 }

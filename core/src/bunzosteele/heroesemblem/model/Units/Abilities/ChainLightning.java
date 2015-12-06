@@ -1,6 +1,7 @@
 package bunzosteele.heroesemblem.model.Units.Abilities;
 
 import java.util.HashSet;
+import java.util.List;
 
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
@@ -18,6 +19,12 @@ public class ChainLightning extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.abilityColor = new Color(1f, 0f, 0f, .5f);
+		this.isAction = true;
+	}
+	
+	public ChainLightning(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.exhausted = exhausted;
 	}
 
 	@Override
@@ -61,8 +68,10 @@ public class ChainLightning extends Ability
 					damagedUnit.dealDamage(damage);
 					executor.damageDealt += damage;
 					damagedUnit.startDamage();
-					if(damagedUnit.checkDeath(executor) && damagedUnit.team == 0){
-						state.SaveGraveyard(damagedUnit);
+					if(damagedUnit.checkDeath()){
+						damagedUnit.killUnit(executor, state.roundsSurvived);
+						if(damagedUnit.team == 0)
+							state.SaveGraveyard(damagedUnit);
 					}
 					damagedUnits.add(damagedUnit);
 					damage = damage / 2;

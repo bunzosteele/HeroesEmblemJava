@@ -21,6 +21,12 @@ public class Scholar extends Ability
 		this.isTargeted = true;
 		this.abilityColor = new Color(1f, .8f, 0f, .5f);
 		this.areTargetsPersistent = true;
+		this.isAction = true;
+	}
+	
+	public Scholar(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
+		this();
+		this.targets = abilityTargets;
 	}
 
 	@Override
@@ -57,7 +63,7 @@ public class Scholar extends Ability
 				if(leveled){
 					executor.giveExperience(exp);
 				}
-				this.targets.add(unit);
+				this.targets.add(unit.id);
 				return true;
 			}
 		}
@@ -70,7 +76,7 @@ public class Scholar extends Ability
 		final List<Unit> targetables = new ArrayList<Unit>();
 		for (final Unit unit : state.roster)
 		{
-			if (!this.targets.contains(unit))
+			if (!this.targets.contains(unit.id))
 			{
 				targetables.add(unit);
 			}

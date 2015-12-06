@@ -225,6 +225,8 @@ public class SettingsScreen extends MenuScreen
 					this.erasingHighscores = false;
 					}else{
 						this.game.isQuitting = true;
+						this.game.battleState = null;
+						this.game.shopState = null;
 						this.game.setScreen(previousScreen);	
 					}
 				}

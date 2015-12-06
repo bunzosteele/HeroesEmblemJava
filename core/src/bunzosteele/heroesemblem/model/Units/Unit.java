@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Abilities.Ability;
+import bunzosteele.heroesemblem.view.BattleWindow;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -47,7 +49,10 @@ public abstract class Unit implements Ai
 	public int experienceFrame = 1;
 	public int damageFrame = 1;
 	public int healFrame = 1;
-	public int attackFrame = 1;
+	public int attackFrame = 0;
+	public int idleFrame = 0;
+	public int maxAttackFrame;
+	public int maxIdleFrame;
 	public int missedFrame = 1;
 	public int deathFrame = 10;
 	public int distanceMoved = 0;
@@ -55,12 +60,13 @@ public abstract class Unit implements Ai
 	public boolean hasAttacked;
 	public String damageDisplay = "";
 	public static Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
-	public static Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("death.wav"));;
-	public static Sound missSound = Gdx.audio.newSound(Gdx.files.internal("miss.wav"));;
-	public static Sound levelSound = Gdx.audio.newSound(Gdx.files.internal("level.wav"));;
+	public static Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
+	public static Sound missSound = Gdx.audio.newSound(Gdx.files.internal("miss.wav"));
+	public static Sound levelSound = Gdx.audio.newSound(Gdx.files.internal("level.wav"));
 	public float gameSpeed;
 	public boolean isMale;
 	public String backStory;
+	public Map<Tile, Integer> movementOptions = null;
 
 	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory) throws IOException
 	{
@@ -82,6 +88,34 @@ public abstract class Unit implements Ai
 		this.gameSpeed = gameSpeed;
 		this.isMale = isMale;
 		this.backStory = backStory;
+		Timer.schedule(new Task()
+		{
+			@Override
+			public void run()
+			{
+				idleFrame++;
+				if (idleFrame > maxIdleFrame)
+				{
+					idleFrame = 0;
+				}
+			}
+		}, 0, 1 / 3f);
+	}
+
+	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory, int x, int y, int level, int unitsKilled, int damageDealt, int currentHealth, int experience, int experienceNeeded, int distanceMoved, boolean hasMoved, boolean hasAttacked) throws IOException
+	{
+		this(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed, isMale, backStory);
+		this.x = x;
+		this.y = y;
+		this.level = level;
+		this.unitsKilled = unitsKilled;
+		this.damageDealt = damageDealt;
+		this.currentHealth = currentHealth;
+		this.experience = experience;
+		this.experienceNeeded = experienceNeeded;
+		this.distanceMoved = distanceMoved;
+		this.hasMoved = hasMoved;
+		this.hasAttacked = hasAttacked;
 	}
 
 	public boolean AddExperience(final int experience)
@@ -122,7 +156,11 @@ public abstract class Unit implements Ai
 				final boolean isCriticalPoint = random.nextInt(101) >= 95;
 				if (statRoll >= 95)
 				{
-					this.movement += 1;
+					if(this.movement < 9){
+						this.movement += 1;
+					}else{
+						this.evasion += 4;
+					}
 				} else if (statRoll >= 70)
 				{
 					if (isCriticalPoint)
@@ -225,15 +263,15 @@ public abstract class Unit implements Ai
 		{
 			@Override
 			public void run()
-			{
+			{		
 				Unit.this.attackFrame++;
-				if (Unit.this.attackFrame > 2)
+				if (Unit.this.attackFrame > maxAttackFrame)
 				{
-					Unit.this.attackFrame = 1;
+					Unit.this.attackFrame = 0;
 					Unit.this.isAttacking = false;
 				}
 			}
-		}, 0, this.gameSpeed, 3);
+		}, this.gameSpeed / 2, this.gameSpeed / 2, 3);
 	}
 
 	public void startDamage()
@@ -255,24 +293,16 @@ public abstract class Unit implements Ai
 		}, 0, this.gameSpeed, 1);
 	}
 	
-	public boolean checkDeath(Unit attacker){
-		if (this.currentHealth <= 0)
-		{
-			if(this.ability == null){
-				attacker.giveExperience(this.maximumHealth + this.attack + this.defense);
-				this.startDeath();
-				++attacker.unitsKilled;
-				return true;
-			}
-			if (!this.ability.IsPreventingDeath(this))
-			{
-				attacker.giveExperience(this.maximumHealth + this.attack + this.defense);
-				this.startDeath();
-				++attacker.unitsKilled;
-				return true;
-			}
-		}
-		return false;
+	public boolean checkDeath(){
+		return this.currentHealth <= 0 &&(this.ability == null || !this.ability.IsPreventingDeath(this));
+	}
+	
+	public void killUnit(Unit attacker, int roundsSurvived){
+		int baseExperience = this.maximumHealth + this.attack + this.defense;
+		float scale = 1 + roundsSurvived / 10f;
+		attacker.giveExperience((int) (baseExperience * scale));
+		this.startDeath();
+		++attacker.unitsKilled;
 	}
 
 	public void startDeath()
@@ -311,6 +341,7 @@ public abstract class Unit implements Ai
 	{
 		this.isMissed = true;
 		this.damageDisplay = "Missed!";
+		this.isTakingDamage = false;
 		Timer.schedule(new Task()
 		{
 			@Override
