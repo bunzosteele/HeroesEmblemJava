@@ -33,7 +33,7 @@ public class UnitDto {
 	public int distanceMoved;
 	public boolean hasMoved;
 	public boolean hasAttacked;
-	public float gameSpeed;
+	public float animationSpeed;
 	public boolean isAbilityExhausted;
 	public boolean canUseAbility;
 	public List<Integer> abilityTargets;

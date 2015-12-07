@@ -63,10 +63,10 @@ public class StockWindow
 				if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
 				{
 					this.game.batcher.draw(blueSelect, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2), (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4), this.columnWidth, this.columnWidth);
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, "Attack", false);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, true, false);
 				} else
 				{
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, "Idle", false);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, false, false);
 				}
 			} else
 			{
@@ -75,10 +75,10 @@ public class StockWindow
 				{
 					this.game.batcher.draw(blueSelect, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2), (this.yOffset - (this.columnWidth / 2)) + (this.height / 4), this.columnWidth, this.columnWidth);
 
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + (this.height / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, "Attack", false);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + (this.height / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, true, false);
 				} else
 				{
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + (this.height / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, "Idle", false);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + (this.height / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, false, false);
 				}
 			}
 			unitOffset++;

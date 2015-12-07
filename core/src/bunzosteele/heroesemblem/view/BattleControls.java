@@ -177,11 +177,13 @@ public class BattleControls
 
 	public boolean isTouched(final float x, final float y)
 	{
-		if ((x >= this.xOffset) && (x < (this.xOffset + (3 * this.largeButtonWidth) + this.smallButtonWidth)))
-		{
-			if ((y >= this.yOffset) && (y < (this.yOffset + this.height)))
+		if(!state.isInTactics){
+			if ((x >= this.xOffset) && (x < (this.xOffset + (3 * this.largeButtonWidth) + this.smallButtonWidth)))
 			{
-				return true;
+				if ((y >= this.yOffset) && (y < (this.yOffset + this.height)))
+				{
+					return true;
+				}
 			}
 		}
 		return false;

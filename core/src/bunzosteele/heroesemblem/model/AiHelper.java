@@ -35,8 +35,10 @@ public final class AiHelper
 		List<Unit> playerUnits = state.roster;
 		HashSet<Unit> threats = new HashSet<Unit>();
 		for(Unit playerUnit : playerUnits){
-			if(CombatHelper.GetAttackableTargets(playerUnit.x, playerUnit.y, playerUnit, state).contains(tile)){
-				threats.add(playerUnit);
+			if(playerUnit.x >= 0 && playerUnit.y >= 0){
+				if(CombatHelper.GetAttackableTargets(playerUnit.x, playerUnit.y, playerUnit, state).contains(tile)){
+					threats.add(playerUnit);
+				}
 			}
 		}
 		return threats;
@@ -71,7 +73,7 @@ public final class AiHelper
 				Unit.hitSound.play(volume);
 				target.startDamage();
 				if(target.checkDeath()){
-					target.killUnit(unit, state.roundsSurvived);
+					target.killUnit(unit, state);
 					if(target.team == 0)
 						state.SaveGraveyard(target);
 				}

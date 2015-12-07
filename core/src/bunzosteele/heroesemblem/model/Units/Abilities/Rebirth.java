@@ -84,7 +84,7 @@ public class Rebirth extends Ability
 		final List<Unit> targetables = new ArrayList<Unit>();
 		for (final Unit unit : state.roster)
 		{
-			if (!this.targets.contains(unit) && (unit.currentHealth != unit.maximumHealth))
+			if (!this.targets.contains(unit.id) && (unit.currentHealth != unit.maximumHealth))
 			{
 				targetables.add(unit);
 			}

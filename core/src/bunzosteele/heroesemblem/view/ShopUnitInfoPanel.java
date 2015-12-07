@@ -45,7 +45,7 @@ public class ShopUnitInfoPanel
 		if (this.state.selected != null)
 		{
 			this.game.batcher.draw(pedestalSprite, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - this.xOffset + scaledSize / 4, scaledSize, scaledSize);
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4 + scaledSize / 10, Gdx.graphics.getHeight() - this.xOffset + scaledSize / 4 + scaledSize / 10, scaledSize * 8 / 10, "Idle", false);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4 + scaledSize / 10, Gdx.graphics.getHeight() - this.xOffset + scaledSize / 4 + scaledSize / 10, scaledSize * 8 / 10, false, false);
 			if (!this.state.roster.contains(this.state.selected))
 			{
 				UnitRenderer.DrawStockInfo(this.game, this.state.selected, this.xOffset + scaledSize * 11 / 8, Gdx.graphics.getHeight() - scaledSize * 3 / 8, scaledSize, this.width, this.xOffset);

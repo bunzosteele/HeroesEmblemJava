@@ -78,7 +78,7 @@ public class Thrust extends Ability
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
 					if(unit.checkDeath()){
-						unit.killUnit(executor, state.roundsSurvived);
+						unit.killUnit(executor, state);
 						if(unit.team == 0)
 							state.SaveGraveyard(unit);
 					}
@@ -89,7 +89,7 @@ public class Thrust extends Ability
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
 					if(unit.checkDeath()){
-						unit.killUnit(executor, state.roundsSurvived);
+						unit.killUnit(executor, state);
 						if(unit.team == 0)
 							state.SaveGraveyard(unit);
 					}
@@ -101,7 +101,7 @@ public class Thrust extends Ability
 							executor.damageDealt += executor.attack / 2;
 							nextUnit.startDamage();
 							if(nextUnit.checkDeath()){
-								nextUnit.killUnit(executor, state.roundsSurvived);
+								nextUnit.killUnit(executor, state);
 								if(nextUnit.team == 0)
 									state.SaveGraveyard(nextUnit);
 							}
@@ -114,7 +114,7 @@ public class Thrust extends Ability
 					executor.damageDealt += executor.attack * 2;
 					unit.startDamage();
 					if(unit.checkDeath()){
-						unit.killUnit(executor, state.roundsSurvived);
+						unit.killUnit(executor, state);
 						if(unit.team == 0)
 							state.SaveGraveyard(unit);
 					}

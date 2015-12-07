@@ -102,12 +102,18 @@ public class ShopkeeperPanel
 			this.game.font.getData().setScale(.33f);
 			break;
 		case 4:
+			this.game.font.draw(this.game.batcher, "Tactics", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
+			this.game.font.getData().setScale(.2f);
+			this.game.font.draw(this.game.batcher, "Choose where your units spawn at the start of each combat.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
+			this.game.font.getData().setScale(.33f);
+			break;
+		case 5:
 			this.game.font.draw(this.game.batcher, "Renew", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
 			this.game.font.getData().setScale(.2f);
 			this.game.font.draw(this.game.batcher, "After each round, your most heavily damaged unit is restored to full health.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
 			this.game.font.getData().setScale(.33f);
 			break;
-		case 5:
+		case 6:
 			this.game.font.draw(this.game.batcher, "Learning", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
 			this.game.font.getData().setScale(.2f);
 			this.game.font.draw(this.game.batcher, "After each round, all units gain experience.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
@@ -119,7 +125,7 @@ public class ShopkeeperPanel
 			this.game.font.draw(this.game.batcher, "Increases the level of draftable units by the number of times this perk has been unlocked.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
 			this.game.font.getData().setScale(.33f);	
 		}
-		this.game.font.getData().setScale(.33f);
+		this.game.font.getData().setScale(.28f);
 		this.game.font.draw(this.game.batcher, "Buy Perk", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, scaledSize * 3, 1, false);
 		this.game.batcher.draw(goldSprite,  xOffset + width / 4 - scaledSize * 3 / 4, Gdx.graphics.getHeight() - scaledSize * 11 / 4, scaledSize / 2, scaledSize / 2);
 		this.game.font.draw(this.game.batcher, "" + this.state.GetNextPerkCost(), xOffset + width / 4 - scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, scaledSize * 3 / 2, 1, false);
@@ -137,12 +143,15 @@ public class ShopkeeperPanel
 		this.game.font.draw(this.game.batcher, "Sabotage", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 3, scaledSize * 3, 1, false);
 		if(this.state.perksPurchased < 5)
 			this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Renew", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 4, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Tactics", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 4, scaledSize * 3, 1, false);
 		if(this.state.perksPurchased < 6)
 			this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Learning", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 5, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Renew", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 5, scaledSize * 3, 1, false);
+		if(this.state.perksPurchased < 7)
+			this.game.font.setColor(Color.GRAY);
+		this.game.font.draw(this.game.batcher, "Learning", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 6, scaledSize * 3, 1, false);
 		this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Training "+ (this.state.GetTrainingPerkLevel() + 1), xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 6, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Training "+ (this.state.GetTrainingPerkLevel() + 1), xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 7, scaledSize * 3, 1, false);
 	}
 
 	public void drawBackground()

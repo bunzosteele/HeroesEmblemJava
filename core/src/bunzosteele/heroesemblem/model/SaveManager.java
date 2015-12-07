@@ -62,7 +62,12 @@ public class SaveManager
 			return null;
 		
 		Json json = new Json();
-		StateDto stateDto = json.fromJson(SaveManager.StateDto.class, saveData);
+		StateDto stateDto;
+		try{
+			stateDto = json.fromJson(SaveManager.StateDto.class, saveData);
+		}catch (Exception ex){
+			return null;
+		}
 		return stateDto;
 	}
 	
@@ -100,6 +105,7 @@ public class SaveManager
 		stateDto.turnCount = state.turnCount;
 		stateDto.graveyard = state.graveyard;
 		stateDto.undos = state.undos;
+		stateDto.isInTactics = state.isInTactics;
 		return stateDto;
 	}
 	
@@ -134,6 +140,7 @@ public class SaveManager
 		public Stack<Move> undos;
 		public List<UnitDto> stock;
 		public int rerollCount;
+		public boolean isInTactics;
 	}
 	
 	public static List<Unit> MapUnits(List<UnitDto> source) throws IOException{
@@ -208,12 +215,13 @@ public class SaveManager
 			unitDto.distanceMoved = unit.distanceMoved;
 			unitDto.hasMoved = unit.hasMoved;
 			unitDto.hasAttacked = unit.hasAttacked;
-			unitDto.gameSpeed = unit.gameSpeed;
+			unitDto.animationSpeed = unit.animationSpeed;
 			if(unit.ability != null){
 				unitDto.isAbilityExhausted = unit.ability.exhausted;
 				unitDto.ability = unit.ability.displayName;
 				if(battleState != null){
-					unitDto.canUseAbility = unit.ability.CanUse(battleState, unit);
+					if(!unit.ability.IsAction())
+						unitDto.canUseAbility = unit.ability.CanUse(battleState, unit);
 				}else{
 					unitDto.canUseAbility = false;			
 				}

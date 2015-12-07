@@ -69,7 +69,7 @@ public class ChainLightning extends Ability
 					executor.damageDealt += damage;
 					damagedUnit.startDamage();
 					if(damagedUnit.checkDeath()){
-						damagedUnit.killUnit(executor, state.roundsSurvived);
+						damagedUnit.killUnit(executor, state);
 						if(damagedUnit.team == 0)
 							state.SaveGraveyard(damagedUnit);
 					}

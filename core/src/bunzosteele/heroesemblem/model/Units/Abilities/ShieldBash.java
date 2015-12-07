@@ -67,7 +67,7 @@ public class ShieldBash extends Ability
 				executor.damageDealt += executor.attack;
 				unit.startDamage();
 				if(unit.checkDeath()){
-					unit.killUnit(executor, state.roundsSurvived);
+					unit.killUnit(executor, state);
 					if(unit.team == 0)
 						state.SaveGraveyard(unit);
 				}

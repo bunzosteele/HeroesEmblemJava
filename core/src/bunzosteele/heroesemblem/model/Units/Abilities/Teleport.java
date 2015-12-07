@@ -96,7 +96,8 @@ public class Teleport extends Ability
 		{
 			for (final Unit unit : state.AllUnits())
 			{
-				targets.add(state.battlefield.get(unit.y).get(unit.x));
+				if(unit.x >=0 && unit.y >= 0)
+					targets.add(state.battlefield.get(unit.y).get(unit.x));
 			}
 		} else
 		{

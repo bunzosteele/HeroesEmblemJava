@@ -24,6 +24,7 @@ public class BattleState
 {
 	public List<Unit> enemies;
 	public List<Unit> roster;
+	public List<Unit> dyingUnits;
 	public Unit selected;
 	public int gold;
 	public int roundsSurvived;
@@ -39,6 +40,10 @@ public class BattleState
 	public HeroesEmblem game;
 	public List<UnitDto> graveyard;
 	public Stack<Move> undos;
+	public boolean isInTactics;
+	public boolean hasBenchedUnits = false;
+	public List<Spawn> playerSpawns = new ArrayList<Spawn>();
+	
 
 	public BattleState(final ShopState shopState) throws IOException
 	{
@@ -54,18 +59,15 @@ public class BattleState
 		this.battlefieldId = shopState.nextBattlefieldId;
 		this.battlefield = shopState.nextBattlefield;
 		final List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
-		final List<Spawn> playerSpawns = new ArrayList<Spawn>();
 		final List<Spawn> enemySpawns = new ArrayList<Spawn>();
 		for (final Spawn spawn : spawns)
 		{
-			if (spawn.isPlayer)
-			{
-				playerSpawns.add(spawn);
-			} else
+			if (!spawn.isPlayer)
 			{
 				enemySpawns.add(spawn);
 			}
 		}
+		this.playerSpawns = GetPlayerSpawns(battlefieldId);
 		if(this.perksPurchased > 3){
 			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - 7, this.roster, this.game);	
 			for(Unit enemy : this.enemies){
@@ -83,16 +85,21 @@ public class BattleState
 		}
 		this.graveyard = shopState.graveyard;
 		this.undos = new Stack<Move>();
-		this.SpawnUnits(this.roster, playerSpawns);
 		this.SpawnUnits(this.enemies, enemySpawns);
 		this.StartBattle();
+		if(this.perksPurchased > 4){
+			this.isInTactics = true;
+		}else{
+			this.SpawnUnits(this.roster, playerSpawns);
+		}
+		this.dyingUnits = new ArrayList<Unit>();
 	}
 
 	public BattleState(HeroesEmblem game, StateDto stateDto) throws IOException
 	{
 		this.game = game;
-		this.turnCount = 1;
-		this.currentPlayer = 0;
+		this.turnCount = stateDto.turnCount;
+		this.currentPlayer = stateDto.currentPlayer;
 		this.roundsSurvived = stateDto.roundsSurvived;
 		this.perksPurchased = stateDto.perksPurchased;
 		this.difficulty = (int) Math.pow(2, roundsSurvived);
@@ -104,6 +111,8 @@ public class BattleState
 		this.enemies = SaveManager.MapUnits(stateDto.enemies);
 		this.graveyard = stateDto.graveyard;
 		this.undos = stateDto.undos;
+		this.isInTactics = stateDto.isInTactics;
+		this.dyingUnits = new ArrayList<Unit>();
 	}
 
 	public List<Unit> AllUnits()
@@ -141,6 +150,23 @@ public class BattleState
 		return false;
 	}
 
+	public List<Spawn> GetPlayerSpawns(int battlefieldId) throws IOException{
+		if(this.playerSpawns.size() > 0)
+			return this.playerSpawns;
+		
+		final List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
+		final List<Spawn> playerSpawns = new ArrayList<Spawn>();
+		for (final Spawn spawn : spawns)
+		{
+			if (spawn.isPlayer)
+			{
+				playerSpawns.add(spawn);
+			}
+		}
+		this.playerSpawns = playerSpawns;
+		return playerSpawns;
+	}
+	
 	public boolean CanMove()
 	{
 		if ((this.selected != null) && (this.selected.team == this.currentPlayer))
@@ -176,24 +202,11 @@ public class BattleState
 
 	public void CleanBoard()
 	{
-		for (int i = this.roster.size() - 1; i >= 0; i--)
+		for (int i = this.dyingUnits.size() - 1; i >= 0; i--)
 		{
-			if (this.roster.get(i).isDying)
+			if (this.dyingUnits.get(i).deathFrame < 1)
 			{
-				if (this.roster.get(i).deathFrame < 1)
-				{
-					this.roster.remove(i);
-				}
-			}
-		}
-		for (int i = this.enemies.size() - 1; i >= 0; i--)
-		{
-			if (this.enemies.get(i).isDying)
-			{
-				if (this.enemies.get(i).deathFrame < 1)
-				{
-					this.enemies.remove(i);
-				}
+				this.dyingUnits.remove(i);
 			}
 		}
 	}
@@ -206,9 +219,21 @@ public class BattleState
 	public Tile GetTileForUnit(Unit unit){
 		return this.battlefield.get(unit.y).get(unit.x);
 	}
+	
+	public boolean HasPlayerLost(){
+		for(Unit unit: this.roster){
+			if (unit.x >= 0 || unit.y >= 0)
+				return false;
+		}
+		return !this.isInTactics;
+	}
 
 	public void EndBattle()
 	{
+		for(Unit unit : this.roster){
+			unit.x = -1;
+			unit.y = -1;
+		}
 		WipeUnitVariables();
 		ClearUndos();
 	}

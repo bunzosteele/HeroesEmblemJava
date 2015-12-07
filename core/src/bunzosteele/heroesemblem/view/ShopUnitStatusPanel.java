@@ -54,7 +54,7 @@ public class ShopUnitStatusPanel
 			}else{
 				this.game.batcher.draw(this.infoOpen, xOffset + scaledSize / 4, Gdx.graphics.getHeight() - this.height + scaledSize / 2, scaledSize / 2, scaledSize / 2);				
 			}
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 7 / 4, scaledSize, "Idle", false);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 7 / 4, scaledSize, false, false);
 			if (!this.state.roster.contains(this.state.selected))
 			{
 				UnitRenderer.DrawStockStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 6 / 4, scaledSize);

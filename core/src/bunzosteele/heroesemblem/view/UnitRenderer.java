@@ -173,18 +173,28 @@ public final class UnitRenderer
 		game.font.getData().setScale(.33f);
 	}
 
-	public static void DrawUnit(final HeroesEmblem game, final Unit unit, final int x, final int y, final int scaledSize, final String animation, final boolean tapped)
+	public static void DrawUnit(final HeroesEmblem game, final Unit unit, final int x, final int y, final int scaledSize, boolean isDisplayEmphasis, final boolean tapped)
 	{
 		int animationFrame = 0;
-		if (!tapped)
-		{
-			if(animation.equals("Idle")){
-				animationFrame = unit.idleFrame;
+		AtlasRegion region;
+		if(unit.isAttacking){
+			animationFrame = unit.attackFrame;
+			region = UnitSheets.get(unit.type).findRegion("Attack-" + unit.team + "-" + animationFrame);
+		}else{
+			if(isDisplayEmphasis){
+				animationFrame = unit.displayEmphasisFrame;
+				if(animationFrame > unit.maxIdleFrame){
+					animationFrame -= (unit.maxIdleFrame + 1);
+					region = UnitSheets.get(unit.type).findRegion("Attack-" + unit.team + "-" + animationFrame);	
+				}else{
+					region = UnitSheets.get(unit.type).findRegion("Idle-" + unit.team + "-" + animationFrame);	
+				}
 			}else{
-				animationFrame = unit.attackFrame;
+				if(!tapped)
+					animationFrame = unit.idleFrame;
+				region = UnitSheets.get(unit.type).findRegion("Idle-" + unit.team + "-" + animationFrame);
 			}
 		}
-		final AtlasRegion region = UnitSheets.get(unit.type).findRegion(animation + "-" + unit.team + "-" + animationFrame);
 		final Sprite sprite = new Sprite(region);
 		if (unit.isTakingDamage)
 		{
@@ -207,14 +217,16 @@ public final class UnitRenderer
 			game.font.setColor(new Color(0f, 1f, 0, 1f));
 			game.batcher.setColor(new Color(0f, 1f, 0, .5f));
 		}
-		if (tapped && !(unit.isHealing || unit.isGettingExperience || unit.isTakingDamage))
+		if (tapped && !(unit.isHealing || unit.isGettingExperience || unit.isTakingDamage || unit.isAttacking))
 		{
 			game.batcher.setColor(new Color(1f, 1f, 1f, .7f));
 		}
 		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
-		game.font.getData().setScale(.165f);
-		game.font.draw(game.batcher, unit.damageDisplay, x + (scaledSize / 2), y + scaledSize);
-		game.font.getData().setScale(.33f);
+		if((unit.isHealing || unit.isGettingExperience || unit.isTakingDamage || unit.isMissed) && game.battleState != null){
+			game.font.getData().setScale(.165f);
+			game.font.draw(game.batcher, unit.damageDisplay, x + (scaledSize / 2), y + scaledSize);
+			game.font.getData().setScale(.33f);
+		}
 		game.batcher.setColor(Color.WHITE);
 	}
 

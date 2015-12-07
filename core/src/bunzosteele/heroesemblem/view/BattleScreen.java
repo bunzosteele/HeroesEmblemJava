@@ -29,6 +29,7 @@ public class BattleScreen extends ScreenAdapter
 	BattleWindow battleWindow;
 	BattleUnitStatusPanel unitStatus;
 	BattleControls battleControls;
+	TacticsControls tacticsControls;
 	AiProcessor aiProcessor;
 	boolean spoofAiThinking = false;
 
@@ -72,6 +73,7 @@ public class BattleScreen extends ScreenAdapter
 		this.battleWindow = new BattleWindow(game, this.state, windowWidth, windowHeight, controlHeight);
 		this.unitStatus = new BattleUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.battleControls = new BattleControls(game, this.state, controlHeight, windowWidth, sideWidth);
+		this.tacticsControls = new TacticsControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
 		this.aiProcessor = new AiProcessor(state);
 		if(state.battlefieldId < 5){
 			MusicManager.PlayEasyBattleMusic(this.game.settings.getFloat("musicVolume", .25f));
@@ -90,10 +92,14 @@ public class BattleScreen extends ScreenAdapter
 		this.game.batcher.begin();
 		this.battleWindow.draw();
 		this.unitStatus.draw();
-		this.battleControls.drawBackground();
-		this.battleControls.draw();
-		this.game.batcher.end();
+		if(this.state.isInTactics){
+			this.tacticsControls.draw();
+		}else{
+			this.battleControls.drawBackground();
+			this.battleControls.draw();
+		}
 
+		this.game.batcher.end();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		this.game.shapeRenderer.begin(ShapeType.Filled);
@@ -138,7 +144,7 @@ public class BattleScreen extends ScreenAdapter
 		}
 		float cpuSpeed = this.game.settings.getFloat("cpuSpeed", 1.1f);
 		for(Unit unit : this.state.AllUnits()){
-			unit.gameSpeed = cpuSpeed;
+			unit.animationSpeed = cpuSpeed;
 		}
 	}
 	
@@ -177,7 +183,7 @@ public class BattleScreen extends ScreenAdapter
 			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen(), true));
 		}
 		this.state.CleanBoard();
-		if (this.state.roster.size() == 0)
+		if (this.state.HasPlayerLost())
 		{
 			game.shopState = null;
 			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived, this.state.graveyard));
@@ -204,12 +210,19 @@ public class BattleScreen extends ScreenAdapter
 			if (this.battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.battleWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				this.tacticsControls.startingWithBenched = false;
 			} else if (this.unitStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.unitStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				this.tacticsControls.startingWithBenched = false;
 			} else if (this.battleControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.battleControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			}else if(this.tacticsControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+				this.tacticsControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			}
+			if(this.state.isInTactics){
+				this.tacticsControls.updateState();
 			}
 		}
 	}

@@ -26,15 +26,13 @@ public class Vault extends Ability
 	
 	public Vault(boolean exhausted, boolean canUse, List<Integer> abilityTargets){
 		this();
-		this.hasVaulted = canUse;
+		this.hasVaulted = !canUse;
 	}
 
 	@Override
 	public boolean CanUse(final BattleState state, final Unit originUnit)
 	{
-		if(this.hasVaulted)
-			return false;
-		return this.GetTargetTiles(state, originUnit).size() > 0;
+		return !this.hasVaulted;
 	}
 
 	@Override

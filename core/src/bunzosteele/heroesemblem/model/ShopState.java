@@ -72,12 +72,12 @@ public class ShopState
 		this.nextBattlefieldId = (random.nextInt((int) Math.pow(2, this.roundsSurvived) + Math.abs(minMap)) % (maxMap + Math.abs(minMap) + 1)) + minMap;
 		this.nextBattlefield = BattlefieldGenerator.GenerateBattlefield(this.nextBattlefieldId);
 		this.rerollCount = 0;
-		if(perksPurchased > 5){
+		if(perksPurchased > 6){
 			for(Unit unit : roster){
 				unit.giveExperience(25);
 			}
 		}
-		if(perksPurchased > 4){
+		if(perksPurchased > 5){
 			Unit mostDamaged = roster.get(0);
 			for(Unit unit : roster){
 				if ((unit.maximumHealth - unit.currentHealth) > (mostDamaged.maximumHealth - mostDamaged.currentHealth)){
@@ -153,12 +153,13 @@ public class ShopState
 			case 3: return 750;
 			case 4: return 1000;
 			case 5: return 1500;
-			default: return 2500 * (this.perksPurchased - 5);		
+			case 6: return 2000;
+			default: return 2500 * (this.perksPurchased - 6);		
 		}		
 	}
 	
 	public int GetTrainingPerkLevel(){
-		int trainingLevel = this.perksPurchased - 6;
+		int trainingLevel = this.perksPurchased - 7;
 		if(trainingLevel < 0)
 			trainingLevel = 0;
 		return trainingLevel;
