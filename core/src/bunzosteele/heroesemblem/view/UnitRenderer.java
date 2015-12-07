@@ -196,7 +196,7 @@ public final class UnitRenderer
 			}
 		}
 		final Sprite sprite = new Sprite(region);
-		if (unit.isTakingDamage)
+		if (unit.isTakingDamage && game.battleState != null)
 		{
 			game.font.setColor(new Color(1f, 0, 0, 1f));
 			if (!unit.isDying)
@@ -207,17 +207,17 @@ public final class UnitRenderer
 				game.batcher.setColor(new Color(1f, 0, 0, .1f * unit.deathFrame));
 			}
 		}
-		if (unit.isGettingExperience)
+		if (unit.isGettingExperience && game.battleState != null)
 		{
 			game.font.setColor(new Color(1f, .8f, 0, 1f));
 			game.batcher.setColor(new Color(1f, .8f, 0, .5f));
 		}
-		if (unit.isHealing)
+		if (unit.isHealing && game.battleState != null)
 		{
 			game.font.setColor(new Color(0f, 1f, 0, 1f));
 			game.batcher.setColor(new Color(0f, 1f, 0, .5f));
 		}
-		if (tapped && !(unit.isHealing || unit.isGettingExperience || unit.isTakingDamage || unit.isAttacking))
+		if (tapped && !(unit.isHealing || unit.isGettingExperience || unit.isTakingDamage || unit.isAttacking) && game.battleState != null)
 		{
 			game.batcher.setColor(new Color(1f, 1f, 1f, .7f));
 		}

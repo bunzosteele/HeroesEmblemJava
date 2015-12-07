@@ -187,7 +187,7 @@ public class BattleScreen extends ScreenAdapter
 		{
 			game.shopState = null;
 			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived, this.state.graveyard));
-		}else if (this.state.enemies.size() == 0)
+		}else if (this.state.enemies.size() == 0 && this.state.dyingUnits.size() == 0)
 		{
 			this.state.EndBattle();
 			game.battleState = null;

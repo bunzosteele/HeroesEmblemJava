@@ -225,7 +225,11 @@ public class BattleState
 			if (unit.x >= 0 || unit.y >= 0)
 				return false;
 		}
-		return !this.isInTactics;
+		
+		if(this.dyingUnits.size() == 0)
+			return !this.isInTactics;
+		
+		return false;
 	}
 
 	public void EndBattle()
