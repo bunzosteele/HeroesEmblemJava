@@ -63,6 +63,7 @@ public class HeroesEmblem extends Game
 			dataLoaded = this.LoadData();
 		} catch (IOException e) {
 			e.printStackTrace();
+			SaveManager.EraseSaveData();
 		}
 		if(!dataLoaded)
 			this.setScreen(new SplashScreen(this));
