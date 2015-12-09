@@ -36,7 +36,7 @@ public class GameOverScreen extends MenuScreen
 	Sprite inactiveButton;
 	float yOffset;
 	float buttonHeight;
-	boolean hasSubmitted = false;
+	static boolean hasSubmitted = false;
 
 	public GameOverScreen(final HeroesEmblem game, int roundsSurvived, List<UnitDto> graveyard)
 	{
@@ -147,16 +147,19 @@ public class GameOverScreen extends MenuScreen
 		{
 			if ((Gdx.input.getX() > this.xOffset * 23 / 4 && Gdx.input.getX() < this.xOffset * 23 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
 			{
+				GameOverScreen.hasSubmitted = false;
 				this.game.setScreen(new ShopScreen(this.game));
 				return;
 			}
 			if ((Gdx.input.getX() > this.xOffset * 13 / 4 && Gdx.input.getX() < this.xOffset * 13 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
 			{
+				GameOverScreen.hasSubmitted = false;
 				this.game.setScreen(new MainMenuScreen(this.game));
 				return;
 			}
 			if ((Gdx.input.getX() > this.xOffset * 3 / 4 && Gdx.input.getX() < this.xOffset * 3 / 4 + this.xOffset * 3 / 2) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + buttonHeight))
 			{
+				GameOverScreen.hasSubmitted = false;
 				this.game.setScreen(new HighscoreScreen(this.game));
 				return;
 			}
@@ -164,7 +167,7 @@ public class GameOverScreen extends MenuScreen
 			{
 				if(CanSubmitScore()){
 					this.game.gameServicesController.SubmitHighScore(score);
-					this.hasSubmitted = true;
+					GameOverScreen.hasSubmitted = true;
 				}
 			}
 			if ((Gdx.input.getX() > this.xOffset * 13 / 3 && Gdx.input.getX() < this.xOffset * 13 / 3 + this.xOffset * 3) && (Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset))

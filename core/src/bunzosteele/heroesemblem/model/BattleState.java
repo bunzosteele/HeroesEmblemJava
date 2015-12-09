@@ -92,6 +92,16 @@ public class BattleState
 		}else{
 			this.SpawnUnits(this.roster, playerSpawns);
 		}
+		int maxId = 0;
+		for(Unit unit : this.roster){
+			if(unit.id > maxId)
+				maxId = unit.id;
+		}
+		for(Unit unit : this.enemies){
+			if(unit.id > maxId)
+				maxId = unit.id;
+		}
+		UnitGenerator.OverrideStartingId(maxId + 1);
 		this.dyingUnits = new ArrayList<Unit>();
 	}
 

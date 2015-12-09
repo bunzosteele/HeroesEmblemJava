@@ -18,7 +18,6 @@ public final class UnitGenerator
 {
 	private static int id = 0;
 	
-
 	private static int GenerateAbility(int team)
 	{
 		if (team > 0)
@@ -467,5 +466,9 @@ public final class UnitGenerator
 		{
 			return UnitType.Priest;
 		}
+	}
+	
+	public static void OverrideStartingId(int newId){
+		UnitGenerator.id = newId;
 	}
 }

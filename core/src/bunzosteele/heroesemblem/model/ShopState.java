@@ -54,6 +54,7 @@ public class ShopState
 		this.game = battleState.game;
 		this.roster = battleState.roster;
 		this.stock = UnitGenerator.GenerateStock(this.roster, battleState.game, this.GetTrainingPerkLevel());
+		this.roundsSurvived = battleState.roundsSurvived + 1;
 		this.selected = null;
 		int bonusGold = 400 + battleState.difficulty * 20;
 		int totalLevel = 0;
@@ -61,9 +62,10 @@ public class ShopState
 			totalLevel+= unit.level;
 		}
 		float avgLevel = (float) totalLevel / roster.size();
+		float multiplier = avgLevel - 1f;
+		multiplier = multiplier / (float) this.roundsSurvived;
 		bonusGold = (int) (bonusGold * avgLevel);
 		this.gold = battleState.gold + bonusGold;
-		this.roundsSurvived = battleState.roundsSurvived + 1;
 		this.graveyard = battleState.graveyard;
 		this.perksPurchased = battleState.perksPurchased;
 		final Random random = new Random();
@@ -93,6 +95,16 @@ public class ShopState
 		this.game = game;
 		this.roster = SaveManager.MapUnits(stateDto.roster);
 		this.stock = SaveManager.MapUnits(stateDto.stock);
+		int maxId = 0;
+		for(Unit unit : this.roster){
+			if(unit.id > maxId)
+				maxId = unit.id;
+		}
+		for(Unit unit : this.stock){
+			if(unit.id > maxId)
+				maxId = unit.id;
+		}
+		UnitGenerator.OverrideStartingId(maxId + 1);
 		this.selected = null;
 		this.gold = stateDto.gold;
 		this.roundsSurvived = stateDto.roundsSurvived;
