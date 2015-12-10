@@ -294,6 +294,7 @@ public class BattleState
 			{
 				unit.ability.exhausted = false;
 				unit.ability.targets = new ArrayList<Integer>();
+				unit.ability.ResetAbility();
 			}
 			unit.isAttacking = false;
 			unit.isDying = false;

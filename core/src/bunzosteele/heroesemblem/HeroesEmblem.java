@@ -80,6 +80,8 @@ public class HeroesEmblem extends Game
 			SaveManager.SaveGame(this.battleState);
 		}else if(this.shopState != null){
 			SaveManager.SaveGame(this.shopState);
+		}else{
+			SaveManager.EraseSaveData();
 		}
 	}
 	
