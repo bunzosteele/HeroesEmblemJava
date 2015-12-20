@@ -35,6 +35,8 @@ public class MainMenuScreen extends MenuScreen
 		buttonSprite = new Sprite(buttonRegion);
 		MusicManager.PlayMenuMusic(this.game.settings.getFloat("musicVolume", .25f));
 		game.adsController.showBannerAd();
+		this.game.battleState = null;
+		this.game.shopState = null;
 	}
 
 	public void draw()

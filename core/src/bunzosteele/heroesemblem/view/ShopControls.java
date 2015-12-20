@@ -13,6 +13,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -118,18 +119,46 @@ public class ShopControls
 	private void drawRoster()
 	{
 		int unitOffset = 0;
-		final int columnWidth = this.rosterWidth / 10;
-		final int gapWidth = ((2 * this.rosterWidth) / 10) / 9;
-
+		final int columnWidth = this.rosterWidth / 12;
+		final int gapWidth = (this.rosterWidth - (columnWidth * 8)) / 9;
 		for (final Unit unit : this.state.roster)
 		{
 			if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
 			{
 				this.game.batcher.draw(blueSelect, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset),  (this.height - columnWidth) / 2, columnWidth, columnWidth);
-				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, true, false);
+				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, true, false, false);
 			} else
 			{
-				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, false, false);
+				UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.buttonWidth + gapWidth + ((gapWidth * unitOffset) + 1) + (columnWidth * unitOffset), (this.height - columnWidth) / 2, columnWidth, false, false, false);
+			}
+			unitOffset++;
+		}
+	}
+	
+	public void drawHealthBars()
+	{
+		int unitOffset = 0;
+		final int columnWidth = this.rosterWidth / 12;
+		final int gapWidth = (this.rosterWidth - (columnWidth * 8)) / 9;
+		for (final Unit unit : this.state.roster)
+		{
+			final float healthPercent = unit.currentHealth / (float) unit.maximumHealth;
+			if ((healthPercent > 0) && (healthPercent < 1))
+			{
+				Color color;
+				if (healthPercent > .7)
+				{
+					color = new Color(0f, 1f, 0f, 1f);
+				} else if (healthPercent > .3)
+				{
+					color = new Color(1f, 1f, 0f, 1f);
+				} else
+				{
+					color = new Color(1f, 0f, 0f, 1f);
+				}
+	
+				this.game.shapeRenderer.setColor(color);
+				this.game.shapeRenderer.rect(gapWidth + ((columnWidth + gapWidth) * unitOffset) + this.buttonWidth + (columnWidth * .21875f), (this.height - columnWidth) / 2, (columnWidth - (columnWidth * .4375f)) * healthPercent, this.height / 15);
 			}
 			unitOffset++;
 		}
@@ -198,6 +227,9 @@ public class ShopControls
 		{
 			this.state.selected = null;
 			this.state.isInspecting = false;
+			this.state.isShopkeeperPanelDisplayed = false;
+		}if(isHit && this.state.isShopkeeperPanelDisplayed){
+			this.state.isInspecting = true;
 			this.state.isShopkeeperPanelDisplayed = false;
 		}
 	}

@@ -3,7 +3,7 @@
         <Attack>9</Attack>
         <Defense>2</Defense>
         <Evasion>20</Evasion>
-        <Accuracy>75</Accuracy>
+        <Accuracy>80</Accuracy>
         <Movement>4</Movement>
         <Cost>600</Cost>
         <MaximumHealth>15</MaximumHealth>
@@ -25,7 +25,7 @@
         <Attack>10</Attack>
         <Defense>1</Defense>
         <Evasion>10</Evasion>
-        <Accuracy>80</Accuracy>
+        <Accuracy>85</Accuracy>
         <Movement>4</Movement>
         <Cost>650</Cost>
         <MaximumHealth>15</MaximumHealth>

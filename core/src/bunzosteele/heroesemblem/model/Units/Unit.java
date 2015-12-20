@@ -70,6 +70,12 @@ public abstract class Unit implements Ai
 	public boolean isMale;
 	public String backStory;
 	public Map<Tile, Integer> movementOptions = null;
+	public int initialAttack = -1;
+	public int initialDefense = -1;
+	public int initialEvasion = -1;
+	public int initialAccuracy = -1;
+	public int initialMovement = -1;
+	public int initialHealth = -1;
 
 	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float animationSpeed, final boolean isMale, final String backStory, int maxIdleFrame, int maxAttackFrame) throws IOException
 	{
@@ -114,7 +120,7 @@ public abstract class Unit implements Ai
 		}, 0, frameDuration);
 	}
 
-	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory, int maxIdleFrame, int maxAttackFrame, int x, int y, int level, int unitsKilled, int damageDealt, int currentHealth, int experience, int experienceNeeded, int distanceMoved, boolean hasMoved, boolean hasAttacked) throws IOException
+	public Unit(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory, int maxIdleFrame, int maxAttackFrame, int x, int y, int level, int unitsKilled, int damageDealt, int currentHealth, int experience, int experienceNeeded, int distanceMoved, boolean hasMoved, boolean hasAttacked, int initialAttack, int initialDefense, int initialAccuracy, int initialEvasion, int initialMovement, int initialHealth) throws IOException
 	{
 		this(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed, isMale, backStory, maxIdleFrame, maxAttackFrame);
 		this.x = x;
@@ -128,6 +134,12 @@ public abstract class Unit implements Ai
 		this.distanceMoved = distanceMoved;
 		this.hasMoved = hasMoved;
 		this.hasAttacked = hasAttacked;
+		this.initialAttack = initialAttack;
+		this.initialDefense = initialDefense;
+		this.initialAccuracy = initialAccuracy;
+		this.initialEvasion = initialEvasion;
+		this.initialMovement = initialMovement;
+		this.initialHealth = initialHealth;
 	}
 
 	public boolean AddExperience(final int experience)
@@ -144,22 +156,25 @@ public abstract class Unit implements Ai
 			final Random random = new Random();
 			final int bonusRoll = random.nextInt(101);
 			int bonusPoints = 0;
-			if (bonusRoll >= 95)
+			if (bonusRoll >= 90)
 			{
 				bonusPoints = 5;
-			} else if (bonusRoll >= 85)
-			{
-				bonusPoints = 4;
 			} else if (bonusRoll >= 75)
 			{
-				bonusPoints = 3;
+				bonusPoints = 4;
 			} else if (bonusRoll >= 50)
+			{
+				bonusPoints = 3;
+			} else if (bonusRoll >= 25)
 			{
 				bonusPoints = 2;
 			} else
 			{
 				bonusPoints = 1;
 			}
+			
+			if(this.team > 0)
+				bonusPoints--;
 
 			this.maximumHealth += 1;
 			for (int i = 0; i < bonusPoints; i++)
@@ -233,25 +248,33 @@ public abstract class Unit implements Ai
 
 	public boolean giveExperience(final int amount)
 	{
-		float displayDuration = 1.1f;
-		if(team != 0)
-			displayDuration = this.animationSpeed;
 		boolean leveled = this.AddExperience(amount);
-		this.damageDisplay = "" + amount;
-		Timer.schedule(new Task()
-		{
-			@Override
-			public void run()
+		if(!this.isGettingExperience){
+			Unit.this.isGettingExperience = true;
+			float displayDuration = 1.1f;
+			if(team != 0)
+				displayDuration = this.animationSpeed;
+			this.damageDisplay = "" + amount;
+			Timer.schedule(new Task()
 			{
-				Unit.this.isGettingExperience = true;
-				Unit.this.experienceFrame++;
-				if (Unit.this.experienceFrame > 2)
+				@Override
+				public void run()
 				{
-					Unit.this.experienceFrame = 1;
-					Unit.this.isGettingExperience = false;
+					Unit.this.experienceFrame++;		
+					if (Unit.this.experienceFrame > 2)
+					{
+						Unit.this.experienceFrame = 1;
+						Unit.this.isGettingExperience = false;
+					}
 				}
+			}, 0, displayDuration, 1);
+		}else{
+			try{
+				int pastExp = Integer.parseInt(this.damageDisplay);
+				this.damageDisplay = "" + (amount + pastExp);
+			}catch(NumberFormatException ex){
 			}
-		}, 0, displayDuration, 1);
+		}
 		return leveled;
 	}
 

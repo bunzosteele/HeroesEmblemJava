@@ -34,7 +34,7 @@ public class TutorialShopFirstScreen extends MenuScreen
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.exampleSprite = new Sprite(exampleRegion);
-		exampleRatio = (float) 423 / 294;
+		exampleRatio = (float) 707 / 399;
 		game.adsController.hideBannerAd();
 	}
 
@@ -56,8 +56,8 @@ public class TutorialShopFirstScreen extends MenuScreen
 		this.game.font.draw(this.game.batcher, "Back", this.xOffset * 3 - this.game.font.getData().lineHeight, this.yOffset * 4 - 2 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.draw(this.game.batcher, "Next", this.xOffset * 3 / 2, this.yOffset - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.20f);
-		this.game.font.draw(this.game.batcher, "In the shop, you can build your army. Draft from 8 randomly selected units.", this.xOffset / 2, this.yOffset * 3, 3 * this.xOffset, 1, true);
-		this.game.batcher.draw(exampleSprite, 2 * this.xOffset - ((this.yOffset * 3 / 2) * exampleRatio) / 2, this.yOffset + this.buttonHeight / 5, (this.yOffset * 3 / 2) * exampleRatio, this.yOffset * 3 / 2);
+		this.game.font.draw(this.game.batcher, "In the shop, you can build your army.\n Draft from 8 randomly selected units.\n Your gold can be seen in the top center of the screen. \n The cost of each unit is displayed below it. \n Visit the shopkeeper to purchase perks.", this.xOffset * 2, this.yOffset * 5 / 2, 2 * this.xOffset, 1, true);
+		this.game.batcher.draw(exampleSprite, this.xOffset / 2, this.yOffset + this.buttonHeight / 2, (this.yOffset * 3 / 2) * exampleRatio, this.yOffset * 3 / 2);
 	}
 
 	@Override

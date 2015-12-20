@@ -41,6 +41,8 @@ public class GameOverScreen extends MenuScreen
 	public GameOverScreen(final HeroesEmblem game, int roundsSurvived, List<UnitDto> graveyard)
 	{
 		super(game);
+		this.game.battleState = null;
+		this.game.shopState = null;
 		this.roundsSurvived = roundsSurvived;
 		this.graveyard = graveyard;
 		this.hero = GetHero(graveyard);

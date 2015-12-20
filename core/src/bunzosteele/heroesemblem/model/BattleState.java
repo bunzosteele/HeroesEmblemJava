@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.audio.Sound;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
@@ -18,6 +19,7 @@ import bunzosteele.heroesemblem.model.Units.LocationDto;
 import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
+import bunzosteele.heroesemblem.model.Units.UnitType;
 import bunzosteele.heroesemblem.view.ShopControls;
 
 public class BattleState
@@ -42,7 +44,10 @@ public class BattleState
 	public Stack<Move> undos;
 	public boolean isInTactics;
 	public boolean hasBenchedUnits = false;
+	public boolean isPreviewingAttack = false;
+	public boolean isPreviewingAbility = false;
 	public List<Spawn> playerSpawns = new ArrayList<Spawn>();
+	public Tile victimTile;
 	
 
 	public BattleState(final ShopState shopState) throws IOException
@@ -247,6 +252,9 @@ public class BattleState
 		for(Unit unit : this.roster){
 			unit.x = -1;
 			unit.y = -1;
+			if(unit.type == UnitType.Priest){
+				unit.giveExperience(10 * (this.roundsSurvived + 1));
+			}
 		}
 		WipeUnitVariables();
 		ClearUndos();
@@ -325,6 +333,8 @@ public class BattleState
 		this.isMoving = false;
 		this.isUsingAbility = false;
 		this.selected = null;
+		this.isPreviewingAttack = false;
+		this.isPreviewingAbility = false;
 		ClearUndos();
 		for (final Unit unit : this.CurrentPlayerUnits())
 		{

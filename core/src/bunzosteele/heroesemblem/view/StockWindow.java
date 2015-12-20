@@ -1,12 +1,15 @@
 package bunzosteele.heroesemblem.view;
 
 import java.io.IOException;
+import java.util.List;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.ShopState;
+import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
@@ -27,6 +30,7 @@ public class StockWindow
 	Sprite inactiveReroll;
 	Sprite goldSprite;
 	Sprite blueSelect;
+	Sprite buttonSprite;
 
 	public StockWindow(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -36,7 +40,7 @@ public class StockWindow
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		this.columnWidth = width * 2 / 15;
+		this.columnWidth = width / 9;
 		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("WoodFloor");
 		this.backgroundSprite = new Sprite(backgroundRegion);
 		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
@@ -49,40 +53,68 @@ public class StockWindow
 		this.goldSprite = new Sprite(goldRegion);
 		final AtlasRegion blueSelectRegion = this.game.textureAtlas.findRegion("BlueSelect");
 		this.blueSelect = new Sprite(blueSelectRegion);
+		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");
+		this.buttonSprite = new Sprite(buttonRegion);
 	}
 
 	public void draw()
 	{
-		drawBackground();		
+		drawBackground();
+		drawStock();
+		this.game.batcher.draw(buttonSprite, this.columnWidth * 13 / 2, Gdx.graphics.getHeight() - this.columnWidth * 3 / 4, this.columnWidth * 2, this.columnWidth / 2);
+		this.game.font.getData().setScale(.18f);
+		this.game.font.draw(this.game.batcher, "Visit Shopkeeper", this.columnWidth * 13 / 2, Gdx.graphics.getHeight() - this.columnWidth * 3 / 7, this.columnWidth * 2, 1, false);
+		this.game.font.getData().setScale(.4f);
+		this.game.batcher.draw(goldSprite, this.xOffset + this.columnWidth * 7 / 2, Gdx.graphics.getHeight() - this.columnWidth * 3 / 4, this.columnWidth / 2, this.columnWidth / 2);
+		this.game.font.draw(this.game.batcher, "" + this.state.gold, this.xOffset + this.columnWidth * 4, Gdx.graphics.getHeight() - this.columnWidth * 3 / 4 + this.game.font.getData().lineHeight * 4 / 5, this.columnWidth * 3 / 2, 0, false);
+		this.game.font.getData().setScale(.33f);
+	}
+
+	private void drawBackground()
+	{
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 12; j++){
+				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 19) * i, (Gdx.graphics.getHeight() / 11) * j, (Gdx.graphics.getWidth() / 19), (Gdx.graphics.getHeight() / 11));
+			}
+		}
+	}
+	
+	private void drawStock(){
 		int unitOffset = 0;
+		this.game.font.getData().setScale(.2f);
 		for (final Unit unit : this.state.stock)
 		{
 			if (unitOffset < 4)
 			{
-				this.game.batcher.draw(pedestalSprite, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2), (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4), this.columnWidth, this.columnWidth);
+				this.game.batcher.draw(pedestalSprite, this.xOffset + this.columnWidth + (2 * this.columnWidth * unitOffset), Gdx.graphics.getHeight() - 2 * this.columnWidth, this.columnWidth, this.columnWidth);
 				if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
 				{
-					this.game.batcher.draw(blueSelect, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2), (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4), this.columnWidth, this.columnWidth);
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, true, false);
+					this.game.batcher.draw(blueSelect, this.xOffset + this.columnWidth + (2 * this.columnWidth * unitOffset), (Gdx.graphics.getHeight() - 2 * this.columnWidth), this.columnWidth, this.columnWidth);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (2 * this.columnWidth * unitOffset) + this.columnWidth / 10, (Gdx.graphics.getHeight() - 2 * this.columnWidth) + this.columnWidth / 10, this.columnWidth * 8 / 10, true, false, false);
 				} else
 				{
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, false, false);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (2 * this.columnWidth * unitOffset) + this.columnWidth / 10, (Gdx.graphics.getHeight() - 2 * this.columnWidth) + this.columnWidth / 10, this.columnWidth * 8 / 10, false, false, false);
 				}
+				this.game.batcher.draw(goldSprite, this.xOffset + this.columnWidth + (2 * this.columnWidth * unitOffset), Gdx.graphics.getHeight() - this.columnWidth * 9 / 4, this.columnWidth / 4, this.columnWidth / 4);
+				this.game.font.draw(this.game.batcher, "" + unit.cost, this.xOffset + this.columnWidth * 5 / 4 + (2 * this.columnWidth * unitOffset), Gdx.graphics.getHeight() - this.columnWidth * 9 / 4 + this.game.font.getData().lineHeight * 4 / 5, this.columnWidth * 3 / 4, 1, false);
 			} else
 			{
-				this.game.batcher.draw(pedestalSprite, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2), (this.yOffset - (this.columnWidth / 2)) + (this.height / 4), this.columnWidth, this.columnWidth);
+				this.game.batcher.draw(pedestalSprite, this.xOffset + this.columnWidth + (2 * this.columnWidth * (unitOffset - 4)), this.yOffset + this.columnWidth, this.columnWidth, this.columnWidth);
 				if ((this.state.selected != null) && this.state.selected.isEquivalentTo(unit))
 				{
-					this.game.batcher.draw(blueSelect, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2), (this.yOffset - (this.columnWidth / 2)) + (this.height / 4), this.columnWidth, this.columnWidth);
+					this.game.batcher.draw(blueSelect, this.xOffset + this.columnWidth + (2 * this.columnWidth * (unitOffset - 4)), (this.yOffset + this.columnWidth), this.columnWidth, this.columnWidth);
 
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + (this.height / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, true, false);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (2 * this.columnWidth * (unitOffset - 4)) + this.columnWidth / 10, (this.yOffset + this.columnWidth) + this.columnWidth / 10, this.columnWidth * 8 / 10, true, false, false);
 				} else
 				{
-					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2) + this.columnWidth / 10, (this.yOffset - (this.columnWidth / 2)) + (this.height / 4) + this.columnWidth / 10, this.columnWidth * 8 / 10, false, false);
+					UnitRenderer.DrawUnit(this.game, unit, this.xOffset + this.columnWidth + (2 * this.columnWidth * (unitOffset - 4)) + this.columnWidth / 10, (this.yOffset + this.columnWidth) + this.columnWidth / 10, this.columnWidth * 8 / 10, false, false, false);
 				}
+				this.game.batcher.draw(goldSprite, this.xOffset + this.columnWidth + (2 * this.columnWidth * (unitOffset - 4)), this.yOffset + this.columnWidth * 3 / 4, this.columnWidth / 4, this.columnWidth / 4);
+				this.game.font.draw(this.game.batcher, "" + unit.cost, this.xOffset + this.columnWidth * 5 / 4 + (2 * this.columnWidth * (unitOffset - 4)), this.yOffset + this.columnWidth * 3 / 4 + this.game.font.getData().lineHeight * 4 / 5, this.columnWidth * 3 / 4, 1, false);
 			}
 			unitOffset++;
 		}
+		this.game.font.getData().setScale(.33f);
 		if(this.state.perksPurchased > 2){
 			if(this.state.gold >= this.state.GetRerollCost() && this.state.roster.size() < 8){
 				this.game.batcher.draw(activeReroll, xOffset + this.columnWidth / 4, Gdx.graphics.getHeight() - 3 * this.columnWidth / 4, this.columnWidth / 2, this.columnWidth / 2);
@@ -94,15 +126,6 @@ public class StockWindow
 				this.game.font.getData().setScale(.2f);
 				this.game.font.draw(this.game.batcher, "" + this.state.GetRerollCost(), xOffset + this.columnWidth + this.columnWidth / 3, Gdx.graphics.getHeight() - 5 * this.columnWidth / 8 + this.game.font.getData().lineHeight * 3 / 4, this.columnWidth / 2, -1, false);
 				this.game.font.getData().setScale(.33f);
-			}
-		}
-	}
-
-	public void drawBackground()
-	{
-		for(int i = 0; i < 20; i++){
-			for(int j = 0; j < 12; j++){
-				this.game.batcher.draw(backgroundSprite, (Gdx.graphics.getWidth() / 19) * i, (Gdx.graphics.getHeight() / 11) * j, (Gdx.graphics.getWidth() / 19), (Gdx.graphics.getHeight() / 11));
 			}
 		}
 	}
@@ -127,7 +150,7 @@ public class StockWindow
 		{
 			if (unitOffset < 4)
 			{
-				final int lowerXBound = this.xOffset + this.columnWidth + (this.columnWidth * unitOffset * 3 / 2);
+				final int lowerXBound = this.xOffset + this.columnWidth + (2 * this.columnWidth * unitOffset);
 				final int upperXBound = lowerXBound + this.columnWidth;
 				final int lowerYBound = (this.yOffset - (this.columnWidth / 2)) + ((3 * this.height) / 4);
 				final int upperYBound = lowerYBound + this.columnWidth;
@@ -141,7 +164,7 @@ public class StockWindow
 				}
 			} else
 			{
-				final int lowerXBound = this.xOffset + this.columnWidth + (this.columnWidth * (unitOffset - 4) * 3 / 2);
+				final int lowerXBound = this.xOffset + this.columnWidth + (2 * this.columnWidth * (unitOffset-4));
 				final int upperXBound = lowerXBound + this.columnWidth;
 				final int lowerYBound = (this.yOffset - (this.columnWidth / 2)) + (this.height / 4);
 				final int upperYBound = lowerYBound + this.columnWidth;
@@ -166,6 +189,9 @@ public class StockWindow
 				}else{
 					ShopControls.finalBuySound.play(this.game.settings.getFloat("sfxVolume", .5f));
 				}
+			}
+			if(x >= this.columnWidth * 13 / 2 && x <= this.columnWidth * 17 / 2 && y >= Gdx.graphics.getHeight() - columnWidth){
+				this.state.isShopkeeperPanelDisplayed = true;
 			}
 		}
 	}

@@ -104,12 +104,12 @@ public class BattleScreen extends ScreenAdapter
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		this.game.shapeRenderer.begin(ShapeType.Filled);
 		this.battleWindow.drawHighlights();
+		this.battleWindow.drawHealthBars();
+		if(this.state.isInTactics){
+			this.tacticsControls.drawHealthBars();
+		}
 		this.game.shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-
-		this.game.shapeRenderer.begin(ShapeType.Filled);
-		this.battleWindow.drawHealthBars();
-		this.game.shapeRenderer.end();
 	}
 
 	@Override
@@ -186,6 +186,9 @@ public class BattleScreen extends ScreenAdapter
 		if (this.state.HasPlayerLost())
 		{
 			game.shopState = null;
+			for(Unit unit : state.roster){
+				state.graveyard.add(generateUnitDto(unit));
+			}
 			this.game.setScreen(new GameOverScreen(this.game, this.state.roundsSurvived, this.state.graveyard));
 		}else if (this.state.enemies.size() == 0 && this.state.dyingUnits.size() == 0)
 		{

@@ -44,13 +44,13 @@ public class BattleUnitStatusPanel
 		this.game.batcher.draw(this.settingsIcon, xOffset + scaledSize * 17 / 8, Gdx.graphics.getHeight() - scaledSize * 7 / 8, scaledSize / 2, scaledSize / 2);
 		if (this.state.selected != null)
 		{
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, true, false);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, true, false, false);
 			if (!this.state.roster.contains(this.state.selected))
 			{
-				UnitRenderer.DrawEnemyStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize, this.state.perksPurchased > 1);
+				UnitRenderer.DrawEnemyStats(this.game, this.state.battlefield, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize, this.state.perksPurchased > 1);
 			} else
 			{
-				UnitRenderer.DrawOwnedStats(this.game, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);
+				UnitRenderer.DrawOwnedStats(this.game, this.state.battlefield, this.state.selected, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - scaledSize, scaledSize);
 			}
 		}
 		this.game.font.setColor(Color.WHITE);
@@ -91,5 +91,7 @@ public class BattleUnitStatusPanel
 		this.state.isMoving = false;
 		this.state.isUsingAbility = false;
 		this.state.isAttacking = false;
+		this.state.isPreviewingAttack = false;
+		this.state.isPreviewingAbility = false;
 	}
 }

@@ -193,6 +193,7 @@ public class BattleControls
 	{
 		this.state.isMoving = false;
 		this.state.isAttacking = false;
+		this.state.isPreviewingAttack = false;
 		if (this.state.CanUseAbility(this.state.selected))
 		{
 			this.state.isUsingAbility = !this.state.isUsingAbility;
@@ -200,6 +201,8 @@ public class BattleControls
 			{
 				this.state.selected.ability.targets = new ArrayList<Integer>();
 			}
+		}else{
+			this.state.isPreviewingAbility = !this.state.isPreviewingAbility;
 		}
 	}
 
@@ -207,9 +210,12 @@ public class BattleControls
 	{
 		this.state.isMoving = false;
 		this.state.isUsingAbility = false;
+		this.state.isPreviewingAbility = false;
 		if (this.state.CanAttack(this.state.selected))
 		{
 			this.state.isAttacking = !this.state.isAttacking;
+		}else{
+			this.state.isPreviewingAttack = !this.state.isPreviewingAttack;
 		}
 	}
 
@@ -222,6 +228,8 @@ public class BattleControls
 	{
 		this.state.isAttacking = false;
 		this.state.isUsingAbility = false;
+		this.state.isPreviewingAttack = false;
+		this.state.isPreviewingAbility = false;
 		if(this.state.CanUndo()){
 			Move previous = this.state.undos.pop();
 			this.state.selected.x = previous.oldX;

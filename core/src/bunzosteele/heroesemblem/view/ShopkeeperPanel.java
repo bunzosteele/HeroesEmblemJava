@@ -1,9 +1,11 @@
 package bunzosteele.heroesemblem.view;
 
 import java.io.IOException;
+import java.util.List;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.ShopState;
+import bunzosteele.heroesemblem.model.Battlefield.Tile;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -27,6 +29,7 @@ public class ShopkeeperPanel
 	Sprite pedestalSprite;
 	Sprite inactiveButton;
 	Sprite activeButton;
+	Sprite button;
 	
 	public ShopkeeperPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -48,7 +51,7 @@ public class ShopkeeperPanel
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		this.columnWidth = width * 2 / 15;
+		this.columnWidth = width / 9;
 		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("WoodFloor");
 		this.backgroundSprite = new Sprite(backgroundRegion);
 		final AtlasRegion goldRegion = this.game.textureAtlas.findRegion("Gold");
@@ -59,99 +62,82 @@ public class ShopkeeperPanel
 		this.inactiveButton = new Sprite(inactiveRegion);
 		final AtlasRegion activeRegion = this.game.textureAtlas.findRegion("ActiveButton");
 		this.activeButton = new Sprite(activeRegion);
+		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");
+		this.button = new Sprite(buttonRegion);
 	}
 
 	public void draw() throws IOException
 	{
 		drawBackground();
-		final int scaledSize = this.width / 9;
 		final AtlasRegion shopkeeperRegion = this.game.textureAtlas.findRegion("Shopkeeper-" + this.currentFrame);
 		Sprite shopkeeperSprite = new Sprite(shopkeeperRegion);
-		this.game.batcher.draw(pedestalSprite, xOffset + width / 4 - scaledSize / 2, Gdx.graphics.getHeight() - scaledSize * 5 / 4, scaledSize, scaledSize);
-		this.game.batcher.draw(shopkeeperSprite, xOffset + width / 4 - scaledSize / 2 + scaledSize / 10, Gdx.graphics.getHeight()  + scaledSize / 10 - scaledSize * 5 / 4, scaledSize * 8 / 10, scaledSize * 8 / 10);
+		this.game.batcher.draw(pedestalSprite, xOffset + this.columnWidth, Gdx.graphics.getHeight() - this.columnWidth * 3 / 2, this.columnWidth, this.columnWidth);
+		this.game.batcher.draw(shopkeeperSprite, this.columnWidth + this.columnWidth / 10, Gdx.graphics.getHeight() - this.columnWidth * 3 / 2 + this.columnWidth / 10, this.columnWidth * 8 / 10, this.columnWidth * 8 / 10);
 		if(this.state.CanBuyPerk()){
-			this.game.batcher.draw(activeButton, xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 2, scaledSize * 3, scaledSize / 2);
+			this.game.batcher.draw(activeButton, xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 2, this.columnWidth * 2, this.columnWidth / 2);
 		}else{
-			this.game.batcher.draw(inactiveButton, xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 2, scaledSize * 3, scaledSize / 2);
+			this.game.batcher.draw(inactiveButton, xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 2, this.columnWidth * 2, this.columnWidth / 2);
 		}
-
+		this.game.font.draw(this.game.batcher, "Buy Perk", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 2 + this.game.font.getData().lineHeight  * 5 / 6, this.columnWidth * 2, 1, false);
+		this.game.batcher.draw(button, this.columnWidth * 13 / 2, Gdx.graphics.getHeight() - this.columnWidth * 3 / 4, this.columnWidth * 2, this.columnWidth / 2);
+		this.game.font.getData().setScale(.18f);
+		this.game.font.draw(this.game.batcher, "Back", this.columnWidth * 13 / 2, Gdx.graphics.getHeight() - this.columnWidth * 3 / 7, this.columnWidth * 2, 1, false);
+		this.game.font.getData().setScale(.4f);
+		this.game.batcher.draw(goldSprite, this.xOffset + this.columnWidth * 7 / 2, Gdx.graphics.getHeight() - this.columnWidth * 3 / 4, this.columnWidth / 2, this.columnWidth / 2);
+		this.game.font.draw(this.game.batcher, "" + this.state.gold, this.xOffset + this.columnWidth * 4, Gdx.graphics.getHeight() - this.columnWidth * 3 / 4 + this.game.font.getData().lineHeight * 4 / 5, this.columnWidth * 3 / 2, 0, false);
+		this.game.font.getData().setScale(.33f);
+		this.game.batcher.draw(goldSprite,  xOffset + columnWidth * 3 / 4, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2, this.columnWidth / 2, this.columnWidth / 2);
+		this.game.font.draw(this.game.batcher, "" + this.state.GetNextPerkCost(), xOffset + columnWidth * 5 / 4, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 + this.game.font.getData().lineHeight * 6 / 7, this.columnWidth, 1, false);
+		drawPerks();
+		drawMap();
+	}
+	
+	private void drawPerks(){
 		this.game.font.setColor(Color.WHITE);
-		switch(this.state.perksPurchased){
-		case 0:	
-			this.game.font.draw(this.game.batcher, "Map", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "Shows a map of the next battlefield.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);
-			break;
-		case 1:
-			this.game.font.draw(this.game.batcher, "Spies", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "Reveals more information about enemy units.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);
-			break;
-		case 2:
-			this.game.font.draw(this.game.batcher, "Reroll", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "Allows you to generate new units to draft from. The first use of reroll each round is free.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);
-			break;
-		case 3:
-			this.game.font.draw(this.game.batcher, "Sabotage", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "Prevents your enemies from bringing extra reinforcements when you have advantageous terrain. Enemies may arrive to battle damaged.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);
-			break;
-		case 4:
-			this.game.font.draw(this.game.batcher, "Tactics", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "Choose where your units spawn at the start of each combat.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);
-			break;
-		case 5:
-			this.game.font.draw(this.game.batcher, "Renew", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "After each round, your most heavily damaged unit is restored to full health.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);
-			break;
-		case 6:
-			this.game.font.draw(this.game.batcher, "Learning", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "After each round, all units gain experience.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);
-			break;
-		default:
-			this.game.font.draw(this.game.batcher, "Training", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, false);
-			this.game.font.getData().setScale(.2f);
-			this.game.font.draw(this.game.batcher, "Increases the level of draftable units by the number of times this perk has been unlocked.", xOffset + width / 2, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, width * 4 / 10, 1, true);
-			this.game.font.getData().setScale(.33f);	
-		}
 		this.game.font.getData().setScale(.28f);
-		this.game.font.draw(this.game.batcher, "Buy Perk", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 2 + this.game.font.getData().lineHeight * 3 / 4, scaledSize * 3, 1, false);
-		this.game.batcher.draw(goldSprite,  xOffset + width / 4 - scaledSize * 3 / 4, Gdx.graphics.getHeight() - scaledSize * 11 / 4, scaledSize / 2, scaledSize / 2);
-		this.game.font.draw(this.game.batcher, "" + this.state.GetNextPerkCost(), xOffset + width / 4 - scaledSize / 4, Gdx.graphics.getHeight() - scaledSize * 11 / 4 + this.game.font.getData().lineHeight * 3 / 4, scaledSize * 3 / 2, 1, false);
 		if(this.state.perksPurchased == 0)
 			this.game.font.setColor(Color.GRAY);	
-		this.game.font.draw(this.game.batcher, "Map", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Map", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2, this.columnWidth * 2, 1, false);
 		if(this.state.perksPurchased < 2)
 			this.game.font.setColor(Color.GRAY);	
-		this.game.font.draw(this.game.batcher, "Spies", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight , scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Spies", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 - this.game.font.getData().lineHeight , this.columnWidth * 2, 1, false);
 		if(this.state.perksPurchased < 3)
 			this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Reroll", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 2, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Reroll", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 - this.game.font.getData().lineHeight * 2, this.columnWidth * 2, 1, false);
 		if(this.state.perksPurchased < 4)
 			this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Sabotage", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 3, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Sabotage", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 - this.game.font.getData().lineHeight * 3, this.columnWidth * 2, 1, false);
 		if(this.state.perksPurchased < 5)
 			this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Tactics", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 4, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Tactics", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 - this.game.font.getData().lineHeight * 4, this.columnWidth * 2, 1, false);
 		if(this.state.perksPurchased < 6)
 			this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Renew", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 5, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Renew", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 - this.game.font.getData().lineHeight * 5, this.columnWidth * 2, 1, false);
 		if(this.state.perksPurchased < 7)
 			this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Learning", xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 6, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Learning", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 - this.game.font.getData().lineHeight * 6, this.columnWidth * 2, 1, false);
 		this.game.font.setColor(Color.GRAY);
-		this.game.font.draw(this.game.batcher, "Training "+ (this.state.GetTrainingPerkLevel() + 1), xOffset + width / 4 - scaledSize * 3 / 2, Gdx.graphics.getHeight() - scaledSize * 3 - this.game.font.getData().lineHeight * 7, scaledSize * 3, 1, false);
+		this.game.font.draw(this.game.batcher, "Training "+ (this.state.GetTrainingPerkLevel() + 1), xOffset + columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 5 / 2 - this.game.font.getData().lineHeight * 7, this.columnWidth * 2, 1, false);
+		this.game.font.setColor(Color.WHITE);
+	}
+	
+	private void drawMap(){
+		if(this.state.perksPurchased > 0){
+			this.game.font.draw(this.game.batcher, "Next Battle:", this.xOffset + this.columnWidth * 3, Gdx.graphics.getHeight() - this.columnWidth * 3 / 2 + this.game.font.getData().lineHeight, this.columnWidth * 6, 1, false);
+			int rowOffset = 1;
+			for (final List<Tile> row : this.state.nextBattlefield)
+			{
+				int tileOffset = 0;
+				for (final Tile tile : row)
+				{
+					final AtlasRegion tileRegion = this.game.textureAtlas.findRegion(tile.type);
+					final Sprite tileSprite = new Sprite(tileRegion);
+					this.game.batcher.draw(tileSprite, this.xOffset + this.columnWidth * 9 / 2 + ((this.columnWidth * 3) / 16 * (tileOffset)), Gdx.graphics.getHeight() - this.columnWidth * 3 / 2 -  ((this.columnWidth * 3) / 16  * rowOffset), (this.columnWidth * 3) / 16 , (this.columnWidth * 3) / 16);
+					tileOffset++;
+				}
+				rowOffset++;
+			}
+		}
 	}
 
 	public void drawBackground()
@@ -177,10 +163,10 @@ public class ShopkeeperPanel
 
 	public void processTouch(final float x, final float y) throws IOException
 	{
-		if(x >= xOffset + width / 4 - width / 6
-				&& x <= xOffset + width / 4 + width / 6
-				&& y >= Gdx.graphics.getHeight() - width * 2 / 9
-				&& y <= Gdx.graphics.getHeight() - width * 2 / 9 + width / 18){
+		if(x >= this.columnWidth / 2
+				&& x <= this.columnWidth * 5 / 2
+				&& y >= Gdx.graphics.getHeight() - this.columnWidth * 2
+				&& y <= Gdx.graphics.getHeight() - this.columnWidth * 3 / 2){
 			if(this.state.CanBuyPerk()){
 				this.state.BuyPerk();
 				if(state.CanBuy()){
@@ -189,6 +175,9 @@ public class ShopkeeperPanel
 					ShopControls.finalBuySound.play(this.game.settings.getFloat("sfxVolume", .5f));
 				}
 			}
+		}
+		if(x >= this.columnWidth * 13 / 2 && x <= this.columnWidth * 17 / 2 && y >= Gdx.graphics.getHeight() - this.columnWidth && this.state.isShopkeeperPanelDisplayed){
+			this.state.isShopkeeperPanelDisplayed = false;
 		}
 	}
 }

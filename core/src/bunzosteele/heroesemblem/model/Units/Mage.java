@@ -15,9 +15,12 @@ import bunzosteele.heroesemblem.model.Units.Abilities.Teleport;
 
 public class Mage extends Unit
 {
+	final static int maxIdleFrame = 2;
+	final static int maxAttackFrame = 1;
+	
 	public Mage(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory) throws IOException
 	{
-		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed, isMale, backStory, 2, 1);
+		super(team, name, attack, defense, evasion, accuracy, movement, maximumHealth, maximumRange, minimumRange, cost, id, gameSpeed, isMale, backStory, maxIdleFrame, maxAttackFrame);
 		this.type = UnitType.Mage;
 		if (ability == 1)
 		{
@@ -32,7 +35,7 @@ public class Mage extends Unit
 	}
 	
 	public Mage(UnitDto unitDto) throws IOException{
-		super(unitDto.team, unitDto.name, unitDto.attack, unitDto.defense, unitDto.evasion, unitDto.accuracy, unitDto.movement, unitDto.maximumHealth, unitDto.maximumRange, unitDto.minimumRange, unitDto.cost, unitDto.id, unitDto.animationSpeed, unitDto.isMale, unitDto.backStory, 2, 1, unitDto.x, unitDto.y, unitDto.level, unitDto.unitsKilled, unitDto.damageDealt, unitDto.currentHealth, unitDto.experience, unitDto.experienceNeeded, unitDto.distanceMoved, unitDto.hasMoved, unitDto.hasAttacked);
+		super(unitDto.team, unitDto.name, unitDto.attack, unitDto.defense, unitDto.evasion, unitDto.accuracy, unitDto.movement, unitDto.maximumHealth, unitDto.maximumRange, unitDto.minimumRange, unitDto.cost, unitDto.id, unitDto.animationSpeed, unitDto.isMale, unitDto.backStory, maxIdleFrame, maxAttackFrame, unitDto.x, unitDto.y, unitDto.level, unitDto.unitsKilled, unitDto.damageDealt, unitDto.currentHealth, unitDto.experience, unitDto.experienceNeeded, unitDto.distanceMoved, unitDto.hasMoved, unitDto.hasAttacked, unitDto.initialAttack, unitDto.initialDefense, unitDto.initialAccuracy, unitDto.initialEvasion, unitDto.initialMovement, unitDto.initialHealth);
 		this.type = UnitType.Mage;
 		this.ability = Ability.GenerateAbilityByName(unitDto.ability, unitDto.isAbilityExhausted, unitDto.canUseAbility, unitDto.abilityTargets);
 	}

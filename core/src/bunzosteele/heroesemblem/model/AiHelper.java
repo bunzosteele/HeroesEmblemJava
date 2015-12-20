@@ -59,6 +59,7 @@ public final class AiHelper
 			}
 		}
 		unit.ability.Execute(state, unit, state.GetTileForUnit(weakestTarget));
+		state.victimTile = state.GetTileForUnit(weakestTarget);
 		unit.ability.PlaySound(volume);
 		unit.ability.exhausted = true;
 	}
@@ -68,6 +69,7 @@ public final class AiHelper
 		if(targets.size() > 0){
 			Unit target = SelectAttackTarget(state, unit, targets);
 			unit.startAttack();
+			state.victimTile = state.GetTileForUnit(target);
 			if (CombatHelper.Attack(unit, target, state.battlefield))
 			{
 				Unit.hitSound.play(volume);

@@ -11,6 +11,12 @@ public class UnitDto {
 	public int accuracy;
 	public int movement;
 	public int maximumHealth;
+	public int initialAttack;
+	public int initialDefense;
+	public int initialEvasion;
+	public int initialAccuracy;
+	public int initialMovement;
+	public int initialHealth;
 	public int level;
 	public String ability;
 	public int unitsKilled;
@@ -19,7 +25,6 @@ public class UnitDto {
 	public LocationDto locationKilled;
 	public boolean isMale;
 	public String backStory;
-	
 	public int team;
 	public int currentHealth;
 	public int experience;

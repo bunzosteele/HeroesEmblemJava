@@ -58,6 +58,7 @@ public class PowerShot extends Ability
 	{
 		final HashSet<Tile> targetTiles = this.GetTargetedTiles(state, targetTile);
 		boolean hit = false;
+		int damage = executor.attack;
 		for (final Unit unit : this.GetTargetableUnits(state))
 		{
 			for (final Tile tile : targetTiles)
@@ -65,8 +66,8 @@ public class PowerShot extends Ability
 				if ((unit.x == tile.x) && (unit.y == tile.y))
 				{
 					hit = true;
-					unit.dealDamage(executor.attack);
-					executor.damageDealt += executor.attack;
+					unit.dealDamage(damage);
+					executor.damageDealt += damage;
 					unit.startDamage();
 					if(unit.checkDeath()){
 						unit.killUnit(executor, state);

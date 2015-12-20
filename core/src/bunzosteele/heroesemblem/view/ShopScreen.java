@@ -23,7 +23,6 @@ public class ShopScreen extends ScreenAdapter
 
 	HeroesEmblem game;
 	ShopState state;
-	ShopStatusPanel shopStatus;
 	StockWindow stockWindow;
 	ShopUnitStatusPanel unitStatus;
 	ShopControls shopControls;
@@ -34,6 +33,7 @@ public class ShopScreen extends ScreenAdapter
 	{
 		this.state = new ShopState(game);
 		game.shopState = this.state;
+		game.battleState = null;
 		this.InitializeShopScreen(game);
 		game.adsController.hideBannerAd();
 	}
@@ -42,6 +42,7 @@ public class ShopScreen extends ScreenAdapter
 	{
 		this.state = new ShopState(state);
 		game.shopState = this.state;
+		game.battleState = null;
 		this.InitializeShopScreen(game);
 		game.adsController.hideBannerAd();
 	}
@@ -50,6 +51,7 @@ public class ShopScreen extends ScreenAdapter
 	{
 		this.state = shopState;
 		game.shopState = this.state;
+		game.battleState = null;
 		this.InitializeShopScreen(game);
 		game.adsController.hideBannerAd();
 	}
@@ -67,10 +69,12 @@ public class ShopScreen extends ScreenAdapter
 		}else{
 			this.stockWindow.draw();
 		}
-		this.shopStatus.draw();
 		this.unitStatus.draw();
 		this.shopControls.draw();
 		this.game.batcher.end();
+		this.game.shapeRenderer.begin(ShapeType.Filled);
+		this.shopControls.drawHealthBars();
+		this.game.shapeRenderer.end();
 	}
 
 	private void InitializeShopScreen(final HeroesEmblem game)
@@ -81,12 +85,11 @@ public class ShopScreen extends ScreenAdapter
 		int controlHeight = Gdx.graphics.getHeight() / 6;
 		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
 		int windowHeight = Gdx.graphics.getHeight() - controlHeight;
-		this.shopStatus = new ShopStatusPanel(game, this.state, sideWidth, windowHeight, controlHeight);
-		this.stockWindow = new StockWindow(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
+		this.stockWindow = new StockWindow(game, this.state, windowWidth, windowHeight, 0, controlHeight);
 		this.unitStatus = new ShopUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
 		this.shopControls = new ShopControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
-		this.unitInfo = new ShopUnitInfoPanel(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
-		this.shopkeeperPanel= new ShopkeeperPanel(game, this.state, windowWidth - sideWidth, windowHeight, sideWidth, controlHeight);
+		this.unitInfo = new ShopUnitInfoPanel(game, this.state, windowWidth, windowHeight, 0, controlHeight);
+		this.shopkeeperPanel= new ShopkeeperPanel(game, this.state, windowWidth, windowHeight, 0, controlHeight);
 		MusicManager.PlayShopMusic(this.game.settings.getFloat("musicVolume", .25f));
 	}
 
@@ -159,10 +162,7 @@ public class ShopScreen extends ScreenAdapter
 			if (!this.state.isInspecting && !this.state.isShopkeeperPanelDisplayed && this.stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}else if (this.shopStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
-				this.shopStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			} else if (this.unitStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			}else if (this.unitStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.unitStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			} else if (this.shopControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
@@ -171,7 +171,7 @@ public class ShopScreen extends ScreenAdapter
 			} else if (this.state.isInspecting && this.unitInfo.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.unitInfo.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			} else if (this.state.isShopkeeperPanelDisplayed && this.unitInfo.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			} else if (this.state.isShopkeeperPanelDisplayed && this.shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			}	

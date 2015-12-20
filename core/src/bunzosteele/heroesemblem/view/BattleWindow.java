@@ -113,10 +113,36 @@ public class BattleWindow
 
 	public void drawHighlights() throws IOException
 	{
+		if(this.state.selected != null && this.state.selected.team != 0 && this.state.currentPlayer == 0 && !this.state.isPreviewingAttack && !this.state.isPreviewingAbility){
+			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, this.state.selected);
+			final Color color = new Color(.2f, .2f, .7f, .3f);
+			for (final Tile tile : options)
+			{
+				this.drawHighlight(tile.x, tile.y, color);
+			}
+		}
+		if(this.state.selected != null && this.state.isPreviewingAttack){
+			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected);
+			final Color color = new Color(.7f, .2f, .2f, .3f);
+			for (final Tile tile : options)
+			{
+				this.drawHighlight(tile.x, tile.y, color);
+			}
+		}
+		if(this.state.selected != null && this.state.selected.ability != null && this.state.isPreviewingAbility){
+			final HashSet<Tile> options = this.state.selected.ability.GetTargetTiles(this.state, this.state.selected);
+			if(options != null){
+				for (final Tile tile : options)
+				{
+					this.drawHighlight(tile.x, tile.y, this.state.selected.ability.abilityColor.add(0f, 0f, 0f, -.3f));
+					this.state.selected.ability.abilityColor.add(0f, 0f, 0f, .3f);
+				}
+			}
+		}
 		if (this.state.isMoving)
 		{
 			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state);
-			final Color color = new Color(.2f, .2f, .7f, .5f);
+			final Color color = new Color(.2f, .2f, .7f, .6f);
 			for (final Tile tile : options)
 			{
 				this.drawHighlight(tile.x, tile.y, color);
@@ -125,7 +151,7 @@ public class BattleWindow
 		if (this.state.isAttacking)
 		{
 			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected);
-			final Color color = new Color(.7f, .2f, .2f, .5f);
+			final Color color = new Color(.7f, .2f, .2f, .6f);
 			for (final Tile tile : options)
 			{
 				this.drawHighlight(tile.x, tile.y, color);
@@ -161,7 +187,8 @@ public class BattleWindow
 	{
 		for (final Unit unit : this.state.AllUnits())
 		{
-			UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, unit.isAttacking, this.state.IsTapped(unit));
+			boolean isFlipped = this.state.victimTile != null && unit.isAttacking && ((unit.team == 0 && unit.x > this.state.victimTile.x) || (unit.team == 1 && unit.x < this.state.victimTile.x));
+			UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, unit.isAttacking, this.state.IsTapped(unit), isFlipped);
 			if(state.selected != null && state.selected.equals(unit)){
 				if(unit.team == 0){
 					this.game.batcher.draw(blueSelect, this.xOffset + (this.tileWidth * unit.x), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth, this.tileHeight);
@@ -171,7 +198,7 @@ public class BattleWindow
 			}
 		}
 		for(final Unit unit : this.state.dyingUnits){
-			UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, unit.isAttacking, this.state.IsTapped(unit));
+			UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, unit.isAttacking, this.state.IsTapped(unit), false);
 		}
 	}
 
@@ -189,6 +216,8 @@ public class BattleWindow
 
 	public void processTouch(final float x, final float y) throws IOException
 	{
+		this.state.isPreviewingAttack = false;
+		this.state.isPreviewingAbility = false;
 		if(this.state.isInTactics){
 			List<Spawn> spawns = this.state.GetPlayerSpawns(this.state.battlefieldId);
 			Spawn touched = null;
@@ -253,6 +282,7 @@ public class BattleWindow
 								if ((enemy.x == tile.x) && (enemy.y == tile.y))
 								{
 									this.state.selected.startAttack();
+									this.state.victimTile = this.state.battlefield.get(enemy.y).get(enemy.x);
 									if (CombatHelper.Attack(this.state.selected, enemy, this.state.battlefield))
 									{
 										if(enemy.currentHealth >= 1){
@@ -295,6 +325,7 @@ public class BattleWindow
 						{
 							if (this.state.selected.ability.Execute(this.state, this.state.selected, tile))
 							{
+								this.state.victimTile = tile; 
 								this.state.selected.ability.PlaySound(this.game.settings.getFloat("sfxVolume", .5f));
 								this.state.isUsingAbility = false;
 								if(this.state.selected.ability.IsAction())

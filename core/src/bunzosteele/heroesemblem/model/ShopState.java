@@ -56,7 +56,7 @@ public class ShopState
 		this.stock = UnitGenerator.GenerateStock(this.roster, battleState.game, this.GetTrainingPerkLevel());
 		this.roundsSurvived = battleState.roundsSurvived + 1;
 		this.selected = null;
-		int bonusGold = 400 + battleState.difficulty * 20;
+		int bonusGold = 400 + this.roundsSurvived * 50 + battleState.difficulty * 5;
 		int totalLevel = 0;
 		for(Unit unit : roster){
 			totalLevel+= unit.level;
@@ -117,6 +117,12 @@ public class ShopState
 	
 	public void BuyUnit() throws IOException{
 		this.roster.add(this.selected);
+		this.selected.initialAttack = this.selected.attack;
+		this.selected.initialDefense = this.selected.defense;
+		this.selected.initialEvasion = this.selected.evasion;
+		this.selected.initialAccuracy = this.selected.accuracy;
+		this.selected.initialMovement = this.selected.movement;
+		this.selected.initialHealth = this.selected.maximumHealth;
 		String action = "" + this.roundsSurvived;
 		UnitDto unitDto = new UnitDto();
 		unitDto.type = this.selected.type.toString();

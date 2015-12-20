@@ -31,7 +31,7 @@ public class ShopUnitInfoPanel
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		this.columnWidth = width * 2 / 15;
+		this.columnWidth = width / 9;
 		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("WoodFloor");
 		this.backgroundSprite = new Sprite(backgroundRegion);
 		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
@@ -41,17 +41,16 @@ public class ShopUnitInfoPanel
 	public void draw() throws IOException
 	{
 		drawBackground();
-		final int scaledSize = this.width / 6;
 		if (this.state.selected != null)
 		{
-			this.game.batcher.draw(pedestalSprite, this.xOffset + scaledSize / 4, Gdx.graphics.getHeight() - this.xOffset + scaledSize / 4, scaledSize, scaledSize);
-			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + scaledSize / 4 + scaledSize / 10, Gdx.graphics.getHeight() - this.xOffset + scaledSize / 4 + scaledSize / 10, scaledSize * 8 / 10, false, false);
+			this.game.batcher.draw(pedestalSprite, this.xOffset + this.columnWidth / 2, Gdx.graphics.getHeight() - this.columnWidth * 3 / 2, this.columnWidth, this.columnWidth);
+			UnitRenderer.DrawUnit(this.game, this.state.selected, this.xOffset + this.columnWidth / 2 + this.columnWidth / 10, Gdx.graphics.getHeight() - this.columnWidth * 3 / 2 + this.columnWidth / 10, this.columnWidth * 8 / 10, false, false, false);
 			if (!this.state.roster.contains(this.state.selected))
 			{
-				UnitRenderer.DrawStockInfo(this.game, this.state.selected, this.xOffset + scaledSize * 11 / 8, Gdx.graphics.getHeight() - scaledSize * 3 / 8, scaledSize, this.width, this.xOffset);
+				UnitRenderer.DrawStockInfo(this.game, this.state.selected, this.xOffset + this.columnWidth * 3 / 2, Gdx.graphics.getHeight() - this.columnWidth / 2, this.columnWidth * 7 / 3, this.width, this.xOffset);
 			} else
 			{
-				UnitRenderer.DrawOwnedInfo(this.game, this.state.selected, this.xOffset + scaledSize * 11 / 8, Gdx.graphics.getHeight() - scaledSize * 3 / 8, scaledSize, this.width, this.xOffset);
+				UnitRenderer.DrawOwnedInfo(this.game, null, this.state.selected, this.xOffset + this.columnWidth * 3 / 2, Gdx.graphics.getHeight() - this.columnWidth / 2, this.columnWidth * 7 / 3, this.width, this.xOffset);
 			}
 		}
 	}

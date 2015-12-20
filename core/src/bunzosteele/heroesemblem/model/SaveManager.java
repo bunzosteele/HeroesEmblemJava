@@ -196,6 +196,12 @@ public class SaveManager
 			unitDto.evasion = unit.evasion;
 			unitDto.accuracy = unit.accuracy;
 			unitDto.movement = unit.movement;
+			unitDto.initialAttack = unit.initialAttack;
+			unitDto.initialDefense = unit.initialDefense;
+			unitDto.initialEvasion = unit.initialEvasion;
+			unitDto.initialAccuracy = unit.initialAccuracy;
+			unitDto.initialMovement = unit.initialMovement;
+			unitDto.initialHealth = unit.initialHealth;
 			unitDto.maximumHealth = unit.maximumHealth;
 			unitDto.level = unit.level;
 			unitDto.unitsKilled = unit.unitsKilled;
