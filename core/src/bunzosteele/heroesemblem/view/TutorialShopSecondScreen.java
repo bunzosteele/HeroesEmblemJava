@@ -35,7 +35,6 @@ public class TutorialShopSecondScreen extends MenuScreen
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.exampleSprite = new Sprite(exampleRegion);
 		exampleRatio = (float) 224 / 593;
-		game.adsController.hideBannerAd();
 	}
 
 	public void draw()

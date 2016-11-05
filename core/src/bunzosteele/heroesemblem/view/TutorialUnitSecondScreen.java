@@ -33,7 +33,6 @@ public class TutorialUnitSecondScreen extends MenuScreen
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
-		game.adsController.hideBannerAd();
 	}
 
 	public void draw()

@@ -30,7 +30,6 @@ public class TutorialMenuScreen extends MenuScreen
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
-		game.adsController.showBannerAd();
 	}
 
 	public void draw()

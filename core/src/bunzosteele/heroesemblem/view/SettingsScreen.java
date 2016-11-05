@@ -61,7 +61,6 @@ public class SettingsScreen extends MenuScreen
 		this.activeSmallButtonSprite = new Sprite(activeSmallButtonRegion);
 		this.inactiveSmallButtonSprite = new Sprite(inactiveSmallButtonRegion);
 		this.smallButtonSize = this.game.font.getData().lineHeight * 2;
-		game.adsController.hideBannerAd();
 	}
 
 	public void draw()

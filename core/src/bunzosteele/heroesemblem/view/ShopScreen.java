@@ -34,8 +34,8 @@ public class ShopScreen extends ScreenAdapter
 		this.state = new ShopState(game);
 		game.shopState = this.state;
 		game.battleState = null;
+		game.adsController.showInterstitialAd();
 		this.InitializeShopScreen(game);
-		game.adsController.hideBannerAd();
 	}
 
 	public ShopScreen(final HeroesEmblem game, final BattleState state) throws IOException
@@ -44,7 +44,6 @@ public class ShopScreen extends ScreenAdapter
 		game.shopState = this.state;
 		game.battleState = null;
 		this.InitializeShopScreen(game);
-		game.adsController.hideBannerAd();
 	}
 	
 	public ShopScreen(final HeroesEmblem game, final ShopState shopState) throws IOException
@@ -53,7 +52,6 @@ public class ShopScreen extends ScreenAdapter
 		game.shopState = this.state;
 		game.battleState = null;
 		this.InitializeShopScreen(game);
-		game.adsController.hideBannerAd();
 	}
 
 	public void draw() throws IOException

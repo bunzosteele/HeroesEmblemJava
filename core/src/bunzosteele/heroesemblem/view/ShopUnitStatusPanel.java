@@ -36,9 +36,9 @@ public class ShopUnitStatusPanel
 		this.backdrop = new Sprite(backdropRegion);
 		final AtlasRegion settingsRegion = this.game.textureAtlas.findRegion("settingsIcon");
 		this.settingsIcon = new Sprite(settingsRegion);
-		final AtlasRegion infoOpenRegion = this.game.textureAtlas.findRegion("infoOpen");
+		final AtlasRegion infoOpenRegion = this.game.textureAtlas.findRegion("InfoOpen");
 		this.infoOpen = new Sprite(infoOpenRegion);
-		final AtlasRegion infoCloseRegion = this.game.textureAtlas.findRegion("infoClose");
+		final AtlasRegion infoCloseRegion = this.game.textureAtlas.findRegion("InfoClose");
 		this.infoClose = new Sprite(infoCloseRegion);
 	}
 

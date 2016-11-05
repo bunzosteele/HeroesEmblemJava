@@ -60,7 +60,6 @@ public class GameOverScreen extends MenuScreen
 		buttonSprite = new Sprite(buttonRegion);
 		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
 		this.inactiveButton = new Sprite(inactiveRegion);
-		game.adsController.showBannerAd();
 		score = roundsSurvived * 100;
 		for(UnitDto unit : graveyard){
 			score += unit.unitsKilled;

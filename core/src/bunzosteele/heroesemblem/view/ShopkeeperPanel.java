@@ -52,7 +52,7 @@ public class ShopkeeperPanel
 		this.width = width;
 		this.height = height;
 		this.columnWidth = width / 9;
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("WoodFloor");
+		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Flooring-1");
 		this.backgroundSprite = new Sprite(backgroundRegion);
 		final AtlasRegion goldRegion = this.game.textureAtlas.findRegion("Gold");
 		this.goldSprite = new Sprite(goldRegion);
@@ -132,7 +132,22 @@ public class ShopkeeperPanel
 				{
 					final AtlasRegion tileRegion = this.game.textureAtlas.findRegion(tile.type);
 					final Sprite tileSprite = new Sprite(tileRegion);
-					this.game.batcher.draw(tileSprite, this.xOffset + this.columnWidth * 9 / 2 + ((this.columnWidth * 3) / 16 * (tileOffset)), Gdx.graphics.getHeight() - this.columnWidth * 3 / 2 -  ((this.columnWidth * 3) / 16  * rowOffset), (this.columnWidth * 3) / 16 , (this.columnWidth * 3) / 16);
+					this.game.batcher.draw(tileSprite, this.xOffset + this.columnWidth * 9 / 2 + ((this.columnWidth * 3) / 16 * (tileOffset)), Gdx.graphics.getHeight() - this.columnWidth * 3 / 2 -  ((this.columnWidth * 3) / 16  * rowOffset), (this.columnWidth * 3) / 16, (this.columnWidth * 3) / 16);
+					tileOffset++;
+				}
+				rowOffset++;
+			}
+			rowOffset = 1;
+			for (final List<Tile> row : this.state.nextBattlefield)
+			{
+				int tileOffset = 0;
+				for (final Tile tile : row)
+				{
+					if(tile.foreground != null){
+						final AtlasRegion foregroundRegion = this.game.textureAtlas.findRegion(tile.foreground);
+						final Sprite foregroundSprite = new Sprite(foregroundRegion);
+						this.game.batcher.draw(foregroundSprite, this.xOffset + this.columnWidth * 9 / 2 + ((this.columnWidth * 3) / 16 * (tileOffset)), Gdx.graphics.getHeight() - this.columnWidth * 3 / 2 -  ((this.columnWidth * 3) / 16  * rowOffset), (this.columnWidth * 3) / 16, (this.columnWidth * 3) / 16);
+					}
 					tileOffset++;
 				}
 				rowOffset++;

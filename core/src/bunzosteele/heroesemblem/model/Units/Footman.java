@@ -15,8 +15,8 @@ import bunzosteele.heroesemblem.model.Units.Abilities.ShieldBash;
 
 public class Footman extends Unit
 {
-	final static int maxIdleFrame = 2;
-	final static int maxAttackFrame = 1;
+	final static int maxIdleFrame = 13;
+	final static int maxAttackFrame = 13;
 	
 	public Footman(final int team, final String name, final int attack, final int defense, final int evasion, final int accuracy, final int movement, final int maximumHealth, final int maximumRange, final int minimumRange, final int ability, final int cost, final int id, final float gameSpeed, final boolean isMale, final String backStory) throws IOException
 	{

@@ -27,8 +27,8 @@ public class MenuScreen extends ScreenAdapter {
 	
 	public MenuScreen(HeroesEmblem game){
 		this.game = game;
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("WoodFloor");
-		final AtlasRegion altBackgroundRegion = this.game.textureAtlas.findRegion("WoodFloorDam");
+		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Flooring-1");
+		final AtlasRegion altBackgroundRegion = this.game.textureAtlas.findRegion("Flooring-2");
 		backgroundSprite = new Sprite(backgroundRegion);
 		altBackgroundSprite = new Sprite(altBackgroundRegion);
 		alternateCoordinates = new HashMap<Integer, Integer>();

@@ -32,9 +32,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.plus.Plus;
+import com.purplebrain.adbuddiz.sdk.AdBuddiz;
 
 public class AndroidLauncher extends AndroidApplication implements AdsController, GameServicesController, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-	private static final String BANNER_AD_UNIT_ID = "ca-app-pub-9270769703022419/8818024885";
 	private static final String PROPERTY_ID = "UA-69183424-2";
 	private static final String LEADERBOARD_ID = "CgkIi_ntxuUZEAIQAQ";
 	Tracker analytics;
@@ -60,9 +60,6 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		setupAds();
 		RelativeLayout layout = new RelativeLayout(this);
 		layout.addView(gameView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		layout.addView(bannerAd, params);
 		setContentView(layout);
 	    GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(this);
 	    analytics = googleAnalytics.newTracker(PROPERTY_ID);
@@ -130,26 +127,10 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	}
 	
 	@Override
-	public void showBannerAd(){
-	    runOnUiThread(new Runnable() {
-	        @Override
-	        public void run() {
-	        	bannerAd.setVisibility(View.VISIBLE);
-	            AdRequest.Builder builder = new AdRequest.Builder();
-	            AdRequest ad = builder.build();
-	            bannerAd.loadAd(ad);
-	        }
-	    });	
-	}
-	
-	@Override
-	public void hideBannerAd() {
-	    runOnUiThread(new Runnable() {
-	        @Override
-	        public void run() {
-	            bannerAd.setVisibility(View.INVISIBLE);
-	        }
-	    });
+	public void showInterstitialAd(){
+	   if (AdBuddiz.isReadyToShowAd(this)) {
+		      AdBuddiz.showAd(this);
+	   }
 	}
 	
 	@Override
@@ -160,12 +141,9 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		return (ni != null && ni.isConnected());
 	}
 	
-	private void setupAds(){
-		bannerAd = new AdView(this);
-		bannerAd.setVisibility(View.INVISIBLE);
-		bannerAd.setBackgroundColor(0x00000000);
-		bannerAd.setAdUnitId(BANNER_AD_UNIT_ID);
-		bannerAd.setAdSize(AdSize.SMART_BANNER);
+	private void setupAds(){	
+		AdBuddiz.setPublisherKey("b5d3138e-2c1c-4110-9712-996a47f18c30");
+		AdBuddiz.cacheAds(this);
 	}
 
     @Override

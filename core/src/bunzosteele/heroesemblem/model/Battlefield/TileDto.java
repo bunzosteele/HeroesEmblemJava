@@ -10,4 +10,5 @@ public class TileDto {
 	public int altitude;
 	public int x;
 	public int y;
+	public String foreground;
 }

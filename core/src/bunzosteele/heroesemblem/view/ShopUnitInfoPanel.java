@@ -32,7 +32,7 @@ public class ShopUnitInfoPanel
 		this.width = width;
 		this.height = height;
 		this.columnWidth = width / 9;
-		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("WoodFloor");
+		final AtlasRegion backgroundRegion = this.game.textureAtlas.findRegion("Flooring-1");
 		this.backgroundSprite = new Sprite(backgroundRegion);
 		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
 		this.pedestalSprite = new Sprite(pedestalRegion);

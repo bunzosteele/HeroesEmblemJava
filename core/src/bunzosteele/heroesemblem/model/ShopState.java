@@ -37,9 +37,9 @@ public class ShopState
 		this.stock = UnitGenerator.GenerateStock(this.roster, game, this.GetTrainingPerkLevel());
 		this.game = game;
 		this.selected = null;
-		this.gold = 5000;
+		this.gold = 50000;
 		this.graveyard = new ArrayList<UnitDto>();
-		this.roundsSurvived = 0;
+		this.roundsSurvived = 9;
 		this.perksPurchased = 0;
 		final Random random = new Random();
 		int maxMap = BattlefieldGenerator.DetectMaximumMap();

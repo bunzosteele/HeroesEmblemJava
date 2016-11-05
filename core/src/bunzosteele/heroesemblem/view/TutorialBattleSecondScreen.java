@@ -77,7 +77,6 @@ public class TutorialBattleSecondScreen extends MenuScreen
 		this.waterSprite = new Sprite(waterRegion);
 		this.voidSprite = new Sprite(voidRegion);
 		exampleRatio = (float) 150 / 396;
-		game.adsController.hideBannerAd();
 	}
 
 	public void draw()

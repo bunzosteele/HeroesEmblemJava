@@ -22,6 +22,7 @@ public class HeroesEmblem extends Game
 {
 	public SpriteBatch batcher;
 	public ShapeRenderer shapeRenderer;
+	public SpriteHolder sprites;
 	public BitmapFont font;
 	public TextureAtlas textureAtlas;
 	public Preferences settings;
@@ -32,16 +33,16 @@ public class HeroesEmblem extends Game
 	public ShopState shopState = null;
 	
 	public HeroesEmblem(AdsController adsController, GameServicesController analyticsController){
-            if (adsController != null) {
-                this.adsController = adsController;
-            } else {
-                this.adsController = new DummyAdsController();
-            }
-            if (analyticsController != null) {
-                this.gameServicesController = analyticsController;
-            } else {
-                this.gameServicesController = new DummyGameServicesController();
-            }
+        if (adsController != null) {
+            this.adsController = adsController;
+        } else {
+            this.adsController = new DummyAdsController();
+        }
+        if (analyticsController != null) {
+            this.gameServicesController = analyticsController;
+        } else {
+            this.gameServicesController = new DummyGameServicesController();
+        }
 	}
 
 	@Override
@@ -50,13 +51,14 @@ public class HeroesEmblem extends Game
 		Gdx.input.setCatchBackKey(true);
 		this.batcher = new SpriteBatch();
 		this.shapeRenderer = new ShapeRenderer();
-		final FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("madness.ttf"));
+		final FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("alagard.ttf"));
 		final FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = Gdx.graphics.getHeight() / 4;
 		this.font = generator.generateFont(parameter);
 		generator.dispose();
 		FileHandle textureFile = Gdx.files.internal("HeroesEmblem.pack");
 		this.textureAtlas = new TextureAtlas(textureFile);
+        this.sprites = new SpriteHolder(this);
 		settings = Gdx.app.getPreferences("HeroesEmblemSettings");
 		boolean dataLoaded = false;
 		try {

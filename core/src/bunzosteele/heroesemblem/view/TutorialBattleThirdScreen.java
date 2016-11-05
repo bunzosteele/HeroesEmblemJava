@@ -33,7 +33,6 @@ public class TutorialBattleThirdScreen extends MenuScreen
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.buttonSprite = new Sprite(buttonRegion);
 		exampleRatio = (float) 87 / 858;
-		game.adsController.hideBannerAd();
 	}
 
 	public void draw()

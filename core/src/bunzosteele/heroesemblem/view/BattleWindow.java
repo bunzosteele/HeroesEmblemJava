@@ -44,7 +44,7 @@ public class BattleWindow
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		this.tileWidth = width / 16;
+		this.tileWidth = width / 13;
 		this.tileHeight = height / 9;
 		final AtlasRegion blueSelectRegion = this.game.textureAtlas.findRegion("BlueSelect");
 		this.blueSelect = new Sprite(blueSelectRegion);
@@ -56,6 +56,7 @@ public class BattleWindow
 	{
 		this.drawBattlefield();
 		this.drawUnits();
+		this.drawForeground();
 	}
 
 	private void drawBattlefield()
@@ -72,6 +73,36 @@ public class BattleWindow
 				tileOffset++;
 			}
 			rowOffset++;
+		}
+	}
+	
+	private void drawForeground()
+	{
+		int rowOffset = 1;
+		for (final List<Tile> row : this.state.battlefield)
+		{
+			int tileOffset = 0;
+			for (final Tile tile : row)
+			{
+				if(tile.foreground != null){
+					final AtlasRegion foregroundRegion = this.game.textureAtlas.findRegion(tile.foreground);
+					final Sprite foregroundSprite = new Sprite(foregroundRegion);
+					this.game.batcher.draw(foregroundSprite, this.xOffset + (this.tileWidth * tileOffset), Gdx.graphics.getHeight() - (this.tileHeight * rowOffset), this.tileWidth, this.tileHeight);
+				}
+				tileOffset++;
+			}
+			rowOffset++;
+		}
+		
+		for (final Unit unit : this.state.AllUnits())
+		{
+			if(state.selected != null && state.selected.equals(unit)){
+				if(unit.team == 0){
+					this.game.batcher.draw(blueSelect, this.xOffset + (this.tileWidth * unit.x), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth, this.tileHeight);
+				}else{
+					this.game.batcher.draw(redSelect, this.xOffset + (this.tileWidth * unit.x), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth, this.tileHeight);					
+				}
+			}
 		}
 	}
 
@@ -363,7 +394,7 @@ public class BattleWindow
 							this.state.selected.ability.targets = new ArrayList<Integer>();
 						}
 						this.state.selected = unit;
-						this.state.isMoving = false;
+						this.state.isMoving = (!this.state.selected.hasMoved && this.state.selected.team == 0);
 						this.state.isAttacking = false;
 						this.state.isUsingAbility = false;
 						return;

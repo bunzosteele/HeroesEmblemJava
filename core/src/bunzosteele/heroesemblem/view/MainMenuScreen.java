@@ -34,7 +34,6 @@ public class MainMenuScreen extends MenuScreen
 		yOffset = Gdx.graphics.getHeight() / 4;
 		buttonSprite = new Sprite(buttonRegion);
 		MusicManager.PlayMenuMusic(this.game.settings.getFloat("musicVolume", .25f));
-		game.adsController.showBannerAd();
 		this.game.battleState = null;
 		this.game.shopState = null;
 	}

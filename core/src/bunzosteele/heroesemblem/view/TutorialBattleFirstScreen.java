@@ -35,7 +35,6 @@ public class TutorialBattleFirstScreen extends MenuScreen
 		this.buttonSprite = new Sprite(buttonRegion);
 		this.exampleSprite = new Sprite(exampleRegion);
 		exampleRatio = (float) 87 / 858;
-		game.adsController.hideBannerAd();
 	}
 
 	public void draw()

@@ -2,7 +2,6 @@ package bunzosteele.heroesemblem;
 
 public interface AdsController
 {
-	public void showBannerAd();
-	public void hideBannerAd();
+	public void showInterstitialAd();
 	public boolean isWifiConnected();
 }

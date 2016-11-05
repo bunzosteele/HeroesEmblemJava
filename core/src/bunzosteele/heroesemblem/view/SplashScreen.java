@@ -38,7 +38,7 @@ public class SplashScreen extends ScreenAdapter
 			public void run()
 			{
 				if(!touched)
-					game.setScreen(new MainMenuScreen(game));
+					LeaveSplashScreen();
 			}
 		}, 3f, 1f, 0);
 	}
@@ -77,8 +77,13 @@ public class SplashScreen extends ScreenAdapter
 	{		
 		if (Gdx.input.justTouched())
 		{
-			this.touched = true;
-			game.setScreen(new MainMenuScreen(game));
+			LeaveSplashScreen();
 		}
+	}
+	
+	private void LeaveSplashScreen(){
+		this.touched = true;
+		this.game.adsController.showInterstitialAd();
+		game.setScreen(new MainMenuScreen(game));
 	}
 }

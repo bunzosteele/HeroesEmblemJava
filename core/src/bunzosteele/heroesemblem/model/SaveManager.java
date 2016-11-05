@@ -257,6 +257,7 @@ public class SaveManager
 				tileDto.type = tile.type;
 				tileDto.x = tile.x;
 				tileDto.y = tile.y;
+				tileDto.foreground = tile.foreground;
 				dtoRow.add(tileDto);
 			}
 			battlefield.add(dtoRow);
