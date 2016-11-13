@@ -20,7 +20,6 @@ public class Heal extends Ability
 		this.displayName = "Heal";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(0f, 1f, 0f, .5f);
 		this.isAction = true;
 	}
 	

@@ -20,7 +20,6 @@ public class Vault extends Ability
 		this.displayName = "Vault";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(0f, 0f, 1f, .5f);
 		this.isAction = false;
 	}
 	

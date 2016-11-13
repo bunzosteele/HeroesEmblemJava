@@ -19,7 +19,6 @@ public class Rebirth extends Ability
 		this.displayName = "Rebirth";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(0f, 1f, 0f, .5f);
 		this.areTargetsPersistent = true;
 		this.isAction = true;
 	}

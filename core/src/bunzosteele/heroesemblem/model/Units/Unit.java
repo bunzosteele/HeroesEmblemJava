@@ -61,7 +61,8 @@ public abstract class Unit implements Ai
 	public int distanceMoved = 0;
 	public boolean hasMoved;
 	public boolean hasAttacked;
-	public String damageDisplay = "";
+	public int damageDisplay = -1;
+	public boolean isCrit = false;
 	public static Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 	public static Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
 	public static Sound missSound = Gdx.audio.newSound(Gdx.files.internal("miss.wav"));
@@ -240,10 +241,11 @@ public abstract class Unit implements Ai
 		return leveled;
 	}
 
-	public void dealDamage(final int damage)
+	public void dealDamage(int damage, boolean isCrit)
 	{
 		this.currentHealth -= damage;
-		this.damageDisplay = "" + damage;
+		this.damageDisplay = damage;
+		this.isCrit = isCrit;
 	}
 
 	public boolean giveExperience(final int amount)
@@ -254,7 +256,7 @@ public abstract class Unit implements Ai
 			float displayDuration = 1.1f;
 			if(team != 0)
 				displayDuration = this.animationSpeed;
-			this.damageDisplay = "" + amount;
+			this.damageDisplay = amount;
 			Timer.schedule(new Task()
 			{
 				@Override
@@ -269,11 +271,7 @@ public abstract class Unit implements Ai
 				}
 			}, 0, displayDuration, 1);
 		}else{
-			try{
-				int pastExp = Integer.parseInt(this.damageDisplay);
-				this.damageDisplay = "" + (amount + pastExp);
-			}catch(NumberFormatException ex){
-			}
+				this.damageDisplay += amount;
 		}
 		return leveled;
 	}
@@ -285,7 +283,7 @@ public abstract class Unit implements Ai
 		{
 			this.currentHealth = this.maximumHealth;
 		}
-		this.damageDisplay = "" + heal;
+		this.damageDisplay = heal;
 	}
 
 	public boolean isEquivalentTo(final Unit other)
@@ -395,7 +393,6 @@ public abstract class Unit implements Ai
 		float displayDuration = 1.1f;
 		if(team == 0)
 			displayDuration = this.animationSpeed;
-		this.damageDisplay = "Missed!";
 		this.isTakingDamage = false;
 		Timer.schedule(new Task()
 		{

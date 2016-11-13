@@ -18,7 +18,6 @@ public class PowerShot extends Ability
 		this.displayName = "Power Shot";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(1f, 0f, 0f, .5f);
 		this.isAction = true;
 	}
 	
@@ -66,7 +65,7 @@ public class PowerShot extends Ability
 				if ((unit.x == tile.x) && (unit.y == tile.y))
 				{
 					hit = true;
-					unit.dealDamage(damage);
+					unit.dealDamage(damage, false);
 					executor.damageDealt += damage;
 					unit.startDamage();
 					if(unit.checkDeath()){

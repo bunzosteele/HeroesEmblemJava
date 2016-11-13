@@ -18,7 +18,6 @@ public class Thrust extends Ability
 		this.displayName = "Thrust";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(1f, 0f, 0f, .5f);
 		this.isAction = true;
 	}
 	
@@ -74,7 +73,7 @@ public class Thrust extends Ability
 					executor.y += dy;
 					unit.x += dx;
 					unit.y += dy;
-					unit.dealDamage(executor.attack);
+					unit.dealDamage(executor.attack, false);
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
 					if(unit.checkDeath()){
@@ -85,7 +84,7 @@ public class Thrust extends Ability
 				} else if (this.isInBounds(nextX, nextY, state.battlefield) && !this.isEmpty(nextX, nextY, state.AllUnits()))
 				{
 					executor.startAttack();
-					unit.dealDamage(executor.attack);
+					unit.dealDamage(executor.attack, false);
 					executor.damageDealt += executor.attack;
 					unit.startDamage();
 					if(unit.checkDeath()){
@@ -97,7 +96,7 @@ public class Thrust extends Ability
 					{
 						if ((nextUnit.x == nextX) && (nextUnit.y == nextY))
 						{
-							nextUnit.dealDamage(executor.attack / 2);
+							nextUnit.dealDamage(executor.attack / 2, false);
 							executor.damageDealt += executor.attack / 2;
 							nextUnit.startDamage();
 							if(nextUnit.checkDeath()){
@@ -110,7 +109,7 @@ public class Thrust extends Ability
 				} else
 				{
 					executor.startAttack();
-					unit.dealDamage(executor.attack * 2);
+					unit.dealDamage(executor.attack * 2, true);
 					executor.damageDealt += executor.attack * 2;
 					unit.startDamage();
 					if(unit.checkDeath()){

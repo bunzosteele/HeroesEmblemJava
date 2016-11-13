@@ -13,6 +13,7 @@ import bunzosteele.heroesemblem.model.MovementHelper;
 import bunzosteele.heroesemblem.model.Battlefield.Spawn;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
+import bunzosteele.heroesemblem.model.Units.Abilities.Ability;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -52,11 +53,13 @@ public class BattleWindow
 		this.redSelect = new Sprite(redSelectRegion);
 	}
 
-	public void draw()
+	public void draw() throws IOException
 	{
 		this.drawBattlefield();
+		HashSet<Tile> overlap = this.drawHighlights();
 		this.drawUnits();
-		this.drawForeground();
+		this.drawForeground(overlap);
+		this.drawProjection();
 	}
 
 	private void drawBattlefield()
@@ -76,7 +79,7 @@ public class BattleWindow
 		}
 	}
 	
-	private void drawForeground()
+	private void drawForeground(HashSet<Tile> highlights)
 	{
 		int rowOffset = 1;
 		for (final List<Tile> row : this.state.battlefield)
@@ -87,7 +90,11 @@ public class BattleWindow
 				if(tile.foreground != null){
 					final AtlasRegion foregroundRegion = this.game.textureAtlas.findRegion(tile.foreground);
 					final Sprite foregroundSprite = new Sprite(foregroundRegion);
+					if(highlights.contains(tile)){
+						this.game.batcher.setColor(new Color(1f, 1f, 1f, .5f));
+					}
 					this.game.batcher.draw(foregroundSprite, this.xOffset + (this.tileWidth * tileOffset), Gdx.graphics.getHeight() - (this.tileHeight * rowOffset), this.tileWidth, this.tileHeight);
+					game.batcher.setColor(new Color(1f, 1f, 1f, 1f));
 				}
 				tileOffset++;
 			}
@@ -136,56 +143,24 @@ public class BattleWindow
 		}
 	}
 
-	private void drawHighlight(final int x, final int y, final Color color)
+	public HashSet<Tile> drawHighlights() throws IOException
 	{
-		this.game.shapeRenderer.setColor(color);
-		this.game.shapeRenderer.rect((x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (y + 1)), this.tileWidth, this.tileHeight);
-	}
-
-	public void drawHighlights() throws IOException
-	{
-		if(this.state.selected != null && this.state.selected.team != 0 && this.state.currentPlayer == 0 && !this.state.isPreviewingAttack && !this.state.isPreviewingAbility){
-			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, this.state.selected);
-			final Color color = new Color(.2f, .2f, .7f, .3f);
+		HashSet<Tile> highlightedTiles = new HashSet<Tile>();
+		if(this.state.selected != null && this.state.selected.team != 0 && this.state.currentPlayer == 0){
+			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, this.state.selected, true);		
 			for (final Tile tile : options)
 			{
-				this.drawHighlight(tile.x, tile.y, color);
+				this.game.batcher.draw(game.sprites.blueTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);
+				highlightedTiles.add(tile);
 			}
 		}
-		if(this.state.selected != null && this.state.isPreviewingAttack){
-			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected);
-			final Color color = new Color(.7f, .2f, .2f, .3f);
-			for (final Tile tile : options)
-			{
-				this.drawHighlight(tile.x, tile.y, color);
-			}
-		}
-		if(this.state.selected != null && this.state.selected.ability != null && this.state.isPreviewingAbility){
-			final HashSet<Tile> options = this.state.selected.ability.GetTargetTiles(this.state, this.state.selected);
-			if(options != null){
-				for (final Tile tile : options)
-				{
-					this.drawHighlight(tile.x, tile.y, this.state.selected.ability.abilityColor.add(0f, 0f, 0f, -.3f));
-					this.state.selected.ability.abilityColor.add(0f, 0f, 0f, .3f);
-				}
-			}
-		}
-		if (this.state.isMoving)
+		if (this.state.CanAttack(this.state.selected) && ! this.state.isUsingAbility)
 		{
-			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state);
-			final Color color = new Color(.2f, .2f, .7f, .6f);
+			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected, true);
 			for (final Tile tile : options)
 			{
-				this.drawHighlight(tile.x, tile.y, color);
-			}
-		}
-		if (this.state.isAttacking)
-		{
-			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected);
-			final Color color = new Color(.7f, .2f, .2f, .6f);
-			for (final Tile tile : options)
-			{
-				this.drawHighlight(tile.x, tile.y, color);
+				this.game.batcher.draw(game.sprites.redTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);
+				highlightedTiles.add(tile);
 			}
 		}
 		if (this.state.isUsingAbility)
@@ -193,7 +168,21 @@ public class BattleWindow
 			final HashSet<Tile> options = this.state.selected.ability.GetTargetTiles(this.state, this.state.selected);
 			for (final Tile tile : options)
 			{
-				this.drawHighlight(tile.x, tile.y, this.state.selected.ability.abilityColor);
+				this.game.batcher.draw(GetAbilityTile(this.state.selected.ability), (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);
+				highlightedTiles.add(tile);
+			}
+		}
+		if (this.state.isMoving && ! this.state.isUsingAbility)
+		{
+			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, true);
+			for (final Tile tile : options)
+			{
+				if(highlightedTiles.contains(tile)){
+					this.game.batcher.setColor(new Color(1f, 1f, 1f, .25f));
+				}
+				this.game.batcher.draw(game.sprites.blueTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);
+				highlightedTiles.add(tile);
+				this.game.batcher.setColor(new Color(1f, 1f, 1f, 1f));
 			}
 		}
 		if (this.state.isInTactics){
@@ -202,16 +191,12 @@ public class BattleWindow
 				for(Unit unit : this.state.AllUnits()){
 					if(unit.x == spawn.x && unit.y == spawn.y)
 						isAvailable = false;
-				}
-				Color color;
-				if(isAvailable){
-					color = new Color(.4f, .4f, .7f, .8f);
-				}else{
-					color = new Color(.4f, .4f, .7f, .3f);
-				}			
-				this.drawHighlight(spawn.x, spawn.y, color);
+				}	
+				this.game.batcher.draw(game.sprites.blueTile, (spawn.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (spawn.y + 1)), this.tileWidth, this.tileHeight);
 			}
 		}
+		
+		return highlightedTiles;
 	}
 
 	private void drawUnits()
@@ -232,6 +217,42 @@ public class BattleWindow
 			UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, unit.isAttacking, this.state.IsTapped(unit), false);
 		}
 	}
+	
+	private void drawProjection(){
+		if(state.selected != null && state.CanAttack(state.selected)){
+			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected, false);
+			for(Tile option : options){
+				for(Unit enemy : state.enemies){
+					if(option.x == enemy.x && option.y == enemy.y && (state.targeted == null || state.targeted != enemy)){
+						this.game.batcher.draw(game.sprites.crosshair, (option.x * this.tileWidth) + this.xOffset + (tileWidth / 4), Gdx.graphics.getHeight() - (this.tileHeight * (option.y + 1)) + (tileWidth / 4), this.tileWidth /2, this.tileHeight/2);
+					}
+				}
+			}
+			if(state.targeted != null){
+				double projectionHeightRatio = .75;
+				this.game.batcher.draw(game.sprites.projectionBackground, (state.targeted.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8), this.tileWidth, (int) (this.tileHeight * projectionHeightRatio));
+				this.game.batcher.draw(game.sprites.projectionBorder, (state.targeted.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8), this.tileWidth, (int) (this.tileHeight * projectionHeightRatio));
+				Tile enemyTile = state.battlefield.get(state.targeted.y).get(state.targeted.x);
+				int expectedDamage = CombatHelper.GetExpectedDamage(state.selected, state.targeted, enemyTile);
+				int hitChance = CombatHelper.GetHitPercent(state.selected, state.targeted, enemyTile);
+				int critChance = CombatHelper.GetCritPercent(state.selected, state.targeted, enemyTile);
+				String damageString = (expectedDamage > 0 ? ((expectedDamage - 1) + "-" + (expectedDamage + 1))  : "0-" + (expectedDamage + 1));
+				String hitString = (hitChance > 0 ? (hitChance > 100 ? "100" : hitChance) : "0") + "%";
+				String critString = (critChance > 0 ? (critChance > 100 ? "100" : critChance) : "0") + "%";
+				game.projectionFont.setColor(new Color(0f, 0f, 0f, 1f));
+				float borderOffset = .1363f;
+				
+				game.projectionFont.draw(game.batcher, "DMG", (state.targeted.x * this.tileWidth) + this.xOffset  + (int)(borderOffset * tileWidth), Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + this.game.projectionFont.getLineHeight() * 3 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
+				game.projectionFont.draw(game.batcher, damageString, ((state.targeted.x + 1) * this.tileWidth) + this.xOffset - (int)(borderOffset * tileWidth) - (tileWidth * 32 / 44), Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + this.game.projectionFont.getLineHeight() * 3 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
+	
+				game.projectionFont.draw(game.batcher, "HIT", (state.targeted.x * this.tileWidth) + this.xOffset + (int)(borderOffset * tileWidth), Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + this.game.projectionFont.getLineHeight() * 2 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
+				game.projectionFont.draw(game.batcher, hitString, ((state.targeted.x + 1) * this.tileWidth) + this.xOffset  - (int)(borderOffset * tileWidth) - (tileWidth * 32 / 44), Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + this.game.projectionFont.getLineHeight() * 2 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
+				
+				game.projectionFont.draw(game.batcher, "CRT", (state.targeted.x * this.tileWidth) + this.xOffset + (int)(borderOffset * tileWidth), Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + this.game.projectionFont.getLineHeight() + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
+				game.projectionFont.draw(game.batcher, critString, ((state.targeted.x + 1) * this.tileWidth) + this.xOffset - (int)(borderOffset * tileWidth) - (tileWidth * 32 / 44), Gdx.graphics.getHeight() - (this.tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + this.game.projectionFont.getLineHeight() + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
+			}
+		}
+	}
 
 	public boolean isTouched(final float x, final float y)
 	{
@@ -247,195 +268,207 @@ public class BattleWindow
 
 	public void processTouch(final float x, final float y) throws IOException
 	{
-		this.state.isPreviewingAttack = false;
-		this.state.isPreviewingAbility = false;
 		if(this.state.isInTactics){
-			List<Spawn> spawns = this.state.GetPlayerSpawns(this.state.battlefieldId);
-			Spawn touched = null;
-			for(Spawn spawn : spawns){
-				if (((spawn.x * this.tileWidth) < x) && (x <= ((spawn.x * this.tileWidth) + this.tileWidth)))
-				{
-					if (((Gdx.graphics.getHeight() - ((spawn.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((spawn.y) * this.tileHeight)))){
-						touched = spawn;
-					}
+			ProcessTacticsTouch(x, y);
+			return;
+		}		
+		if ((this.state.selected != null) && !this.state.selected.hasAttacked && this.state.selected.team == 0)
+			if(ProcessAttackTouch(x, y)) return;	
+
+		if ((this.state.selected != null) && this.state.isUsingAbility)
+			if(ProcessAbilityTouch(x, y)) return;	
+
+		if(ProcessUnitTouch(x, y)) return;
+
+		if ((this.state.selected != null) && this.state.isMoving)
+			if (ProcessMoveTouch(x, y)) return;
+
+		if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
+		{
+			this.state.selected.ability.targets = new ArrayList<Integer>();
+		}
+
+		this.state.selected = null;
+		this.state.targeted = null;
+		this.state.isMoving = false;
+		this.state.isUsingAbility = false;
+	}
+	
+	private Sprite GetAbilityTile(Ability ability){
+		if(ability.displayName.equals("Teleport")){
+			return game.sprites.purpleTile;
+		}else if(ability.displayName.equals("Scholar")){
+			return game.sprites.goldTile;
+		}else if(ability.displayName.equals("Vault")){
+			return game.sprites.blueTile;
+		}else if(ability.displayName.equals("Heal") || ability.displayName.equals("Rebirth")){
+			return game.sprites.greenTile;
+		}else{
+			return game.sprites.redTile;
+		}
+	}
+	
+	private void ProcessTacticsTouch(float x, float y) throws IOException{
+		List<Spawn> spawns = this.state.GetPlayerSpawns(this.state.battlefieldId);
+		Spawn touched = null;
+		for(Spawn spawn : spawns){
+			if (((spawn.x * this.tileWidth) < x) && (x <= ((spawn.x * this.tileWidth) + this.tileWidth)))
+			{
+				if (((Gdx.graphics.getHeight() - ((spawn.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((spawn.y) * this.tileHeight)))){
+					touched = spawn;
 				}
-			}		
-			if(touched != null){
-				if(this.state.selected == null){
-					for(Unit unit : this.state.roster){
-						if(unit.x == touched.x && unit.y == touched.y){
-							this.state.selected = unit;
-						}
-					}
-				}else{
-					Unit otherUnit = null;
-					for(Unit unit : this.state.roster){
-						if(unit.x == touched.x && unit.y == touched.y){
-							otherUnit = unit;
-						}
-					}
-					if(otherUnit != null){
-						this.state.selected = otherUnit;
-					}else{
-						if(this.state.selected.team == 0){
-							this.state.selected.x = touched.x;
-							this.state.selected.y = touched.y;
-						}else{
-							this.state.selected = null;
-						}
+			}
+		}		
+		if(touched != null){
+			if(this.state.selected == null){
+				for(Unit unit : this.state.roster){
+					if(unit.x == touched.x && unit.y == touched.y){
+						this.state.selected = unit;
 					}
 				}
 			}else{
-				this.state.selected = null;
-				for (final Unit unit : this.state.AllUnits())
-				{
-					if (((unit.x * this.tileWidth) < x) && (x <= ((unit.x * this.tileWidth) + this.tileWidth)))
-					{
-						if (((Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((unit.y) * this.tileHeight))))
-						{
-							this.state.selected = unit;
-						}
+				Unit otherUnit = null;
+				for(Unit unit : this.state.roster){
+					if(unit.x == touched.x && unit.y == touched.y){
+						otherUnit = unit;
+					}
+				}
+				if(otherUnit != null){
+					this.state.selected = otherUnit;
+				}else{
+					if(this.state.selected.team == 0){
+						this.state.selected.x = touched.x;
+						this.state.selected.y = touched.y;
+					}else{
+						this.state.selected = null;
 					}
 				}
 			}
-		}else{			
-			if ((this.state.selected != null) && this.state.isAttacking)
-			{
-				final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected);
-				for (final Tile tile : options)
-				{
-					if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
-					{
-						if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
-						{
-							for (final Unit enemy : this.state.enemies)
-							{
-								if ((enemy.x == tile.x) && (enemy.y == tile.y))
-								{
-									this.state.selected.startAttack();
-									this.state.victimTile = this.state.battlefield.get(enemy.y).get(enemy.x);
-									if (CombatHelper.Attack(this.state.selected, enemy, this.state.battlefield))
-									{
-										if(enemy.currentHealth >= 1){
-											Unit.hitSound.play(this.game.settings.getFloat("sfxVolume", .5f));
-										}else{
-											Unit.deathSound.play(this.game.settings.getFloat("sfxVolume", .5f));
-										}
-										enemy.startDamage();
-										if(enemy.checkDeath()){
-											enemy.killUnit(this.state.selected, this.state);
-											state.SaveGraveyard(enemy);
-										}
-									} else
-									{
-										Unit.missSound.play(this.game.settings.getFloat("sfxVolume", .5f));
-										enemy.startMiss();
-									}
-	
-									this.state.isAttacking = false;
-									this.state.selected.hasAttacked = true;
-									this.state.ClearUndos();
-									if(this.state.IsTapped(this.state.selected))
-										this.state.selected = null;
-									return;
-								}
-							}
-						}
-					}
-				}
-			}
-	
-			if ((this.state.selected != null) && this.state.isUsingAbility)
-			{
-				final HashSet<Tile> options = this.state.selected.ability.GetTargetTiles(this.state, this.state.selected);
-				for (final Tile tile : options)
-				{
-					if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
-					{
-						if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
-						{
-							if (this.state.selected.ability.Execute(this.state, this.state.selected, tile))
-							{
-								this.state.victimTile = tile; 
-								this.state.selected.ability.PlaySound(this.game.settings.getFloat("sfxVolume", .5f));
-								this.state.isUsingAbility = false;
-								if(this.state.selected.ability.IsAction())
-									this.state.selected.hasAttacked = true;
-								this.state.selected.ability.exhausted = true;
-								this.state.ClearUndos();
-								if(this.state.IsTapped(this.state.selected))
-									this.state.selected = null;		
-								return;
-							} else
-							{
-								if (!this.state.selected.ability.isMultiInput)
-								{
-									this.state.isUsingAbility = false;
-									if(this.state.IsTapped(this.state.selected))
-										this.state.selected = null;
-								} else
-								{
-									return;
-								}
-							}
-						}
-					}
-				}
-			}
-	
+		}else{
+			this.state.selected = null;
 			for (final Unit unit : this.state.AllUnits())
 			{
 				if (((unit.x * this.tileWidth) < x) && (x <= ((unit.x * this.tileWidth) + this.tileWidth)))
 				{
 					if (((Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((unit.y) * this.tileHeight))))
 					{
-						if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
-						{
-							this.state.selected.ability.targets = new ArrayList<Integer>();
-						}
 						this.state.selected = unit;
-						this.state.isMoving = (!this.state.selected.hasMoved && this.state.selected.team == 0);
-						this.state.isAttacking = false;
-						this.state.isUsingAbility = false;
-						return;
 					}
 				}
 			}
+		}
+	}
 	
-			if ((this.state.selected != null) && this.state.isMoving)
+	private boolean ProcessAttackTouch(float x, float y){
+		final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected, false);
+		for (final Tile tile : options)
+		{
+			if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
 			{
-				final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state);
-				for (final Tile tile : options)
+				if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
 				{
-					if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
+					for (final Unit enemy : this.state.enemies)
 					{
-						if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
+						if ((enemy.x == tile.x) && (enemy.y == tile.y))
 						{
-							this.state.selected.distanceMoved = (Math.abs(this.state.selected.x - tile.x) + Math.abs(this.state.selected.y - tile.y));
-							Move oldLocation = new Move();
-							oldLocation.oldX = state.selected.x;
-							oldLocation.oldY = state.selected.y;
-							oldLocation.unitId = this.state.selected.id;
-							this.state.selected.x = tile.x;
-							this.state.selected.y = tile.y;
-							this.state.isMoving = false;
-							this.state.selected.hasMoved = true;
-							this.state.undos.push(oldLocation);
-							return;
+							if(this.state.targeted != null && this.state.targeted == enemy){
+								this.state.victimTile = tile; 
+								this.state.ConfirmAttack();
+								return true;
+							}
+							this.state.targeted = enemy;
+							return true;
 						}
 					}
 				}
 			}
-	
-			if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
-			{
-				this.state.selected.ability.targets = new ArrayList<Integer>();
-			}
-	
-			this.state.selected = null;
-			this.state.isAttacking = false;
-			this.state.isMoving = false;
-			this.state.isUsingAbility = false;
 		}
+		return false;
+	}
+	
+	private boolean ProcessAbilityTouch(float x, float y){
+		final HashSet<Tile> options = this.state.selected.ability.GetTargetTiles(this.state, this.state.selected);
+		for (final Tile tile : options)
+		{
+			if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
+			{
+				if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
+				{
+					if (this.state.selected.ability.Execute(this.state, this.state.selected, tile))
+					{
+						this.state.victimTile = tile; 
+						this.state.selected.ability.PlaySound(this.game.settings.getFloat("sfxVolume", .5f));
+						this.state.isUsingAbility = false;
+						if(this.state.selected.ability.IsAction())
+							this.state.selected.hasAttacked = true;
+						this.state.selected.ability.exhausted = true;
+						this.state.ClearUndos();
+						this.state.targeted = null;
+						if(!this.state.selected.hasMoved)
+							this.state.isMoving = true;
+						return true;
+					} else
+					{
+						if (!this.state.selected.ability.isMultiInput)
+						{
+							this.state.isUsingAbility = false;
+							this.state.targeted = null;
+						} else
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean ProcessUnitTouch(float x, float y){
+		for (final Unit unit : this.state.AllUnits())
+		{
+			if (((unit.x * this.tileWidth) < x) && (x <= ((unit.x * this.tileWidth) + this.tileWidth)))
+			{
+				if (((Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((unit.y) * this.tileHeight))))
+				{
+					if ((this.state.selected != null) && (this.state.selected.ability != null) && (this.state.selected.ability.targets.size() > 0) && !this.state.selected.ability.areTargetsPersistent)
+					{
+						this.state.selected.ability.targets = new ArrayList<Integer>();
+					}
+					this.state.selected = unit;
+					this.state.targeted = null;
+					this.state.isMoving = (!this.state.selected.hasMoved && this.state.selected.team == 0);
+					this.state.isUsingAbility = false;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean ProcessMoveTouch(float x, float y){
+		final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, false);
+		for (final Tile tile : options)
+		{
+			if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))
+			{
+				if (((Gdx.graphics.getHeight() - ((tile.y + 1) * this.tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((tile.y) * this.tileHeight))))
+				{
+					this.state.selected.distanceMoved = (Math.abs(this.state.selected.x - tile.x) + Math.abs(this.state.selected.y - tile.y));
+					Move oldLocation = new Move();
+					oldLocation.oldX = state.selected.x;
+					oldLocation.oldY = state.selected.y;
+					oldLocation.unitId = this.state.selected.id;
+					this.state.selected.x = tile.x;
+					this.state.selected.y = tile.y;
+					this.state.isMoving = false;
+					this.state.selected.hasMoved = true;
+					this.state.targeted = null;
+					this.state.undos.push(oldLocation);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

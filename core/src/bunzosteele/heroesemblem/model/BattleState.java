@@ -2,6 +2,7 @@ package bunzosteele.heroesemblem.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -35,7 +36,6 @@ public class BattleState
 	public int battlefieldId;
 	public List<List<Tile>> battlefield;
 	public boolean isMoving;
-	public boolean isAttacking;
 	public boolean isUsingAbility;
 	public int currentPlayer;
 	public int turnCount;
@@ -44,10 +44,9 @@ public class BattleState
 	public Stack<Move> undos;
 	public boolean isInTactics;
 	public boolean hasBenchedUnits = false;
-	public boolean isPreviewingAttack = false;
-	public boolean isPreviewingAbility = false;
 	public List<Spawn> playerSpawns = new ArrayList<Spawn>();
 	public Tile victimTile;
+	public Unit targeted;
 	
 
 	public BattleState(final ShopState shopState) throws IOException
@@ -60,6 +59,7 @@ public class BattleState
 		this.difficulty = (int) Math.pow(2, roundsSurvived);
 		this.roster = shopState.roster;
 		this.selected = null;
+		this.targeted = null;
 		this.gold = shopState.gold;
 		this.battlefieldId = shopState.nextBattlefieldId;
 		this.battlefield = shopState.nextBattlefield;
@@ -120,6 +120,7 @@ public class BattleState
 		this.difficulty = (int) Math.pow(2, roundsSurvived);
 		this.roster = SaveManager.MapUnits(stateDto.roster);
 		this.selected = null;
+		this.targeted = null;
 		this.gold = stateDto.gold;
 		this.battlefieldId = stateDto.battlefieldId;
 		this.battlefield = SaveManager.MapTiles(stateDto.battlefield);
@@ -150,7 +151,7 @@ public class BattleState
 		{
 			if (!unit.hasAttacked)
 			{
-				for (final Tile tile : CombatHelper.GetAttackOptions(this, unit))
+				for (final Tile tile : CombatHelper.GetAttackOptions(this, unit, false))
 				{
 					for (final Unit enemy : this.AllUnits())
 					{
@@ -206,7 +207,7 @@ public class BattleState
 	}
 	
 	public boolean CanUndo(){
-		return this.selected != null && this.undos.size() > 0 && this.selected.id == this.undos.peek().unitId;
+		return this.undos.size() > 0;
 	}
 	
 	public void ClearUndos(){
@@ -319,22 +320,20 @@ public class BattleState
 			unit.distanceMoved = 0;
 			unit.hasAttacked = false;
 			unit.hasMoved = false;
-			unit.damageDisplay = "";
+			unit.damageDisplay = -1;
 		}
 		this.selected = null;
-		this.isAttacking = false;
+		this.targeted = null;
 		this.isMoving = false;
 		this.isUsingAbility = false;
 	}
 
 	public void EndTurn()
 	{
-		this.isAttacking = false;
 		this.isMoving = false;
 		this.isUsingAbility = false;
 		this.selected = null;
-		this.isPreviewingAttack = false;
-		this.isPreviewingAbility = false;
+		this.targeted = null;
 		ClearUndos();
 		for (final Unit unit : this.CurrentPlayerUnits())
 		{
@@ -355,6 +354,15 @@ public class BattleState
 			}
 		}
 	}
+	
+	public boolean containsUnit(Tile tile){
+		for (Unit unit : this.AllUnits()){
+			if(unit.x == tile.x && unit.y == tile.y){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public boolean IsTapped(final Unit unit)
 	{
@@ -374,6 +382,33 @@ public class BattleState
 		}
 
 		return true;
+	}
+	
+	public void ConfirmAttack(){
+		if(selected != null && targeted != null){
+			selected.startAttack();
+			if (CombatHelper.Attack(selected, targeted, battlefield))
+			{
+				if(targeted.currentHealth >= 1){
+					Unit.hitSound.play(this.game.settings.getFloat("sfxVolume", .5f));
+				}else{
+					Unit.deathSound.play(this.game.settings.getFloat("sfxVolume", .5f));
+				}
+				targeted.startDamage();
+				if(targeted.checkDeath()){
+					targeted.killUnit(selected, this);
+					SaveGraveyard(targeted);
+				}
+			} 
+			else{
+				Unit.missSound.play(this.game.settings.getFloat("sfxVolume", .5f));
+				targeted.startMiss();
+			}
+	
+			selected.hasAttacked = true;
+			ClearUndos();
+			targeted = null;
+		}
 	}
 
 	private void SpawnUnits(final List<Unit> units, final List<Spawn> spawns)

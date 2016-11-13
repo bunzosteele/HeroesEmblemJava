@@ -24,6 +24,7 @@ public class HeroesEmblem extends Game
 	public ShapeRenderer shapeRenderer;
 	public SpriteHolder sprites;
 	public BitmapFont font;
+	public BitmapFont projectionFont;
 	public TextureAtlas textureAtlas;
 	public Preferences settings;
 	public AdsController adsController;
@@ -56,6 +57,11 @@ public class HeroesEmblem extends Game
 		parameter.size = Gdx.graphics.getHeight() / 4;
 		this.font = generator.generateFont(parameter);
 		generator.dispose();
+		final FreeTypeFontGenerator projectionGenerator = new FreeTypeFontGenerator(Gdx.files.internal("slkscr.ttf"));
+		final FreeTypeFontParameter projectionParameter = new FreeTypeFontParameter();
+		projectionParameter.size = (int) (Gdx.graphics.getHeight() * .01767f);
+		this.projectionFont = projectionGenerator.generateFont(projectionParameter);
+		projectionGenerator.dispose();
 		FileHandle textureFile = Gdx.files.internal("HeroesEmblem.pack");
 		this.textureAtlas = new TextureAtlas(textureFile);
         this.sprites = new SpriteHolder(this);

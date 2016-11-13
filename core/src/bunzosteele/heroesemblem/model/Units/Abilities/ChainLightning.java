@@ -18,7 +18,6 @@ public class ChainLightning extends Ability
 		this.displayName = "Lightning";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(1f, 0f, 0f, .5f);
 		this.isAction = true;
 	}
 	
@@ -65,7 +64,7 @@ public class ChainLightning extends Ability
 				}
 				if (damagedUnit != null)
 				{
-					damagedUnit.dealDamage(damage);
+					damagedUnit.dealDamage(damage, false);
 					executor.damageDealt += damage;
 					damagedUnit.startDamage();
 					if(damagedUnit.checkDeath()){

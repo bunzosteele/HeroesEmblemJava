@@ -19,7 +19,6 @@ public class Teleport extends Ability
 		this.displayName = "Teleport";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(.5f, 0f, .5f, .5f);
 		this.isMultiInput = true;
 		this.isAction = true;
 	}

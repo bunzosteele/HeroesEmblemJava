@@ -117,7 +117,7 @@ public final class AiHelper
 	public static Map<Tile, Integer> GetMovementOptions(BattleState state, Unit unit){
 		if(unit.movementOptions == null){
 			Map<Tile, Integer> optionsWithScore = new HashMap<Tile, Integer>();
-			HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit);
+			HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit, false);
 			for(Tile tile : options){
 				int score = unit.GetTileScore(tile, state);
 				optionsWithScore.put(tile, score);

@@ -19,7 +19,6 @@ public class Scholar extends Ability
 		this.displayName = "Scholar";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(1f, .8f, 0f, .5f);
 		this.areTargetsPersistent = true;
 		this.isAction = true;
 	}

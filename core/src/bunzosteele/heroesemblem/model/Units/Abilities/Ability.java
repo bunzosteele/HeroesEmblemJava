@@ -10,13 +10,13 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public abstract class Ability
 {
 	public String displayName;
 	public boolean isActive;
 	public boolean isTargeted;
-	public Color abilityColor;
 	public boolean exhausted;
 	public boolean isMultiInput;
 	public List<Integer> targets = new ArrayList<Integer>();

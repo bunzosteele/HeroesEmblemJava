@@ -1,5 +1,6 @@
 package bunzosteele.heroesemblem.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -13,26 +14,32 @@ public final class MovementHelper
 		return battlefield.get(y).get(x).movementCost;
 	}
 
-	public static HashSet<Tile> GetMovementOptions(final BattleState state)
+	public static HashSet<Tile> GetMovementOptions(final BattleState state, boolean forDisplay)
 	{
 		if (state.selected == null)
 		{
 			return null;
 		}
 		final HashSet<Tile> options = new HashSet<Tile>();
-		final List<Unit> allUnits = state.AllUnits();
+		List<Unit> allUnits = state.AllUnits();
 		allUnits.remove(state.selected);
+		if(forDisplay){
+			allUnits = new ArrayList<Unit>();
+		}
 		return MovementHelper.GetMovementOptionsCore(state.selected.x, state.selected.y, allUnits, state.enemies, state.selected, state.battlefield, state.selected.movement, options);
 	}
 	
-	public static HashSet<Tile> GetMovementOptions(final BattleState state, Unit unit){
+	public static HashSet<Tile> GetMovementOptions(final BattleState state, Unit unit, boolean forDisplay){
 		final HashSet<Tile> options = new HashSet<Tile>();
-		final List<Unit> allUnits = state.AllUnits();
+		List<Unit> allUnits = state.AllUnits();
 		allUnits.remove(unit);
 		for(Unit unmovedUnit: state.enemies){
 			if(!unit.hasMoved){
 				allUnits.remove(unmovedUnit);
 			}
+		}
+		if(forDisplay){
+			allUnits = new ArrayList<Unit>();
 		}
 		return MovementHelper.GetMovementOptionsCore(unit.x, unit.y, allUnits, state.roster, null, state.battlefield, unit.movement, options);
 	}

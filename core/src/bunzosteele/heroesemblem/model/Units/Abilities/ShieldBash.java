@@ -18,7 +18,6 @@ public class ShieldBash extends Ability
 		this.displayName = "Shield Bash";
 		this.isActive = true;
 		this.isTargeted = true;
-		this.abilityColor = new Color(1f, 0f, 0f, .5f);
 		this.isAction = true;
 	}
 	
@@ -63,7 +62,7 @@ public class ShieldBash extends Ability
 				executor.startAttack();
 				unit.hasAttacked = true;
 				unit.hasMoved = true;
-				unit.dealDamage(executor.attack);
+				unit.dealDamage(executor.attack, false);
 				executor.damageDealt += executor.attack;
 				unit.startDamage();
 				if(unit.checkDeath()){

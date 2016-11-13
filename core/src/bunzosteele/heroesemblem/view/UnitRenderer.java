@@ -283,9 +283,14 @@ public final class UnitRenderer {
 		}
 		if (isFlipped) sprite.flip(true, false);
 		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
-		if ((unit.isHealing || unit.isGettingExperience || unit.isTakingDamage || unit.isMissed) && game.battleState != null) {
+		if ((unit.isHealing || unit.isGettingExperience || unit.isTakingDamage) && game.battleState != null && unit.damageDisplay >= 0) {
 			game.font.getData().setScale(.165f);
-			game.font.draw(game.batcher, unit.damageDisplay, x + (scaledSize / 2), y + scaledSize);
+			game.font.draw(game.batcher, "" + unit.damageDisplay, x + (scaledSize / 2), y + scaledSize);
+			game.font.getData().setScale(.33f);
+		}
+		if ((unit.isMissed) && game.battleState != null) {
+			game.font.getData().setScale(.165f);
+			game.font.draw(game.batcher, "Missed!", x + (scaledSize / 2), y + scaledSize);
 			game.font.getData().setScale(.33f);
 		}
 		game.font.setColor(Color.WHITE);
