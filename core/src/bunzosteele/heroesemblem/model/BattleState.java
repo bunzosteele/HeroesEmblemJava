@@ -363,6 +363,15 @@ public class BattleState
 		}
 		return false;
 	}
+	
+	public boolean containsEnemy(Tile tile){
+		for (Unit unit : this.enemies){
+			if(unit.x == tile.x && unit.y == tile.y){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public boolean IsTapped(final Unit unit)
 	{

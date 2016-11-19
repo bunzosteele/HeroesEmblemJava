@@ -120,7 +120,7 @@ public class BattlePanel
 			int nameBackdropWidth = width - chainSize * 2 - portraitHeight;
 			this.game.batcher.draw(new Sprite(nameBackdropRegion), this.xOffset + (this.chainSize + portraitHeight), nameY, nameBackdropWidth, portraitHeight + shadowSize * 2);
 			game.font.draw(game.batcher, state.selected.name, this.xOffset + (this.chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
-						
+			game.font.draw(game.batcher, state.selected.type.toString(), this.xOffset + (this.chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
 			this.game.batcher.draw(this.game.sprites.healthBackdrop, this.xOffset + (width - this.backdropWidth) / 2, nameY - this.backdropHeight, this.backdropWidth, this.backdropHeight);
 			game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, this.xOffset + (width - this.backdropWidth) / 2 + this.backdropHeight, nameY - game.font.getData().lineHeight / 2, this.backdropWidth - (this.backdropWidth * 2 / 29) - this.backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawHealthBar(nameY);
@@ -128,17 +128,20 @@ public class BattlePanel
 			game.font.draw(game.batcher, "LVL." + state.selected.level, this.xOffset + (width - this.backdropWidth) / 2 + this.backdropHeight, nameY - this.backdropHeight - game.font.getData().lineHeight / 2, this.backdropWidth - (this.backdropWidth * 2 / 29) - this.backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawExperienceBar(nameY);
 			if (state.selected.team == 0 || state.perksPurchased >= 2) {
-				game.font.getData().setScale(.15f);
-				this.game.batcher.draw(this.game.sprites.attackBackdrop, this.xOffset + (width - this.backdropWidth) / 2, nameY - this.backdropHeight * 3, this.backdropWidth, this.backdropHeight);
-				game.font.draw(game.batcher, "" + state.selected.attack, this.xOffset + (width - this.backdropWidth) / 2 + this.backdropHeight, nameY - this.backdropHeight * 5 / 2 + game.font.getData().lineHeight / 4, this.backdropWidth - (this.backdropWidth * 2 / 29) - this.backdropHeight - (nameBackdropWidth / 10), 1, false);
+				game.font.getData().setScale(.165f);
+				int statTextXOffset = this.xOffset + (width - this.backdropWidth) / 2 + this.backdropWidth * 57 / 116;
+				int statTextWidth = this.backdropWidth * 32 / 116;
+				int statRelativeYOffset = this.backdropHeight * 2 / 41 + (this.backdropHeight * 25 / 41) / 2 ;
+				this.game.batcher.draw(this.game.sprites.attackBackdrop, this.xOffset + (width - this.backdropWidth) / 2, nameY - this.backdropHeight * 3, this.backdropWidth, this.backdropHeight);	
+				game.font.draw(game.batcher, "" + state.selected.attack, statTextXOffset, nameY - this.backdropHeight * 2 - statRelativeYOffset, statTextWidth, 1, false);
 				this.game.batcher.draw(this.game.sprites.accuracyBackdrop, this.xOffset + (width - this.backdropWidth) / 2, nameY - this.backdropHeight * 4, this.backdropWidth, this.backdropHeight);
-				game.font.draw(game.batcher, state.selected.accuracy + "%", this.xOffset + (width - this.backdropWidth) / 2 + this.backdropHeight, nameY - this.backdropHeight * 7 / 2 + game.font.getData().lineHeight / 4, this.backdropWidth - (this.backdropWidth * 2 / 29) - this.backdropHeight - (nameBackdropWidth / 10), 1, false);
+				game.font.draw(game.batcher, "" + state.selected.accuracy, statTextXOffset, nameY - this.backdropHeight * 3 - statRelativeYOffset, statTextWidth, 1, false);
 				this.game.batcher.draw(this.game.sprites.defenseBackdrop, this.xOffset + (width - this.backdropWidth) / 2, nameY - this.backdropHeight * 5, this.backdropWidth, this.backdropHeight);
 				UnitRenderer.SetDefenseFont(state.selected, null, state.battlefield, game.font);
-				game.font.draw(game.batcher, "" + (state.selected.defense + state.battlefield.get(state.selected.y).get(state.selected.x).defenseModifier), this.xOffset + (width - this.backdropWidth) / 2 + this.backdropHeight, nameY - this.backdropHeight * 9 / 2 + game.font.getData().lineHeight / 4, this.backdropWidth - (this.backdropWidth * 2 / 29) - this.backdropHeight - (nameBackdropWidth / 10), 1, false);
+				game.font.draw(game.batcher, "" + (state.selected.defense + state.battlefield.get(state.selected.y).get(state.selected.x).defenseModifier), statTextXOffset, nameY - this.backdropHeight * 4 - statRelativeYOffset, statTextWidth, 1, false);
 				this.game.batcher.draw(this.game.sprites.evasionBackdrop, this.xOffset + (width - this.backdropWidth) / 2, nameY - this.backdropHeight * 6, this.backdropWidth, this.backdropHeight);
-				UnitRenderer.SetEvasionFont(state.selected, null, state.battlefield, game.font);
-				game.font.draw(game.batcher, (state.selected.evasion + state.battlefield.get(state.selected.y).get(state.selected.x).evasionModifier) + "%", this.xOffset + (width - this.backdropWidth) / 2 + this.backdropHeight, nameY - this.backdropHeight * 11 / 2 + game.font.getData().lineHeight / 4, this.backdropWidth - (this.backdropWidth * 2 / 29) - this.backdropHeight - (nameBackdropWidth / 10), 1, false);
+				//UnitRenderer.SetEvasionFont(state.selected, null, state.battlefield, game.font);
+				game.font.draw(game.batcher, "" + (state.selected.evasion + state.battlefield.get(state.selected.y).get(state.selected.x).evasionModifier), statTextXOffset, nameY - this.backdropHeight * 5 - statRelativeYOffset, statTextWidth, 1, false);
 			}
 			
 			game.font.getData().setScale(.33f);
@@ -166,6 +169,12 @@ public class BattlePanel
 			}
 		}else{
 			this.game.batcher.draw(this.game.sprites.abilityDisabled, this.abilityX, this.abilityY, buttonSize, buttonSize);
+		}
+		if(state.selected != null && state.selected.ability != null){
+			game.font.getData().setScale(.08f);
+			game.font.setColor(new Color(0f, 0f, 0f, 1f));
+			game.font.draw(game.batcher, state.selected.ability.displayName, this.abilityX, this.abilityY + buttonSize / 2 + game.font.getLineHeight() / 2, buttonSize, 1, false);
+			game.font.getData().setScale(.33f);
 		}
 		
 		if(this.state.targeted != null){

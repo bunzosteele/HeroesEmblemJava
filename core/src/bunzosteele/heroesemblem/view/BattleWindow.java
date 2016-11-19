@@ -90,7 +90,7 @@ public class BattleWindow
 				if(tile.foreground != null){
 					final AtlasRegion foregroundRegion = this.game.textureAtlas.findRegion(tile.foreground);
 					final Sprite foregroundSprite = new Sprite(foregroundRegion);
-					if(highlights.contains(tile)){
+					if(highlights.contains(tile) || state.containsUnit(tile)){
 						this.game.batcher.setColor(new Color(1f, 1f, 1f, .5f));
 					}
 					this.game.batcher.draw(foregroundSprite, this.xOffset + (this.tileWidth * tileOffset), Gdx.graphics.getHeight() - (this.tileHeight * rowOffset), this.tileWidth, this.tileHeight);
@@ -147,19 +147,10 @@ public class BattleWindow
 	{
 		HashSet<Tile> highlightedTiles = new HashSet<Tile>();
 		if(this.state.selected != null && this.state.selected.team != 0 && this.state.currentPlayer == 0){
-			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, this.state.selected, true);		
+			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, this.state.selected);		
 			for (final Tile tile : options)
 			{
 				this.game.batcher.draw(game.sprites.blueTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);
-				highlightedTiles.add(tile);
-			}
-		}
-		if (this.state.CanAttack(this.state.selected) && ! this.state.isUsingAbility)
-		{
-			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected, true);
-			for (final Tile tile : options)
-			{
-				this.game.batcher.draw(game.sprites.redTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);
 				highlightedTiles.add(tile);
 			}
 		}
@@ -174,7 +165,7 @@ public class BattleWindow
 		}
 		if (this.state.isMoving && ! this.state.isUsingAbility)
 		{
-			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, true);
+			final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state);
 			for (final Tile tile : options)
 			{
 				if(highlightedTiles.contains(tile)){
@@ -183,6 +174,26 @@ public class BattleWindow
 				this.game.batcher.draw(game.sprites.blueTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);
 				highlightedTiles.add(tile);
 				this.game.batcher.setColor(new Color(1f, 1f, 1f, 1f));
+			}
+		}
+		if (this.state.CanAttack(this.state.selected) && ! this.state.isUsingAbility && this.state.isMoving)
+		{
+			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected, true);
+			for (final Tile tile : options)
+			{
+				if(!highlightedTiles.contains(tile) && state.containsEnemy(tile)){
+					this.game.batcher.draw(game.sprites.redTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);	
+					highlightedTiles.add(tile);
+				}
+			}
+		}
+		if (this.state.selected != null && !this.state.isMoving && !this.state.isUsingAbility && !this.state.selected.hasAttacked && this.state.selected.team ==0)
+		{
+			final HashSet<Tile> options = CombatHelper.GetAttackOptions(this.state, this.state.selected, true);
+			for (final Tile tile : options)
+			{
+				this.game.batcher.draw(game.sprites.redTile, (tile.x * this.tileWidth) + this.xOffset, Gdx.graphics.getHeight() - (this.tileHeight * (tile.y + 1)), this.tileWidth, this.tileHeight);	
+				highlightedTiles.add(tile);
 			}
 		}
 		if (this.state.isInTactics){
@@ -212,6 +223,19 @@ public class BattleWindow
 					this.game.batcher.draw(redSelect, this.xOffset + (this.tileWidth * unit.x), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth, this.tileHeight);					
 				}
 			}
+			
+			this.game.batcher.draw(game.sprites.healthBarBackground, this.xOffset + (this.tileWidth * unit.x) + (this.tileWidth * 14 / 50), Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)), this.tileWidth * 22 / 50, this.tileHeight * 4 / 50);	
+			int healthPercent = (int) ((unit.currentHealth / (double) unit.maximumHealth) * 10);
+			healthPercent = healthPercent == 0 ? 1 : healthPercent;
+			int healthOffset = this.xOffset + (this.tileWidth * unit.x) + this.tileWidth * 15 / 50;
+			for(int i = 1; i <= healthPercent; i++){
+				AtlasRegion healthBarRegion = this.game.textureAtlas.findRegion("HealthBar" + i);
+				Sprite healthBarSprite = new Sprite(healthBarRegion);
+				this.game.batcher.draw(healthBarSprite, healthOffset, Gdx.graphics.getHeight() - (this.tileHeight * (unit.y + 1)) + (this.tileHeight / 50), this.tileWidth * 2 / 50, this.tileHeight * 2 / 50);	
+				healthOffset += this.tileWidth * 2 / 50;
+			}
+		
+			
 		}
 		for(final Unit unit : this.state.dyingUnits){
 			UnitRenderer.DrawUnit(this.game, unit, unit.x * this.tileWidth, Gdx.graphics.getHeight() - ((unit.y + 1) * this.tileHeight), this.tileWidth, unit.isAttacking, this.state.IsTapped(unit), false);
@@ -447,7 +471,7 @@ public class BattleWindow
 	}
 	
 	private boolean ProcessMoveTouch(float x, float y){
-		final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state, false);
+		final HashSet<Tile> options = MovementHelper.GetMovementOptions(this.state);
 		for (final Tile tile : options)
 		{
 			if (((tile.x * this.tileWidth) < x) && (x <= ((tile.x * this.tileWidth) + this.tileWidth)))

@@ -14,7 +14,7 @@ public final class MovementHelper
 		return battlefield.get(y).get(x).movementCost;
 	}
 
-	public static HashSet<Tile> GetMovementOptions(final BattleState state, boolean forDisplay)
+	public static HashSet<Tile> GetMovementOptions(final BattleState state)
 	{
 		if (state.selected == null)
 		{
@@ -23,25 +23,12 @@ public final class MovementHelper
 		final HashSet<Tile> options = new HashSet<Tile>();
 		List<Unit> allUnits = state.AllUnits();
 		allUnits.remove(state.selected);
-		if(forDisplay){
-			allUnits = new ArrayList<Unit>();
-		}
 		return MovementHelper.GetMovementOptionsCore(state.selected.x, state.selected.y, allUnits, state.enemies, state.selected, state.battlefield, state.selected.movement, options);
 	}
 	
-	public static HashSet<Tile> GetMovementOptions(final BattleState state, Unit unit, boolean forDisplay){
+	public static HashSet<Tile> GetMovementOptions(final BattleState state, Unit unit){
 		final HashSet<Tile> options = new HashSet<Tile>();
-		List<Unit> allUnits = state.AllUnits();
-		allUnits.remove(unit);
-		for(Unit unmovedUnit: state.enemies){
-			if(!unit.hasMoved){
-				allUnits.remove(unmovedUnit);
-			}
-		}
-		if(forDisplay){
-			allUnits = new ArrayList<Unit>();
-		}
-		return MovementHelper.GetMovementOptionsCore(unit.x, unit.y, allUnits, state.roster, null, state.battlefield, unit.movement, options);
+		return MovementHelper.GetMovementOptionsCore(unit.x, unit.y, state.AllUnits(), state.roster, null, state.battlefield, unit.movement, options);
 	}
 
 	public static HashSet<Tile> GetMovementOptionsCore(final int x, final int y, final List<Unit> allUnits, final List<Unit> enemies, final Unit movingUnit, final List<List<Tile>> battlefield, final int movement, final HashSet<Tile> options)

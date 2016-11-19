@@ -44,6 +44,8 @@ public abstract class Unit implements Ai
 	public boolean isAttacking = false;
 	public boolean isTakingDamage = false;
 	public boolean isGettingExperience = false;
+	public boolean hasLeveled = false;
+	public boolean isLevelingUp = false;
 	public boolean isHealing = false;
 	public boolean isMissed = false;
 	public boolean isDying = false;
@@ -57,6 +59,7 @@ public abstract class Unit implements Ai
 	public int displayEmphasisFrame = 0;
 	public int maxDisplayEmphasisFrame = 0;
 	public int missedFrame = 1;
+	public int levelingFrame = 1;
 	public int deathFrame = 10;
 	public int distanceMoved = 0;
 	public boolean hasMoved;
@@ -267,12 +270,16 @@ public abstract class Unit implements Ai
 					{
 						Unit.this.experienceFrame = 1;
 						Unit.this.isGettingExperience = false;
+						if(Unit.this.hasLeveled)
+							Unit.this.startLevelUp();
 					}
 				}
 			}, 0, displayDuration, 1);
 		}else{
 				this.damageDisplay += amount;
 		}
+		if(leveled)
+			this.hasLeveled = true;
 		return leveled;
 	}
 
@@ -328,6 +335,28 @@ public abstract class Unit implements Ai
 				{
 					Unit.this.damageFrame = 1;
 					Unit.this.isTakingDamage = false;
+				}
+			}
+		}, 0, displayDuration, 1);
+	}
+	
+	public void startLevelUp()
+	{
+		float displayDuration = 1.1f;
+		if(team == 1)
+			displayDuration = this.animationSpeed;
+		this.hasLeveled = false;
+		Timer.schedule(new Task()
+		{
+			@Override
+			public void run()
+			{
+				Unit.this.isLevelingUp = true;
+				++Unit.this.levelingFrame;
+				if (Unit.this.levelingFrame > 2)
+				{
+					Unit.this.levelingFrame = 1;
+					Unit.this.isLevelingUp = false;
 				}
 			}
 		}, 0, displayDuration, 1);

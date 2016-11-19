@@ -1,7 +1,6 @@
 package bunzosteele.heroesemblem.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -117,7 +116,7 @@ public final class AiHelper
 	public static Map<Tile, Integer> GetMovementOptions(BattleState state, Unit unit){
 		if(unit.movementOptions == null){
 			Map<Tile, Integer> optionsWithScore = new HashMap<Tile, Integer>();
-			HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit, false);
+			HashSet<Tile> options = MovementHelper.GetMovementOptions(state, unit);
 			for(Tile tile : options){
 				int score = unit.GetTileScore(tile, state);
 				optionsWithScore.put(tile, score);

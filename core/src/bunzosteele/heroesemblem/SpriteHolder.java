@@ -39,6 +39,9 @@ public class SpriteHolder {
 	public final Sprite crosshair;
 	public final Sprite projectionBorder;
 	public final Sprite projectionBackground;
+	public final Sprite critBackground;
+	public final Sprite damageBackground;
+	public final Sprite healthBarBackground;
 		
 	public SpriteHolder(HeroesEmblem game){
 		final AtlasRegion settingsRegion = game.textureAtlas.findRegion("settingsIcon");
@@ -109,5 +112,11 @@ public class SpriteHolder {
 		this.projectionBorder = new Sprite(projectionBorderRegion);
 		final AtlasRegion projectionBackgroundRegion = game.textureAtlas.findRegion("ProjectionBackground");
 		this.projectionBackground = new Sprite(projectionBackgroundRegion);
+		final AtlasRegion critBackgroundRegion = game.textureAtlas.findRegion("CritBackground");
+		this.critBackground = new Sprite(critBackgroundRegion);
+		final AtlasRegion damageBackgroundRegion = game.textureAtlas.findRegion("DamageBackground");
+		this.damageBackground = new Sprite(damageBackgroundRegion);
+		final AtlasRegion healthBarBackgroundRegion = game.textureAtlas.findRegion("HealthBarBackground");
+		this.healthBarBackground = new Sprite(healthBarBackgroundRegion);
 	}
 }

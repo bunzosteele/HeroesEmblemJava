@@ -233,64 +233,70 @@ public final class UnitRenderer {
 		game.font.getData().setScale(.33f);
 	}
 
-	public static void DrawUnit(final HeroesEmblem game, final Unit unit,
-			final int x, final int y, final int scaledSize,
-			boolean isDisplayEmphasis, final boolean tapped,
-			final boolean isFlipped) {
+	public static void DrawUnit(final HeroesEmblem game, final Unit unit, final int x, final int y, final int scaledSize, boolean isDisplayEmphasis, final boolean tapped, final boolean isFlipped) {
 		int animationFrame = 0;
 		AtlasRegion region;
 		if (unit.isAttacking) {
 			animationFrame = unit.attackFrame;
-			region = UnitSheets.get(unit.type).findRegion(
-					"Attack-" + unit.team + "-" + animationFrame);
-		} else {
+			region = UnitSheets.get(unit.type).findRegion("Attack-" + unit.team + "-" + animationFrame);
+		} 
+		else 
+		{
 			if (isDisplayEmphasis) {
 				animationFrame = unit.displayEmphasisFrame;
 				if (animationFrame > unit.maxIdleFrame) {
 					animationFrame -= (unit.maxIdleFrame + 1);
-					region = UnitSheets.get(unit.type).findRegion(
-							"Attack-" + unit.team + "-" + animationFrame);
+					region = UnitSheets.get(unit.type).findRegion("Attack-" + unit.team + "-" + animationFrame);
 				} else {
-					region = UnitSheets.get(unit.type).findRegion(
-							"Idle-" + unit.team + "-" + animationFrame);
+					region = UnitSheets.get(unit.type).findRegion("Idle-" + unit.team + "-" + animationFrame);
 				}
 			} else {
 				if (!tapped)
 					animationFrame = unit.idleFrame;
-				region = UnitSheets.get(unit.type).findRegion(
-						"Idle-" + unit.team + "-" + animationFrame);
+				
+				region = UnitSheets.get(unit.type).findRegion("Idle-" + unit.team + "-" + animationFrame);
 			}
 		}
 		final Sprite sprite = new Sprite(region);
-		if (unit.isTakingDamage && game.battleState != null) {
-			game.font.setColor(new Color(1f, 0, 0, 1f));
-			if (!unit.isDying) {
-				game.batcher.setColor(new Color(1f, 0, 0, .5f));
-			} else {
-				game.batcher.setColor(new Color(1f, 0, 0, .1f * unit.deathFrame));
-			}
-		}
 		if (unit.isGettingExperience && game.battleState != null) {
 			game.font.setColor(new Color(1f, .8f, 0, 1f));
-			game.batcher.setColor(new Color(1f, .8f, 0, .5f));
 		}
 		if (unit.isHealing && game.battleState != null) {
 			game.font.setColor(new Color(0f, 1f, 0, 1f));
-			game.batcher.setColor(new Color(0f, 1f, 0, .5f));
 		}
 		if (tapped && !(unit.isHealing || unit.isGettingExperience || unit.isTakingDamage || unit.isAttacking) && game.battleState != null) {
 			game.batcher.setColor(new Color(1f, 1f, 1f, .7f));
 		}
 		if (isFlipped) sprite.flip(true, false);
 		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
-		if ((unit.isHealing || unit.isGettingExperience || unit.isTakingDamage) && game.battleState != null && unit.damageDisplay >= 0) {
+		if ((unit.isHealing || unit.isGettingExperience) && game.battleState != null && unit.damageDisplay >= 0) {
 			game.font.getData().setScale(.165f);
-			game.font.draw(game.batcher, "" + unit.damageDisplay, x + (scaledSize / 2), y + scaledSize);
+			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 20 + game.font.getLineHeight() * 3 / 2, (int) (scaledSize * .8), 1, false);
 			game.font.getData().setScale(.33f);
 		}
-		if ((unit.isMissed) && game.battleState != null) {
+		if (unit.isTakingDamage && game.battleState != null && unit.damageDisplay > 0) {
 			game.font.getData().setScale(.165f);
-			game.font.draw(game.batcher, "Missed!", x + (scaledSize / 2), y + scaledSize);
+			Sprite background = unit.damageDisplay > 9 ? game.sprites.critBackground : game.sprites.damageBackground;
+			game.batcher.draw(background, x + scaledSize / 10, y + scaledSize / 10, (int) (scaledSize * .8), (int) (scaledSize * .8));
+			game.font.setColor(new Color(0, 0, 0, 1f));
+			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 20 + game.font.getLineHeight() * 3 / 2, (int) (scaledSize * .8), 1, false);
+			game.font.getData().setScale(.33f);
+		}else if (unit.isTakingDamage && game.battleState != null) {
+			game.font.getData().setScale(.125f);
+			game.font.setColor(new Color(1f, 1f, 1f, 1f));
+			game.font.draw(game.batcher, "BLOCK!", x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 2, (int) (scaledSize * .8), 1, false);
+			game.font.getData().setScale(.33f);
+		}
+		if (unit.isMissed && game.battleState != null) {
+			game.font.getData().setScale(.125f);
+			game.font.setColor(new Color(1f, 1f, 1f, 1f));
+			game.font.draw(game.batcher, "MISS!", x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 2, (int) (scaledSize * .8), 1, false);
+			game.font.getData().setScale(.33f);
+		}
+		if (unit.isLevelingUp && game.battleState != null) {
+			game.font.getData().setScale(.1125f);
+			game.font.setColor(new Color(1f, 1f, 1f, 1f));
+			game.font.draw(game.batcher, "LVL-UP!", x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 2, (int) (scaledSize * .8), 1, false);
 			game.font.getData().setScale(.33f);
 		}
 		game.font.setColor(Color.WHITE);
@@ -335,8 +341,7 @@ public final class UnitRenderer {
 		}
 	}
 
-	public static void SetDefenseFont(final Unit unit, final Element unitStats,
-			List<List<Tile>> battlefield, final BitmapFont font) {
+	public static void SetDefenseFont(final Unit unit, final Element unitStats, List<List<Tile>> battlefield, final BitmapFont font) {
 		int baseStat;
 		int defense;
 		if (unitStats != null) {
@@ -345,19 +350,23 @@ public final class UnitRenderer {
 		} else if (battlefield != null && (unit.y >= 0 && unit.x >= 0)) {
 			baseStat = 0;
 			defense = battlefield.get(unit.y).get(unit.x).defenseModifier;
-		} else {
-			font.setColor(new Color(0, 0, 0, 1));
-			return;
-		}
-		if (defense == baseStat) {
-			font.setColor(new Color(0, 0, 0, 1));
+		}else{
+			baseStat = 0;
+			defense = 0;
 		}
 		if (defense > baseStat) {
-			font.setColor(new Color(155, 115, 0, 1));
+			font.setColor(new Color(0f, 0f, 1f, 1f));
+			return;
 		}
 		if (defense < baseStat) {
 			font.setColor(new Color(255, 0, 0, 1));
-		}
+			return;
+		}		
+		if(battlefield == null){
+			font.setColor(new Color(255, 255, 255, 1));
+		}else{
+			font.setColor(new Color(0, 0, 0, 1));
+		}	
 	}
 
 	public static void SetEvasionFont(final Unit unit, final Element unitStats, List<List<Tile>> battlefield, final BitmapFont font) {
@@ -370,18 +379,22 @@ public final class UnitRenderer {
 			baseStat = 0;
 			evasion = battlefield.get(unit.y).get(unit.x).evasionModifier;
 		} else {
-			font.setColor(new Color(0, 0, 0, 1));
-			return;
-		}
-		if (evasion == baseStat) {
-			font.setColor(new Color(0, 0, 0, 1));
+			baseStat = 0;
+			evasion = 0;
 		}
 		if (evasion > baseStat) {
-			font.setColor(new Color(55, 5, 0, 1));
+			font.setColor(new Color(204, 153, 0, 1));
+			return;
 		}
 		if (evasion < baseStat) {
 			font.setColor(new Color(255, 0, 0, 1));
+			return;
 		}
+		if(battlefield == null){
+			font.setColor(new Color(255, 255, 255, 1));
+		}else{
+			font.setColor(new Color(0, 0, 0, 1));
+		}		
 	}
 
 	public static void SetHealthFont(final Unit unit, final Element unitStats,
