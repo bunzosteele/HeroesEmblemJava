@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
-import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Move;
+import bunzosteele.heroesemblem.model.ShopState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
@@ -15,21 +15,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.badlogic.gdx.utils.XmlReader.Element;
 
-public class BattlePanel
+public class ShopPanel
 {
 	HeroesEmblem game;
-	BattleState state;
+	ShopState state;
 	int xOffset;
 	int yOffset;
 	int width;
 	int height;
 	int buttonSize;
-	int endTurnX;
-	int endTurnY;
-	int confirmX;
-	int confirmY;
+	int combatX;
+	int combatY;
+	int purchaseX;
+	int purchaseY;
 	int abilityX;
 	int abilityY;
 	int infoX;
@@ -41,7 +43,7 @@ public class BattlePanel
 	int dividerWidth;
 	int dividerHeight;
 
-	public BattlePanel(final HeroesEmblem game, final BattleState state, final int width, final int height, final int xOffset, final int yOffset)
+	public ShopPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
 		this.game = game;
 		this.state = state;
@@ -58,10 +60,10 @@ public class BattlePanel
 		dividerHeight = (int) (dividerWidth * .0547);
 		int buttonRegionHeight =  height - chainSize - backdropHeight * 7 - shadowSize * 2 - chainSize;
 		int buttonVerticalSpacing = (buttonRegionHeight - 2 * buttonSize - dividerHeight) / 4;
-		endTurnX = xOffset + width - buttonSize - (chainSize - shadowSize) * 2;
-		endTurnY = buttonVerticalSpacing + chainSize;
-		confirmX = xOffset + (chainSize - shadowSize) * 2;
-		confirmY = buttonVerticalSpacing + chainSize;
+		combatX = xOffset + width - buttonSize - (chainSize - shadowSize) * 2;
+		combatY = buttonVerticalSpacing + chainSize;
+		purchaseX = xOffset + (chainSize - shadowSize) * 2;
+		purchaseY = buttonVerticalSpacing + chainSize;
 		abilityX = xOffset + (chainSize - shadowSize) * 2;
 		abilityY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
 		infoX = xOffset + width - buttonSize - (chainSize - shadowSize) * 2;
@@ -122,72 +124,87 @@ public class BattlePanel
 			game.font.draw(game.batcher, state.selected.name, xOffset + (chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
 			game.font.draw(game.batcher, state.selected.type.toString(), xOffset + (chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
 			game.batcher.draw(game.sprites.HealthBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight, backdropWidth, backdropHeight);
-			game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawHealthBar(nameY);
 			game.batcher.draw(game.sprites.ExperienceBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 2, backdropWidth, backdropHeight);
-			game.font.draw(game.batcher, "LVL." + state.selected.level, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - backdropHeight - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawExperienceBar(nameY);
-			if (state.selected.team == 0 || state.perksPurchased >= 2) {
+			final XmlReader reader = new XmlReader();
+			final Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
+			final Element unitStats = xml.getChildByName(state.selected.type.toString());		
+			game.batcher.draw(game.sprites.AttackBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 3, backdropWidth, backdropHeight);
+			game.batcher.draw(game.sprites.AccuracyBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 4, backdropWidth, backdropHeight);
+			game.batcher.draw(game.sprites.DefenseBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 5, backdropWidth, backdropHeight);
+			game.batcher.draw(game.sprites.EvasionBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 6, backdropWidth, backdropHeight);
+			int statTextXOffset = xOffset + (width - backdropWidth) / 2 + backdropWidth * 57 / 116;
+			int statTextWidth = backdropWidth * 32 / 116;
+			int statRelativeYOffset = backdropHeight * 2 / 41 + (backdropHeight * 25 / 41) / 2 ;
+			if (!this.state.roster.contains(state.selected)) {
+				UnitRenderer.SetHealthFont(state.selected, unitStats, game.font);
+				game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
+				game.font.setColor(Color.BLACK);
+				game.font.draw(game.batcher, "LVL." + state.selected.level, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - backdropHeight - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 				game.font.getData().setScale(.35f);
-				int statTextXOffset = xOffset + (width - backdropWidth) / 2 + backdropWidth * 57 / 116;
-				int statTextWidth = backdropWidth * 32 / 116;
-				int statRelativeYOffset = backdropHeight * 2 / 41 + (backdropHeight * 25 / 41) / 2 ;
-				game.batcher.draw(game.sprites.AttackBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 3, backdropWidth, backdropHeight);	
+				UnitRenderer.SetAttackFont(state.selected, unitStats, game.font);
 				game.font.draw(game.batcher, "" + state.selected.attack, statTextXOffset, nameY - backdropHeight * 2 - statRelativeYOffset, statTextWidth, 1, false);
-				game.batcher.draw(game.sprites.AccuracyBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 4, backdropWidth, backdropHeight);
+				UnitRenderer.SetAccuracyFont(state.selected, unitStats, game.font);
 				game.font.draw(game.batcher, "" + state.selected.accuracy, statTextXOffset, nameY - backdropHeight * 3 - statRelativeYOffset, statTextWidth, 1, false);
-				game.batcher.draw(game.sprites.DefenseBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 5, backdropWidth, backdropHeight);
-				UnitRenderer.SetDefenseFont(state.selected, null, state.battlefield, game.font);
-				game.font.draw(game.batcher, "" + (state.selected.defense + state.battlefield.get(state.selected.y).get(state.selected.x).defenseModifier), statTextXOffset, nameY - backdropHeight * 4 - statRelativeYOffset, statTextWidth, 1, false);
-				game.batcher.draw(game.sprites.EvasionBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 6, backdropWidth, backdropHeight);
-				UnitRenderer.SetEvasionFont(state.selected, null, state.battlefield, game.font);
-				game.font.draw(game.batcher, "" + (state.selected.evasion + state.battlefield.get(state.selected.y).get(state.selected.x).evasionModifier), statTextXOffset, nameY - backdropHeight * 5 - statRelativeYOffset, statTextWidth, 1, false);
-			}
-			
-			game.font.getData().setScale(.33f);
+				UnitRenderer.SetDefenseFont(state.selected, unitStats, null, game.font);
+				game.font.draw(game.batcher, "" + state.selected.defense, statTextXOffset, nameY - backdropHeight * 4 - statRelativeYOffset, statTextWidth, 1, false);
+				UnitRenderer.SetEvasionFont(state.selected, unitStats, null, game.font);
+				game.font.draw(game.batcher, "" + state.selected.evasion, statTextXOffset, nameY - backdropHeight * 5 - statRelativeYOffset, statTextWidth, 1, false);
+			}else{
+				game.font.setColor(Color.BLACK);
+				game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
+				game.font.draw(game.batcher, "LVL." + state.selected.level, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - backdropHeight - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
+				game.font.getData().setScale(.35f);
+				game.font.draw(game.batcher, "" + state.selected.attack, statTextXOffset, nameY - backdropHeight * 2 - statRelativeYOffset, statTextWidth, 1, false);
+				game.font.draw(game.batcher, "" + state.selected.accuracy, statTextXOffset, nameY - backdropHeight * 3 - statRelativeYOffset, statTextWidth, 1, false);
+				game.font.draw(game.batcher, "" + state.selected.defense, statTextXOffset, nameY - backdropHeight * 4 - statRelativeYOffset, statTextWidth, 1, false);
+				game.font.draw(game.batcher, "" + state.selected.evasion, statTextXOffset, nameY - backdropHeight * 5 - statRelativeYOffset, statTextWidth, 1, false);
+			}	
 		}
 	}
 	
-	public void drawButtons(){
-		
-		if(state.currentPlayer == 0){
-			if (!hasActions())
+	public void drawButtons(){		
+		if(canStartGame()){
+			if (!state.CanBuy())
 			{
-				game.batcher.draw(game.sprites.EndTurnEmphasized, endTurnX, endTurnY, buttonSize, buttonSize);
+				game.batcher.draw(game.sprites.CombatEmphasis, combatX, combatY, buttonSize, buttonSize);
 			}else{
-				game.batcher.draw(game.sprites.EndTurnEnabled, endTurnX, endTurnY, buttonSize, buttonSize);
+				game.batcher.draw(game.sprites.CombatEnabled, combatX, combatY, buttonSize, buttonSize);
 			}
 		}else{
-			game.batcher.draw(game.sprites.EndTurnDisabled, endTurnX, endTurnY, buttonSize, buttonSize);
+			game.batcher.draw(game.sprites.CombatDisabled, combatX, combatY, buttonSize, buttonSize);
 		}
+	
+		game.batcher.draw(game.sprites.AbilityDisabled, abilityX, abilityY, buttonSize, buttonSize);
 		
-		if(state.selected != null && state.selected.ability != null && state.CanUseAbility(state.selected)){
-			if(state.isUsingAbility){
-				game.batcher.draw(game.sprites.AbilityEmphasis, abilityX, abilityY, buttonSize, buttonSize);
-			}else{
-				game.batcher.draw(game.sprites.AbilityEnabled, abilityX, abilityY, buttonSize, buttonSize);
-			}
-		}else{
-			game.batcher.draw(game.sprites.AbilityDisabled, abilityX, abilityY, buttonSize, buttonSize);
-		}
+		
 		if(state.selected != null && state.selected.ability != null){
-			game.font.getData().setScale(.20f);
+			game.font.getData().setScale(.2f);
 			game.font.setColor(new Color(0f, 0f, 0f, 1f));
 			game.font.draw(game.batcher, state.selected.ability.displayName, abilityX, abilityY + buttonSize / 2 + game.font.getLineHeight() / 2, buttonSize, 1, false);
 		}
 		
-		if(state.targeted != null){
-			game.batcher.draw(game.sprites.ConfirmEnabled, confirmX, confirmY, buttonSize, buttonSize);	
-		}else if(state.CanUndo()){
-			game.batcher.draw(game.sprites.UndoEnabled, confirmX, confirmY, buttonSize, buttonSize);	
+		if (canPurchaseSelected())
+		{
+			game.batcher.draw(game.sprites.HireEnabled, purchaseX, purchaseY, buttonSize, buttonSize);	
 		}else{
-			game.batcher.draw(game.sprites.ConfirmDisabled, confirmX, confirmY, buttonSize, buttonSize);	
+			game.batcher.draw(game.sprites.HireDisabled, purchaseX, purchaseY, buttonSize, buttonSize);
 		}
-		
 		
 		game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);
 		
-		game.batcher.draw(game.sprites.ControlsDivider, chainSize + xOffset, endTurnY + buttonSize - dividerHeight / 2 + (abilityY - buttonSize - endTurnY) / 2, dividerWidth, dividerHeight);
+		game.batcher.draw(game.sprites.ControlsDivider, chainSize + xOffset, combatY + buttonSize - dividerHeight / 2 + (abilityY - buttonSize - combatY) / 2, dividerWidth, dividerHeight);
+	}
+	
+	private boolean canStartGame()
+	{
+		return state.roster.size() > 0;
+	}
+	
+	private boolean canPurchaseSelected()
+	{
+		return (state.selected != null) && (state.gold >= state.selected.cost) && (state.roster.size() < 8) && !state.roster.contains(state.selected);
 	}
 	
 	private void DrawHealthBar(int nameY){
@@ -229,19 +246,6 @@ public class BattlePanel
 		}	
 	}
 	
-	private boolean hasActions()
-	{
-		for (final Unit unit : state.roster)
-		{
-			if (!state.IsTapped(unit))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-
 	public boolean isTouched(final float x, final float y)
 	{
 		if ((x >= xOffset) && (x < (xOffset + width)))
@@ -254,63 +258,50 @@ public class BattlePanel
 		return false;
 	}
 
-	public void processTouch(final float x, final float y)
+	public void processTouch(final float x, final float y) throws IOException
 	{
 		int clickedX = Gdx.input.getX();
 		int clickedY = Gdx.graphics.getHeight() - Gdx.input.getY();
-		if((clickedX > endTurnX && clickedX < endTurnX + buttonSize) && (clickedY > endTurnY && clickedY < endTurnY + buttonSize)){
-			processEndTouch();
+		if((clickedX > combatX && clickedX < combatX + buttonSize) && (clickedY > combatY && clickedY < combatY + buttonSize)){
+			processCombatTouch();
 		}else if((clickedX > abilityX && clickedX < abilityX + buttonSize) && (clickedY > abilityY && clickedY < abilityY + buttonSize)){
 			processAbilityTouch();
-		}else if((clickedX > confirmX && clickedX < confirmX + buttonSize) && (clickedY > confirmY && clickedY < confirmY + buttonSize)){
-			processConfirmTouch();
+		}else if((clickedX > purchaseX && clickedX < purchaseX + buttonSize) && (clickedY > purchaseY && clickedY < purchaseY + buttonSize)){
+			processPurchaseTouch();
+		}else if((clickedX > infoX && clickedX < infoX + buttonSize) && (clickedY > infoY && clickedY < infoY + buttonSize)){
+			processInfoTouch();
 		}
 		else{
 			state.selected = null;
-			state.targeted = null;
-			state.isMoving = false;
-			state.isUsingAbility = false;
 		}
 	}
 	
-	private void processEndTouch()
-	{
-		state.EndTurn();
-	}
-	
-	private void processAbilityTouch()
-	{
-		state.isMoving = false;
-		state.targeted = null;
-		if (state.CanUseAbility(state.selected))
+	private void processCombatTouch() throws IOException{
+		if (canStartGame())
 		{
-			state.isUsingAbility = !state.isUsingAbility;
-			if (!state.selected.ability.areTargetsPersistent)
-			{
-				state.selected.ability.targets = new ArrayList<Integer>();
+			game.shopState = null;
+			game.setScreen(new BattleScreen(game, state));
+			return;
+		}		
+	}
+	
+	private void processAbilityTouch(){
+		
+	}
+	
+	private void processPurchaseTouch() throws IOException{
+		if (canPurchaseSelected())
+		{
+			state.BuyUnit();		
+			if(state.CanBuy()){
+				ShopControls.buySound.play(game.settings.getFloat("sfxVolume", .5f));
+			}else{
+				ShopControls.finalBuySound.play(game.settings.getFloat("sfxVolume", .5f));
 			}
-		}
-			
-		if(!state.isUsingAbility && state.CanMove()){
-			state.isMoving = true;
 		}
 	}
 	
-	public void processConfirmTouch()
-	{
-		if(state.targeted != null){
-			state.ConfirmAttack();
-		}else if(state.CanUndo()){
-			Move previous = state.undos.pop();
-			for(Unit unit : state.AllUnits()){
-				if(unit.id == previous.unitId)
-					state.selected = unit;
-			}
-			state.selected.x = previous.oldX;
-			state.selected.y = previous.oldY;
-			state.selected.hasMoved = false;
-			state.isMoving = true;		
-		}
-		state.isUsingAbility = false;
+	private void processInfoTouch(){
+		
 	}
 }

@@ -24,34 +24,32 @@ public class ShopScreen extends ScreenAdapter
 	HeroesEmblem game;
 	ShopState state;
 	StockWindow stockWindow;
-	ShopUnitStatusPanel unitStatus;
-	ShopControls shopControls;
-	ShopUnitInfoPanel unitInfo;
 	ShopkeeperPanel shopkeeperPanel;
+	ShopPanel shopPanel;
 
 	public ShopScreen(final HeroesEmblem game) throws IOException
 	{
 		this.state = new ShopState(game);
-		game.shopState = this.state;
+		game.shopState = state;
 		game.battleState = null;
 		game.adsController.showInterstitialAd();
-		this.InitializeShopScreen(game);
+		InitializeShopScreen(game);
 	}
 
-	public ShopScreen(final HeroesEmblem game, final BattleState state) throws IOException
+	public ShopScreen(final HeroesEmblem game, final BattleState battleState) throws IOException
 	{
-		this.state = new ShopState(state);
+		this.state = new ShopState(battleState);
 		game.shopState = this.state;
 		game.battleState = null;
-		this.InitializeShopScreen(game);
+		InitializeShopScreen(game);
 	}
 	
 	public ShopScreen(final HeroesEmblem game, final ShopState shopState) throws IOException
 	{
 		this.state = shopState;
-		game.shopState = this.state;
+		game.shopState = state;
 		game.battleState = null;
-		this.InitializeShopScreen(game);
+		InitializeShopScreen(game);
 	}
 
 	public void draw() throws IOException
@@ -59,36 +57,29 @@ public class ShopScreen extends ScreenAdapter
 		final GL20 gl = Gdx.gl;
 		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.game.batcher.begin();
-		if(this.state.isInspecting){
-			this.unitInfo.draw();
-		}else if(this.state.isShopkeeperPanelDisplayed){
-			this.shopkeeperPanel.draw();
-		}else{
-			this.stockWindow.draw();
-		}
-		this.unitStatus.draw();
-		this.shopControls.draw();
-		this.game.batcher.end();
-		this.game.shapeRenderer.begin(ShapeType.Filled);
-		this.shopControls.drawHealthBars();
-		this.game.shapeRenderer.end();
+		
+		game.shapeRenderer.begin(ShapeType.Filled);
+		shopPanel.drawBackground();
+		game.shapeRenderer.end();
+		
+		game.batcher.begin();
+		shopkeeperPanel.draw();
+		stockWindow.draw();
+		shopPanel.draw();
+		game.batcher.end();
 	}
 
 	private void InitializeShopScreen(final HeroesEmblem game)
 	{
 		this.game = game;
-		this.game.isQuitting = false;
-		int sideWidth = Gdx.graphics.getWidth() / 6;
-		int controlHeight = Gdx.graphics.getHeight() / 6;
-		int windowWidth = Gdx.graphics.getWidth() - sideWidth;
-		int windowHeight = Gdx.graphics.getHeight() - controlHeight;
-		this.stockWindow = new StockWindow(game, this.state, windowWidth, windowHeight, 0, controlHeight);
-		this.unitStatus = new ShopUnitStatusPanel(game, this.state, sideWidth, windowHeight, windowWidth, controlHeight);
-		this.shopControls = new ShopControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
-		this.unitInfo = new ShopUnitInfoPanel(game, this.state, windowWidth, windowHeight, 0, controlHeight);
-		this.shopkeeperPanel= new ShopkeeperPanel(game, this.state, windowWidth, windowHeight, 0, controlHeight);
-		MusicManager.PlayShopMusic(this.game.settings.getFloat("musicVolume", .25f));
+		game.isQuitting = false;
+		int sideWidth = (Gdx.graphics.getWidth() / 16) * 3;
+		int windowWidth = Gdx.graphics.getWidth() - sideWidth * 2;
+		int windowHeight = Gdx.graphics.getHeight();
+		this.stockWindow = new StockWindow(game, state, windowWidth, windowHeight, sideWidth, 0);
+		this.shopkeeperPanel= new ShopkeeperPanel(game, state, sideWidth, windowHeight, 0, 0);
+		this.shopPanel = new ShopPanel(game, state, sideWidth, windowHeight, windowWidth + sideWidth, 0);
+		MusicManager.PlayShopMusic(game.settings.getFloat("musicVolume", .25f));
 	}
 
 	@Override
@@ -96,7 +87,7 @@ public class ShopScreen extends ScreenAdapter
 	{
 		try
 		{
-			this.update();
+			update();
 		} catch (final IOException e)
 		{
 			// TODO Auto-generated catch block
@@ -104,7 +95,7 @@ public class ShopScreen extends ScreenAdapter
 		}
 		try
 		{
-			this.draw();
+			draw();
 		} catch (final IOException e)
 		{
 			// TODO Auto-generated catch block
@@ -115,11 +106,11 @@ public class ShopScreen extends ScreenAdapter
 	@Override
 	public void show()
 	{
-		if(this.game.isQuitting){
+		if(game.isQuitting){
 			for(Unit unit : state.roster){
 				state.graveyard.add(generateUnitDto(unit));
 			}
-			this.game.setScreen(new GameOverScreen(game, state.roundsSurvived, state.graveyard));
+			game.setScreen(new GameOverScreen(game, state.roundsSurvived, state.graveyard));
 		}
 	}
 	
@@ -146,7 +137,7 @@ public class ShopScreen extends ScreenAdapter
 		location.x = -1;
 		location.y = -1;
 		unitDto.locationKilled = location;
-		unitDto.roundKilled = this.state.roundsSurvived;
+		unitDto.roundKilled = state.roundsSurvived;
 		unitDto.isMale = deceased.isMale;
 		unitDto.backStory = deceased.backStory;
 		return unitDto;
@@ -157,24 +148,18 @@ public class ShopScreen extends ScreenAdapter
 	{
 		if (Gdx.input.justTouched())
 		{
-			if (!this.state.isInspecting && !this.state.isShopkeeperPanelDisplayed && this.stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+			if (!state.isInspecting && !state.isShopkeeperPanelDisplayed && stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}else if (this.unitStatus.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+				stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			}else if (shopPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.unitStatus.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			} else if (this.shopControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+				shopPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			} else if (state.isShopkeeperPanelDisplayed && shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
-				this.shopControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			} else if (this.state.isInspecting && this.unitInfo.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
-				this.unitInfo.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			} else if (this.state.isShopkeeperPanelDisplayed && this.shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
-				this.shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			}	
 		}else if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsScreen.backEnabled){
-			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen(), true));
+			game.setScreen(new SettingsScreen(game, game.getScreen(), true));
 		}
 	}
 }

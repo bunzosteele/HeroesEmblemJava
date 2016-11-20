@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 public class HeroesEmblem extends Game
 {
@@ -54,7 +55,7 @@ public class HeroesEmblem extends Game
 		this.shapeRenderer = new ShapeRenderer();
 		final FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("alagard.ttf"));
 		final FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = Gdx.graphics.getHeight() / 4;
+		parameter.size = Gdx.graphics.getHeight() / 9;
 		this.font = generator.generateFont(parameter);
 		generator.dispose();
 		final FreeTypeFontGenerator projectionGenerator = new FreeTypeFontGenerator(Gdx.files.internal("slkscr.ttf"));
@@ -64,7 +65,15 @@ public class HeroesEmblem extends Game
 		projectionGenerator.dispose();
 		FileHandle textureFile = Gdx.files.internal("HeroesEmblem.pack");
 		this.textureAtlas = new TextureAtlas(textureFile);
-        this.sprites = new SpriteHolder(this);
+        try {
+			this.sprites = new SpriteHolder(this);
+		} catch (IllegalArgumentException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (ReflectionException e1) {
+			e1.printStackTrace();
+		}
 		settings = Gdx.app.getPreferences("HeroesEmblemSettings");
 		boolean dataLoaded = false;
 		try {

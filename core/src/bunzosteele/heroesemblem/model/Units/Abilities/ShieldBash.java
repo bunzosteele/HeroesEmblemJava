@@ -15,7 +15,7 @@ public class ShieldBash extends Ability
 {
 	public ShieldBash()
 	{
-		this.displayName = "Shield Bash";
+		this.displayName = "Bash";
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;

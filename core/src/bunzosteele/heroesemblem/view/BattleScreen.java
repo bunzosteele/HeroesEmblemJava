@@ -28,7 +28,6 @@ public class BattleScreen extends ScreenAdapter
 	BattleState state;
 	BattleWindow battleWindow;
 	BattlePanel battlePanel;
-	//BattleControls battleControls;
 	//TacticsControls tacticsControls;
 	AiProcessor aiProcessor;
 	boolean spoofAiThinking = false;
@@ -56,7 +55,6 @@ public class BattleScreen extends ScreenAdapter
 		int windowHeight = Gdx.graphics.getHeight();
 		this.battleWindow = new BattleWindow(game, this.state, windowWidth, windowHeight, 0);
 		this.battlePanel = new BattlePanel(game, this.state, sideWidth, windowHeight, windowWidth, 0);
-		//this.battleControls = new BattleControls(game, this.state, controlHeight, windowWidth, sideWidth);
 		//this.tacticsControls = new TacticsControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
 		this.aiProcessor = new AiProcessor(state);
 		if(state.battlefieldId < 5){

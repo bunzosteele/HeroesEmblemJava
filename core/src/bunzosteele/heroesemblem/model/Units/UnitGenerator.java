@@ -3,6 +3,8 @@ package bunzosteele.heroesemblem.model.Units;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -217,6 +219,12 @@ public final class UnitGenerator
 			final UnitType unitType = UnitGenerator.GenerateUnitType();
 			stock.add(UnitGenerator.GenerateUnit(0, unitType, roster, game, trainingLevel));
 		}
+		Collections.sort(stock, new Comparator<Unit>(){
+			@Override
+			public int compare (Unit unit1, Unit unit2){
+				return unit1.cost - unit2.cost;
+			}
+		});
 		return stock;
 	}
 
