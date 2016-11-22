@@ -27,8 +27,6 @@ public class ShopControls
 	int buttonWidth;
 	int rosterWidth;
 	int height;
-	public static Sound buySound = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
-	public static Sound finalBuySound = Gdx.audio.newSound(Gdx.files.internal("finalbuy.wav"));
 	Sprite inactiveButton;
 	Sprite activeButton;
 	Sprite emphasisButton;
@@ -187,9 +185,9 @@ public class ShopControls
 		{
 			this.state.BuyUnit();		
 			if(this.state.CanBuy()){
-				ShopControls.buySound.play(this.game.settings.getFloat("sfxVolume", .5f));
+				//ShopControls.buySound.play(this.game.settings.getFloat("sfxVolume", .5f));
 			}else{
-				ShopControls.finalBuySound.play(this.game.settings.getFloat("sfxVolume", .5f));
+				//ShopControls.finalBuySound.play(this.game.settings.getFloat("sfxVolume", .5f));
 			}
 		}
 	}

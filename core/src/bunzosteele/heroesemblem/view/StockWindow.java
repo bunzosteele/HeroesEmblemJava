@@ -27,13 +27,15 @@ public class StockWindow
 	int tileHeight;
 	int chainSize;
 	int shadowSize;
-	int stockWindowYOffset;
 	int dividerHeight;
 	int dividerWidth;
 	int stockHeight;
 	int stockWidth;
 	int stockXOffset;
 	int stockYOffset;
+	int buttonSize;
+	int rerollX;
+	int rerollY;
 
 	public StockWindow(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -44,42 +46,33 @@ public class StockWindow
 		this.width = width;
 		this.height = height;
 		this.tileWidth = width / 10;
-		this.tileHeight = height / 9;
-		this.chainSize = 20;
+		this.tileHeight = height / 7;
+		this.chainSize = tileWidth / 5;
 		this.shadowSize = chainSize / 4; 
-		this.stockWindowYOffset = yOffset + tileHeight * 2;
 		this.dividerHeight = tileHeight * 4;
 		this.dividerWidth = dividerHeight * 489 / 209;
 		this.stockWidth = dividerWidth / 4;
 		this.stockHeight = dividerHeight / 2;
 		this.stockXOffset = xOffset + (width - dividerWidth) / 2;
-		this.stockYOffset = stockWindowYOffset + (height - stockWindowYOffset - dividerHeight) / 2;
+		this.stockYOffset = yOffset + (height - dividerHeight) / 2;
+		this.buttonSize = width * 12 / 100;
+		this.rerollX = xOffset + width - buttonSize - chainSize - shadowSize;
+		this.rerollY = yOffset + chainSize;
 	}
 
 	public void draw()
 	{
-		drawBackground();
-		drawBorder();
 		drawStock();
+		drawButtons();
+		drawStockpile();
 	}
 	
 	public void drawBorder(){
 		int chainXOffset = 0;
-		int chainYOffset = 0;
-		while (chainYOffset < height){
-			game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize, chainSize);
-			chainYOffset += chainSize;
-		}
 		while (chainXOffset < width){
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize, chainSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize, chainSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, 2 * tileHeight, chainSize, chainSize);
-			chainXOffset += chainSize;
+			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize - shadowSize, chainSize);
+			chainXOffset += chainSize - shadowSize;
 		}
-		
-		game.batcher.draw(game.sprites.ChainNW, xOffset, Gdx.graphics.getHeight() - (chainSize), chainSize, chainSize);
-		game.batcher.draw(game.sprites.ChainNW, xOffset, 2 * tileHeight, chainSize, chainSize);
-		game.batcher.draw(game.sprites.ChainSW, xOffset -1, 0, chainSize -1, chainSize -1);
 	}
 
 	public void drawBackground()
@@ -109,34 +102,19 @@ public class StockWindow
 			{
 				int unitXOffset = stockXOffset + stockWidth * unitOffset;
 				int unitYOffset = stockYOffset + dividerHeight / 2;
-				drawStock(unitXOffset, unitYOffset, stockWidth, stockHeight, unit);
+				drawUnitPane(unitXOffset, unitYOffset, stockWidth, stockHeight, unit);
 			} else
 			{
 				int unitXOffset = stockXOffset + stockWidth * (unitOffset - 4);
 				int unitYOffset = stockYOffset;
-				drawStock(unitXOffset, unitYOffset, stockWidth, stockHeight, unit);
+				drawUnitPane(unitXOffset, unitYOffset, stockWidth, stockHeight, unit);
 			}
 			unitOffset++;
 		}
 		game.font.getData().setScale(.33f);
-		/*
-		if(state.perksPurchased > 2){
-			if(state.gold >= state.GetRerollCost() && state.roster.size() < 8){
-				game.batcher.draw(game.sprites.RerollEnabled, xOffset + columnWidth / 4, Gdx.graphics.getHeight() - 3 * columnWidth / 4, columnWidth / 2, columnWidth / 2);
-			}else{
-				game.batcher.draw(game.sprites.RerollDisabled, xOffset + columnWidth / 4, Gdx.graphics.getHeight() - 3 * columnWidth / 4, columnWidth / 2, columnWidth / 2);
-			}	
-			if(state.GetRerollCost() > 0){
-				game.batcher.draw(game.sprites.GoldCoin, xOffset + columnWidth, Gdx.graphics.getHeight() - 5 * columnWidth / 8, columnWidth / 4, columnWidth / 4);
-				game.font.getData().setScale(.2f);
-				game.font.draw(game.batcher, "" + state.GetRerollCost(), xOffset + columnWidth + columnWidth / 3, Gdx.graphics.getHeight() - 5 * columnWidth / 8 + game.font.getData().lineHeight * 3 / 4, columnWidth / 2, -1, false);
-				game.font.getData().setScale(.33f);
-			}
-		}
-		*/
 	}
 	
-	private void drawStock(int xOffset, int yOffset, int width, int height, Unit unit){
+	private void drawUnitPane(int xOffset, int yOffset, int width, int height, Unit unit){
 		int nameBackdropWidth = width * 8 / 10;
 		int nameBackdropHeight = nameBackdropWidth * 42 / 93;
 		game.batcher.draw(game.sprites.StockNameBackdrop, xOffset + (width - nameBackdropWidth) / 2, yOffset + height / 20, nameBackdropWidth, nameBackdropHeight);
@@ -160,6 +138,35 @@ public class StockWindow
 		game.font.setColor(new Color(1f, 1f, 1f, 1f));
 		game.font.getData().setScale(.2f);
 		game.font.draw(game.batcher, unit.ability != null ? unit.ability.displayName : "", xOffset + (width - nameBackdropWidth) / 2 + tileWidth, yOffset + height / 10 + nameBackdropHeight + game.font.getLineHeight(), width - ((width - nameBackdropWidth) / 2 + tileWidth), 1, false);
+	}
+	
+	private void drawButtons(){
+		if(state.perksPurchased > 2){
+			if(state.gold >= state.GetRerollCost() && state.roster.size() < 8){
+				game.batcher.draw(game.sprites.RerollEnabled, rerollX, rerollY, buttonSize, buttonSize);
+			}else{
+				game.batcher.draw(game.sprites.RerollDisabled, rerollX, rerollY, buttonSize, buttonSize);
+			}	
+			if(state.GetRerollCost() > 0){
+				game.batcher.draw(game.sprites.GoldCoin, rerollX - tileWidth * 3 / 8, rerollY, tileWidth / 4, tileHeight / 4);
+				game.font.getData().setScale(.25f);
+				game.font.setColor(new Color(1f, .8f, 0, 1f));
+				game.font.draw(game.batcher, "" + state.GetRerollCost(), rerollX - tileWidth * 19 / 16, rerollY + game.font.getData().lineHeight * 3 / 4, tileWidth * 3 / 4, 0, false);
+			}
+		}
+	}
+	
+	private void drawStockpile(){
+		int stockpileOffset = xOffset + (width - stockWidth) / 2;
+		int chestWidth = tileWidth * 28 / 50;
+		int chestHeight = chestWidth * 21 / 28;
+		int goldWidth = chestWidth * 26 / 28;
+		int goldHeight = goldWidth * 19 / 26;	
+		game.batcher.draw(game.sprites.GoldChest, stockpileOffset, rerollY, chestWidth, chestHeight);
+		game.font.getData().setScale(.35f);
+		game.font.setColor(new Color(1f, .8f, 0, 1f));
+		game.font.draw(game.batcher, "" + state.gold, stockpileOffset + chestWidth, rerollY + game.font.getData().lineHeight * 3 / 4, stockWidth - goldWidth - chestWidth, 1, false);
+		game.batcher.draw(game.sprites.Gold, stockpileOffset + stockWidth - goldWidth, rerollY, goldWidth, goldHeight);
 	}
 
 	public boolean isTouched(final float x, final float y)
@@ -214,19 +221,21 @@ public class StockWindow
 		if (!hit)
 		{
 			state.selected = null;
-			/*
-			if(x >= xOffset && x <= xOffset + columnWidth && y >= Gdx.graphics.getHeight() - columnWidth && state.perksPurchased > 2 && state.gold >= state.GetRerollCost() && state.roster.size() < 8){
-				state.Reroll();
-				if(state.CanBuy()){
-					ShopControls.buySound.play(game.settings.getFloat("sfxVolume", .5f));
-				}else{
-					ShopControls.finalBuySound.play(game.settings.getFloat("sfxVolume", .5f));
-				}
+			if(x >= rerollX && x <= rerollX + buttonSize && y >= rerollY && y <= rerollY + buttonSize){
+				processRerollTouch();
 			}
-			if(x >= columnWidth * 13 / 2 && x <= columnWidth * 17 / 2 && y >= Gdx.graphics.getHeight() - columnWidth){
-				state.isShopkeeperPanelDisplayed = true;
+		
+		}
+	}
+	
+	private void processRerollTouch() throws IOException{
+		if(state.gold > state.GetRerollCost()){
+			state.Reroll();
+			if(state.CanBuy()){
+				ShopScreen.buySound.play(game.settings.getFloat("sfxVolume", .5f));
+			}else{
+				ShopScreen.finalBuySound.play(game.settings.getFloat("sfxVolume", .5f));
 			}
-			*/
 		}
 	}
 }

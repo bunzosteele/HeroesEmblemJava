@@ -58,13 +58,13 @@ public class BattlePanel
 		dividerHeight = (int) (dividerWidth * .0547);
 		int buttonRegionHeight =  height - chainSize - backdropHeight * 7 - shadowSize * 2 - chainSize;
 		int buttonVerticalSpacing = (buttonRegionHeight - 2 * buttonSize - dividerHeight) / 4;
-		endTurnX = xOffset + width - buttonSize - (chainSize - shadowSize) * 2;
+		endTurnX = xOffset + width - buttonSize - chainSize;
 		endTurnY = buttonVerticalSpacing + chainSize;
-		confirmX = xOffset + (chainSize - shadowSize) * 2;
+		confirmX = xOffset + chainSize;
 		confirmY = buttonVerticalSpacing + chainSize;
-		abilityX = xOffset + (chainSize - shadowSize) * 2;
+		abilityX = xOffset + chainSize;
 		abilityY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
-		infoX = xOffset + width - buttonSize - (chainSize - shadowSize) * 2;
+		infoX = xOffset + width - buttonSize - chainSize;
 		infoY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
 	}
 
@@ -82,23 +82,23 @@ public class BattlePanel
 	}
 	
 	public void drawBorder(){
-		int chainXOffset = 0;
-		int chainYOffset = 0;
-		while (chainXOffset < width){
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize, chainSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize, chainSize);
-			chainXOffset += chainSize;
+		int chainXOffset = chainSize - shadowSize;
+		int chainYOffset = chainSize - shadowSize;
+		while (chainXOffset < width - (chainSize - shadowSize)){
+			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize - shadowSize, chainSize);
+			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize - shadowSize, chainSize);
+			chainXOffset += chainSize - shadowSize;
 		}
-		while (chainYOffset < height){
-			game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize, chainSize);
-			game.batcher.draw(game.sprites.ChainVertical, xOffset + width - (chainSize - shadowSize), chainYOffset, chainSize, chainSize);
-			chainYOffset += chainSize;
+		while (chainYOffset < height - (chainSize - shadowSize)){
+			game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize, chainSize - shadowSize);
+			game.batcher.draw(game.sprites.ChainVertical, xOffset + width - (chainSize - shadowSize), chainYOffset, chainSize, chainSize - shadowSize);
+			chainYOffset += chainSize - shadowSize;
 		}
 		
-		game.batcher.draw(game.sprites.ChainNW, xOffset, Gdx.graphics.getHeight() - (chainSize), chainSize, chainSize);
-		game.batcher.draw(game.sprites.ChainNE, xOffset + width - chainSize, Gdx.graphics.getHeight() - (chainSize), chainSize -1, chainSize-1);
-		game.batcher.draw(game.sprites.ChainSW, xOffset -1, 0, chainSize -1, chainSize -1);
-		game.batcher.draw(game.sprites.ChainSE, xOffset + width - chainSize, 0, chainSize + 1, chainSize - 1);	
+		game.batcher.draw(game.sprites.NewChainNW, xOffset, Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.NewChainNE, xOffset + width - (chainSize - shadowSize), Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.NewChainSW, xOffset, 0, chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.NewChainSE, xOffset + width - (chainSize - shadowSize), 0, chainSize - shadowSize, chainSize - shadowSize);
 	}
 	
 	public void drawUnitStats() throws IOException{
@@ -125,7 +125,7 @@ public class BattlePanel
 			game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawHealthBar(nameY);
 			game.batcher.draw(game.sprites.ExperienceBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 2, backdropWidth, backdropHeight);
-			game.font.draw(game.batcher, "LVL." + state.selected.level, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - backdropHeight - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
+			game.font.draw(game.batcher, (state.selected.level < 10 ? "Lvl. 0" : "Lvl. ") + state.selected.level, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - backdropHeight - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawExperienceBar(nameY);
 			if (state.selected.team == 0 || state.perksPurchased >= 2) {
 				game.font.getData().setScale(.35f);

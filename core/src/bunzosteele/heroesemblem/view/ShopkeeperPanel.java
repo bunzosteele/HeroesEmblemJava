@@ -43,7 +43,7 @@ public class ShopkeeperPanel
 		this.height = height;
 		this.tileWidth = width / 3;
 		this.tileHeight = height / 9;
-		this.chainSize = 20;
+		this.chainSize = tileWidth / 5;
 		this.shadowSize = chainSize / 4; 
 		this.buttonSize = width * 4 / 10;
 		int backdropWidth = (int) (width * .8);
@@ -52,16 +52,14 @@ public class ShopkeeperPanel
 		int dividerHeight = (int) (dividerWidth * .0547);
 		int buttonRegionHeight =  height - chainSize - backdropHeight * 7 - shadowSize * 2 - chainSize;
 		int buttonVerticalSpacing = (buttonRegionHeight - 2 * buttonSize - dividerHeight) / 4;
-		this.purchaseX = xOffset + width - buttonSize - (chainSize - shadowSize) * 2;
+		this.purchaseX = xOffset + width - buttonSize - chainSize;;
 		this.purchaseY = yOffset + chainSize + shadowSize + buttonVerticalSpacing;
-		this.mapX = xOffset + (chainSize - shadowSize) * 2;
+		this.mapX = xOffset + chainSize;
 		this.mapY = yOffset + chainSize + shadowSize + buttonVerticalSpacing;
 	}
 
 	public void draw() throws IOException
 	{
-		drawBackground();
-		drawBorder();
 		drawButtons();
 		drawPerks();
 	}
@@ -70,33 +68,50 @@ public class ShopkeeperPanel
 		int shopkeeperWidth = tileWidth;
 		int shopkeeperHeight = shopkeeperWidth * 82 / 60;
 		game.batcher.draw(game.sprites.Shopkeeper, (width - shopkeeperWidth)/2, Gdx.graphics.getHeight() - tileHeight / 2 - shopkeeperHeight, shopkeeperWidth, shopkeeperHeight);
-		/*
-		game.font.setColor(Color.WHITE);
-		game.font.getData().setScale(.28f);
-		if(state.perksPurchased == 0)
-			game.font.setColor(Color.GRAY);	
-		game.font.draw(game.batcher, "Map", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2, columnWidth * 2, 1, false);
-		if(state.perksPurchased < 2)
-			game.font.setColor(Color.GRAY);	
-		game.font.draw(game.batcher, "Spies", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2 - game.font.getData().lineHeight , columnWidth * 2, 1, false);
-		if(state.perksPurchased < 3)
-			game.font.setColor(Color.GRAY);
-		game.font.draw(game.batcher, "Reroll", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2 - game.font.getData().lineHeight * 2, columnWidth * 2, 1, false);
-		if(state.perksPurchased < 4)
-			game.font.setColor(Color.GRAY);
-		game.font.draw(game.batcher, "Sabotage", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2 - game.font.getData().lineHeight * 3, columnWidth * 2, 1, false);
-		if(state.perksPurchased < 5)
-			game.font.setColor(Color.GRAY);
-		game.font.draw(game.batcher, "Tactics", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2 - game.font.getData().lineHeight * 4, columnWidth * 2, 1, false);
-		if(state.perksPurchased < 6)
-			game.font.setColor(Color.GRAY);
-		game.font.draw(game.batcher, "Renew", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2 - game.font.getData().lineHeight * 5, columnWidth * 2, 1, false);
-		if(state.perksPurchased < 7)
-			game.font.setColor(Color.GRAY);
-		game.font.draw(game.batcher, "Learning", xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2 - game.font.getData().lineHeight * 6, columnWidth * 2, 1, false);
-		game.font.setColor(Color.GRAY);
-		game.font.draw(game.batcher, "Training "+ (state.GetTrainingPerkLevel() + 1), xOffset + columnWidth / 2, Gdx.graphics.getHeight() - columnWidth * 5 / 2 - game.font.getData().lineHeight * 7, columnWidth * 2, 1, false);
-		game.font.setColor(Color.WHITE);*/
+		
+		int perkWidth = (width - (chainSize - shadowSize) * 2) * 9 / 10;
+		int perkHeight = perkWidth * 25 / 122;
+		int perkYOffset = Gdx.graphics.getHeight() - tileHeight / 2 - shopkeeperHeight - perkHeight * 2;
+		int perkXOffset = xOffset + (width - perkWidth) / 2;
+		int dividerWidth = perkWidth / 4;
+		int dividerHeight = dividerWidth * 7 / 30; 
+		game.font.getData().setScale(.25f);
+		for(int i = 0; i < 8; i++){
+			if(state.perksPurchased == i || ( i == 7 && state.perksPurchased >= i)){
+				game.batcher.draw(game.sprites.PerkDivider, perkXOffset, perkYOffset - perkHeight * i + (perkHeight - dividerHeight) / 2, dividerWidth, dividerHeight);
+				game.batcher.draw(game.sprites.PerkDivider, perkXOffset + perkWidth - dividerWidth - (perkWidth * 2 / 122), perkYOffset - perkHeight * i + (perkHeight - dividerHeight) / 2, dividerWidth, dividerHeight);
+				game.batcher.draw(game.sprites.GoldCoin, perkXOffset + perkWidth - dividerWidth - (perkWidth * 2 / 122) - tileWidth * 3 / 8, perkYOffset - perkHeight * i + tileHeight / 8 + dividerHeight / 7, tileHeight / 4, tileHeight / 4);
+				game.font.setColor(new Color(1f, .8f, 0, 1f));
+				game.font.draw(game.batcher, "" + state.GetNextPerkCost(), perkXOffset + dividerWidth, perkYOffset - perkHeight * i + tileHeight / 8 + game.font.getLineHeight() * 4 / 5 + dividerHeight / 7, perkWidth - 2 * dividerWidth - tileWidth * 3 / 8, 1, false);
+				continue;
+			}
+			if(state.perksPurchased > i){
+				game.batcher.draw(game.sprites.PerkEnabled, perkXOffset, perkYOffset - perkHeight * i, perkWidth, perkHeight);
+				game.font.setColor(new Color(1f, .8f, 0, 1f));
+				game.font.draw(game.batcher, state.GetPerkName(i + 1), perkXOffset, perkYOffset - perkHeight * i + tileHeight / 8 + game.font.getLineHeight(), perkWidth - perkWidth * 2 /122, 1, false);
+
+			}
+			
+			if(state.perksPurchased < i){
+				if(state.perksPurchased + 1 == i){
+					game.batcher.draw(game.sprites.PerkEmphasis, perkXOffset, perkYOffset - perkHeight * i, perkWidth, perkHeight);
+					game.font.setColor(new Color(0, 0, 0, 1f));
+				}else{
+					game.font.setColor(new Color(0, 0, 0, .6f));
+					game.batcher.draw(game.sprites.PerkDisabled, perkXOffset, perkYOffset - perkHeight * i, perkWidth, perkHeight);
+				}
+				game.font.draw(game.batcher, state.GetPerkName(i), perkXOffset, perkYOffset - perkHeight * i + tileHeight / 8 + game.font.getLineHeight(), perkWidth - perkWidth * 2 /122, 1, false);
+			}
+		}
+		
+		if(state.perksPurchased >= 7){
+			game.font.setColor(new Color(0, 0, 0, 1f));
+			game.batcher.draw(game.sprites.PerkEmphasis, perkXOffset, perkYOffset - perkHeight * 8, perkWidth, perkHeight);
+		}else{
+			game.font.setColor(new Color(0, 0, 0, .6f));
+			game.batcher.draw(game.sprites.PerkDisabled, perkXOffset, perkYOffset - perkHeight * 8, perkWidth, perkHeight);
+		}
+		game.font.draw(game.batcher, state.GetPerkName(state.perksPurchased < 8 ? 8 : state.perksPurchased + 1), perkXOffset, perkYOffset - perkHeight * 8 + tileHeight / 8 + game.font.getLineHeight(), perkWidth - perkWidth * 2 /122, 1, false);
 	}
 	/*
 	private void drawMap(){
@@ -148,20 +163,23 @@ public class ShopkeeperPanel
 	}
 	
 	public void drawBorder(){
-		int chainXOffset = 0;
-		int chainYOffset = 0;
-		while (chainYOffset < height){
-			game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize, chainSize);
-			chainYOffset += chainSize;
+		int chainXOffset = chainSize - shadowSize;
+		int chainYOffset = chainSize - shadowSize;
+		while (chainXOffset < width - (chainSize - shadowSize)){
+			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize - shadowSize, chainSize);
+			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize - shadowSize, chainSize);
+			chainXOffset += chainSize - shadowSize;
 		}
-		while (chainXOffset < width){
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize, chainSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize, chainSize);
-			chainXOffset += chainSize;
+		while (chainYOffset < height - (chainSize - shadowSize)){
+			game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize, chainSize - shadowSize);
+			game.batcher.draw(game.sprites.ChainVertical, xOffset + width - (chainSize - shadowSize), chainYOffset, chainSize, chainSize - shadowSize);
+			chainYOffset += chainSize - shadowSize;
 		}
 		
-		game.batcher.draw(game.sprites.ChainNW, xOffset, 2 * tileHeight, chainSize, chainSize);
-		game.batcher.draw(game.sprites.ChainSW, xOffset -1, 0, chainSize -1, chainSize -1);
+		game.batcher.draw(game.sprites.NewChainNW, xOffset, Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.NewChainNE, xOffset + width - (chainSize - shadowSize), Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.NewChainSW, xOffset, 0, chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.NewChainSE, xOffset + width - (chainSize - shadowSize), 0, chainSize - shadowSize, chainSize - shadowSize);
 	}
 	
 	public void drawButtons(){		
@@ -188,23 +206,30 @@ public class ShopkeeperPanel
 
 	public void processTouch( float x,  float y) throws IOException
 	{
-		/*
-		if(x >= columnWidth / 2
-				&& x <= columnWidth * 5 / 2
-				&& y >= Gdx.graphics.getHeight() - columnWidth * 2
-				&& y <= Gdx.graphics.getHeight() - columnWidth * 3 / 2){
-			if(state.CanBuyPerk()){
-				state.BuyPerk();
-				if(state.CanBuy()){
-					ShopControls.buySound.play(game.settings.getFloat("sfxVolume", .5f));
-				}else{
-					ShopControls.BuySound.play(game.settings.getFloat("sfxVolume", .5f));
-				}
+		int clickedX = Gdx.input.getX();
+		int clickedY = Gdx.graphics.getHeight() - Gdx.input.getY();
+		if((clickedX > purchaseX && clickedX < purchaseX + buttonSize) && (clickedY > purchaseY && clickedY < purchaseY + buttonSize)){
+			processPurchaseTouch();
+		}else if((clickedX > mapX && clickedX < mapX + buttonSize) && (clickedY > mapY && clickedY < mapY + buttonSize)){
+			processMapTouch();
+		}else{
+			state.selected = null;
+		}
+
+	}
+	
+	private void processPurchaseTouch() throws IOException{
+		if(state.CanBuyPerk()){
+			state.BuyPerk();
+			if(state.CanBuy()){
+				ShopScreen.buySound.play(game.settings.getFloat("sfxVolume", .5f));
+			}else{
+				ShopScreen.finalBuySound.play(game.settings.getFloat("sfxVolume", .5f));
 			}
 		}
-		if(x >= columnWidth * 13 / 2 && x <= columnWidth * 17 / 2 && y >= Gdx.graphics.getHeight() - columnWidth && state.isShopkeeperPanelDisplayed){
-			state.isShopkeeperPanelDisplayed = false;
-		}
-		*/
+	}
+	
+	private void processMapTouch(){
+		
 	}
 }

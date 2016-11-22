@@ -176,6 +176,20 @@ public class ShopState
 		}		
 	}
 	
+	public String GetPerkName(int perkNumber){
+		switch(perkNumber){
+			case 0: return "NONE";
+			case 1: return "Map";
+			case 2: return "Spies";
+			case 3 : return "Reroll";
+			case 4: return "Sabotage";
+			case 5: return "Tactics";
+			case 6: return "Renew";
+			case 7: return "Learning";
+			default: return "Training " + (perkNumber - 7);		
+		}	
+	}
+	
 	public int GetTrainingPerkLevel(){
 		int trainingLevel = this.perksPurchased - 7;
 		if(trainingLevel < 0)

@@ -11,6 +11,10 @@ public class SpriteHolder {
 	public Sprite ChainNE;
 	public Sprite ChainSW;
 	public Sprite ChainSE;
+	public Sprite NewChainNW;
+	public Sprite NewChainNE;
+	public Sprite NewChainSW;
+	public Sprite NewChainSE;
 	public Sprite EndTurnDisabled;
 	public Sprite EndTurnEnabled;
 	public Sprite EndTurnEmphasized;
@@ -60,6 +64,18 @@ public class SpriteHolder {
 	public Sprite StockNameBackdrop;
 	public Sprite ShopLabel;
 	public Sprite Shopkeeper;
+	public Sprite PerkDisabled;
+	public Sprite PerkEnabled;
+	public Sprite PerkEmphasis;
+	public Sprite PerkDivider;
+	public Sprite GoldChest;
+	public Sprite Gold;
+	public Sprite RosterLabel;
+	public Sprite RosterSummary;
+	public Sprite RosterSummarySlot;
+	public Sprite RosterDivider;
+	public Sprite LevelBackdrop;
+	
 
 	public SpriteHolder(HeroesEmblem game) throws ReflectionException, IllegalArgumentException, IllegalAccessException {
 		java.lang.reflect.Field[] fields = getClass().getFields();
@@ -68,7 +84,11 @@ public class SpriteHolder {
 		}
 	}
 
-	private static void LoadSprite(HeroesEmblem game, SpriteHolder spriteHolder, java.lang.reflect.Field sprite) throws ReflectionException, IllegalArgumentException, IllegalAccessException {
-		sprite.set(spriteHolder, new Sprite(game.textureAtlas.findRegion(sprite.getName())));
+	private static void LoadSprite(HeroesEmblem game, SpriteHolder spriteHolder, java.lang.reflect.Field sprite) {
+		try{
+			sprite.set(spriteHolder, new Sprite(game.textureAtlas.findRegion(sprite.getName())));
+		} catch(Exception ex){
+			throw new IllegalArgumentException("Error generating sprite: " + sprite.getName());
+		}
 	}
 }

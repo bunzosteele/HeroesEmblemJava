@@ -13,6 +13,7 @@ import bunzosteele.heroesemblem.model.Units.UnitDto;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -26,6 +27,9 @@ public class ShopScreen extends ScreenAdapter
 	StockWindow stockWindow;
 	ShopkeeperPanel shopkeeperPanel;
 	ShopPanel shopPanel;
+	RosterPanel rosterPanel;
+	public static Sound buySound = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
+	public static Sound finalBuySound = Gdx.audio.newSound(Gdx.files.internal("finalbuy.wav"));
 
 	public ShopScreen(final HeroesEmblem game) throws IOException
 	{
@@ -63,9 +67,17 @@ public class ShopScreen extends ScreenAdapter
 		game.shapeRenderer.end();
 		
 		game.batcher.begin();
-		shopkeeperPanel.draw();
-		stockWindow.draw();
+		stockWindow.drawBackground();
+		rosterPanel.drawBackground();
+		shopkeeperPanel.drawBackground();
+		stockWindow.drawBorder();
+		shopkeeperPanel.drawBorder();
+		rosterPanel.drawBorder();
+		shopPanel.drawBorder();
 		shopPanel.draw();
+		stockWindow.draw();
+		rosterPanel.draw();
+		shopkeeperPanel.draw();
 		game.batcher.end();
 	}
 
@@ -76,9 +88,11 @@ public class ShopScreen extends ScreenAdapter
 		int sideWidth = (Gdx.graphics.getWidth() / 16) * 3;
 		int windowWidth = Gdx.graphics.getWidth() - sideWidth * 2;
 		int windowHeight = Gdx.graphics.getHeight();
-		this.stockWindow = new StockWindow(game, state, windowWidth, windowHeight, sideWidth, 0);
+		int rosterHeight = Gdx.graphics.getHeight() * 2 / 9;
+		this.stockWindow = new StockWindow(game, state, windowWidth, Gdx.graphics.getHeight() - rosterHeight, sideWidth, rosterHeight);
 		this.shopkeeperPanel= new ShopkeeperPanel(game, state, sideWidth, windowHeight, 0, 0);
 		this.shopPanel = new ShopPanel(game, state, sideWidth, windowHeight, windowWidth + sideWidth, 0);
+		this.rosterPanel = new RosterPanel(game, state, windowWidth, rosterHeight, sideWidth, 0);
 		MusicManager.PlayShopMusic(game.settings.getFloat("musicVolume", .25f));
 	}
 
@@ -148,14 +162,13 @@ public class ShopScreen extends ScreenAdapter
 	{
 		if (Gdx.input.justTouched())
 		{
-			if (!state.isInspecting && !state.isShopkeeperPanelDisplayed && stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
+			if (rosterPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+				rosterPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			}else if (stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
 				stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}else if (shopPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
+			}else if (shopPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
 				shopPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			} else if (state.isShopkeeperPanelDisplayed && shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
+			}else if (shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
 				shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			}	
 		}else if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsScreen.backEnabled){
