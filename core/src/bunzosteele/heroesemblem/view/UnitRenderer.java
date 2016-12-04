@@ -55,34 +55,29 @@ public  class UnitRenderer {
 		if (isFlipped) sprite.flip(true, false);
 		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
 		if ((unit.isHealing || unit.isGettingExperience) && game.battleState != null && unit.damageDisplay >= 0) {
-			game.font.getData().setScale(.165f);
-			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 20 + game.font.getLineHeight() * 3 / 2, (int) (scaledSize * .8), 1, false);
 			game.font.getData().setScale(.33f);
+			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 20 + game.font.getLineHeight() * 3 / 2, (int) (scaledSize * .8), 1, false);
 		}
 		if (unit.isTakingDamage && game.battleState != null && unit.damageDisplay > 0) {
-			game.font.getData().setScale(.165f);
+			game.font.getData().setScale(.33f);
 			Sprite background = unit.damageDisplay > 9 ? game.sprites.CritBackground : game.sprites.DamageBackground;
 			game.batcher.draw(background, x + scaledSize / 10, y + scaledSize / 10, (int) (scaledSize * .8), (int) (scaledSize * .8));
 			game.font.setColor(new Color(0, 0, 0, 1f));
-			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 20 + game.font.getLineHeight() * 3 / 2, (int) (scaledSize * .8), 1, false);
-			game.font.getData().setScale(.33f);
+			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 3, (int) (scaledSize * .8), 1, false);
 		}else if (unit.isTakingDamage && game.battleState != null) {
-			game.font.getData().setScale(.125f);
+			game.font.getData().setScale(.33f);
 			game.font.setColor(new Color(1f, 1f, 1f, 1f));
 			game.font.draw(game.batcher, "BLOCK!", x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 2, (int) (scaledSize * .8), 1, false);
-			game.font.getData().setScale(.33f);
 		}
 		if (unit.isMissed && game.battleState != null) {
-			game.font.getData().setScale(.125f);
+			game.font.getData().setScale(.33f);
 			game.font.setColor(new Color(1f, 1f, 1f, 1f));
 			game.font.draw(game.batcher, "MISS!", x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 2, (int) (scaledSize * .8), 1, false);
-			game.font.getData().setScale(.33f);
 		}
 		if (unit.isLevelingUp && game.battleState != null) {
-			game.font.getData().setScale(.1125f);
+			game.font.getData().setScale(.33f);
 			game.font.setColor(new Color(1f, 1f, 1f, 1f));
 			game.font.draw(game.batcher, "LVL-UP!", x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 2, (int) (scaledSize * .8), 1, false);
-			game.font.getData().setScale(.33f);
 		}
 		game.font.setColor(Color.WHITE);
 		game.batcher.setColor(Color.WHITE);

@@ -49,22 +49,22 @@ public class BattlePanel
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		buttonSize = width * 4 / 10;
-		chainSize = 20;
-		shadowSize = chainSize / 4; 
+		buttonSize = width / 3;
+		chainSize = width / 15;
+		shadowSize = chainSize / 3; 
 		backdropWidth = (int) (width * .8);
 		backdropHeight = (int) Math.floor(backdropWidth * .353);
-		dividerWidth = width - 2 * chainSize;
+		dividerWidth = width - buttonSize;
 		dividerHeight = (int) (dividerWidth * .0547);
 		int buttonRegionHeight =  height - chainSize - backdropHeight * 7 - shadowSize * 2 - chainSize;
 		int buttonVerticalSpacing = (buttonRegionHeight - 2 * buttonSize - dividerHeight) / 4;
-		endTurnX = xOffset + width - buttonSize - chainSize;
+		endTurnX = xOffset + width - buttonSize - buttonSize / 3;
 		endTurnY = buttonVerticalSpacing + chainSize;
-		confirmX = xOffset + chainSize;
+		confirmX = xOffset + buttonSize / 3;
 		confirmY = buttonVerticalSpacing + chainSize;
-		abilityX = xOffset + chainSize;
+		abilityX = xOffset + buttonSize / 3;
 		abilityY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
-		infoX = xOffset + width - buttonSize - chainSize;
+		infoX = xOffset + width - buttonSize - buttonSize / 3;
 		infoY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
 	}
 
@@ -82,23 +82,26 @@ public class BattlePanel
 	}
 	
 	public void drawBorder(){
-		int chainXOffset = chainSize - shadowSize;
-		int chainYOffset = chainSize - shadowSize;
-		while (chainXOffset < width - (chainSize - shadowSize)){
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize - shadowSize, chainSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize - shadowSize, chainSize);
-			chainXOffset += chainSize - shadowSize;
+		int chainXOffset = xOffset;
+		int chainYOffset = height + yOffset - chainSize;
+		
+		while (chainXOffset < xOffset + width){
+			if(chainXOffset > xOffset && chainXOffset < xOffset + width - chainSize)
+				game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, yOffset + height - chainSize - shadowSize, chainSize, chainSize + shadowSize);
+			game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, yOffset - shadowSize, chainSize, chainSize + shadowSize);
+			chainXOffset += chainSize;
 		}
-		while (chainYOffset < height - (chainSize - shadowSize)){
-			game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize, chainSize - shadowSize);
-			game.batcher.draw(game.sprites.ChainVertical, xOffset + width - (chainSize - shadowSize), chainYOffset, chainSize, chainSize - shadowSize);
-			chainYOffset += chainSize - shadowSize;
+		while (chainYOffset >= yOffset){
+			if(chainYOffset > yOffset && chainYOffset < yOffset + height - chainSize)
+				game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize + shadowSize, chainSize);
+			game.batcher.draw(game.sprites.ChainVertical, xOffset + width - chainSize, chainYOffset, chainSize + shadowSize, chainSize);
+			chainYOffset -= chainSize;
 		}
 		
-		game.batcher.draw(game.sprites.NewChainNW, xOffset, Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
-		game.batcher.draw(game.sprites.NewChainNE, xOffset + width - (chainSize - shadowSize), Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
-		game.batcher.draw(game.sprites.NewChainSW, xOffset, 0, chainSize - shadowSize, chainSize - shadowSize);
-		game.batcher.draw(game.sprites.NewChainSE, xOffset + width - (chainSize - shadowSize), 0, chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.ChainNW, xOffset, yOffset + height - chainSize, chainSize, chainSize);
+		game.batcher.draw(game.sprites.ChainNE, xOffset + width - chainSize, yOffset + height - chainSize, chainSize, chainSize);
+		game.batcher.draw(game.sprites.ChainSW, xOffset, yOffset, chainSize, chainSize);
+		game.batcher.draw(game.sprites.ChainSE, xOffset + width - chainSize, yOffset, chainSize, chainSize);
 	}
 	
 	public void drawUnitStats() throws IOException{
@@ -163,12 +166,12 @@ public class BattlePanel
 		
 		if(state.selected != null && state.selected.ability != null && state.CanUseAbility(state.selected)){
 			if(state.isUsingAbility){
-				game.batcher.draw(game.sprites.AbilityEmphasis, abilityX, abilityY, buttonSize, buttonSize);
+				game.batcher.draw(game.sprites.EmptyEmphasis, abilityX, abilityY, buttonSize, buttonSize);
 			}else{
-				game.batcher.draw(game.sprites.AbilityEnabled, abilityX, abilityY, buttonSize, buttonSize);
+				game.batcher.draw(game.sprites.EmptyEnabled, abilityX, abilityY, buttonSize, buttonSize);
 			}
 		}else{
-			game.batcher.draw(game.sprites.AbilityDisabled, abilityX, abilityY, buttonSize, buttonSize);
+			game.batcher.draw(game.sprites.EmptyDisabled, abilityX, abilityY, buttonSize, buttonSize);
 		}
 		if(state.selected != null && state.selected.ability != null){
 			game.font.getData().setScale(.20f);
@@ -185,9 +188,9 @@ public class BattlePanel
 		}
 		
 		
-		game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);
-		
+		game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);	
 		game.batcher.draw(game.sprites.ControlsDivider, chainSize + xOffset, endTurnY + buttonSize - dividerHeight / 2 + (abilityY - buttonSize - endTurnY) / 2, dividerWidth, dividerHeight);
+		game.batcher.draw(game.sprites.SettingsIcon, xOffset + width - chainSize * 2, yOffset + height - chainSize * 2, chainSize + shadowSize, chainSize + shadowSize);
 	}
 	
 	private void DrawHealthBar(int nameY){
@@ -264,8 +267,9 @@ public class BattlePanel
 			processAbilityTouch();
 		}else if((clickedX > confirmX && clickedX < confirmX + buttonSize) && (clickedY > confirmY && clickedY < confirmY + buttonSize)){
 			processConfirmTouch();
-		}
-		else{
+		}else if((clickedX > xOffset + width - chainSize * 3) && (clickedY > yOffset + height - chainSize * 3)){
+			processSettingsTouch();	
+		}else{
 			state.selected = null;
 			state.targeted = null;
 			state.isMoving = false;
@@ -312,5 +316,9 @@ public class BattlePanel
 			state.isMoving = true;		
 		}
 		state.isUsingAbility = false;
+	}
+	
+	private void processSettingsTouch(){
+		this.state.isSettingsOpen = !this.state.isSettingsOpen;
 	}
 }

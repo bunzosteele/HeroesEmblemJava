@@ -154,12 +154,12 @@ public class MainMenuScreen extends MenuScreen
 				this.game.setScreen(new ShopScreen(this.game));
 				return;
 			}
-			
+			/*
 			if ((Gdx.input.getX() > xOffset / 4 && Gdx.input.getX() < xOffset / 4 + this.xOffset) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + this.buttonHeight))
 			{
-				this.game.setScreen(new SettingsScreen(this.game));
+				this.game.setScreen(new SettingsPanel(this.game));
 				return;
-			}
+			}*/
 			
 			if ((Gdx.input.getX() > this.xOffset * 3 / 2 && Gdx.input.getX() < this.xOffset * 3 / 2 + this.xOffset) && (Gdx.graphics.getHeight() - Gdx.input.getY() > this.yOffset && Gdx.graphics.getHeight() - Gdx.input.getY() < this.yOffset + this.buttonHeight))
 			{

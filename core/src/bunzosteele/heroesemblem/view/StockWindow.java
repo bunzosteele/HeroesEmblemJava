@@ -68,10 +68,11 @@ public class StockWindow
 	}
 	
 	public void drawBorder(){
-		int chainXOffset = 0;
-		while (chainXOffset < width){
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize - shadowSize, chainSize);
-			chainXOffset += chainSize - shadowSize;
+		int chainXOffset = xOffset;
+		
+		while (chainXOffset < xOffset + width){
+			game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, yOffset + height - chainSize - shadowSize, chainSize, chainSize + shadowSize);
+			chainXOffset += chainSize;
 		}
 	}
 

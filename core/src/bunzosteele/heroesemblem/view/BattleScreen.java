@@ -30,6 +30,7 @@ public class BattleScreen extends ScreenAdapter
 	BattlePanel battlePanel;
 	//TacticsControls tacticsControls;
 	AiProcessor aiProcessor;
+	SettingsPanel settingsPanel;
 	boolean spoofAiThinking = false;
 
 
@@ -56,6 +57,7 @@ public class BattleScreen extends ScreenAdapter
 		this.battleWindow = new BattleWindow(game, this.state, windowWidth, windowHeight, 0);
 		this.battlePanel = new BattlePanel(game, this.state, sideWidth, windowHeight, windowWidth, 0);
 		//this.tacticsControls = new TacticsControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
+		this.settingsPanel = new SettingsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
 		this.aiProcessor = new AiProcessor(state);
 		if(state.battlefieldId < 5){
 			MusicManager.PlayEasyBattleMusic(this.game.settings.getFloat("musicVolume", .25f));
@@ -83,16 +85,16 @@ public class BattleScreen extends ScreenAdapter
 			//this.battleControls.drawBackground();
 			//this.battleControls.draw();
 		}
-
 		this.game.batcher.end();
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		this.game.shapeRenderer.begin(ShapeType.Filled);
-		if(this.state.isInTactics){
-			//this.tacticsControls.drawHealthBars();
+		
+		if(state.isSettingsOpen){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			settingsPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			settingsPanel.draw();
+			game.batcher.end();		
 		}
-		this.game.shapeRenderer.end();
-		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 
 	@Override
@@ -162,8 +164,8 @@ public class BattleScreen extends ScreenAdapter
 
 	public void update() throws IOException
 	{		
-		if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsScreen.backEnabled){
-			this.game.setScreen(new SettingsScreen(this.game, this.game.getScreen(), true));
+		if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsPanel.backEnabled){
+			//this.game.setScreen(new SettingsPanel(this.game, this.game.getScreen(), true));
 		}
 		this.state.CleanBoard();
 		if (this.state.HasPlayerLost())
@@ -193,6 +195,13 @@ public class BattleScreen extends ScreenAdapter
 			}
 		}else if (this.state.currentPlayer == 0 && Gdx.input.justTouched())
 		{
+			if(state.isSettingsOpen){
+				if (settingsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					settingsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else{
+					state.isSettingsOpen = false;
+				}
+			}
 			if (this.battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
 			{
 				this.battleWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());

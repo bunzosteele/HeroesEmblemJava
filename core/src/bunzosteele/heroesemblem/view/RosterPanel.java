@@ -66,11 +66,12 @@ public class RosterPanel
 	}
 	
 	public void drawBorder(){
-		int chainXOffset = 0;
-		while (chainXOffset < width){
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, height, chainSize - shadowSize, chainSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize - shadowSize, chainSize);
-			chainXOffset += chainSize - shadowSize;
+		int chainXOffset = xOffset;
+		
+		while (chainXOffset < xOffset + width){
+			game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, yOffset + height - shadowSize, chainSize, chainSize + shadowSize);
+			game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, yOffset - shadowSize, chainSize, chainSize + shadowSize);
+			chainXOffset += chainSize;
 		}
 	}
 

@@ -11,10 +11,6 @@ public class SpriteHolder {
 	public Sprite ChainNE;
 	public Sprite ChainSW;
 	public Sprite ChainSE;
-	public Sprite NewChainNW;
-	public Sprite NewChainNE;
-	public Sprite NewChainSW;
-	public Sprite NewChainSE;
 	public Sprite EndTurnDisabled;
 	public Sprite EndTurnEnabled;
 	public Sprite EndTurnEmphasized;
@@ -27,9 +23,9 @@ public class SpriteHolder {
 	public Sprite DefenseBackdrop;
 	public Sprite EvasionBackdrop;
 	public Sprite ControlsDivider;
-	public Sprite AbilityEnabled;
-	public Sprite AbilityEmphasis;
-	public Sprite AbilityDisabled;
+	public Sprite EmptyEnabled;
+	public Sprite EmptyEmphasis;
+	public Sprite EmptyDisabled;
 	public Sprite InfoDisabled;
 	public Sprite InfoOpen;
 	public Sprite InfoClose;
@@ -75,6 +71,7 @@ public class SpriteHolder {
 	public Sprite RosterSummarySlot;
 	public Sprite RosterDivider;
 	public Sprite LevelBackdrop;
+	public Sprite DeleteButton;
 	
 
 	public SpriteHolder(HeroesEmblem game) throws ReflectionException, IllegalArgumentException, IllegalAccessException {

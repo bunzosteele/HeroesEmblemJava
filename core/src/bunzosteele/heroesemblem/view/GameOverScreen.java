@@ -31,9 +31,6 @@ public class GameOverScreen extends MenuScreen
 	int xOffset;
 	int headerOffset;
 	int score;
-	Sprite pedestalSprite;
-	Sprite buttonSprite;
-	Sprite inactiveButton;
 	float yOffset;
 	float buttonHeight;
 	static boolean hasSubmitted = false;
@@ -54,12 +51,6 @@ public class GameOverScreen extends MenuScreen
 		}
 		this.xOffset = Gdx.graphics.getWidth() / 8;
 		this.headerOffset = Gdx.graphics.getHeight() - xOffset / 16;
-		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
-		this.pedestalSprite = new Sprite(pedestalRegion);
-		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
-		buttonSprite = new Sprite(buttonRegion);
-		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
-		this.inactiveButton = new Sprite(inactiveRegion);
 		score = roundsSurvived * 100;
 		for(UnitDto unit : graveyard){
 			score += unit.unitsKilled;
@@ -89,7 +80,6 @@ public class GameOverScreen extends MenuScreen
 			final Sprite sprite = new Sprite(region);
 			this.game.font.draw(this.game.batcher, "Your hero: " + this.hero.name, this.xOffset * 2, this.headerOffset - 2 * this.game.font.getData().lineHeight, xOffset * 4, 1, false);
 			this.game.font.getData().setScale(.2f);
-			this.game.batcher.draw(pedestalSprite, 3 * this.xOffset - (6 * this.game.font.getData().lineHeight / 2) , this.headerOffset - 10 * this.game.font.getData().lineHeight, 6 * this.game.font.getData().lineHeight, 6 * this.game.font.getData().lineHeight);
 			this.game.batcher.draw(sprite, 3 * this.xOffset - (6 * this.game.font.getData().lineHeight / 2) + (this.game.font.getData().lineHeight * 3 / 10) , this.headerOffset - 10 * this.game.font.getData().lineHeight + (this.game.font.getData().lineHeight * 3 / 10), (6 * this.game.font.getData().lineHeight) * 8 / 10, (6 * this.game.font.getData().lineHeight) * 8 / 10);
 			this.game.font.draw(this.game.batcher, "Level " + this.hero.level + " " + this.hero.type, this.xOffset * 3, this.headerOffset - 4 * this.game.font.getData().lineHeight, xOffset * 4, 1, false);
 			this.game.font.draw(this.game.batcher, "Kills:" + this.hero.unitsKilled, this.xOffset * 4, this.headerOffset - 5 * this.game.font.getData().lineHeight, xOffset, 1, false);
@@ -110,6 +100,7 @@ public class GameOverScreen extends MenuScreen
 		this.game.font.getData().setScale(.25f);
 		this.yOffset = this.headerOffset - 15 * this.game.font.getData().lineHeight;
 		this.buttonHeight = this.game.font.getData().lineHeight * 3 / 2;
+		/*
 		if(CanSubmitScore()){
 			this.game.batcher.draw(buttonSprite, this.xOffset * 2 / 3, this.yOffset - 2 * this.game.font.getData().lineHeight, this.xOffset * 3, this.buttonHeight);
 		}else{
@@ -119,6 +110,7 @@ public class GameOverScreen extends MenuScreen
 		this.game.batcher.draw(buttonSprite, this.xOffset * 3 / 4, this.yOffset, this.xOffset * 3 / 2, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 13 / 4, this.yOffset, this.xOffset * 3 / 2, this.buttonHeight);
 		this.game.batcher.draw(buttonSprite, this.xOffset * 23 / 4, this.yOffset, this.xOffset * 3 / 2, this.buttonHeight);
+		*/
 		this.game.font.draw(this.game.batcher, "Submit Highscore", this.xOffset * 2 / 3, this.yOffset - this.game.font.getData().lineHeight, xOffset * 3, 1, false);
 		this.game.font.draw(this.game.batcher, "View Leaderboards", this.xOffset * 13 / 3, this.yOffset - this.game.font.getData().lineHeight, xOffset * 3, 1, false);
 		this.game.font.draw(this.game.batcher, "Highscores", this.xOffset * 3 / 4, this.yOffset + this.game.font.getData().lineHeight, xOffset * 3 / 2, 1, false);

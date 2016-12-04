@@ -2,14 +2,11 @@ package bunzosteele.heroesemblem.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.fsm.State;
-import com.badlogic.gdx.audio.Sound;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.SaveManager.StateDto;
@@ -21,7 +18,6 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitGenerator;
 import bunzosteele.heroesemblem.model.Units.UnitType;
-import bunzosteele.heroesemblem.view.ShopControls;
 
 public class BattleState
 {
@@ -47,6 +43,7 @@ public class BattleState
 	public List<Spawn> playerSpawns = new ArrayList<Spawn>();
 	public Tile victimTile;
 	public Unit targeted;
+	public boolean isSettingsOpen;
 	
 
 	public BattleState(final ShopState shopState) throws IOException

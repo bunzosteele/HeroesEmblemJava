@@ -44,17 +44,17 @@ public class ShopkeeperPanel
 		this.tileWidth = width / 3;
 		this.tileHeight = height / 9;
 		this.chainSize = tileWidth / 5;
-		this.shadowSize = chainSize / 4; 
-		this.buttonSize = width * 4 / 10;
+		this.shadowSize = chainSize / 3; 
+		this.buttonSize = width / 3;
 		int backdropWidth = (int) (width * .8);
 		int backdropHeight = (int) Math.floor(backdropWidth * .353);
 		int dividerWidth = width - 2 * chainSize;
 		int dividerHeight = (int) (dividerWidth * .0547);
 		int buttonRegionHeight =  height - chainSize - backdropHeight * 7 - shadowSize * 2 - chainSize;
 		int buttonVerticalSpacing = (buttonRegionHeight - 2 * buttonSize - dividerHeight) / 4;
-		this.purchaseX = xOffset + width - buttonSize - chainSize;;
+		this.purchaseX = xOffset + width - buttonSize - buttonSize / 3;
 		this.purchaseY = yOffset + chainSize + shadowSize + buttonVerticalSpacing;
-		this.mapX = xOffset + chainSize;
+		this.mapX = xOffset + buttonSize / 3;
 		this.mapY = yOffset + chainSize + shadowSize + buttonVerticalSpacing;
 	}
 
@@ -163,23 +163,26 @@ public class ShopkeeperPanel
 	}
 	
 	public void drawBorder(){
-		int chainXOffset = chainSize - shadowSize;
-		int chainYOffset = chainSize - shadowSize;
-		while (chainXOffset < width - (chainSize - shadowSize)){
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, Gdx.graphics.getHeight() - chainSize, chainSize - shadowSize, chainSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, xOffset + chainXOffset, -shadowSize, chainSize - shadowSize, chainSize);
-			chainXOffset += chainSize - shadowSize;
+		int chainXOffset = xOffset;
+		int chainYOffset = height + yOffset - chainSize * 2;
+		
+		while (chainXOffset < xOffset + width){
+			if(chainXOffset > xOffset && chainXOffset < xOffset + width - chainSize)
+				game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, yOffset + height - chainSize - shadowSize, chainSize, chainSize + shadowSize);
+			game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, yOffset - shadowSize, chainSize, chainSize + shadowSize);
+			chainXOffset += chainSize;
 		}
-		while (chainYOffset < height - (chainSize - shadowSize)){
-			game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize, chainSize - shadowSize);
-			game.batcher.draw(game.sprites.ChainVertical, xOffset + width - (chainSize - shadowSize), chainYOffset, chainSize, chainSize - shadowSize);
-			chainYOffset += chainSize - shadowSize;
+		while (chainYOffset >= yOffset){
+			if(chainYOffset > yOffset && chainYOffset < yOffset + height - chainSize)
+				game.batcher.draw(game.sprites.ChainVertical, xOffset, chainYOffset, chainSize + shadowSize, chainSize);
+			game.batcher.draw(game.sprites.ChainVertical, xOffset + width - chainSize, chainYOffset, chainSize + shadowSize, chainSize);
+			chainYOffset -= chainSize;
 		}
 		
-		game.batcher.draw(game.sprites.NewChainNW, xOffset, Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
-		game.batcher.draw(game.sprites.NewChainNE, xOffset + width - (chainSize - shadowSize), Gdx.graphics.getHeight() - (chainSize - shadowSize), chainSize - shadowSize, chainSize - shadowSize);
-		game.batcher.draw(game.sprites.NewChainSW, xOffset, 0, chainSize - shadowSize, chainSize - shadowSize);
-		game.batcher.draw(game.sprites.NewChainSE, xOffset + width - (chainSize - shadowSize), 0, chainSize - shadowSize, chainSize - shadowSize);
+		game.batcher.draw(game.sprites.ChainNW, xOffset, yOffset + height - chainSize, chainSize, chainSize);
+		game.batcher.draw(game.sprites.ChainNE, xOffset + width - chainSize, yOffset + height - chainSize, chainSize, chainSize);
+		game.batcher.draw(game.sprites.ChainSW, xOffset, yOffset, chainSize, chainSize);
+		game.batcher.draw(game.sprites.ChainSE, xOffset + width - chainSize, yOffset, chainSize, chainSize);
 	}
 	
 	public void drawButtons(){		

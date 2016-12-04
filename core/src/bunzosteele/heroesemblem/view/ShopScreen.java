@@ -21,13 +21,13 @@ import com.badlogic.gdx.math.Vector3;
 
 public class ShopScreen extends ScreenAdapter
 {
-
 	HeroesEmblem game;
 	ShopState state;
 	StockWindow stockWindow;
 	ShopkeeperPanel shopkeeperPanel;
 	ShopPanel shopPanel;
 	RosterPanel rosterPanel;
+	SettingsPanel settingsPanel;
 	public static Sound buySound = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
 	public static Sound finalBuySound = Gdx.audio.newSound(Gdx.files.internal("finalbuy.wav"));
 
@@ -79,6 +79,15 @@ public class ShopScreen extends ScreenAdapter
 		rosterPanel.draw();
 		shopkeeperPanel.draw();
 		game.batcher.end();
+		
+		if(state.isSettingsOpen){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			settingsPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			settingsPanel.draw();
+			game.batcher.end();		
+		}
 	}
 
 	private void InitializeShopScreen(final HeroesEmblem game)
@@ -93,6 +102,7 @@ public class ShopScreen extends ScreenAdapter
 		this.shopkeeperPanel= new ShopkeeperPanel(game, state, sideWidth, windowHeight, 0, 0);
 		this.shopPanel = new ShopPanel(game, state, sideWidth, windowHeight, windowWidth + sideWidth, 0);
 		this.rosterPanel = new RosterPanel(game, state, windowWidth, rosterHeight, sideWidth, 0);
+		this.settingsPanel = new SettingsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
 		MusicManager.PlayShopMusic(game.settings.getFloat("musicVolume", .25f));
 	}
 
@@ -116,63 +126,30 @@ public class ShopScreen extends ScreenAdapter
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void show()
-	{
-		if(game.isQuitting){
-			for(Unit unit : state.roster){
-				state.graveyard.add(generateUnitDto(unit));
-			}
-			game.setScreen(new GameOverScreen(game, state.roundsSurvived, state.graveyard));
-		}
-	}
-	
-	private UnitDto generateUnitDto(Unit deceased){
-		UnitDto unitDto = new UnitDto();
-		unitDto.type = deceased.type.toString();
-		unitDto.name = deceased.name;
-		unitDto.attack = deceased.attack;
-		unitDto.defense = deceased.defense;
-		unitDto.evasion = deceased.evasion;
-		unitDto.accuracy = deceased.accuracy;
-		unitDto.movement = deceased.movement;
-		unitDto.maximumHealth = deceased.maximumHealth;
-		unitDto.level = deceased.level;
-		if(deceased.ability == null){
-			unitDto.ability = "None";
-		}else{
-			unitDto.ability = deceased.ability.displayName;
-		}
-		unitDto.unitsKilled = deceased.unitsKilled;
-		unitDto.damageDealt = deceased.damageDealt;
-		LocationDto location = new LocationDto();
-		location.battlefieldId = Integer.MIN_VALUE;
-		location.x = -1;
-		location.y = -1;
-		unitDto.locationKilled = location;
-		unitDto.roundKilled = state.roundsSurvived;
-		unitDto.isMale = deceased.isMale;
-		unitDto.backStory = deceased.backStory;
-		return unitDto;
-	}
-
 
 	public void update() throws IOException
 	{
 		if (Gdx.input.justTouched())
 		{
-			if (rosterPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-				rosterPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}else if (stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-				stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}else if (shopPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-				shopPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}else if (shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-				shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}	
-		}else if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsScreen.backEnabled){
-			game.setScreen(new SettingsScreen(game, game.getScreen(), true));
+			if(state.isSettingsOpen){
+				if (settingsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					settingsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else{
+					state.isSettingsOpen = false;
+				}
+			}else{
+				if (rosterPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					rosterPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else if (stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					stockWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else if (shopPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					shopPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else if (shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}	
+			}
+		}else if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsPanel.backEnabled){
+			//game.setScreen(new SettingsPanel(game, game.getScreen(), true));
 		}
 	}
 }

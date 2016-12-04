@@ -26,8 +26,7 @@ public class ShopState
 	public int rerollCount;
 	public List<UnitDto> graveyard;
 	public HeroesEmblem game;
-	public boolean isInspecting = false;
-	public boolean isShopkeeperPanelDisplayed = false;
+	public boolean isSettingsOpen = false;
 	public int nextBattlefieldId;
 	public List<List<Tile>> nextBattlefield;
 
@@ -142,8 +141,7 @@ public class ShopState
 		this.game.gameServicesController.RecordAnalyticsEvent("UnitPurchased", action, parsedUnit, this.selected.cost);
 		this.gold -= this.selected.cost;
 		this.selected = null;
-		this.isInspecting = false;
-		this.isShopkeeperPanelDisplayed = false;
+		this.isSettingsOpen = false;
 		this.stock = UnitGenerator.GenerateStock(this.roster, this.game, this.GetTrainingPerkLevel());
 	}
 	
