@@ -19,6 +19,7 @@ public class Thrust extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;
+		this.description = "Deals damage equal to this unit's Attack to an adjacent enemy and knock them back. Pin enemies against obstacles for bonus damage. Can be used once per battle.";
 	}
 	
 	public Thrust(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

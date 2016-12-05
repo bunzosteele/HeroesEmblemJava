@@ -111,7 +111,7 @@ public  class UnitRenderer {
 		}
 	}
 
-	public static void SetDefenseFont( Unit unit,  Element unitStats, List<List<Tile>> battlefield,  BitmapFont font) {
+	public static void SetDefenseFont(Unit unit,  Element unitStats, List<List<Tile>> battlefield,  BitmapFont font) {
 		int baseStat;
 		int defense;
 		if (unitStats != null) {
@@ -170,6 +170,20 @@ public  class UnitRenderer {
 			font.setColor(new Color(0, 0, 255, 1));
 		}
 		if (currentHealth < baseStat) {
+			font.setColor(new Color(.7f, .4f, .4f, 1f));
+		}
+	}
+	
+	public static void SetMovementFont( Unit unit,  Element unitStats, BitmapFont font) {
+		int baseStat = unitStats.getInt("Movement");
+		int movement = unit.movement;
+		if (movement == baseStat) {
+			font.setColor(new Color(0, 0, 0, 1));
+		}
+		if (movement > baseStat) {
+			font.setColor(new Color(0, 0, 255, 1));
+		}
+		if (movement < baseStat) {
 			font.setColor(new Color(.7f, .4f, .4f, 1f));
 		}
 	}

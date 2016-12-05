@@ -21,6 +21,7 @@ public class Vault extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = false;
+		this.description = "Leap over obstacles to a nearby space. Can be used in addition to movement and attacking each turn.";
 	}
 	
 	public Vault(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

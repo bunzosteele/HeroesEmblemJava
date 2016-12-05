@@ -16,6 +16,7 @@ public class ChainLightning extends Ability
 	public ChainLightning()
 	{
 		this.displayName = "Lightning";
+		this.description = "Deals damage equal to this unit's Attack to target enemy. Damage then bounces to nearby units, doing reduced damage. Can be used once per battle.";
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;

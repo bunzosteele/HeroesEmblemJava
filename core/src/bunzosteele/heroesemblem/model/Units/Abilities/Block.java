@@ -11,6 +11,7 @@ public class Block extends Ability
 		this.isActive = false;
 		this.isTargeted = false;
 		this.isAction = false;
+		this.description = "This unit has a chance to block all incoming damage when attacked.";
 	}
 	
 	public Block(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

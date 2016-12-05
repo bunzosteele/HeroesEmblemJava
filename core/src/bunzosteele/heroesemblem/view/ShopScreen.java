@@ -28,6 +28,8 @@ public class ShopScreen extends ScreenAdapter
 	ShopPanel shopPanel;
 	RosterPanel rosterPanel;
 	SettingsPanel settingsPanel;
+	MapPanel mapPanel;
+	UnitDetailsPanel unitDetailsPanel;
 	public static Sound buySound = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
 	public static Sound finalBuySound = Gdx.audio.newSound(Gdx.files.internal("finalbuy.wav"));
 
@@ -87,6 +89,20 @@ public class ShopScreen extends ScreenAdapter
 			game.batcher.begin();
 			settingsPanel.draw();
 			game.batcher.end();		
+		}else if(state.isMapOpen){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			mapPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			mapPanel.draw();
+			game.batcher.end();
+		}else if(state.isUnitDetailsOpen){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			unitDetailsPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			unitDetailsPanel.draw();
+			game.batcher.end();
 		}
 	}
 
@@ -103,6 +119,8 @@ public class ShopScreen extends ScreenAdapter
 		this.shopPanel = new ShopPanel(game, state, sideWidth, windowHeight, windowWidth + sideWidth, 0);
 		this.rosterPanel = new RosterPanel(game, state, windowWidth, rosterHeight, sideWidth, 0);
 		this.settingsPanel = new SettingsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
+		this.mapPanel = new MapPanel(game, state.nextBattlefield, Gdx.graphics.getWidth() * 7 / 16, Gdx.graphics.getHeight() * 5 / 9, Gdx.graphics.getWidth() * 9 / 32, Gdx.graphics.getHeight() * 2 / 9);
+		this.unitDetailsPanel = new UnitDetailsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 5 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 2 / 9);
 		MusicManager.PlayShopMusic(game.settings.getFloat("musicVolume", .25f));
 	}
 
@@ -136,8 +154,26 @@ public class ShopScreen extends ScreenAdapter
 					settingsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 				}else{
 					state.isSettingsOpen = false;
+					state.isMapOpen = false;
+					state.isUnitDetailsOpen = false;
 				}
-			}else{
+			}else if(state.isMapOpen){
+				if (mapPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					mapPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else{
+					state.isSettingsOpen = false;
+					state.isMapOpen = false;
+					state.isUnitDetailsOpen = false;
+				}
+			}else if(state.isUnitDetailsOpen){
+				if (unitDetailsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					unitDetailsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else{
+					state.isSettingsOpen = false;
+					state.isMapOpen = false;
+					state.isUnitDetailsOpen = false;
+				}
+			}else{			
 				if (rosterPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
 					rosterPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 				}else if (stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){

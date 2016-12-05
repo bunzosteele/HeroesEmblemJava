@@ -21,6 +21,7 @@ public class Heal extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;
+		this.description = "Heals an adjacent allied unit. Scales with this unit's Attack stat. Steals experience equal to the amount healed. Unlimited uses.";
 	}
 	
 	public Heal(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

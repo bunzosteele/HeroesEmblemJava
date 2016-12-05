@@ -21,6 +21,7 @@ public class Rebirth extends Ability
 		this.isTargeted = true;
 		this.areTargetsPersistent = true;
 		this.isAction = true;
+		this.description = "Heals a nearby ally for a large amount. Scales with this unit's Attack. Steals experience equal to amount healed. Can be used once per unit per battle.";
 	}
 	
 	public Rebirth(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

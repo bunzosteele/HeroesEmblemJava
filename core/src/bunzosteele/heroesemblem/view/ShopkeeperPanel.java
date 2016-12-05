@@ -113,40 +113,6 @@ public class ShopkeeperPanel
 		}
 		game.font.draw(game.batcher, state.GetPerkName(state.perksPurchased < 8 ? 8 : state.perksPurchased + 1), perkXOffset, perkYOffset - perkHeight * 8 + tileHeight / 8 + game.font.getLineHeight(), perkWidth - perkWidth * 2 /122, 1, false);
 	}
-	/*
-	private void drawMap(){
-		if(state.perksPurchased > 0){
-			game.font.draw(game.batcher, "Next Battle:", xOffset + columnWidth * 3, Gdx.graphics.getHeight() - columnWidth * 3 / 2 + game.font.getData().lineHeight, columnWidth * 6, 1, false);
-			int rowOffset = 1;
-			for ( List<Tile> row : state.nextBattlefield)
-			{
-				int tileOffset = 0;
-				for ( Tile tile : row)
-				{
-					 AtlasRegion tileRegion = game.textureAtlas.findRegion(tile.type);
-					 Sprite tileSprite = new Sprite(tileRegion);
-					game.batcher.draw(tileSprite, xOffset + columnWidth * 9 / 2 + ((columnWidth * 3) / 16 * (tileOffset)), Gdx.graphics.getHeight() - columnWidth * 3 / 2 -  ((columnWidth * 3) / 16  * rowOffset), (columnWidth * 3) / 16, (columnWidth * 3) / 16);
-					tileOffset++;
-				}
-				rowOffset++;
-			}
-			rowOffset = 1;
-			for ( List<Tile> row : state.nextBattlefield)
-			{
-				int tileOffset = 0;
-				for ( Tile tile : row)
-				{
-					if(tile.foreground != null){
-						 AtlasRegion foregroundRegion = game.textureAtlas.findRegion(tile.foreground);
-						 Sprite foregroundSprite = new Sprite(foregroundRegion);
-						game.batcher.draw(foregroundSprite, xOffset + columnWidth * 9 / 2 + ((columnWidth * 3) / 16 * (tileOffset)), Gdx.graphics.getHeight() - columnWidth * 3 / 2 -  ((columnWidth * 3) / 16  * rowOffset), (columnWidth * 3) / 16, (columnWidth * 3) / 16);
-					}
-					tileOffset++;
-				}
-				rowOffset++;
-			}
-		}
-	}*/
 
 	public void drawBackground()
 	{
@@ -192,7 +158,12 @@ public class ShopkeeperPanel
 			game.batcher.draw(game.sprites.PurchaseDisabled, purchaseX, purchaseY, buttonSize, buttonSize);
 		}
 		
-		game.batcher.draw(game.sprites.MapDisabled, mapX, mapY, buttonSize, buttonSize);
+		if(state.perksPurchased > 0){
+			game.batcher.draw(game.sprites.MapEnabled, mapX, mapY, buttonSize, buttonSize);
+		}else{
+			game.batcher.draw(game.sprites.MapDisabled, mapX, mapY, buttonSize, buttonSize);
+		}
+		
 	}
 
 	public boolean isTouched( float x,  float y)
@@ -233,6 +204,7 @@ public class ShopkeeperPanel
 	}
 	
 	private void processMapTouch(){
-		
+		if(state.perksPurchased > 0)
+			state.isMapOpen = !state.isMapOpen;
 	}
 }

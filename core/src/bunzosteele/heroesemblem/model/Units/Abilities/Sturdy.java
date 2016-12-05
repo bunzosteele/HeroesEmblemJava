@@ -12,6 +12,7 @@ public class Sturdy extends Ability
 		this.isActive = false;
 		this.isTargeted = false;
 		this.isAction = false;
+		this.description = "Once per battle, this unit will survive otherwise lethal damage.";
 	}
 	
 	public Sturdy(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

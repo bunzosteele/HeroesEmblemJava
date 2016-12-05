@@ -31,6 +31,7 @@ public class BattleScreen extends ScreenAdapter
 	//TacticsControls tacticsControls;
 	AiProcessor aiProcessor;
 	SettingsPanel settingsPanel;
+	UnitDetailsPanel unitDetailsPanel;
 	boolean spoofAiThinking = false;
 
 
@@ -58,6 +59,7 @@ public class BattleScreen extends ScreenAdapter
 		this.battlePanel = new BattlePanel(game, this.state, sideWidth, windowHeight, windowWidth, 0);
 		//this.tacticsControls = new TacticsControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
 		this.settingsPanel = new SettingsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
+		this.unitDetailsPanel = new UnitDetailsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 5 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 2 / 9);
 		this.aiProcessor = new AiProcessor(state);
 		if(state.battlefieldId < 5){
 			MusicManager.PlayEasyBattleMusic(this.game.settings.getFloat("musicVolume", .25f));
@@ -93,6 +95,13 @@ public class BattleScreen extends ScreenAdapter
 			game.shapeRenderer.end();
 			game.batcher.begin();
 			settingsPanel.draw();
+			game.batcher.end();		
+		}else if(state.isUnitDetailsOpen){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			unitDetailsPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			unitDetailsPanel.draw();
 			game.batcher.end();		
 		}
 	}
@@ -200,24 +209,33 @@ public class BattleScreen extends ScreenAdapter
 					settingsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 				}else{
 					state.isSettingsOpen = false;
+					state.isUnitDetailsOpen = false;
 				}
-			}
-			if (this.battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
-				this.battleWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-				//this.tacticsControls.startingWithBenched = false;
-			} else if (this.battlePanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
-				this.battlePanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-				//this.tacticsControls.startingWithBenched = false;
-			} /*else if (this.battleControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-			{
-				this.battleControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}else if(this.tacticsControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-				this.tacticsControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-			}*/
-			if(this.state.isInTactics){
-				//this.tacticsControls.updateState();
+			}else if(state.isUnitDetailsOpen){
+				if (unitDetailsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					unitDetailsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else{
+					state.isSettingsOpen = false;
+					state.isUnitDetailsOpen = false;
+				}
+			}else{
+				if (this.battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+				{
+					this.battleWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+					//this.tacticsControls.startingWithBenched = false;
+				} else if (this.battlePanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+				{
+					this.battlePanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+					//this.tacticsControls.startingWithBenched = false;
+				} /*else if (this.battleControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+				{
+					this.battleControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else if(this.tacticsControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					this.tacticsControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}*/
+				if(this.state.isInTactics){
+					//this.tacticsControls.updateState();
+				}
 			}
 		}
 	}

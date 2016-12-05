@@ -20,6 +20,7 @@ public class Snipe extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;
+		this.description = "Hits any enemy on the battlefield for damage equal to this unit's Attack. Has a very high chance to crit. Can be used once per battle.";
 	}
 	
 	public Snipe(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

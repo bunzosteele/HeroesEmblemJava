@@ -21,6 +21,7 @@ public class Teleport extends Ability
 		this.isTargeted = true;
 		this.isMultiInput = true;
 		this.isAction = true;
+		this.description = "Teleports any unit to an available space on the battlefield. Can be used once per battle.";
 	}
 	
 	public Teleport(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

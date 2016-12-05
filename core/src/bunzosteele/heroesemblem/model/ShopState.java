@@ -27,6 +27,8 @@ public class ShopState
 	public List<UnitDto> graveyard;
 	public HeroesEmblem game;
 	public boolean isSettingsOpen = false;
+	public boolean isMapOpen = false;
+	public boolean isUnitDetailsOpen = false;
 	public int nextBattlefieldId;
 	public List<List<Tile>> nextBattlefield;
 

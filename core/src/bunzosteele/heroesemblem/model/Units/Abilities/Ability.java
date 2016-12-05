@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public abstract class Ability
 {
 	public String displayName;
+	public String description;
 	public boolean isActive;
 	public boolean isTargeted;
 	public boolean exhausted;

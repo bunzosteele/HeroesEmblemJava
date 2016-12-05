@@ -19,6 +19,7 @@ public class PowerShot extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;
+		this.description = "Deals damage equal to this unit's Attack to all units in a straight line. Can hit allies and is blocked by terrain. Can be used once per battle.";
 	}
 	
 	public PowerShot(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

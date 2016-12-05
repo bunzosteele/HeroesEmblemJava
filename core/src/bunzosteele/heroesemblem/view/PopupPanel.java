@@ -22,7 +22,7 @@ public class PopupPanel {
 		this.yOffset = yOffset;
 		this.width = width;
 		this.height = height;
-		this.chainSize = width / 40;
+		this.chainSize = Gdx.graphics.getWidth() / 80;
 		this.shadowSize = chainSize / 3; 
 	}
 	

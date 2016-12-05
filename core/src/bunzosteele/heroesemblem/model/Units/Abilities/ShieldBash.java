@@ -19,6 +19,7 @@ public class ShieldBash extends Ability
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;
+		this.description = "Deals damage to target adjacent unit equal to this unit's Attack. Stuns the target for one turn. Can be used once per battle.";
 	}
 	
 	public ShieldBash(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

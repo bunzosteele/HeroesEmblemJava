@@ -107,29 +107,32 @@ public class BattlePanel
 	public void drawUnitStats() throws IOException{
 		if(state.selected != null){
 			game.font.setColor(Color.BLACK);
-			game.font.getData().setScale(.25f);
+			game.font.getData().setScale(.20f);
 			
-			int portraitHeight = (int) (buttonSize * .66);
-			int nameY =  height - chainSize - portraitHeight - shadowSize * 2;
+			int portraitHeight = buttonSize - chainSize - shadowSize;
+			int nameBackdropWidth = buttonSize * 2 - chainSize - shadowSize;
+			int nameBackdropHeight = nameBackdropWidth * 44 / 92;
+			int nameY =  height + yOffset - chainSize - shadowSize - nameBackdropHeight;
 			final AtlasRegion portraitRegion = game.textureAtlas.findRegion("Portrait" + state.selected.type + state.selected.team);
-			game.batcher.draw(new Sprite(portraitRegion), xOffset + chainSize, nameY, portraitHeight, portraitHeight);
+			game.batcher.draw(new Sprite(portraitRegion), xOffset + chainSize + shadowSize, nameY + shadowSize, portraitHeight, portraitHeight);
 	
 			int bannerWidth = buttonSize / 4;
 			int bannerHeight = (int) (bannerWidth * 1.42);
 			final AtlasRegion bannerRegion = game.textureAtlas.findRegion("Banner" + state.selected.team);
-			game.batcher.draw(new Sprite(bannerRegion), xOffset, height - (chainSize / 2) - bannerHeight, bannerWidth, bannerHeight);
+			game.batcher.draw(new Sprite(bannerRegion), xOffset + chainSize - shadowSize, height - chainSize + shadowSize - bannerHeight, bannerWidth, bannerHeight);
 			
 			final AtlasRegion nameBackdropRegion = game.textureAtlas.findRegion("NameBackdrop" + state.selected.team);
-			int nameBackdropWidth = width - chainSize * 2 - portraitHeight;
-			game.batcher.draw(new Sprite(nameBackdropRegion), xOffset + (chainSize + portraitHeight), nameY, nameBackdropWidth, portraitHeight + shadowSize * 2);
-			game.font.draw(game.batcher, state.selected.name, xOffset + (chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
-			game.font.draw(game.batcher, state.selected.type.toString(), xOffset + (chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
+			game.batcher.draw(new Sprite(nameBackdropRegion), xOffset + (chainSize + portraitHeight) + shadowSize, yOffset + height - chainSize - shadowSize - nameBackdropHeight, nameBackdropWidth, nameBackdropHeight);
+			game.font.draw(game.batcher, state.selected.name, xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
+			game.font.draw(game.batcher, state.selected.type.toString(), xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
 			game.batcher.draw(game.sprites.HealthBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight, backdropWidth, backdropHeight);
+			game.font.getData().setScale(.25f);
 			game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawHealthBar(nameY);
 			game.batcher.draw(game.sprites.ExperienceBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 2, backdropWidth, backdropHeight);
 			game.font.draw(game.batcher, (state.selected.level < 10 ? "Lvl. 0" : "Lvl. ") + state.selected.level, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - backdropHeight - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawExperienceBar(nameY);
+			
 			if (state.selected.team == 0 || state.perksPurchased >= 2) {
 				game.font.getData().setScale(.35f);
 				int statTextXOffset = xOffset + (width - backdropWidth) / 2 + backdropWidth * 57 / 116;
@@ -152,7 +155,6 @@ public class BattlePanel
 	}
 	
 	public void drawButtons(){
-		
 		if(state.currentPlayer == 0){
 			if (!hasActions())
 			{
@@ -188,7 +190,16 @@ public class BattlePanel
 		}
 		
 		
-		game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);	
+		if (state.selected == null){
+			game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);
+		}else{
+			if(state.isUnitDetailsOpen){
+				game.batcher.draw(game.sprites.InfoClose, infoX, infoY, buttonSize, buttonSize);
+			}else{
+				game.batcher.draw(game.sprites.InfoOpen, infoX, infoY, buttonSize, buttonSize);
+			}
+		}
+
 		game.batcher.draw(game.sprites.ControlsDivider, chainSize + xOffset, endTurnY + buttonSize - dividerHeight / 2 + (abilityY - buttonSize - endTurnY) / 2, dividerWidth, dividerHeight);
 		game.batcher.draw(game.sprites.SettingsIcon, xOffset + width - chainSize * 2, yOffset + height - chainSize * 2, chainSize + shadowSize, chainSize + shadowSize);
 	}
@@ -210,8 +221,7 @@ public class BattlePanel
 				
 			int barYOffset = (int) (backdropHeight * .122);
 			game.batcher.draw(new Sprite(game.textureAtlas.findRegion("Health" + healthIndex)), xOffset + (width - backdropWidth) / 2 + leftOffset, nameY - backdropHeight + barYOffset, barWidth, barHeight);
-		}
-		
+		}		
 	}
 	
 	private void DrawExperienceBar(int nameY){
@@ -269,6 +279,8 @@ public class BattlePanel
 			processConfirmTouch();
 		}else if((clickedX > xOffset + width - chainSize * 3) && (clickedY > yOffset + height - chainSize * 3)){
 			processSettingsTouch();	
+		}else if((clickedX > infoX && clickedX < infoX + buttonSize) && (clickedY > infoY && clickedY < infoY + buttonSize)){
+			processInfoTouch();	
 		}else{
 			state.selected = null;
 			state.targeted = null;
@@ -320,5 +332,11 @@ public class BattlePanel
 	
 	private void processSettingsTouch(){
 		this.state.isSettingsOpen = !this.state.isSettingsOpen;
+	}
+	
+	private void processInfoTouch(){
+		if(state.selected != null){
+			state.isUnitDetailsOpen = !state.isUnitDetailsOpen;
+		}
 	}
 }

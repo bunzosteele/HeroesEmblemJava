@@ -54,7 +54,7 @@ public class ShopPanel
 		buttonSize = width / 3;
 		this.chainSize = width / 15;
 		this.shadowSize = chainSize / 3; 
-		backdropWidth = (int) (width * .8);
+		backdropWidth = width * 8 / 10;
 		backdropHeight = (int) Math.floor(backdropWidth * .353);
 		dividerWidth = width - buttonSize;
 		dividerHeight = (int) (dividerWidth * .0547);
@@ -108,27 +108,29 @@ public class ShopPanel
 	public void drawUnitStats() throws IOException{
 		if(state.selected != null){
 			game.font.setColor(Color.BLACK);
-			game.font.getData().setScale(.25f);
+			game.font.getData().setScale(.20f);
 			
-			int portraitHeight = (int) (buttonSize * .66);
-			int nameY =  height - chainSize - portraitHeight - shadowSize * 2;
+			int portraitHeight = buttonSize - chainSize - shadowSize;
+			int nameBackdropWidth = buttonSize * 2 - chainSize - shadowSize;
+			int nameBackdropHeight = nameBackdropWidth * 44 / 92;
+			int nameY =  height + yOffset - chainSize - shadowSize - nameBackdropHeight;
 			final AtlasRegion portraitRegion = game.textureAtlas.findRegion("Portrait" + state.selected.type + state.selected.team);
-			game.batcher.draw(new Sprite(portraitRegion), xOffset + chainSize, nameY, portraitHeight, portraitHeight);
+			game.batcher.draw(new Sprite(portraitRegion), xOffset + chainSize + shadowSize, nameY + shadowSize, portraitHeight, portraitHeight);
 	
 			int bannerWidth = buttonSize / 4;
 			int bannerHeight = (int) (bannerWidth * 1.42);
 			final AtlasRegion bannerRegion = game.textureAtlas.findRegion("Banner" + state.selected.team);
-			game.batcher.draw(new Sprite(bannerRegion), xOffset, height - (chainSize / 2) - bannerHeight, bannerWidth, bannerHeight);
+			game.batcher.draw(new Sprite(bannerRegion), xOffset + chainSize - shadowSize, height - chainSize + shadowSize - bannerHeight, bannerWidth, bannerHeight);
 			
 			final AtlasRegion nameBackdropRegion = game.textureAtlas.findRegion("NameBackdrop" + state.selected.team);
-			int nameBackdropWidth = width - chainSize * 2 - portraitHeight;
-			game.batcher.draw(new Sprite(nameBackdropRegion), xOffset + (chainSize + portraitHeight), nameY, nameBackdropWidth, portraitHeight + shadowSize * 2);
-			game.font.draw(game.batcher, state.selected.name, xOffset + (chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
-			game.font.draw(game.batcher, state.selected.type.toString(), xOffset + (chainSize + portraitHeight), nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
+			game.batcher.draw(new Sprite(nameBackdropRegion), xOffset + (chainSize + portraitHeight) + shadowSize, yOffset + height - chainSize - shadowSize - nameBackdropHeight, nameBackdropWidth, nameBackdropHeight);
+			game.font.draw(game.batcher, state.selected.name, xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
+			game.font.draw(game.batcher, state.selected.type.toString(), xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
 			game.batcher.draw(game.sprites.HealthBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight, backdropWidth, backdropHeight);
 			DrawHealthBar(nameY);
 			game.batcher.draw(game.sprites.ExperienceBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 2, backdropWidth, backdropHeight);
 			DrawExperienceBar(nameY);
+			game.font.getData().setScale(.25f);
 			final XmlReader reader = new XmlReader();
 			final Element xml = reader.parse(Gdx.files.internal("UnitStats.xml"));
 			final Element unitStats = xml.getChildByName(state.selected.type.toString());		
@@ -194,7 +196,16 @@ public class ShopPanel
 			game.batcher.draw(game.sprites.HireDisabled, purchaseX, purchaseY, buttonSize, buttonSize);
 		}
 		
-		game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);
+		if (state.selected == null){
+			game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);
+		}else{
+			if(state.isUnitDetailsOpen){
+				game.batcher.draw(game.sprites.InfoClose, infoX, infoY, buttonSize, buttonSize);
+			}else{
+				game.batcher.draw(game.sprites.InfoOpen, infoX, infoY, buttonSize, buttonSize);
+			}
+		}
+		
 		game.batcher.draw(game.sprites.ControlsDivider, xOffset + (width - dividerWidth) / 2, combatY + buttonSize - dividerHeight / 2 + (abilityY - buttonSize - combatY) / 2, dividerWidth, dividerHeight);
 		game.batcher.draw(game.sprites.SettingsIcon, xOffset + width - chainSize * 2, yOffset + height - chainSize * 2, chainSize + shadowSize, chainSize + shadowSize);
 	}
@@ -305,7 +316,9 @@ public class ShopPanel
 	}
 	
 	private void processInfoTouch(){
-		
+		if(state.selected != null){
+			state.isUnitDetailsOpen = !state.isUnitDetailsOpen;
+		}
 	}
 	
 	private void processSettingsTouch(){

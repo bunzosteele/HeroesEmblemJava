@@ -21,6 +21,7 @@ public class Scholar extends Ability
 		this.isTargeted = true;
 		this.areTargetsPersistent = true;
 		this.isAction = true;
+		this.description = "Give an adjacent ally experience. Scales with this unit's Attack. If the target levels up, this unit gains experience. Can be used once per target per battle.";
 	}
 	
 	public Scholar(boolean exhausted, boolean canUse, List<Integer> abilityTargets){

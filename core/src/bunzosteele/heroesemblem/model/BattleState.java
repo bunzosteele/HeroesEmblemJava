@@ -44,7 +44,7 @@ public class BattleState
 	public Tile victimTile;
 	public Unit targeted;
 	public boolean isSettingsOpen;
-	
+	public boolean isUnitDetailsOpen;
 
 	public BattleState(final ShopState shopState) throws IOException
 	{
