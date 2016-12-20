@@ -40,6 +40,11 @@ public class BattlePanel
 	int backdropHeight;
 	int dividerWidth;
 	int dividerHeight;
+	int summaryWidth;
+	int summaryHeight;
+	int nameBackdropWidth;
+	int nameBackdropHeight;
+	int nameY;
 
 	public BattlePanel(final HeroesEmblem game, final BattleState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -65,7 +70,12 @@ public class BattlePanel
 		abilityX = xOffset + buttonSize / 3;
 		abilityY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
 		infoX = xOffset + width - buttonSize - buttonSize / 3;
-		infoY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
+		infoY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;	
+		summaryWidth = buttonSize * 47 / 100;
+		summaryHeight = summaryWidth * 40 / 47;
+		nameBackdropWidth = buttonSize * 2 - chainSize - shadowSize;
+		nameBackdropHeight = nameBackdropWidth * 44 / 92;
+		nameY =  height + yOffset - chainSize - shadowSize - nameBackdropHeight;
 	}
 
 	public void draw() throws IOException
@@ -110,9 +120,6 @@ public class BattlePanel
 			game.font.getData().setScale(.20f);
 			
 			int portraitHeight = buttonSize - chainSize - shadowSize;
-			int nameBackdropWidth = buttonSize * 2 - chainSize - shadowSize;
-			int nameBackdropHeight = nameBackdropWidth * 44 / 92;
-			int nameY =  height + yOffset - chainSize - shadowSize - nameBackdropHeight;
 			final AtlasRegion portraitRegion = game.textureAtlas.findRegion("Portrait" + state.selected.type + state.selected.team);
 			game.batcher.draw(new Sprite(portraitRegion), xOffset + chainSize + shadowSize, nameY + shadowSize, portraitHeight, portraitHeight);
 	
@@ -143,11 +150,18 @@ public class BattlePanel
 				game.batcher.draw(game.sprites.AccuracyBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 4, backdropWidth, backdropHeight);
 				game.font.draw(game.batcher, "" + state.selected.accuracy, statTextXOffset, nameY - backdropHeight * 3 - statRelativeYOffset, statTextWidth, 1, false);
 				game.batcher.draw(game.sprites.DefenseBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 5, backdropWidth, backdropHeight);
-				UnitRenderer.SetDefenseFont(state.selected, null, state.battlefield, game.font);
-				game.font.draw(game.batcher, "" + (state.selected.defense + state.battlefield.get(state.selected.y).get(state.selected.x).defenseModifier), statTextXOffset, nameY - backdropHeight * 4 - statRelativeYOffset, statTextWidth, 1, false);
 				game.batcher.draw(game.sprites.EvasionBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 6, backdropWidth, backdropHeight);
-				UnitRenderer.SetEvasionFont(state.selected, null, state.battlefield, game.font);
-				game.font.draw(game.batcher, "" + (state.selected.evasion + state.battlefield.get(state.selected.y).get(state.selected.x).evasionModifier), statTextXOffset, nameY - backdropHeight * 5 - statRelativeYOffset, statTextWidth, 1, false);
+
+				if(state.selected.x >= 0 && state.selected.y >= 0){
+					UnitRenderer.SetDefenseFont(state.selected, null, state.battlefield, game.font);
+					game.font.draw(game.batcher, "" + (state.selected.defense + state.battlefield.get(state.selected.y).get(state.selected.x).defenseModifier), statTextXOffset, nameY - backdropHeight * 4 - statRelativeYOffset, statTextWidth, 1, false);
+					UnitRenderer.SetEvasionFont(state.selected, null, state.battlefield, game.font);
+					game.font.draw(game.batcher, "" + (state.selected.evasion + state.battlefield.get(state.selected.y).get(state.selected.x).evasionModifier), statTextXOffset, nameY - backdropHeight * 5 - statRelativeYOffset, statTextWidth, 1, false);
+				}else{
+					game.font.draw(game.batcher, "" + state.selected.defense, statTextXOffset, nameY - backdropHeight * 4 - statRelativeYOffset, statTextWidth, 1, false);
+					game.font.draw(game.batcher, "" + state.selected.evasion, statTextXOffset, nameY - backdropHeight * 5 - statRelativeYOffset, statTextWidth, 1, false);
+
+				}
 			}
 			
 			game.font.getData().setScale(.33f);
@@ -155,30 +169,58 @@ public class BattlePanel
 	}
 	
 	public void drawButtons(){
-		if(state.currentPlayer == 0){
-			if (!hasActions())
-			{
-				game.batcher.draw(game.sprites.EndTurnEmphasized, endTurnX, endTurnY, buttonSize, buttonSize);
-			}else{
-				game.batcher.draw(game.sprites.EndTurnEnabled, endTurnX, endTurnY, buttonSize, buttonSize);
-			}
-		}else{
-			game.batcher.draw(game.sprites.EndTurnDisabled, endTurnX, endTurnY, buttonSize, buttonSize);
-		}
-		
-		if(state.selected != null && state.selected.ability != null && state.CanUseAbility(state.selected)){
-			if(state.isUsingAbility){
+		if(state.isInTactics){
+			if(state.isTacticsOpen){
 				game.batcher.draw(game.sprites.EmptyEmphasis, abilityX, abilityY, buttonSize, buttonSize);
 			}else{
 				game.batcher.draw(game.sprites.EmptyEnabled, abilityX, abilityY, buttonSize, buttonSize);
 			}
+			int summaryX = abilityX + (buttonSize - summaryWidth) / 2;
+			int summaryY = abilityY + (buttonSize - summaryHeight) / 2;
+			
+			game.batcher.draw(game.sprites.RosterSummary, summaryX, summaryY, summaryWidth, summaryHeight);
+			for(int i = 0; i < state.unplacedUnits.size(); i++){
+				int slotWidth = summaryWidth * 7 / 47;
+				int slotHeight = slotWidth * 6 / 7;
+				int slotXOffset = getSlotXOffset(i);
+				int slotYOffset = getSlotYOffset(i);
+				game.batcher.draw(game.sprites.RosterSummarySlot, summaryX + slotXOffset, summaryY + slotYOffset, slotWidth, slotHeight);
+			}
+			
+			if(state.unplacedUnits.size() == 0){
+				game.batcher.draw(game.sprites.CombatEmphasis, endTurnX, endTurnY, buttonSize, buttonSize);
+			}else if(state.roster.size() > state.unplacedUnits.size()){
+				game.batcher.draw(game.sprites.CombatEnabled, endTurnX, endTurnY, buttonSize, buttonSize);
+			}else{
+				game.batcher.draw(game.sprites.CombatDisabled, endTurnX, endTurnY, buttonSize, buttonSize);
+			}
+
 		}else{
-			game.batcher.draw(game.sprites.EmptyDisabled, abilityX, abilityY, buttonSize, buttonSize);
-		}
-		if(state.selected != null && state.selected.ability != null){
-			game.font.getData().setScale(.20f);
-			game.font.setColor(new Color(0f, 0f, 0f, 1f));
-			game.font.draw(game.batcher, state.selected.ability.displayName, abilityX, abilityY + buttonSize / 2 + game.font.getLineHeight() / 2, buttonSize, 1, false);
+			if(state.selected != null && state.selected.ability != null && state.CanUseAbility(state.selected)){
+				if(state.isUsingAbility){
+					game.batcher.draw(game.sprites.EmptyEmphasis, abilityX, abilityY, buttonSize, buttonSize);
+				}else{
+					game.batcher.draw(game.sprites.EmptyEnabled, abilityX, abilityY, buttonSize, buttonSize);
+				}
+			}else{
+				game.batcher.draw(game.sprites.EmptyDisabled, abilityX, abilityY, buttonSize, buttonSize);
+			}
+			if(state.selected != null && state.selected.ability != null){
+				game.font.getData().setScale(.20f);
+				game.font.setColor(new Color(0f, 0f, 0f, 1f));
+				game.font.draw(game.batcher, state.selected.ability.displayName, abilityX, abilityY + buttonSize / 2 + game.font.getLineHeight() / 2, buttonSize, 1, false);
+			}
+			
+			if(state.currentPlayer == 0){
+				if (!hasActions())
+				{
+					game.batcher.draw(game.sprites.EndTurnEmphasized, endTurnX, endTurnY, buttonSize, buttonSize);
+				}else{
+					game.batcher.draw(game.sprites.EndTurnEnabled, endTurnX, endTurnY, buttonSize, buttonSize);
+				}
+			}else{
+				game.batcher.draw(game.sprites.EndTurnDisabled, endTurnX, endTurnY, buttonSize, buttonSize);
+			}
 		}
 		
 		if(state.targeted != null){
@@ -188,7 +230,6 @@ public class BattlePanel
 		}else{
 			game.batcher.draw(game.sprites.ConfirmDisabled, confirmX, confirmY, buttonSize, buttonSize);	
 		}
-		
 		
 		if (state.selected == null){
 			game.batcher.draw(game.sprites.InfoDisabled, infoX, infoY, buttonSize, buttonSize);
@@ -202,6 +243,30 @@ public class BattlePanel
 
 		game.batcher.draw(game.sprites.ControlsDivider, chainSize + xOffset, endTurnY + buttonSize - dividerHeight / 2 + (abilityY - buttonSize - endTurnY) / 2, dividerWidth, dividerHeight);
 		game.batcher.draw(game.sprites.SettingsIcon, xOffset + width - chainSize * 2, yOffset + height - chainSize * 2, chainSize + shadowSize, chainSize + shadowSize);
+	}
+	
+	private int getSlotXOffset(int slot){
+		if(slot == 0 || slot == 7){
+			return summaryWidth * 8 / 47;
+		}else if(slot == 1 || slot == 6){
+			return summaryWidth * 16 / 47;
+		}else if(slot == 2 || slot == 5){
+			return summaryWidth * 25 / 47;
+		}else{
+			return summaryWidth * 33 / 47;
+		}
+	}
+	
+	private int getSlotYOffset(int slot){
+		if(slot == 6 || slot == 5){
+			return summaryHeight * 7 / 40;
+		}else if(slot == 7 || slot == 4){
+			return summaryHeight * 12 / 40;
+		}else if(slot == 0 || slot == 3){
+			return summaryHeight * 23 / 40;
+		}else{
+			return summaryHeight * 27 / 40;
+		}
 	}
 	
 	private void DrawHealthBar(int nameY){
@@ -246,7 +311,7 @@ public class BattlePanel
 	{
 		for (final Unit unit : state.roster)
 		{
-			if (!state.IsTapped(unit))
+			if (!state.IsTapped(unit) && !state.unplacedUnits.contains(unit))
 			{
 				return true;
 			}
@@ -281,34 +346,48 @@ public class BattlePanel
 			processSettingsTouch();	
 		}else if((clickedX > infoX && clickedX < infoX + buttonSize) && (clickedY > infoY && clickedY < infoY + buttonSize)){
 			processInfoTouch();	
+		}else if(state.selected != null && x >= xOffset + (width - backdropWidth) / 2 && x < xOffset + (width - backdropWidth) / 2 + backdropWidth && y > nameY - backdropHeight * 6 && y < nameY){	
 		}else{
 			state.selected = null;
 			state.targeted = null;
 			state.isMoving = false;
 			state.isUsingAbility = false;
+			state.isTacticsOpen = false;
 		}
 	}
 	
 	private void processEndTouch()
 	{
-		state.EndTurn();
+		if(state.isInTactics){
+			if(state.roster.size() > state.unplacedUnits.size()){
+				state.selected = null;
+				state.isTacticsOpen = false;
+				state.isInTactics = false;
+			}
+		}else{
+			state.EndTurn();
+		}
 	}
 	
 	private void processAbilityTouch()
 	{
-		state.isMoving = false;
-		state.targeted = null;
-		if (state.CanUseAbility(state.selected))
-		{
-			state.isUsingAbility = !state.isUsingAbility;
-			if (!state.selected.ability.areTargetsPersistent)
+		if(!state.isInTactics){
+			state.isMoving = false;
+			state.targeted = null;
+			if (state.CanUseAbility(state.selected))
 			{
-				state.selected.ability.targets = new ArrayList<Integer>();
+				state.isUsingAbility = !state.isUsingAbility;
+				if (!state.selected.ability.areTargetsPersistent)
+				{
+					state.selected.ability.targets = new ArrayList<Integer>();
+				}
 			}
-		}
-			
-		if(!state.isUsingAbility && state.CanMove()){
-			state.isMoving = true;
+				
+			if(!state.isUsingAbility && state.CanMove()){
+				state.isMoving = true;
+			}
+		}else{
+			state.isTacticsOpen = !state.isTacticsOpen;
 		}
 	}
 	
@@ -328,6 +407,63 @@ public class BattlePanel
 			state.isMoving = true;		
 		}
 		state.isUsingAbility = false;
+	}
+	
+	public void processLongTouch(float x, float y, HelpPanel helpPanel){
+		String title = "";
+		String text = "";
+		helpPanel.setHeight(buttonSize * 2);
+		helpPanel.setWidth(buttonSize * 6);
+		if(state.selected != null && x >= xOffset + (width - backdropWidth) / 2 && x < xOffset + (width - backdropWidth) / 2 + backdropWidth){
+			if(y >= nameY - backdropHeight && y < nameY){
+				title = "Health";
+				text = state.selected.name + " has " + state.selected.currentHealth + " health remaining.";
+			}else if(y >= nameY - backdropHeight * 2 && y < nameY - backdropHeight){
+				title = "Experience";
+				text = state.selected.name + " needs " + (state.selected.experienceNeeded - state.selected.experience) + " experience reach level " + (state.selected.level + 1) + ".";
+			}else if(y >= nameY - backdropHeight * 3 && y < nameY - backdropHeight * 2 && (state.selected.team == 0 || state.perksPurchased >= 2)){
+				title = "Attack";
+				text = state.selected.name + " has an attack strength of " + state.selected.attack + ".";
+			}else if(y >= nameY - backdropHeight * 4 && y < nameY - backdropHeight * 3 && (state.selected.team == 0 || state.perksPurchased >= 2)){
+				title = "Accuracy";
+				text = state.selected.name + " has an accuracy score of " + state.selected.accuracy + ".";
+			}
+			else if(y >= nameY - backdropHeight * 5 && y < nameY - backdropHeight * 4 && (state.selected.team == 0 || state.perksPurchased >= 2)){
+				title = "Defense";
+				int defenseBoost = state.battlefield.get(state.selected.y).get(state.selected.x).defenseModifier;
+				text = state.selected.name + " has a defense strength of " + state.selected.defense;
+				if(defenseBoost > 0){
+					text += " that is being increased by terrain.";
+				}else if(defenseBoost < 0){
+					text += " that is being reduced by terrain.";
+				}else{
+					text += ".";
+				}	
+			}
+			else if(y >= nameY - backdropHeight * 6 && y < nameY - backdropHeight * 5 && (state.selected.team == 0 || state.perksPurchased >= 2)){
+				title = "Evasion";
+				int evasionBoost = state.battlefield.get(state.selected.y).get(state.selected.x).evasionModifier;
+				text = state.selected.name + " has an evasion score of " + state.selected.evasion;
+				if(evasionBoost > 0){
+					text += " that is being increased by terrain.";
+				}else if(evasionBoost < 0){
+					text += " that is being reduced by terrain.";
+				}else{
+					text += ".";
+				}
+			}else if(state.selected != null && ! state.isInTactics && (x > abilityX && x < abilityX + buttonSize) && (y > abilityY && y < abilityY + buttonSize)){
+				title = state.selected.ability != null ? state.selected.ability.displayName : "Ability";
+				text = state.selected.ability != null ? state.selected.ability.description : "This " + (state.selected.team == 0 ? "hero" : "unit") + " has no special ability.";
+				helpPanel.setWidth(buttonSize * 9);		
+			}else{
+				state.isLongPressed = false;
+				return;
+			}
+			helpPanel.title = title;
+			helpPanel.text = text;
+			helpPanel.isVisible = true;		
+			state.isLongPressed = false;
+		}
 	}
 	
 	private void processSettingsTouch(){

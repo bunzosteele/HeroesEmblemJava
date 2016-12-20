@@ -26,12 +26,14 @@ public class PopupPanel {
 		this.shadowSize = chainSize / 3; 
 	}
 	
-	public void drawBackground()
+	public void drawBackground(boolean isFaded)
 	{
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		Color fadeColor = new Color(0f, 0f, 0f, .66f);
-		game.shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), fadeColor, fadeColor, fadeColor, fadeColor);
+		if(isFaded){
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+			Color fadeColor = new Color(0f, 0f, 0f, .66f);
+			game.shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), fadeColor, fadeColor, fadeColor, fadeColor);
+		}
 		Color backgroundColor = new Color(.227f, .204f, .157f, 1);
 		game.shapeRenderer.rect(xOffset, yOffset, width, height, backgroundColor, backgroundColor, backgroundColor, backgroundColor);
 	}

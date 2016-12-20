@@ -28,10 +28,11 @@ public class BattleScreen extends ScreenAdapter
 	BattleState state;
 	BattleWindow battleWindow;
 	BattlePanel battlePanel;
-	//TacticsControls tacticsControls;
+	TacticsPanel tacticsPanel;
 	AiProcessor aiProcessor;
 	SettingsPanel settingsPanel;
 	UnitDetailsPanel unitDetailsPanel;
+	HelpPanel helpPanel;
 	boolean spoofAiThinking = false;
 
 
@@ -57,9 +58,10 @@ public class BattleScreen extends ScreenAdapter
 		int windowHeight = Gdx.graphics.getHeight();
 		this.battleWindow = new BattleWindow(game, this.state, windowWidth, windowHeight, 0);
 		this.battlePanel = new BattlePanel(game, this.state, sideWidth, windowHeight, windowWidth, 0);
-		//this.tacticsControls = new TacticsControls(game, this.state, sideWidth, windowWidth - sideWidth, controlHeight);
-		this.settingsPanel = new SettingsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
+		this.tacticsPanel = new TacticsPanel(game, this.state, Gdx.graphics.getWidth() * 9 / 16, Gdx.graphics.getHeight() * 2 / 9, Gdx.graphics.getWidth() * 2 / 16, Gdx.graphics.getHeight() / 9);
+		this.settingsPanel = new SettingsPanel(game, state, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 1 / 9);
 		this.unitDetailsPanel = new UnitDetailsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 5 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 2 / 9);
+		this.helpPanel = new HelpPanel(game, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
 		this.aiProcessor = new AiProcessor(state);
 		if(state.battlefieldId < 5){
 			MusicManager.PlayEasyBattleMusic(this.game.settings.getFloat("musicVolume", .25f));
@@ -76,20 +78,23 @@ public class BattleScreen extends ScreenAdapter
 
 		this.game.shapeRenderer.begin(ShapeType.Filled);
 		this.battlePanel.drawBackground();
+		if(this.state.isTacticsOpen)
+			this.tacticsPanel.drawBackground();
 		this.game.shapeRenderer.end();
 		
 		this.game.batcher.begin();
 		this.battleWindow.draw();
 		this.battlePanel.draw();
-		if(this.state.isInTactics){
-			//this.tacticsControls.draw();
-		}else{
-			//this.battleControls.drawBackground();
-			//this.battleControls.draw();
-		}
 		this.game.batcher.end();
 		
-		if(state.isSettingsOpen){
+		if(helpPanel.isVisible){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			helpPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			helpPanel.draw();
+			game.batcher.end();	
+		}else if(state.isSettingsOpen){
 			game.shapeRenderer.begin(ShapeType.Filled);
 			settingsPanel.drawBackground();
 			game.shapeRenderer.end();
@@ -103,6 +108,13 @@ public class BattleScreen extends ScreenAdapter
 			game.batcher.begin();
 			unitDetailsPanel.draw();
 			game.batcher.end();		
+		}else if (state.isTacticsOpen){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			this.tacticsPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			this.tacticsPanel.draw();
+			game.batcher.end();	
 		}
 	}
 
@@ -172,7 +184,7 @@ public class BattleScreen extends ScreenAdapter
 	}
 
 	public void update() throws IOException
-	{		
+	{	
 		if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsPanel.backEnabled){
 			//this.game.setScreen(new SettingsPanel(this.game, this.game.getScreen(), true));
 		}
@@ -202,9 +214,23 @@ public class BattleScreen extends ScreenAdapter
 				}, this.game.settings.getFloat("cpuSpeed", 1.1f), 0, 0);
 				aiProcessor.MakeMove(this.game.settings.getFloat("sfxVolume", .5f));
 			}
+		}else if(state.isLongPressed){
+			if(!state.isSettingsOpen && !state.isUnitDetailsOpen){		
+				if(state.isTacticsOpen && tacticsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					tacticsPanel.processLongTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), helpPanel);
+				}else{
+					if (battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+						battleWindow.processLongTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), helpPanel);
+					}else if (battlePanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+						battlePanel.processLongTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), helpPanel);
+					}
+				}
+			}
 		}else if (this.state.currentPlayer == 0 && Gdx.input.justTouched())
 		{
-			if(state.isSettingsOpen){
+			if(helpPanel.isVisible){
+				helpPanel.isVisible = false;
+			}else if(state.isSettingsOpen){
 				if (settingsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
 					settingsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 				}else{
@@ -212,29 +238,19 @@ public class BattleScreen extends ScreenAdapter
 					state.isUnitDetailsOpen = false;
 				}
 			}else if(state.isUnitDetailsOpen){
-				if (unitDetailsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-					unitDetailsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-				}else{
-					state.isSettingsOpen = false;
-					state.isUnitDetailsOpen = false;
-				}
+				state.isSettingsOpen = false;
+				state.isUnitDetailsOpen = false;
 			}else{
-				if (this.battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-				{
-					this.battleWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-					//this.tacticsControls.startingWithBenched = false;
-				} else if (this.battlePanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-				{
-					this.battlePanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-					//this.tacticsControls.startingWithBenched = false;
-				} /*else if (this.battleControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
-				{
-					this.battleControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-				}else if(this.tacticsControls.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-					this.tacticsControls.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-				}*/
-				if(this.state.isInTactics){
-					//this.tacticsControls.updateState();
+				if(state.isTacticsOpen && tacticsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					tacticsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+				}else{
+					if (this.battleWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+					{
+						this.battleWindow.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+					} else if (this.battlePanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()))
+					{
+						this.battlePanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+					}
 				}
 			}
 		}

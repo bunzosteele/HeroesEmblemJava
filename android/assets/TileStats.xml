@@ -35,6 +35,12 @@
 	    <MovementCost>3</MovementCost>
 	    <Altitude>1</Altitude>
 	</Ash>
+	<Volcano>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>5</EvasionModifier>
+	    <MovementCost>3</MovementCost>
+	    <Altitude>2</Altitude>
+	</Volcano>
 	<Wall>
 	    <DefenseModifier>0</DefenseModifier>
 	    <EvasionModifier>0</EvasionModifier>

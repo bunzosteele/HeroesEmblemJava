@@ -32,6 +32,12 @@ public class ShopkeeperPanel
 	int purchaseY;
 	int mapX;
 	int mapY;
+	int perkWidth;
+	int perkHeight;
+	int perkXOffset;
+	int perkYOffset;
+	int shopkeeperWidth;
+	int shopkeeperHeight;
 	
 	public ShopkeeperPanel( HeroesEmblem game,  ShopState state,  int width,  int height,  int xOffset,  int yOffset)
 	{
@@ -56,6 +62,12 @@ public class ShopkeeperPanel
 		this.purchaseY = yOffset + chainSize + shadowSize + buttonVerticalSpacing;
 		this.mapX = xOffset + buttonSize / 3;
 		this.mapY = yOffset + chainSize + shadowSize + buttonVerticalSpacing;
+		this.shopkeeperWidth = tileWidth;
+		this.shopkeeperHeight = shopkeeperWidth * 82 / 60;
+		this.perkWidth = (width - (chainSize - shadowSize) * 2) * 9 / 10;
+		this.perkHeight = perkWidth * 25 / 122;
+		this.perkYOffset = Gdx.graphics.getHeight() - tileHeight / 2 - shopkeeperHeight - perkHeight * 2;
+		this.perkXOffset = xOffset + (width - perkWidth) / 2;
 	}
 
 	public void draw() throws IOException
@@ -65,14 +77,8 @@ public class ShopkeeperPanel
 	}
 	
 	private void drawPerks(){
-		int shopkeeperWidth = tileWidth;
-		int shopkeeperHeight = shopkeeperWidth * 82 / 60;
-		game.batcher.draw(game.sprites.Shopkeeper, (width - shopkeeperWidth)/2, Gdx.graphics.getHeight() - tileHeight / 2 - shopkeeperHeight, shopkeeperWidth, shopkeeperHeight);
+		game.batcher.draw(game.sprites.Shopkeeper, (width - shopkeeperWidth) / 2, Gdx.graphics.getHeight() - tileHeight / 2 - shopkeeperHeight, shopkeeperWidth, shopkeeperHeight);
 		
-		int perkWidth = (width - (chainSize - shadowSize) * 2) * 9 / 10;
-		int perkHeight = perkWidth * 25 / 122;
-		int perkYOffset = Gdx.graphics.getHeight() - tileHeight / 2 - shopkeeperHeight - perkHeight * 2;
-		int perkXOffset = xOffset + (width - perkWidth) / 2;
 		int dividerWidth = perkWidth / 4;
 		int dividerHeight = dividerWidth * 7 / 30; 
 		game.font.getData().setScale(.25f);
@@ -89,7 +95,6 @@ public class ShopkeeperPanel
 				game.batcher.draw(game.sprites.PerkEnabled, perkXOffset, perkYOffset - perkHeight * i, perkWidth, perkHeight);
 				game.font.setColor(new Color(1f, .8f, 0, 1f));
 				game.font.draw(game.batcher, state.GetPerkName(i + 1), perkXOffset, perkYOffset - perkHeight * i + tileHeight / 8 + game.font.getLineHeight(), perkWidth - perkWidth * 2 /122, 1, false);
-
 			}
 			
 			if(state.perksPurchased < i){
@@ -178,18 +183,71 @@ public class ShopkeeperPanel
 		return false;
 	}
 
-	public void processTouch( float x,  float y) throws IOException
+	public void processTouch(float x,  float y) throws IOException
 	{
-		int clickedX = Gdx.input.getX();
-		int clickedY = Gdx.graphics.getHeight() - Gdx.input.getY();
-		if((clickedX > purchaseX && clickedX < purchaseX + buttonSize) && (clickedY > purchaseY && clickedY < purchaseY + buttonSize)){
+		if((x > purchaseX && x < purchaseX + buttonSize) && (y > purchaseY && y < purchaseY + buttonSize)){
 			processPurchaseTouch();
-		}else if((clickedX > mapX && clickedX < mapX + buttonSize) && (clickedY > mapY && clickedY < mapY + buttonSize)){
+		}else if((x > mapX && x < mapX + buttonSize) && (y > mapY && y < mapY + buttonSize)){
 			processMapTouch();
 		}else{
 			state.selected = null;
 		}
 
+	}
+	
+	public void processLongTouch(float x, float y, HelpPanel helpPanel){
+		if(x >= (width - shopkeeperWidth) / 2 && x <= (width - shopkeeperWidth) / 2 + shopkeeperWidth && y >= Gdx.graphics.getHeight() - tileHeight / 2 - shopkeeperHeight && y <= Gdx.graphics.getHeight() - tileHeight / 2){
+			helpPanel.title = "Shopkeeper";
+			helpPanel.text = "Unlock useful bonuses by tipping the shopkeeper.";
+			helpPanel.setHeight(tileHeight * 2);
+			helpPanel.setWidth(tileWidth * 5);
+			helpPanel.isVisible = true;		
+		}else{
+			if(x >= perkXOffset && x <= perkXOffset + perkWidth){
+				for(int i = 0; i < 9; i++){
+					if((state.perksPurchased == i && i != 8)|| (i == 7 && state.perksPurchased >= i)){					
+						if(y >= perkYOffset - perkHeight * i && y < perkYOffset - perkHeight * (i - 1)){
+							helpPanel.title = "";
+							helpPanel.text = "Cost of the next perk to unlock.";
+							helpPanel.setHeight(tileHeight);
+							helpPanel.setWidth(tileWidth * 8);
+							helpPanel.isVisible = true;		
+							break;
+						}
+					}
+					
+					String perk = "";
+					String helpText = "";
+					if(state.perksPurchased > 7 && i == 8 && y >= perkYOffset - perkHeight * i && y < perkYOffset - perkHeight * (i-1)){
+						perk = state.GetPerkName(state.perksPurchased + 1);
+						helpText = state.GetPerkHelp(state.perksPurchased + 1);
+					}else{
+						if(state.perksPurchased > i){
+							if(y >= perkYOffset - perkHeight * i && y < perkYOffset - perkHeight * (i-1)){
+								perk = state.GetPerkName(i + 1);
+								helpText = state.GetPerkHelp(i + 1);
+							}
+						}
+						
+						if(state.perksPurchased < i){
+							if(y >= perkYOffset - perkHeight * i && y < perkYOffset - perkHeight * (i-1)){
+								perk = state.GetPerkName(i);
+								helpText = state.GetPerkHelp(i);	
+							}
+						}
+					}
+					if(!perk.equals("")){
+						helpPanel.title = perk;
+						helpPanel.text = helpText;
+						helpPanel.setHeight(tileHeight * 2);
+						helpPanel.setWidth(tileWidth * 5);
+						helpPanel.isVisible = true;	
+						break;
+					}
+				}
+			}
+		}
+		state.isLongPressed = false;
 	}
 	
 	private void processPurchaseTouch() throws IOException{

@@ -6,6 +6,7 @@ import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.HighscoreManager;
 import bunzosteele.heroesemblem.model.HighscoreManager.HighscoreDto;
 import bunzosteele.heroesemblem.model.HighscoreManager.HighscoresDto;
+import bunzosteele.heroesemblem.model.Units.Unit;
 import bunzosteele.heroesemblem.model.Units.UnitDto;
 import bunzosteele.heroesemblem.model.Units.UnitType;
 import bunzosteele.heroesemblem.model.MusicManager;
@@ -14,18 +15,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.badlogic.gdx.utils.XmlReader.Element;
 
 public class HighscoreScreen extends MenuScreen
 {
-	Sprite buttonSprite;
-	Sprite pedestalSprite;
-	Sprite activeButton;
-	Sprite inactiveButton;
 	HighscoresDto highscores;
 	int xOffset;
 	int yOffset;
@@ -40,20 +40,12 @@ public class HighscoreScreen extends MenuScreen
 	public HighscoreScreen(final HeroesEmblem game)
 	{
 		super(game);
-		final AtlasRegion buttonRegion = this.game.textureAtlas.findRegion("Button");	
-		final AtlasRegion pedestalRegion = this.game.textureAtlas.findRegion("Pedestal");
 		this.buttonHeight = Gdx.graphics.getHeight() / 6;
 		this.xOffset = (Gdx.graphics.getWidth()) / 4;
 		this.yOffset = Gdx.graphics.getHeight() / 4;
 		this.headerOffset = this.yOffset * 4 - this.buttonHeight - this.game.font.getData().lineHeight;
 		this.tableRowHeight = (this.headerOffset - 3 * this.game.font.getData().lineHeight) / 3;
 		this.pedestalSize = this.tableRowHeight - this.game.font.getData().lineHeight;
-		this.buttonSprite = new Sprite(buttonRegion);
-		this.pedestalSprite = new Sprite(pedestalRegion);
-		final AtlasRegion activeRegion = this.game.textureAtlas.findRegion("ActiveButton");
-		this.activeButton = new Sprite(activeRegion);
-		final AtlasRegion inactiveRegion = this.game.textureAtlas.findRegion("InactiveButton");
-		this.inactiveButton = new Sprite(inactiveRegion);
 		this.highscores = HighscoreManager.GetExistingHighscores();
 		MusicManager.PlayMenuMusic(this.game.settings.getFloat("musicVolume", .25f));
 		this.selected = -1;
@@ -69,17 +61,17 @@ public class HighscoreScreen extends MenuScreen
 	
 	private void drawContent(){
 		super.drawBackground();
-		this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, headerOffset, this.xOffset, this.buttonHeight);
+		//this.game.batcher.draw(buttonSprite, this.xOffset * 3 - this.game.font.getData().lineHeight, headerOffset, this.xOffset, this.buttonHeight);
 		this.game.font.draw(this.game.batcher, "Main Menu", this.xOffset * 3 - this.game.font.getData().lineHeight, headerOffset + this.buttonHeight - this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.66f);
 		this.game.font.draw(this.game.batcher, "Highscores", this.xOffset, this.yOffset * 4 - this.game.font.getData().lineHeight / 2, (float) this.xOffset, 1, false);
 		this.game.font.getData().setScale(.33f);
-		this.game.batcher.draw(buttonSprite, this.xOffset / 2, this.yOffset * 3 - this.buttonHeight * 1 / 6, this.xOffset * 2, this.buttonHeight * 2 / 3);
+		//this.game.batcher.draw(buttonSprite, this.xOffset / 2, this.yOffset * 3 - this.buttonHeight * 1 / 6, this.xOffset * 2, this.buttonHeight * 2 / 3);
 		this.game.font.draw(this.game.batcher, "View Leaderboards", this.xOffset / 2, this.yOffset * 3 + this.buttonHeight * 3 / 12, xOffset * 2, 1, false);
 		if(!this.readingLegend){
-			this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.tableRowHeight * 2 + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
-			this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.tableRowHeight + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
-			this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
+			//this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.tableRowHeight * 2 + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
+			//this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.tableRowHeight + this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
+			//this.game.batcher.draw(this.pedestalSprite, 2 * this.xOffset + this.pedestalSize, this.game.font.getData().lineHeight * 3 / 2, this.pedestalSize, this.pedestalSize);
 			this.game.font.getData().setScale(.66f);
 			this.game.font.draw(this.game.batcher, "1", 0, this.tableRowHeight * 3, (float) this.xOffset, 1, false);
 			this.game.font.draw(this.game.batcher, "2", 0, this.tableRowHeight * 2, (float) this.xOffset, 1, false);
@@ -130,12 +122,12 @@ public class HighscoreScreen extends MenuScreen
 				this.game.font.draw(this.game.batcher, "Ability:" + unit.ability, 3 * this.xOffset, this.headerOffset - 14 * this.game.font.getData().lineHeight, (float) this.xOffset, 1, false);
 				this.legendHeight = this.headerOffset - 17 * this.game.font.getData().lineHeight;
 				if(this.readingLegend){
-					this.game.batcher.draw(activeButton, this.xOffset * 13 / 4, this.headerOffset - 17 * this.game.font.getData().lineHeight, this.xOffset / 2, this.buttonHeight / 2);
+					//this.game.batcher.draw(activeButton, this.xOffset * 13 / 4, this.headerOffset - 17 * this.game.font.getData().lineHeight, this.xOffset / 2, this.buttonHeight / 2);
 				}else{
 					if(unit.backStory == null){
-						this.game.batcher.draw(inactiveButton, this.xOffset * 13 / 4, this.headerOffset - 17 * this.game.font.getData().lineHeight, this.xOffset / 2, this.buttonHeight / 2);						
+						//this.game.batcher.draw(inactiveButton, this.xOffset * 13 / 4, this.headerOffset - 17 * this.game.font.getData().lineHeight, this.xOffset / 2, this.buttonHeight / 2);						
 					}else{
-						this.game.batcher.draw(buttonSprite, this.xOffset * 13 / 4, this.headerOffset - 17 * this.game.font.getData().lineHeight, this.xOffset / 2, this.buttonHeight / 2);						
+						//this.game.batcher.draw(buttonSprite, this.xOffset * 13 / 4, this.headerOffset - 17 * this.game.font.getData().lineHeight, this.xOffset / 2, this.buttonHeight / 2);						
 					}
 				}
 				this.game.font.draw(this.game.batcher, "Legend", 3 * this.xOffset, this.headerOffset - this.game.font.getData().lineHeight * 31 / 2, (float) this.xOffset, 1, false);

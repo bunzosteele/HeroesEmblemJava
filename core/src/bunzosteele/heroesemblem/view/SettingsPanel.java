@@ -45,7 +45,7 @@ public class SettingsPanel extends PopupPanel
 	}
 	
 	public void drawBackground(){
-		super.drawBackground();
+		super.drawBackground(true);
 	}
 	
 	public void draw(){
@@ -212,6 +212,8 @@ public class SettingsPanel extends PopupPanel
 		unitDto.roundKilled = roundsSurvived;
 		unitDto.isMale = deceased.isMale;
 		unitDto.backStory = deceased.backStory;
+		unitDto.experience = deceased.experience;
+		unitDto.experienceNeeded = deceased.experienceNeeded;
 		return unitDto;
 	}
 }

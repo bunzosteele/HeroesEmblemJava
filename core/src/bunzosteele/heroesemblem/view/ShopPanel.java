@@ -42,6 +42,9 @@ public class ShopPanel
 	int backdropHeight;
 	int dividerWidth;
 	int dividerHeight;
+	int nameBackdropWidth;
+	int nameBackdropHeight;
+	int nameY;
 
 	public ShopPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -68,6 +71,9 @@ public class ShopPanel
 		abilityY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
 		infoX = xOffset + width - buttonSize - buttonSize / 3;
 		infoY = buttonVerticalSpacing  * 3 + dividerHeight + buttonSize + chainSize;
+		nameBackdropWidth = buttonSize * 2 - chainSize - shadowSize;
+		nameBackdropHeight = nameBackdropWidth * 44 / 92;
+		nameY =  height + yOffset - chainSize - shadowSize - nameBackdropHeight;
 	}
 
 	public void draw() throws IOException
@@ -111,9 +117,7 @@ public class ShopPanel
 			game.font.getData().setScale(.20f);
 			
 			int portraitHeight = buttonSize - chainSize - shadowSize;
-			int nameBackdropWidth = buttonSize * 2 - chainSize - shadowSize;
-			int nameBackdropHeight = nameBackdropWidth * 44 / 92;
-			int nameY =  height + yOffset - chainSize - shadowSize - nameBackdropHeight;
+
 			final AtlasRegion portraitRegion = game.textureAtlas.findRegion("Portrait" + state.selected.type + state.selected.team);
 			game.batcher.draw(new Sprite(portraitRegion), xOffset + chainSize + shadowSize, nameY + shadowSize, portraitHeight, portraitHeight);
 	
@@ -273,18 +277,17 @@ public class ShopPanel
 
 	public void processTouch(final float x, final float y) throws IOException
 	{
-		int clickedX = Gdx.input.getX();
-		int clickedY = Gdx.graphics.getHeight() - Gdx.input.getY();
-		if((clickedX > combatX && clickedX < combatX + buttonSize) && (clickedY > combatY && clickedY < combatY + buttonSize)){
+		if((x > combatX && x < combatX + buttonSize) && (y > combatY && y < combatY + buttonSize)){
 			processCombatTouch();
-		}else if((clickedX > abilityX && clickedX < abilityX + buttonSize) && (clickedY > abilityY && clickedY < abilityY + buttonSize)){
+		}else if((x > abilityX && x < abilityX + buttonSize) && (y > abilityY && y < abilityY + buttonSize)){
 			processAbilityTouch();
-		}else if((clickedX > purchaseX && clickedX < purchaseX + buttonSize) && (clickedY > purchaseY && clickedY < purchaseY + buttonSize)){
+		}else if((x > purchaseX && x < purchaseX + buttonSize) && (y > purchaseY && y < purchaseY + buttonSize)){
 			processPurchaseTouch();
-		}else if((clickedX > infoX && clickedX < infoX + buttonSize) && (clickedY > infoY && clickedY < infoY + buttonSize)){
+		}else if((x > infoX && x < infoX + buttonSize) && (y > infoY && y < infoY + buttonSize)){
 			processInfoTouch();
-		}else if((clickedX > xOffset + width - chainSize * 3) && (clickedY > yOffset + height - chainSize * 3)){
+		}else if((x > xOffset + width - chainSize * 3) && (y > yOffset + height - chainSize * 3)){
 			processSettingsTouch();	
+		}else if(state.selected != null && x >= xOffset + (width - backdropWidth) / 2 && x < xOffset + (width - backdropWidth) / 2 + backdropWidth && y > nameY - backdropHeight * 6 && y < nameY){	
 		}else{
 			state.selected = null;
 		}
@@ -299,8 +302,7 @@ public class ShopPanel
 		}		
 	}
 	
-	private void processAbilityTouch(){
-		
+	private void processAbilityTouch(){	
 	}
 	
 	private void processPurchaseTouch() throws IOException{
@@ -323,5 +325,46 @@ public class ShopPanel
 	
 	private void processSettingsTouch(){
 		this.state.isSettingsOpen = !this.state.isSettingsOpen;
+	}
+	
+	public void processLongTouch(float x, float y, HelpPanel helpPanel){
+		String title = "";
+		String text = "";
+		helpPanel.setHeight(buttonSize * 2);
+		helpPanel.setWidth(buttonSize * 6);
+		if(state.selected != null && x >= xOffset + (width - backdropWidth) / 2 && x < xOffset + (width - backdropWidth) / 2 + backdropWidth){
+			if(y >= nameY - backdropHeight && y < nameY){
+				title = "Health";
+				text = state.selected.name + " has " + state.selected.currentHealth + " health remaining.";
+			}else if(y >= nameY - backdropHeight * 2 && y < nameY - backdropHeight){
+				title = "Experience";
+				text = state.selected.name + " needs " + (state.selected.experienceNeeded - state.selected.experience) + " experience reach level " + (state.selected.level + 1) + ".";
+			}else if(y >= nameY - backdropHeight * 3 && y < nameY - backdropHeight * 2){
+				title = "Attack";
+				text = state.selected.name + " has an attack strength of " + state.selected.attack + ".";
+			}else if(y >= nameY - backdropHeight * 4 && y < nameY - backdropHeight * 3){
+				title = "Accuracy";
+				text = state.selected.name + " has an accuracy score of " + state.selected.accuracy + ".";
+			}
+			else if(y >= nameY - backdropHeight * 5 && y < nameY - backdropHeight * 4){
+				title = "Defense";
+				text = state.selected.name + " has a defense strength of " + state.selected.defense + ".";
+			}
+			else if(y >= nameY - backdropHeight * 6 && y < nameY - backdropHeight * 5){
+				title = "Evasion";
+				text = state.selected.name + " has an evasion score of " + state.selected.evasion + ".";
+			}else if(state.selected != null && (x > abilityX && x < abilityX + buttonSize) && (y > abilityY && y < abilityY + buttonSize)){
+				title = state.selected.ability != null ? state.selected.ability.displayName : "Ability";
+				text = state.selected.ability != null ? state.selected.ability.description : "This hero has no special ability.";
+				helpPanel.setWidth(buttonSize * 9);		
+			}else{
+				state.isLongPressed = false;
+				return;
+			}
+			helpPanel.title = title;
+			helpPanel.text = text;
+			helpPanel.isVisible = true;		
+			state.isLongPressed = false;
+		}
 	}
 }

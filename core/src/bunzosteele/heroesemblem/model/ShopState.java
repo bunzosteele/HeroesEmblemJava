@@ -29,6 +29,7 @@ public class ShopState
 	public boolean isSettingsOpen = false;
 	public boolean isMapOpen = false;
 	public boolean isUnitDetailsOpen = false;
+	public boolean isLongPressed = false;
 	public int nextBattlefieldId;
 	public List<List<Tile>> nextBattlefield;
 
@@ -38,9 +39,9 @@ public class ShopState
 		this.stock = UnitGenerator.GenerateStock(this.roster, game, this.GetTrainingPerkLevel());
 		this.game = game;
 		this.selected = null;
-		this.gold = 50000;
+		this.gold = 500000;
 		this.graveyard = new ArrayList<UnitDto>();
-		this.roundsSurvived = 9;
+		this.roundsSurvived = 12;
 		this.perksPurchased = 0;
 		final Random random = new Random();
 		int maxMap = BattlefieldGenerator.DetectMaximumMap();
@@ -187,6 +188,20 @@ public class ShopState
 			case 6: return "Renew";
 			case 7: return "Learning";
 			default: return "Training " + (perkNumber - 7);		
+		}	
+	}
+	
+	public String GetPerkHelp(int perkNumber){
+		switch(perkNumber){
+			case 0: return "NONE";
+			case 1: return "Gives you a map of the upcoming battlefield.";
+			case 2: return "Allows you to know more about enemy units.";
+			case 3: return "Allows you to generate new heroes to purchase. The first use each round is free.";
+			case 4: return "Damages enemy units before the battle begins.";
+			case 5: return "Allows you to control the placement of your heroes at the beginning of the battle.";
+			case 6: return "Restores your most damaged unit to full health after each battle.";
+			case 7: return "Grants your units experience for surviving each battle.";
+			default: return "All future heroes for hire will start at level " + (perkNumber - 6) + ".";		
 		}	
 	}
 	

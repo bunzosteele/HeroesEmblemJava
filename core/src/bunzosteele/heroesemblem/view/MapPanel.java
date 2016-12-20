@@ -33,7 +33,7 @@ public class MapPanel extends PopupPanel
 	}
 	
 	public void drawBackground(){
-		super.drawBackground();
+		super.drawBackground(true);
 	}
 	
 	public void draw(){

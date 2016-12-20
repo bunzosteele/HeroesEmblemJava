@@ -30,6 +30,7 @@ public class ShopScreen extends ScreenAdapter
 	SettingsPanel settingsPanel;
 	MapPanel mapPanel;
 	UnitDetailsPanel unitDetailsPanel;
+	HelpPanel helpPanel;
 	public static Sound buySound = Gdx.audio.newSound(Gdx.files.internal("buy.wav"));
 	public static Sound finalBuySound = Gdx.audio.newSound(Gdx.files.internal("finalbuy.wav"));
 
@@ -81,8 +82,14 @@ public class ShopScreen extends ScreenAdapter
 		rosterPanel.draw();
 		shopkeeperPanel.draw();
 		game.batcher.end();
-		
-		if(state.isSettingsOpen){
+		if(helpPanel.isVisible){
+			game.shapeRenderer.begin(ShapeType.Filled);
+			helpPanel.drawBackground();
+			game.shapeRenderer.end();
+			game.batcher.begin();
+			helpPanel.draw();
+			game.batcher.end();	
+		}else if(state.isSettingsOpen){
 			game.shapeRenderer.begin(ShapeType.Filled);
 			settingsPanel.drawBackground();
 			game.shapeRenderer.end();
@@ -119,6 +126,7 @@ public class ShopScreen extends ScreenAdapter
 		this.shopPanel = new ShopPanel(game, state, sideWidth, windowHeight, windowWidth + sideWidth, 0);
 		this.rosterPanel = new RosterPanel(game, state, windowWidth, rosterHeight, sideWidth, 0);
 		this.settingsPanel = new SettingsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
+		this.helpPanel = new HelpPanel(game, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 7 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 1 / 9);
 		this.mapPanel = new MapPanel(game, state.nextBattlefield, Gdx.graphics.getWidth() * 7 / 16, Gdx.graphics.getHeight() * 5 / 9, Gdx.graphics.getWidth() * 9 / 32, Gdx.graphics.getHeight() * 2 / 9);
 		this.unitDetailsPanel = new UnitDetailsPanel(game, state, Gdx.graphics.getWidth() * 8 / 16, Gdx.graphics.getHeight() * 5 / 9, Gdx.graphics.getWidth() * 4 / 16, Gdx.graphics.getHeight() * 2 / 9);
 		MusicManager.PlayShopMusic(game.settings.getFloat("musicVolume", .25f));
@@ -147,9 +155,23 @@ public class ShopScreen extends ScreenAdapter
 
 	public void update() throws IOException
 	{
-		if (Gdx.input.justTouched())
+		if(state.isLongPressed){
+			if(!state.isSettingsOpen && !state.isMapOpen && !state.isUnitDetailsOpen){			
+				if (rosterPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					rosterPanel.processLongTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), helpPanel);
+				}else if (stockWindow.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					stockWindow.processLongTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), helpPanel);
+				}else if (shopPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					shopPanel.processLongTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), helpPanel);
+				}else if (shopkeeperPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+					shopkeeperPanel.processLongTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), helpPanel);
+				}	
+			}
+		}else if (Gdx.input.justTouched())
 		{
-			if(state.isSettingsOpen){
+			if(helpPanel.isVisible){
+				helpPanel.isVisible = false;
+			}else if(state.isSettingsOpen){
 				if (settingsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
 					settingsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 				}else{
@@ -166,13 +188,9 @@ public class ShopScreen extends ScreenAdapter
 					state.isUnitDetailsOpen = false;
 				}
 			}else if(state.isUnitDetailsOpen){
-				if (unitDetailsPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-					unitDetailsPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-				}else{
-					state.isSettingsOpen = false;
-					state.isMapOpen = false;
-					state.isUnitDetailsOpen = false;
-				}
+				state.isSettingsOpen = false;
+				state.isMapOpen = false;
+				state.isUnitDetailsOpen = false;
 			}else{			
 				if (rosterPanel.isTouched(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
 					rosterPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());

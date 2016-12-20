@@ -181,7 +181,7 @@ public class BattleWindow
 				}
 			}
 		}
-		if (state.selected != null && !state.isMoving && !state.isUsingAbility && !state.selected.hasAttacked && state.selected.team ==0)
+		if (state.selected != null && !state.isMoving && !state.isUsingAbility && !state.selected.hasAttacked && state.selected.team ==0 && !state.isInTactics)
 		{
 			final HashSet<Tile> options = CombatHelper.GetAttackOptions(state, state.selected, true);
 			for (final Tile tile : options)
@@ -191,12 +191,7 @@ public class BattleWindow
 			}
 		}
 		if (state.isInTactics){
-			for(Spawn spawn : state.GetPlayerSpawns(state.battlefieldId)){
-				boolean isAvailable = true;
-				for(Unit unit : state.AllUnits()){
-					if(unit.x == spawn.x && unit.y == spawn.y)
-						isAvailable = false;
-				}	
+			for(Spawn spawn : state.playerSpawns){
 				game.batcher.draw(game.sprites.BlueTile, (spawn.x * tileWidth) + xOffset, Gdx.graphics.getHeight() - (tileHeight * (spawn.y + 1)), tileWidth, tileHeight);
 			}
 		}
@@ -310,6 +305,7 @@ public class BattleWindow
 		state.targeted = null;
 		state.isMoving = false;
 		state.isUsingAbility = false;
+		state.isTacticsOpen = false;
 	}
 	
 	private Sprite GetAbilityTile(Ability ability){
@@ -326,10 +322,9 @@ public class BattleWindow
 		}
 	}
 	
-	private void ProcessTacticsTouch(float x, float y) throws IOException{
-		List<Spawn> spawns = state.GetPlayerSpawns(state.battlefieldId);
+	private void ProcessTacticsTouch(float x, float y) throws IOException{;
 		Spawn touched = null;
-		for(Spawn spawn : spawns){
+		for(Spawn spawn : state.playerSpawns){
 			if (((spawn.x * tileWidth) < x) && (x <= ((spawn.x * tileWidth) + tileWidth)))
 			{
 				if (((Gdx.graphics.getHeight() - ((spawn.y + 1) * tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((spawn.y) * tileHeight)))){
@@ -357,13 +352,16 @@ public class BattleWindow
 					if(state.selected.team == 0){
 						state.selected.x = touched.x;
 						state.selected.y = touched.y;
+						if(state.unplacedUnits.contains(state.selected)){
+							state.unplacedUnits.remove(state.selected);
+						}
 					}else{
 						state.selected = null;
 					}
 				}
 			}
 		}else{
-			state.selected = null;
+			boolean isHit = false;
 			for (final Unit unit : state.AllUnits())
 			{
 				if (((unit.x * tileWidth) < x) && (x <= ((unit.x * tileWidth) + tileWidth)))
@@ -371,8 +369,14 @@ public class BattleWindow
 					if (((Gdx.graphics.getHeight() - ((unit.y + 1) * tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((unit.y) * tileHeight))))
 					{
 						state.selected = unit;
+						isHit = true;
 					}
 				}
+			}
+			
+			if(!isHit){
+				state.selected = null;
+				state.isTacticsOpen = false;
 			}
 		}
 	}
@@ -488,5 +492,20 @@ public class BattleWindow
 			}
 		}
 		return false;
+	}
+
+	public void processLongTouch(int x, int y, HelpPanel helpPanel) {
+		for (final Unit unit : state.AllUnits())
+		{
+			if (((unit.x * tileWidth) < x) && (x <= ((unit.x * tileWidth) + tileWidth)))
+			{
+				if (((Gdx.graphics.getHeight() - ((unit.y + 1) * tileHeight)) < y) && (y <= (Gdx.graphics.getHeight() - ((unit.y) * tileHeight))))
+				{
+					state.selected = unit;
+					state.isUnitDetailsOpen = !state.isUnitDetailsOpen;		
+				}
+			}
+		}
+		state.isLongPressed = false;
 	}
 }

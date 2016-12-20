@@ -36,6 +36,8 @@ public class RosterPanel
 	int labelHeight;
 	int summaryWidth;
 	int summaryHeight;
+	int summaryX;
+	int summaryY;
 
 	public RosterPanel(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -58,6 +60,8 @@ public class RosterPanel
 		this.labelHeight = labelWidth * 45 / 83;
 		this.summaryWidth = labelWidth * 47 / 83;
 		this.summaryHeight = summaryWidth * 40 / 47;
+		this.summaryX = xOffset + chainSize + (labelWidth - summaryWidth) / 2;
+		this.summaryY = height - labelHeight / 2 - summaryHeight + labelHeight * 6 / 45;
 	}
 
 	public void draw()
@@ -90,7 +94,6 @@ public class RosterPanel
 	}
 	
 	private void drawRoster(){
-		int tuck = labelHeight * 6 / 45;
 		int rosterYOffset = chainSize;
 		int levelBackdropWidth = rosterSlotWidth - dividerWidth + dividerShadow;
 		int levelBackdropHeight = levelBackdropWidth * 20 / 52;
@@ -114,9 +117,6 @@ public class RosterPanel
 			game.font.getData().setScale(.25f);
 			game.font.draw(game.batcher, (unit.level < 10 ? "Lvl. 0" : "Lvl. ") + unit.level, rosterXOffset + rosterSlotWidth * (i + 1), rosterYOffset + levelBackdropHeight * 8 / 10, levelBackdropWidth, 1, false);			
 		}
-		
-		int summaryX = xOffset + chainSize + (labelWidth - summaryWidth) / 2;
-		int summaryY = height - labelHeight / 2 - summaryHeight + tuck;
 		
 		game.batcher.draw(game.sprites.RosterSummary, summaryX, summaryY, summaryWidth, summaryHeight);
 		for(int i = 0; i < state.roster.size(); i++){
@@ -179,8 +179,34 @@ public class RosterPanel
 			state.selected = state.roster.get(rosterSlot);
 		}else{
 			state.selected = null;
+		}	
+	}
+	
+	public void processLongTouch(float x, float y, HelpPanel helpPanel){	
+		if((x >= xOffset + chainSize && x < xOffset + chainSize + labelWidth && y >= height - labelHeight / 2 && y < height + labelHeight /2)
+				|| (x >= summaryX && x < summaryX + summaryWidth && y >= summaryY && y < summaryY + summaryHeight)){
+			helpPanel.title = "Roster";
+			helpPanel.text = "Your team of heroes.";
+			helpPanel.setHeight(tileHeight * 2);
+			helpPanel.setWidth(tileWidth * 4);
+			helpPanel.isVisible = true;		
+		}else{				
+			int rosterSlot = -1;
+			x = x - rosterXOffset;
+			x -= rosterSlotWidth;
+			while(x > 0){
+				x -= rosterSlotWidth;
+				rosterSlot++;
+			}
+			
+			if(rosterSlot >= 0 && rosterSlot < state.roster.size()){
+				state.selected = state.roster.get(rosterSlot);
+				state.isUnitDetailsOpen = !state.isUnitDetailsOpen;
+			}else{
+				state.selected = null;
+			}	
 		}
-		
-		
+
+		state.isLongPressed = false;
 	}
 }

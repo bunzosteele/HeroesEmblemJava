@@ -23,6 +23,7 @@ public class BattleState
 {
 	public List<Unit> enemies;
 	public List<Unit> roster;
+	public List<Unit> unplacedUnits;
 	public List<Unit> dyingUnits;
 	public Unit selected;
 	public int gold;
@@ -45,6 +46,8 @@ public class BattleState
 	public Unit targeted;
 	public boolean isSettingsOpen;
 	public boolean isUnitDetailsOpen;
+	public boolean isTacticsOpen;
+	public boolean isLongPressed;
 
 	public BattleState(final ShopState shopState) throws IOException
 	{
@@ -55,6 +58,7 @@ public class BattleState
 		this.perksPurchased = shopState.perksPurchased;
 		this.difficulty = (int) Math.pow(2, roundsSurvived);
 		this.roster = shopState.roster;
+		this.unplacedUnits = new ArrayList<Unit>();
 		this.selected = null;
 		this.targeted = null;
 		this.gold = shopState.gold;
@@ -69,7 +73,7 @@ public class BattleState
 				enemySpawns.add(spawn);
 			}
 		}
-		this.playerSpawns = GetPlayerSpawns(battlefieldId);
+		this.playerSpawns =  GeneratePlayerSpawns(battlefieldId);
 		if(this.perksPurchased > 3){
 			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - 7, this.roster, this.game);	
 			for(Unit enemy : this.enemies){
@@ -91,9 +95,8 @@ public class BattleState
 		this.StartBattle();
 		if(this.perksPurchased > 4){
 			this.isInTactics = true;
-		}else{
-			this.SpawnUnits(this.roster, playerSpawns);
 		}
+		this.SpawnUnits(this.roster, playerSpawns);
 		int maxId = 0;
 		for(Unit unit : this.roster){
 			if(unit.id > maxId)
@@ -144,7 +147,7 @@ public class BattleState
 
 	public boolean CanAttack(final Unit unit)
 	{
-		if ((unit != null) && (unit.team == this.currentPlayer))
+		if ((unit != null) && (unit.team == this.currentPlayer) && isInTactics == false)
 		{
 			if (!unit.hasAttacked)
 			{
@@ -162,11 +165,8 @@ public class BattleState
 		}
 		return false;
 	}
-
-	public List<Spawn> GetPlayerSpawns(int battlefieldId) throws IOException{
-		if(this.playerSpawns.size() > 0)
-			return this.playerSpawns;
-		
+	
+	public List<Spawn> GeneratePlayerSpawns(int battlefieldId) throws IOException{
 		final List<Spawn> spawns = BattlefieldGenerator.GenerateSpawns(battlefieldId);
 		final List<Spawn> playerSpawns = new ArrayList<Spawn>();
 		for (final Spawn spawn : spawns)
@@ -176,7 +176,6 @@ public class BattleState
 				playerSpawns.add(spawn);
 			}
 		}
-		this.playerSpawns = playerSpawns;
 		return playerSpawns;
 	}
 	
@@ -290,6 +289,8 @@ public class BattleState
 		unitDto.roundKilled = roundsSurvived + 1;
 		unitDto.isMale = deceased.isMale;
 		unitDto.backStory = deceased.backStory;
+		unitDto.experience = deceased.experience;
+		unitDto.experienceNeeded = deceased.experienceNeeded;
 		this.graveyard.add(unitDto);
 	}
 	
@@ -417,7 +418,7 @@ public class BattleState
 		}
 	}
 
-	private void SpawnUnits(final List<Unit> units, final List<Spawn> spawns)
+	private void SpawnUnits(final List<Unit> units, final List<Spawn> spawns) throws IOException
 	{
 		final Random random = new Random();
 		for (final Unit unit : units)
@@ -428,5 +429,7 @@ public class BattleState
 			unit.y = spawn.y;
 			spawns.remove(spawn);
 		}
+		
+		playerSpawns = GeneratePlayerSpawns(battlefieldId);
 	}
 }

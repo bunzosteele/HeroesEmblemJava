@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 public class HeroesEmblem extends Game
@@ -51,6 +52,7 @@ public class HeroesEmblem extends Game
 	public void create()
 	{
 		Gdx.input.setCatchBackKey(true);
+		Gdx.input.setInputProcessor(new GestureDetector(new HeroesGestureListener(this)));
 		this.batcher = new SpriteBatch();
 		this.shapeRenderer = new ShapeRenderer();
 		final FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("alagard.ttf"));

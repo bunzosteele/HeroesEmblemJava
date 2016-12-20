@@ -49,7 +49,7 @@ public class UnitDetailsPanel extends PopupPanel
 	}
 	
 	public void drawBackground(){
-		super.drawBackground();
+		super.drawBackground(true);
 	}
 	
 	public void draw() throws IOException{
@@ -195,8 +195,5 @@ public class UnitDetailsPanel extends PopupPanel
 			int barYOffset = (int) (backdropHeight * .122);
 			game.batcher.draw(new Sprite(game.textureAtlas.findRegion("Experience" + experienceIndex)), contentXOffset + leftOffset, nameY + barYOffset - backdropHeight * 2, barWidth, barHeight);
 		}	
-	}
-	
-	public void processTouch(final float x, final float y) throws IOException{
 	}
 }

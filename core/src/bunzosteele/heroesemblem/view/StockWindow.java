@@ -33,7 +33,6 @@ public class StockWindow
 	int stockWidth;
 	int stockXOffset;
 	int stockYOffset;
-	int buttonSize;
 	int rerollX;
 	int rerollY;
 
@@ -55,9 +54,8 @@ public class StockWindow
 		this.stockHeight = dividerHeight / 2;
 		this.stockXOffset = xOffset + (width - dividerWidth) / 2;
 		this.stockYOffset = yOffset + (height - dividerHeight) / 2;
-		this.buttonSize = width * 12 / 100;
-		this.rerollX = xOffset + width - buttonSize - chainSize - shadowSize;
-		this.rerollY = yOffset + chainSize;
+		this.rerollX = xOffset + width - tileWidth - chainSize - shadowSize;
+		this.rerollY = yOffset + chainSize * 2;
 	}
 
 	public void draw()
@@ -144,9 +142,9 @@ public class StockWindow
 	private void drawButtons(){
 		if(state.perksPurchased > 2){
 			if(state.gold >= state.GetRerollCost() && state.roster.size() < 8){
-				game.batcher.draw(game.sprites.RerollEnabled, rerollX, rerollY, buttonSize, buttonSize);
+				game.batcher.draw(game.sprites.RerollEnabled, rerollX, rerollY, tileWidth, tileHeight);
 			}else{
-				game.batcher.draw(game.sprites.RerollDisabled, rerollX, rerollY, buttonSize, buttonSize);
+				game.batcher.draw(game.sprites.RerollDisabled, rerollX, rerollY, tileWidth, tileHeight);
 			}	
 			if(state.GetRerollCost() > 0){
 				game.batcher.draw(game.sprites.GoldCoin, rerollX - tileWidth * 3 / 8, rerollY, tileWidth / 4, tileHeight / 4);
@@ -222,15 +220,77 @@ public class StockWindow
 		if (!hit)
 		{
 			state.selected = null;
-			if(x >= rerollX && x <= rerollX + buttonSize && y >= rerollY && y <= rerollY + buttonSize){
+			if(state.perksPurchased > 2 && x >= rerollX && x <= rerollX + tileWidth && y >= rerollY && y <= rerollY + tileHeight){
 				processRerollTouch();
 			}
 		
 		}
 	}
 	
+	public void processLongTouch(float x, float y, HelpPanel helpPanel){	
+		int unitOffset = 0;
+		boolean hit = false;
+		for (Unit unit : state.stock)
+		{
+			if (unitOffset < 4)
+			{
+				int lowerXBound = stockXOffset + stockWidth * unitOffset;
+				int upperXBound = stockXOffset + stockWidth * (unitOffset + 1);
+				int lowerYBound = stockYOffset + dividerHeight / 2;
+				int upperYBound = stockYOffset + dividerHeight / 2 + stockHeight;
+				if ((x >= lowerXBound) && (x < upperXBound))
+				{
+					if ((y >= lowerYBound) && (y < upperYBound))
+					{
+						state.selected = state.stock.get(unitOffset);
+						state.isUnitDetailsOpen = !state.isUnitDetailsOpen;
+						hit = true;
+					}
+				}
+			} else
+			{
+				int lowerXBound = stockXOffset + stockWidth * (unitOffset - 4);
+				int upperXBound = stockXOffset + stockWidth * (unitOffset - 3);
+				int lowerYBound = stockYOffset;
+				int upperYBound = stockYOffset + dividerHeight / 2;
+				if ((x >= lowerXBound) && (x < upperXBound))
+				{
+					if ((y >= lowerYBound) && (y < upperYBound))
+					{
+						state.selected = state.stock.get(unitOffset);
+						state.isUnitDetailsOpen = !state.isUnitDetailsOpen;
+						hit = true;
+					}
+				}
+			}
+			unitOffset++;
+		}
+		if (!hit)
+		{
+			state.selected = null;
+			int stockpileOffset = xOffset + (width - stockWidth) / 2;
+			if(x >= stockpileOffset && x < stockpileOffset + stockWidth && y < yOffset + tileHeight && y > yOffset){
+				helpPanel.title = "Stockpile";
+				helpPanel.text = "You have " + state.gold + " gold to spend.";
+				helpPanel.setHeight(tileHeight * 2);
+				helpPanel.setWidth(tileWidth * 5);
+				helpPanel.isVisible = true;		
+			}	
+			
+			if(x >= xOffset && x < xOffset + tileWidth * 3 /2 && y >= yOffset && y < yOffset + tileWidth / 2){
+				helpPanel.title = "Roster";
+				helpPanel.text = "Your team of heroes.";
+				helpPanel.setHeight(tileHeight * 2);
+				helpPanel.setWidth(tileWidth * 4);
+				helpPanel.isVisible = true;		
+			}
+		}
+
+		state.isLongPressed = false;
+	}
+	
 	private void processRerollTouch() throws IOException{
-		if(state.gold > state.GetRerollCost()){
+		if(state.gold > state.GetRerollCost() && state.roster.size() < 8){
 			state.Reroll();
 			if(state.CanBuy()){
 				ShopScreen.buySound.play(game.settings.getFloat("sfxVolume", .5f));

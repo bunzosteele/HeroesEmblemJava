@@ -73,7 +73,6 @@ public class SpriteHolder {
 	public Sprite LevelBackdrop;
 	public Sprite DeleteButton;
 	
-
 	public SpriteHolder(HeroesEmblem game) throws ReflectionException, IllegalArgumentException, IllegalAccessException {
 		java.lang.reflect.Field[] fields = getClass().getFields();
 		for (int i = 0; i < fields.length; i++) {
