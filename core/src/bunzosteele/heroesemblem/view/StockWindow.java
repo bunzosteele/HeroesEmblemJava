@@ -5,6 +5,7 @@ import java.util.List;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.ShopState;
+import bunzosteele.heroesemblem.model.TipManager;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
 
@@ -35,6 +36,7 @@ public class StockWindow
 	int stockYOffset;
 	int rerollX;
 	int rerollY;
+	String tip;
 
 	public StockWindow(final HeroesEmblem game, final ShopState state, final int width, final int height, final int xOffset, final int yOffset)
 	{
@@ -56,6 +58,12 @@ public class StockWindow
 		this.stockYOffset = yOffset + (height - dividerHeight) / 2;
 		this.rerollX = xOffset + width - tileWidth - chainSize - shadowSize;
 		this.rerollY = yOffset + chainSize * 2;
+		try {
+			tip = TipManager.GetTip();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void draw()
@@ -63,6 +71,7 @@ public class StockWindow
 		drawStock();
 		drawButtons();
 		drawStockpile();
+		drawTip();
 	}
 	
 	public void drawBorder(){
@@ -131,12 +140,11 @@ public class StockWindow
 			UnitRenderer.DrawUnit(game, unit, xOffset + (width - nameBackdropWidth) / 2, yOffset + height / 20 + nameBackdropHeight, tileWidth, false, false, false);
 		}
 		
-		game.batcher.draw(game.sprites.GoldCoin, xOffset + width * 9 / 10 - tileWidth / 4, yOffset + height / 20 + nameBackdropHeight + tileHeight / 2, tileHeight / 4, tileHeight / 4);
+		game.batcher.draw(game.sprites.GoldCoin, xOffset + width * 9 / 10 - tileWidth / 4, yOffset + height / 10 + nameBackdropHeight + tileHeight / 2, tileHeight / 4, tileHeight / 4);
 		game.font.setColor(new Color(1f, .8f, 0, 1f));
-		game.font.draw(game.batcher, "" + unit.cost, xOffset + width * 9 / 10 - tileWidth * 17 / 16, yOffset + height / 20 + nameBackdropHeight + tileHeight / 2 + game.font.getLineHeight() * 4 / 5, tileWidth * 3 / 4, 0, false);
-		game.font.setColor(new Color(1f, 1f, 1f, 1f));
-		game.font.getData().setScale(.2f);
-		game.font.draw(game.batcher, unit.ability != null ? unit.ability.displayName : "", xOffset + (width - nameBackdropWidth) / 2 + tileWidth, yOffset + height / 10 + nameBackdropHeight + game.font.getLineHeight(), width - ((width - nameBackdropWidth) / 2 + tileWidth), 1, false);
+		game.font.draw(game.batcher, "" + unit.cost, xOffset + width * 9 / 10 - tileWidth * 17 / 16, yOffset + height / 10 + nameBackdropHeight + tileHeight / 2 + game.font.getLineHeight() * 4 / 5, tileWidth * 3 / 4, 0, false);
+		if(unit.ability != null)
+			game.batcher.draw(unit.ability.GetAbilityIcon(game), xOffset + tileWidth + tileWidth / 4 + (width - nameBackdropWidth) / 2, yOffset + height / 20 + nameBackdropHeight, tileWidth /2, tileWidth/2);
 	}
 	
 	private void drawButtons(){
@@ -147,10 +155,10 @@ public class StockWindow
 				game.batcher.draw(game.sprites.RerollDisabled, rerollX, rerollY, tileWidth, tileHeight);
 			}	
 			if(state.GetRerollCost() > 0){
-				game.batcher.draw(game.sprites.GoldCoin, rerollX - tileWidth * 3 / 8, rerollY, tileWidth / 4, tileHeight / 4);
+				game.batcher.draw(game.sprites.GoldCoin, rerollX - tileWidth * 3 / 8, rerollY + tileWidth * 4 / 5, tileWidth / 4, tileHeight / 4);
 				game.font.getData().setScale(.25f);
 				game.font.setColor(new Color(1f, .8f, 0, 1f));
-				game.font.draw(game.batcher, "" + state.GetRerollCost(), rerollX - tileWidth * 19 / 16, rerollY + game.font.getData().lineHeight * 3 / 4, tileWidth * 3 / 4, 0, false);
+				game.font.draw(game.batcher, "" + state.GetRerollCost(), rerollX - tileWidth * 19 / 16, rerollY + tileWidth, tileWidth * 3 / 4, 0, false);
 			}
 		}
 	}
@@ -161,11 +169,20 @@ public class StockWindow
 		int chestHeight = chestWidth * 21 / 28;
 		int goldWidth = chestWidth * 26 / 28;
 		int goldHeight = goldWidth * 19 / 26;	
-		game.batcher.draw(game.sprites.GoldChest, stockpileOffset, rerollY, chestWidth, chestHeight);
+		game.batcher.draw(game.sprites.GoldChest, stockpileOffset, rerollY + tileWidth / 2, chestWidth, chestHeight);
 		game.font.getData().setScale(.35f);
 		game.font.setColor(new Color(1f, .8f, 0, 1f));
-		game.font.draw(game.batcher, "" + state.gold, stockpileOffset + chestWidth, rerollY + game.font.getData().lineHeight * 3 / 4, stockWidth - goldWidth - chestWidth, 1, false);
-		game.batcher.draw(game.sprites.Gold, stockpileOffset + stockWidth - goldWidth, rerollY, goldWidth, goldHeight);
+		game.font.draw(game.batcher, "" + state.gold, stockpileOffset + chestWidth, rerollY + game.font.getData().lineHeight * 3 / 4 + tileWidth / 2, stockWidth - goldWidth - chestWidth, 1, false);
+		game.batcher.draw(game.sprites.Gold, stockpileOffset + stockWidth - goldWidth, rerollY + tileWidth / 2, goldWidth, goldHeight);
+	}
+	
+	private void drawTip(){
+		int labelOffset = xOffset + chainSize;
+		int tipOffset = xOffset + chainSize * 2 + tileWidth * 3 / 2;
+		game.font.getData().setScale(.25f);
+		game.font.setColor(Color.WHITE);
+		// game.font.draw(game.batcher, "Overheard Whispers:", labelOffset, yOffset + chainSize + game.font.getData().lineHeight * 3, tileWidth * 3 / 2, 1, true);
+		game.font.draw(game.batcher, tip, tipOffset, yOffset + chainSize + game.font.getData().lineHeight * 2, (stockWidth * 3) - chainSize, 1, true);
 	}
 
 	public boolean isTouched(final float x, final float y)

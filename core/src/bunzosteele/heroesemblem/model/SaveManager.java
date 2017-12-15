@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 
 import bunzosteele.heroesemblem.HeroesEmblem;
+import bunzosteele.heroesemblem.model.Battlefield.Spawn;
+import bunzosteele.heroesemblem.model.Battlefield.SpawnDto;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Battlefield.TileDto;
 import bunzosteele.heroesemblem.model.Units.Archer;
@@ -106,6 +108,7 @@ public class SaveManager
 		stateDto.graveyard = state.graveyard;
 		stateDto.undos = state.undos;
 		stateDto.isInTactics = state.isInTactics;
+		stateDto.playerSpawns = SaveManager.MapSpawnDtos(state.playerSpawns);
 		return stateDto;
 	}
 	
@@ -141,6 +144,7 @@ public class SaveManager
 		public List<UnitDto> stock;
 		public int rerollCount;
 		public boolean isInTactics;
+		public List<SpawnDto> playerSpawns;
 	}
 	
 	public static List<Unit> MapUnits(List<UnitDto> source) throws IOException{
@@ -183,6 +187,19 @@ public class SaveManager
 			battlefield.add(row);
 		}
 		return battlefield;
+	}
+	
+	public static List<Spawn> MapSpawns(List<SpawnDto> source){
+		
+		if(source == null)
+			return null;
+		
+		final List<Spawn> spawns = new ArrayList<Spawn>();
+		for(SpawnDto spawn : source){
+			spawns.add(new Spawn(spawn.x, spawn.y, spawn.isPlayer));
+		}
+		
+		return spawns;
 	}
 	
 	public static List<UnitDto> MapUnitDtos(List<Unit> source, BattleState battleState){
@@ -263,6 +280,18 @@ public class SaveManager
 			battlefield.add(dtoRow);
 		}
 		return battlefield;
+	}
+	
+	public static List<SpawnDto> MapSpawnDtos(List<Spawn> source){
+		final List<SpawnDto> spawns = new ArrayList<SpawnDto>();
+		for(Spawn spawn : source){
+			SpawnDto spawnDto = new SpawnDto();
+			spawnDto.x = spawn.x;
+			spawnDto.y = spawn.y;
+			spawnDto.isPlayer = spawn.isPlayer;
+			spawns.add(spawnDto);
+		}
+		return spawns;
 	}
 	
 	private static final String fileName = "heroesemblemstate.sav";

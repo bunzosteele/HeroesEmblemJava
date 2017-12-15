@@ -17,12 +17,13 @@ import android.widget.Toast;
 import bunzosteele.heroesemblem.AdsController;
 import bunzosteele.heroesemblem.GameServicesController;
 import bunzosteele.heroesemblem.HeroesEmblem;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -32,13 +33,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.plus.Plus;
-import com.purplebrain.adbuddiz.sdk.AdBuddiz;
 
 public class AndroidLauncher extends AndroidApplication implements AdsController, GameServicesController, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 	private static final String PROPERTY_ID = "UA-69183424-2";
 	private static final String LEADERBOARD_ID = "CgkIi_ntxuUZEAIQAQ";
 	Tracker analytics;
-	AdView bannerAd;
 	GoogleApiClient apiClient;
 	boolean isSubmitClick = false;
 	boolean isViewClick = false;
@@ -47,6 +46,8 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	boolean isResolvingConnectionFailure;
 	int scoreToSubmit = -1;
 	HeroesEmblem game;
+	InterstitialAd interstitialAd;
+	AdRequest.Builder adRequestBuilder;
 	
 	private static final int RC_UNUSED = 5001;
     private static final int RC_SIGN_IN = 9001;
@@ -57,10 +58,10 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		this.game = new HeroesEmblem(this, this);
 		View gameView = initializeForView(this.game, config);
-		setupAds();
 		RelativeLayout layout = new RelativeLayout(this);
 		layout.addView(gameView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		setContentView(layout);
+		setupAds();
 	    GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(this);
 	    analytics = googleAnalytics.newTracker(PROPERTY_ID);
 	    analytics.enableAdvertisingIdCollection(true);
@@ -127,13 +128,6 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	}
 	
 	@Override
-	public void showInterstitialAd(){
-	   if (AdBuddiz.isReadyToShowAd(this)) {
-		      AdBuddiz.showAd(this);
-	   }
-	}
-	
-	@Override
 	public boolean isWifiConnected(){
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -142,8 +136,52 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	}
 	
 	private void setupAds(){	
-		AdBuddiz.setPublisherKey("b5d3138e-2c1c-4110-9712-996a47f18c30");
-		AdBuddiz.cacheAds(this);
+		MobileAds.initialize(this, "ca-app-pub-9270769703022419~7341291688");
+		adRequestBuilder = new AdRequest.Builder();
+		adRequestBuilder.addTestDevice("4628d7c3");
+		interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-9270769703022419/9896344621");
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                //Toast.makeText(getApplicationContext(), "Finished Loading Interstitial", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                interstitialAd.loadAd(adRequestBuilder.build());
+                //Toast.makeText(getApplicationContext(), "Closed Interstitial", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+            	super.onAdFailedToLoad(errorCode);
+                interstitialAd.loadAd(adRequestBuilder.build());
+                //Toast.makeText(getApplicationContext(), "Failed to load: " + errorCode, Toast.LENGTH_SHORT).show();
+            }
+        });
+        interstitialAd.loadAd(adRequestBuilder.build());
+	}
+	
+	@Override
+	public void showInterstitialAd() {
+		try {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					if (interstitialAd.isLoaded()) {
+						interstitialAd.show();
+						//Toast.makeText(getApplicationContext(), "Showing Interstitial", Toast.LENGTH_SHORT).show();
+					}else{
+						AdRequest interstitialRequest = adRequestBuilder.build();
+						interstitialAd.loadAd(interstitialRequest);
+						//Toast.makeText(getApplicationContext(), "Starting new Load", Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
+	    
 	}
 
     @Override
@@ -284,4 +322,6 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
         return (new AlertDialog.Builder(activity)).setMessage(text)
                 .setNeutralButton(android.R.string.ok, null).create();
     }
+    
+    
 }

@@ -185,8 +185,9 @@ public class BattleScreen extends ScreenAdapter
 
 	public void update() throws IOException
 	{	
-		if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsPanel.backEnabled){
-			//this.game.setScreen(new SettingsPanel(this.game, this.game.getScreen(), true));
+		if((Gdx.input.isKeyJustPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsPanel.backEnabled){
+			game.battleState.isSettingsOpen = !game.battleState.isSettingsOpen;
+			SettingsPanel.isDisplayingConfirmation = game.battleState.isSettingsOpen;
 		}
 		this.state.CleanBoard();
 		if (this.state.HasPlayerLost())

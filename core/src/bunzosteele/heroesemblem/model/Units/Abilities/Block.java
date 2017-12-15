@@ -3,6 +3,9 @@ package bunzosteele.heroesemblem.model.Units.Abilities;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+
 public class Block extends Ability
 {
 	public Block()
@@ -23,6 +26,6 @@ public class Block extends Ability
 	{
 		final Random rand = new Random();
 		final int roll = rand.nextInt(101);
-		return roll > 90;
+		return roll > 80;
 	}
 }

@@ -202,8 +202,9 @@ public class ShopScreen extends ScreenAdapter
 					shopkeeperPanel.processTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 				}	
 			}
-		}else if((Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsPanel.backEnabled){
-			//game.setScreen(new SettingsPanel(game, game.getScreen(), true));
+		}else if((Gdx.input.isKeyJustPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) && SettingsPanel.backEnabled){
+			game.shopState.isSettingsOpen = !game.shopState.isSettingsOpen;
+			SettingsPanel.isDisplayingConfirmation = game.shopState.isSettingsOpen;
 		}
 	}
 }

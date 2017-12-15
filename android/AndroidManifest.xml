@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="bunzosteele.heroesemblem.android"
-    android:versionCode="24"
-    android:versionName="1.5.4" >
+    android:versionCode="25"
+    android:versionName="2.0.0" >
 
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="22" />
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="26" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/he_launcher"
@@ -22,8 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-     <activity android:name="com.purplebrain.adbuddiz.sdk.AdBuddizActivity" 
-               android:theme="@android:style/Theme.Translucent" />
+<activity android:name="com.google.android.gms.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         <meta-data android:name="com.google.android.gms.version"
 android:value="@integer/google_play_services_version" />
 		<meta-data android:name="com.google.android.gms.games.APP_ID"

@@ -44,13 +44,20 @@ public class SettingsPanel extends PopupPanel
 		this.battleState = state;
 	}
 	
+	public SettingsPanel(final HeroesEmblem game, int width, int height, int xOffset, int yOffset)
+	{
+		super(game, width, height, xOffset, yOffset);
+		this.buttonSize = width / 8;
+		this.isInGame = false;
+	}
+	
 	public void drawBackground(){
 		super.drawBackground(true);
 	}
 	
 	public void draw(){
 		super.drawBorder();
-		game.font.setColor(Color.BLACK);
+		game.font.setColor(Color.WHITE);
 		game.font.getData().setScale(.4f);
 		game.font.draw(game.batcher, "Settings", xOffset, yOffset + height - game.font.getData().lineHeight, width, 1, false);
 		game.font.getData().setScale(.33f);
@@ -91,22 +98,22 @@ public class SettingsPanel extends PopupPanel
 			game.batcher.draw(game.sprites.DeleteButton, xOffset + (width - buttonSize * 3) / 2, yOffset + buttonSize / 2, buttonSize * 3, (buttonSize * 75) / 122);
 			
 			if(!isInGame){
-				game.font.draw(game.batcher, "Erase Highscores", xOffset, yOffset + game.font.getData().lineHeight * 3, width, 1, false);
+				game.font.getData().setScale(.30f);
+				game.font.draw(game.batcher, "Delete Highscores", xOffset, yOffset + game.font.getData().lineHeight * 3, width, 1, false);
+				game.font.getData().setScale(.33f);
 			}else{
 				game.font.draw(game.batcher, "Quit Game", xOffset, yOffset + game.font.getData().lineHeight * 3, width, 1, false);
 			}
 		}else{
 			game.font.getData().setScale(.66f);
 			if(!isInGame){
-				game.font.draw(game.batcher, "Erase Highscores?", xOffset, yOffset + height - game.font.getData().lineHeight * 7 / 2, width, 1, false);
+				game.font.draw(game.batcher, "Delete Highscores?", xOffset, yOffset + height - game.font.getData().lineHeight * 6 / 2, width, 1, false);
 			}else{
-				game.font.draw(game.batcher, "Resign?", xOffset, yOffset + height - game.font.getData().lineHeight * 7 / 2, width, 1, false);
+				game.font.draw(game.batcher, "Resign?", xOffset, yOffset + height - game.font.getData().lineHeight * 6 / 2, width, 1, false);
 			}
-			game.batcher.draw(game.sprites.EmptyEnabled, xOffset + width / 3 - buttonSize / 2, yOffset + height - buttonSize * 8 / 2, buttonSize, buttonSize);
-			game.batcher.draw(game.sprites.EmptyEnabled, xOffset + width * 2 / 3 - buttonSize / 2, yOffset + height - buttonSize * 8 / 2, buttonSize, buttonSize);
+			game.batcher.draw(game.sprites.UndoEnabled, xOffset + width / 3 - buttonSize / 2, yOffset + height - buttonSize * 8 / 2, buttonSize, buttonSize);
+			game.batcher.draw(game.sprites.ConfirmEnabled, xOffset + width * 2 / 3 - buttonSize / 2, yOffset + height - buttonSize * 8 / 2, buttonSize, buttonSize);
 			game.font.getData().setScale(.33f);
-			game.font.draw(game.batcher, "Yes", xOffset + width / 3 - buttonSize / 2, yOffset + height - buttonSize * 7 / 2 + game.font.getData().lineHeight / 2, buttonSize, 1, false);
-			game.font.draw(game.batcher, "No", xOffset + width * 2 / 3 - buttonSize / 2, yOffset + height - buttonSize * 7 / 2 + game.font.getData().lineHeight / 2, buttonSize, 1, false);
 		}
 	}
 	
@@ -164,7 +171,7 @@ public class SettingsPanel extends PopupPanel
 	}
 	
 	private void checkDeleteTouch(int x, int y){
-		if(x > xOffset + width / 3 - buttonSize / 2 && x < xOffset + width / 3 + buttonSize / 2 && y > yOffset + height - buttonSize * 8 / 2 && y < yOffset + height - buttonSize * 6 / 2){
+		if(x > xOffset + width * 2 / 3 - buttonSize / 2 && x < xOffset + width * 2 / 3 + buttonSize / 2 && y > yOffset + height - buttonSize * 8 / 2 && y < yOffset + height - buttonSize * 6 / 2){
 			if(isInGame){
 				if(shopState != null){
 					endGame(shopState.roster, shopState.graveyard, shopState.roundsSurvived);
@@ -173,8 +180,9 @@ public class SettingsPanel extends PopupPanel
 				}		
 			}else{
 				HighscoreManager.EraseHighscores();
+				SettingsPanel.isDisplayingConfirmation = false;
 			}
-		}else if(x > xOffset + width * 2 / 3 - buttonSize / 2 && x < xOffset + width * 2 / 3 + buttonSize / 2 && y > yOffset + height - buttonSize * 8 / 2 && y < yOffset + height - buttonSize * 6 / 2){
+		}else if(x > xOffset + width / 3 - buttonSize / 2 && x < xOffset + width / 3 + buttonSize / 2 && y > yOffset + height - buttonSize * 8 / 2 && y < yOffset + height - buttonSize * 6 / 2){
 			SettingsPanel.isDisplayingConfirmation = false;
 		}
 	}

@@ -72,6 +72,17 @@ public class SpriteHolder {
 	public Sprite RosterDivider;
 	public Sprite LevelBackdrop;
 	public Sprite DeleteButton;
+	public Sprite MenuButton;
+	public Sprite MainTitle;
+	public Sprite FootprintsBlack;
+	public Sprite FootprintsWhite;
+	public Sprite Icon;
+	public Sprite HealBackground;
+	public Sprite ExperienceBackground;
+	public Sprite AbilityDisabled;
+	public Sprite AbilityEnabled;
+	public Sprite AbilityEmphasis;
+	public Sprite MenuBackdrop;
 	
 	public SpriteHolder(HeroesEmblem game) throws ReflectionException, IllegalArgumentException, IllegalAccessException {
 		java.lang.reflect.Field[] fields = getClass().getFields();

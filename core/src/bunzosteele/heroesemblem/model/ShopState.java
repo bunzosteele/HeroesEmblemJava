@@ -39,14 +39,14 @@ public class ShopState
 		this.stock = UnitGenerator.GenerateStock(this.roster, game, this.GetTrainingPerkLevel());
 		this.game = game;
 		this.selected = null;
-		this.gold = 500000;
+		this.gold = 50000;
 		this.graveyard = new ArrayList<UnitDto>();
-		this.roundsSurvived = 12;
+		this.roundsSurvived = 8;
 		this.perksPurchased = 0;
 		final Random random = new Random();
 		int maxMap = BattlefieldGenerator.DetectMaximumMap();
 		int minMap = BattlefieldGenerator.DetectMinimumMap();	
-		this.nextBattlefieldId = (random.nextInt((int) Math.pow(2, this.roundsSurvived) + Math.abs(minMap)) % (maxMap + Math.abs(minMap) + 1)) + minMap;
+		this.nextBattlefieldId = 9; //(random.nextInt((int) Math.pow(2, this.roundsSurvived) + Math.abs(minMap)) % (maxMap + Math.abs(minMap) + 1)) + minMap;
 		this.nextBattlefield = BattlefieldGenerator.GenerateBattlefield(this.nextBattlefieldId);
 		this.rerollCount = 0;
 	}

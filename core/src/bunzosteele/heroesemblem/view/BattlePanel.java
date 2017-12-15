@@ -130,8 +130,10 @@ public class BattlePanel
 			
 			final AtlasRegion nameBackdropRegion = game.textureAtlas.findRegion("NameBackdrop" + state.selected.team);
 			game.batcher.draw(new Sprite(nameBackdropRegion), xOffset + (chainSize + portraitHeight) + shadowSize, yOffset + height - chainSize - shadowSize - nameBackdropHeight, nameBackdropWidth, nameBackdropHeight);
+			game.font.setColor(Color.WHITE);
 			game.font.draw(game.batcher, state.selected.name, xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
 			game.font.draw(game.batcher, state.selected.type.toString(), xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
+			game.font.setColor(Color.BLACK);
 			game.batcher.draw(game.sprites.HealthBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight, backdropWidth, backdropHeight);
 			game.font.getData().setScale(.25f);
 			game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
@@ -139,6 +141,16 @@ public class BattlePanel
 			game.batcher.draw(game.sprites.ExperienceBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 2, backdropWidth, backdropHeight);
 			game.font.draw(game.batcher, (state.selected.level < 10 ? "Lvl. 0" : "Lvl. ") + state.selected.level, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - backdropHeight - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
 			DrawExperienceBar(nameY);
+			
+			int footprintSize = buttonSize / 5;
+			int totalMovementWidth = footprintSize * state.selected.movement;
+			for(int i = 0; i < state.selected.movement; i++){
+				if(state.selected.team == 0 || state.perksPurchased >= 2){
+				game.batcher.draw(game.sprites.FootprintsBlack, xOffset + ((width - totalMovementWidth) / 2) + footprintSize * i, nameY - backdropHeight * 6 - footprintSize, footprintSize, footprintSize * 23 / 20);
+				}else{
+					game.batcher.draw(game.sprites.FootprintsBlack, xOffset + ((width - totalMovementWidth) / 2) + footprintSize * i, nameY - backdropHeight * 2 - footprintSize, footprintSize, footprintSize * 23 / 20);
+				}
+			}
 			
 			if (state.selected.team == 0 || state.perksPurchased >= 2) {
 				game.font.getData().setScale(.35f);
@@ -195,20 +207,21 @@ public class BattlePanel
 				game.batcher.draw(game.sprites.CombatDisabled, endTurnX, endTurnY, buttonSize, buttonSize);
 			}
 
-		}else{
+		}else{					
 			if(state.selected != null && state.selected.ability != null && state.CanUseAbility(state.selected)){
 				if(state.isUsingAbility){
-					game.batcher.draw(game.sprites.EmptyEmphasis, abilityX, abilityY, buttonSize, buttonSize);
+					game.batcher.draw(game.sprites.AbilityEmphasis, abilityX, abilityY, buttonSize, buttonSize);
 				}else{
-					game.batcher.draw(game.sprites.EmptyEnabled, abilityX, abilityY, buttonSize, buttonSize);
+					game.batcher.draw(game.sprites.AbilityEnabled, abilityX, abilityY, buttonSize, buttonSize);
 				}
 			}else{
-				game.batcher.draw(game.sprites.EmptyDisabled, abilityX, abilityY, buttonSize, buttonSize);
+				game.batcher.draw(game.sprites.AbilityDisabled, abilityX, abilityY, buttonSize, buttonSize);
 			}
 			if(state.selected != null && state.selected.ability != null){
-				game.font.getData().setScale(.20f);
-				game.font.setColor(new Color(0f, 0f, 0f, 1f));
-				game.font.draw(game.batcher, state.selected.ability.displayName, abilityX, abilityY + buttonSize / 2 + game.font.getLineHeight() / 2, buttonSize, 1, false);
+				int iconXOffset = (buttonSize * 10) / 51;
+				int iconYOffset = (buttonSize * 11) / 51;
+				int iconSize = (buttonSize * 30) / 51;
+				game.batcher.draw(state.selected.ability.GetAbilityIcon(game), abilityX + iconXOffset, abilityY + iconYOffset + 1, iconSize, iconSize);
 			}
 			
 			if(state.currentPlayer == 0){
@@ -412,6 +425,7 @@ public class BattlePanel
 	public void processLongTouch(float x, float y, HelpPanel helpPanel){
 		String title = "";
 		String text = "";
+		String subtext = "";
 		helpPanel.setHeight(buttonSize * 2);
 		helpPanel.setWidth(buttonSize * 6);
 		if(state.selected != null && x >= xOffset + (width - backdropWidth) / 2 && x < xOffset + (width - backdropWidth) / 2 + backdropWidth){
@@ -461,6 +475,7 @@ public class BattlePanel
 			}
 			helpPanel.title = title;
 			helpPanel.text = text;
+			helpPanel.subtext = subtext;
 			helpPanel.isVisible = true;		
 			state.isLongPressed = false;
 		}

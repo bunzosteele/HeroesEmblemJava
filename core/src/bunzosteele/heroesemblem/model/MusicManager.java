@@ -20,7 +20,7 @@ public final class MusicManager
 	}
 	
 	public static void PlayShopMusic(float volume){
-		String newFile = "UnitSelect.mp3";
+		String newFile = "CrossroadsInn.mp3";
 		if(!newFile.equals(MusicManager.nowPlayingFile)){
 			MusicManager.Dispose();
 			MusicManager.nowPlaying = Gdx.audio.newMusic(Gdx.files.internal(newFile));
@@ -30,7 +30,7 @@ public final class MusicManager
 	}
 	
 	public static void PlayEasyBattleMusic(float volume){
-		String newFile = "MarchingTheme.mp3";
+		String newFile = "MarchingMusic.mp3";
 		if(!newFile.equals(MusicManager.nowPlayingFile)){
 			MusicManager.Dispose();
 			MusicManager.nowPlaying = Gdx.audio.newMusic(Gdx.files.internal(newFile));
@@ -40,16 +40,13 @@ public final class MusicManager
 	}
 	
 	public static void PlayHardBattleMusic(float volume){
-		Random rand = new Random();
-		int random = rand.nextInt(1);
-		String newFile = random == 0 ? "AnotherBattleTheme.mp3" : "BattleMusic.mp3";
+		String newFile = "BattleMusic.mp3";
 		if(!newFile.equals(MusicManager.nowPlayingFile)){
 			MusicManager.Dispose();
 			MusicManager.nowPlaying = Gdx.audio.newMusic(Gdx.files.internal(newFile));
 			MusicManager.nowPlayingFile = newFile;
 			MusicManager.Play(volume);
 		}
-		rand = null;
 	}
 	
 	private static void Dispose(){

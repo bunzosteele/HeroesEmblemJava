@@ -22,7 +22,7 @@
         <MaximumRange>2</MaximumRange>        
     </Spearman>
     <Mage>
-        <Attack>10</Attack>
+        <Attack>11</Attack>
         <Defense>1</Defense>
         <Evasion>10</Evasion>
         <Accuracy>85</Accuracy>
@@ -39,7 +39,7 @@
         <Accuracy>95</Accuracy>
         <Movement>6</Movement>
         <Cost>800</Cost>
-        <MaximumHealth>20</MaximumHealth>
+        <MaximumHealth>25</MaximumHealth>
         <MinimumRange>0</MinimumRange>
         <MaximumRange>1</MaximumRange>        
     </Knight>
@@ -50,14 +50,14 @@
         <Accuracy>95</Accuracy>
         <Movement>4</Movement>
         <Cost>700</Cost>
-        <MaximumHealth>20</MaximumHealth>
+        <MaximumHealth>25</MaximumHealth>
         <MinimumRange>0</MinimumRange>
         <MaximumRange>1</MaximumRange>       
     </Footman>
     <Priest>
         <Attack>4</Attack>
         <Defense>1</Defense>
-        <Evasion>15</Evasion>
+        <Evasion>10</Evasion>
         <Accuracy>100</Accuracy>
         <Movement>4</Movement>
         <Cost>800</Cost>

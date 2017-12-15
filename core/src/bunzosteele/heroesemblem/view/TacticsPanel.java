@@ -106,7 +106,7 @@ public class TacticsPanel extends PopupPanel
 		}
 		if (!isHit)
 		{
-			if(state.selected != null && state.selected.team == 0){
+			if(state.selected != null && state.selected.team == 0 && state.selected.x >=0){
 				state.selected.x = -1;
 				state.selected.y = -1;
 				state.unplacedUnits.add(state.selected);

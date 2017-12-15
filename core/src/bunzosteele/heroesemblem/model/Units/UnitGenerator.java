@@ -328,6 +328,9 @@ public final class UnitGenerator
 			}
 			newUnit.cost = newCost;
 		}
+		
+		newUnit.isGettingExperience = false;
+		newUnit.isLevelingUp = false;
 		return newUnit;
 	}
 

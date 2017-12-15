@@ -15,7 +15,7 @@ public class PowerShot extends Ability
 {	
 	public PowerShot()
 	{
-		this.displayName = "Pierce";
+		this.displayName = "Power Shot";
 		this.isActive = true;
 		this.isTargeted = true;
 		this.isAction = true;

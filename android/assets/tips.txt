@@ -1,0 +1,60 @@
+Useful perks can be purchased from the shopkeeper to the left.
+Tap and hold to learn more information about something.
+The more rounds of combat you survive, the more perks you can unlock.
+The Map perk allows you to view the upcoming battlefield.
+The Spies perk allows you to know your enemy's exact stats.
+The Reroll perk allows you to choose from a new list of heroes. 
+The first time you use the Reroll perk each round is free, subsequent uses will cost you.
+The Sabotage perk will cause some enemies to come into battle injured.
+The Tactics perk allows you to control where your heroes spawn.
+You can use the Tactics perk to keep injured heroes out of a fight.
+The Renew perk will heal your most damaged hero after each fight.
+The Learning perk will give each of your heroes experience for surviving a fight.
+The Training perk will allow you to hire more experienced heroes.
+Consider using your leftover gold to purchase perks.
+Stronger heroes are more expensive. Heroes skilled with special abilities also cost more.
+You can use the altitude of terrain to prevent ranged attacks.
+Hills provide heroes with a defensive advantage.
+Mountains provide heroes with a defensive advantage, but can be slow to traverse.
+Forests can be slow to navigate, but can help heroes to evade attacks.
+Sand is slow to navigate, and can prevent heroes from dodging attacks.
+Ash is slow to navigate and also reduces a hero's defence and evasion.
+Special abilities can be very helpful when fighting heavily armoured enemies.
+Leveling up will fully heal a hero.
+Spearmen with the Vault ability can be extremely mobile despite rugged terrain.
+Spearmen with the Thrust ability are best used when their targets is backed against a wall.
+The Spearman's mobility and range make it an extremely versatile hero.
+Footmen with the Shield Bash ability can stun enemies to pick up easy kills.
+Footmen with the Block ability make a very solid front line.
+The Footman's durability and raw damage make it a solid defensive hero.
+Knights with the Joust ability do increased damage the more they move before attacking.
+Knights with the Sturdy ability will can survive normally lethal damage.
+The Knight's mobility and power make it great for picking off enemies.
+Archers with the Snipe ability can do massive damage to single targets.
+Archers with the Power Shot ability can greatly weaken enemies in a tight formation.
+Archers are powerful but fragile, use your other heroes and the terrain to keep them safe.
+Priests will always have some ability.
+The strength of a Priest's Heal is dependent on it's attack.
+The effectiveness of a Priest's Scholarly teachings is dependent on it's attack.
+Priests with the Heal ability can provide consistent healing at the cost of experience.
+Priests with the Rebirth ability can provide large bursts of healing from a save distance.
+Priests with the Scholar ability can provide massive experience over many rounds of combat.
+Priests with the Scholar ability can still be useful healers, by making your heroes level up.
+Priests can be vital to keeping your army healthy over many fights.
+Mages with the Teleport ability can save stranded heroes or trap enemies.
+Mages with the Chain Lightning ability can deal a large burst of damage to clustered enemies.
+Mages are powerful but fragile, use your other heroes and the terrain to keep them safe.
+Archers and Mages cannot attack adjacent enemies, keep them at a distance.
+Burst down stronger enemies with your special abilities before they wear down your heroes.
+The Training perk is vital for replacing your fallen heroes in later rounds.
+Sometimes it is wise to hire cheap and expendable heroes to keep your veterans safe.
+As you survive more fights, you may end up on more difficult battlegrounds.
+The Snipe and Chain Lightning abilities can be targeted at any enemy.
+The Teleport and Power Shot abilities can be used on both allies and enemies.
+The Attack stat increases damage done by attacks and abilities.
+The Defence stat reduces incoming damage and can be affected by terrain.
+The Accuracy stat increases a hero's chance to hit an enemy.
+The Evasion stat increases a hero's chance to avoid attacks and can be affected by terrain.
+The Movement determines how far a unit can move in a turn.
+Some terrain like sand, ash, mountains, and forest, takes more movement to navigate.
+Heroes will get stronger when they level up, but will not learn new abilities.

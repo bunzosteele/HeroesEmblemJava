@@ -75,11 +75,11 @@ public class BattleState
 		}
 		this.playerSpawns =  GeneratePlayerSpawns(battlefieldId);
 		if(this.perksPurchased > 3){
-			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - 7, this.roster, this.game);	
+			this.enemies = UnitGenerator.GenerateEnemies(enemySpawns.size(), this.difficulty - (battlefieldId + 7), this.roster, this.game);	
 			for(Unit enemy : this.enemies){
 				final Random random = new Random();
-				int sabotageRoll = random.nextInt(31);
-				sabotageRoll = sabotageRoll - 21;
+				int sabotageRoll = random.nextInt(25);
+				sabotageRoll = sabotageRoll - 15;
 				if(sabotageRoll > 0){
 					enemy.currentHealth -= sabotageRoll;
 					if(enemy.currentHealth < 1)
@@ -119,6 +119,11 @@ public class BattleState
 		this.perksPurchased = stateDto.perksPurchased;
 		this.difficulty = (int) Math.pow(2, roundsSurvived);
 		this.roster = SaveManager.MapUnits(stateDto.roster);
+		this.unplacedUnits = new ArrayList<Unit>();
+		for(Unit unit : this.roster){
+			if(unit.x == -1 && unit.y == -1)
+				unplacedUnits.add(unit);
+		}
 		this.selected = null;
 		this.targeted = null;
 		this.gold = stateDto.gold;
@@ -129,6 +134,7 @@ public class BattleState
 		this.undos = stateDto.undos;
 		this.isInTactics = stateDto.isInTactics;
 		this.dyingUnits = new ArrayList<Unit>();
+		this.playerSpawns = SaveManager.MapSpawns(stateDto.playerSpawns);
 	}
 
 	public List<Unit> AllUnits()

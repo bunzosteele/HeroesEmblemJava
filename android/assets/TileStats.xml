@@ -5,12 +5,36 @@
 	    <MovementCost>1</MovementCost>
 	    <Altitude>1</Altitude>
 	</Grass>
+	<Dirt>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>1</Altitude>
+	</Dirt>
+	<Hill>
+	    <DefenseModifier>1</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1</MovementCost>
+	    <Altitude>2</Altitude>
+	</Hill>
 	<Mountain>
 	    <DefenseModifier>2</DefenseModifier>
-	    <EvasionModifier>10</EvasionModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>2</MovementCost>
-	    <Altitude>2</Altitude>
+	    <Altitude>3</Altitude>
 	</Mountain>
+	<Ridge>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>2</MovementCost>
+	    <Altitude>4</Altitude>
+	</Ridge>
+	<Peak>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1000</MovementCost>
+	    <Altitude>5</Altitude>
+	</Peak>
 	<Bridge>
 	    <DefenseModifier>0</DefenseModifier>
 	    <EvasionModifier>0</EvasionModifier>
@@ -18,13 +42,13 @@
 	    <Altitude>1</Altitude>
 	</Bridge>
 	<Forest>
-	    <DefenseModifier>2</DefenseModifier>
+	    <DefenseModifier>0</DefenseModifier>
 	    <EvasionModifier>15</EvasionModifier>
 	    <MovementCost>2</MovementCost>
 	    <Altitude>1</Altitude>
 	</Forest>
 	<Sand>
-	    <DefenseModifier>-1</DefenseModifier>
+	    <DefenseModifier>0</DefenseModifier>
 	    <EvasionModifier>-5</EvasionModifier>
 	    <MovementCost>3</MovementCost>
 	    <Altitude>1</Altitude>
@@ -36,8 +60,8 @@
 	    <Altitude>1</Altitude>
 	</Ash>
 	<Volcano>
-	    <DefenseModifier>1</DefenseModifier>
-	    <EvasionModifier>5</EvasionModifier>
+	    <DefenseModifier>2</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
 	    <MovementCost>3</MovementCost>
 	    <Altitude>2</Altitude>
 	</Volcano>
@@ -47,16 +71,22 @@
 	    <MovementCost>1000</MovementCost>
 	    <Altitude>5</Altitude>
 	</Wall>
-	<Lava>
-	    <DefenseModifier>1</DefenseModifier>
+	<Tower>
+	    <DefenseModifier>0</DefenseModifier>
 	    <EvasionModifier>0</EvasionModifier>
-	    <MovementCost>10</MovementCost>
+	    <MovementCost>1000</MovementCost>
+	    <Altitude>6</Altitude>
+	</Tower>
+	<Lava>
+	    <DefenseModifier>0</DefenseModifier>
+	    <EvasionModifier>0</EvasionModifier>
+	    <MovementCost>1000</MovementCost>
 	    <Altitude>0</Altitude>
 	</Lava>
 	<Water>
-	    <DefenseModifier>1</DefenseModifier>
+	    <DefenseModifier>0</DefenseModifier>
 	    <EvasionModifier>0</EvasionModifier>
-	    <MovementCost>10</MovementCost>
+	    <MovementCost>1000</MovementCost>
 	    <Altitude>0</Altitude>
 	</Water>
 	<Flooring>

@@ -11,6 +11,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -62,7 +63,7 @@ public class HeroesEmblem extends Game
 		generator.dispose();
 		final FreeTypeFontGenerator projectionGenerator = new FreeTypeFontGenerator(Gdx.files.internal("slkscr.ttf"));
 		final FreeTypeFontParameter projectionParameter = new FreeTypeFontParameter();
-		projectionParameter.size = (int) (Gdx.graphics.getHeight() * .01767f);
+		projectionParameter.size = (int) (Gdx.graphics.getHeight() * .021204f);
 		this.projectionFont = projectionGenerator.generateFont(projectionParameter);
 		projectionGenerator.dispose();
 		FileHandle textureFile = Gdx.files.internal("HeroesEmblem.pack");

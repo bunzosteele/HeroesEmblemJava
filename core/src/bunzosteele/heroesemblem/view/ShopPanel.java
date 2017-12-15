@@ -128,8 +128,10 @@ public class ShopPanel
 			
 			final AtlasRegion nameBackdropRegion = game.textureAtlas.findRegion("NameBackdrop" + state.selected.team);
 			game.batcher.draw(new Sprite(nameBackdropRegion), xOffset + (chainSize + portraitHeight) + shadowSize, yOffset + height - chainSize - shadowSize - nameBackdropHeight, nameBackdropWidth, nameBackdropHeight);
+			game.font.setColor(Color.WHITE);
 			game.font.draw(game.batcher, state.selected.name, xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
 			game.font.draw(game.batcher, state.selected.type.toString(), xOffset + (chainSize + portraitHeight) + shadowSize, nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
+			game.font.setColor(Color.BLACK);
 			game.batcher.draw(game.sprites.HealthBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight, backdropWidth, backdropHeight);
 			DrawHealthBar(nameY);
 			game.batcher.draw(game.sprites.ExperienceBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 2, backdropWidth, backdropHeight);
@@ -144,7 +146,19 @@ public class ShopPanel
 			game.batcher.draw(game.sprites.EvasionBackdrop, xOffset + (width - backdropWidth) / 2, nameY - backdropHeight * 6, backdropWidth, backdropHeight);
 			int statTextXOffset = xOffset + (width - backdropWidth) / 2 + backdropWidth * 57 / 116;
 			int statTextWidth = backdropWidth * 32 / 116;
-			int statRelativeYOffset = backdropHeight * 2 / 41 + (backdropHeight * 25 / 41) / 2 ;
+			int statRelativeYOffset = backdropHeight * 2 / 41 + (backdropHeight * 25 / 41) / 2;
+			
+			int footprintSize = buttonSize / 5;
+			int totalMovementWidth = footprintSize * state.selected.movement;
+			for(int i = 0; i < state.selected.movement; i++){
+				if(i >= unitStats.getInt("Movement") && !state.roster.contains(state.selected)){
+					game.batcher.draw(game.sprites.FootprintsWhite, xOffset + ((width - totalMovementWidth) / 2) + footprintSize * i, nameY - backdropHeight * 6 - footprintSize, footprintSize, footprintSize * 23 / 20);
+				}
+				else{
+					game.batcher.draw(game.sprites.FootprintsBlack, xOffset + ((width - totalMovementWidth) / 2) + footprintSize * i, nameY - backdropHeight * 6 - footprintSize, footprintSize, footprintSize * 23 / 20);
+				}
+			}
+			
 			if (!this.state.roster.contains(state.selected)) {
 				UnitRenderer.SetHealthFont(state.selected, unitStats, game.font);
 				game.font.draw(game.batcher, state.selected.currentHealth + "/" + state.selected.maximumHealth, xOffset + (width - backdropWidth) / 2 + backdropHeight, nameY - game.font.getData().lineHeight / 2, backdropWidth - (backdropWidth * 2 / 29) - backdropHeight - (nameBackdropWidth / 10), 1, false);
@@ -182,15 +196,16 @@ public class ShopPanel
 			}
 		}else{
 			game.batcher.draw(game.sprites.CombatDisabled, combatX, combatY, buttonSize, buttonSize);
-		}
-	
-		game.batcher.draw(game.sprites.EmptyDisabled, abilityX, abilityY, buttonSize, buttonSize);
-		
+		}	
 		
 		if(state.selected != null && state.selected.ability != null){
-			game.font.getData().setScale(.2f);
-			game.font.setColor(new Color(0f, 0f, 0f, 1f));
-			game.font.draw(game.batcher, state.selected.ability.displayName, abilityX, abilityY + buttonSize / 2 + game.font.getLineHeight() / 2, buttonSize, 1, false);
+			game.batcher.draw(game.sprites.AbilityDisabled, abilityX, abilityY, buttonSize, buttonSize);
+			int iconXOffset = (buttonSize * 10) / 51;
+			int iconYOffset = (buttonSize * 11) / 51;
+			int iconSize = (buttonSize * 30) / 51;
+			game.batcher.draw(state.selected.ability.GetAbilityIcon(game), abilityX + iconXOffset, abilityY + iconYOffset + 1, iconSize, iconSize);
+		}else{
+			game.batcher.draw(game.sprites.EmptyDisabled, abilityX, abilityY, buttonSize, buttonSize);
 		}
 		
 		if (canPurchaseSelected())
@@ -330,6 +345,7 @@ public class ShopPanel
 	public void processLongTouch(float x, float y, HelpPanel helpPanel){
 		String title = "";
 		String text = "";
+		String subtext = "";
 		helpPanel.setHeight(buttonSize * 2);
 		helpPanel.setWidth(buttonSize * 6);
 		if(state.selected != null && x >= xOffset + (width - backdropWidth) / 2 && x < xOffset + (width - backdropWidth) / 2 + backdropWidth){
@@ -363,6 +379,7 @@ public class ShopPanel
 			}
 			helpPanel.title = title;
 			helpPanel.text = text;
+			helpPanel.subtext = subtext;
 			helpPanel.isVisible = true;		
 			state.isLongPressed = false;
 		}

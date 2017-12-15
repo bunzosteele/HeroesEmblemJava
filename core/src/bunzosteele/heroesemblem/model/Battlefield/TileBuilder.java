@@ -10,11 +10,13 @@ public final class TileBuilder
 	{
 		String parsedType = tileType;
 		if(parsedType.contains("/")){
-			parsedType = parsedType.split("/")[1];
+			int length = parsedType.split("/").length;
+			parsedType = parsedType.split("/")[length-1];
 		}
 		String parsedForeground = foreground;
 		if(parsedForeground != null && parsedForeground.contains("/")){
-			parsedForeground = parsedForeground.split("/")[1];
+			int length = parsedForeground.split("/").length;
+			parsedForeground = parsedForeground.split("/")[length-1];
 		}
 		final Element tileStats = xml.getChildByName(parsedType.split("-")[0]);
 		return new Tile(parsedType, tileStats.getInt("DefenseModifier"), tileStats.getInt("EvasionModifier"), tileStats.getInt("MovementCost"), tileStats.getInt("Altitude"), parsedForeground);

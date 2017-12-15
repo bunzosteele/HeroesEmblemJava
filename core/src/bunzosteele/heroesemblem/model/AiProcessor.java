@@ -19,7 +19,7 @@ public class AiProcessor
 		for(Unit unit: state.enemies){
 			if(!unit.hasMoved){
 				Tile desiredDestination = AiHelper.GetDestination(state, unit, 0);
-				if(unit.x != desiredDestination.x || unit.y != desiredDestination.y)
+				if(desiredDestination != null && (unit.x != desiredDestination.x || unit.y != desiredDestination.y))
 					unitsToMove.add(unit);
 			}
 		}

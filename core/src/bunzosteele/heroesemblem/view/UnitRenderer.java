@@ -42,21 +42,24 @@ public  class UnitRenderer {
 				region = UnitSheets.get(unit.type).findRegion("Idle-" + unit.team + "-" + animationFrame);
 			}
 		}
-		 Sprite sprite = new Sprite(region);
-		if (unit.isGettingExperience && game.battleState != null) {
-			game.font.setColor(new Color(1f, .8f, 0, 1f));
-		}
-		if (unit.isHealing && game.battleState != null) {
-			game.font.setColor(new Color(0f, 1f, 0, 1f));
-		}
+		Sprite sprite = new Sprite(region);
 		if (tapped && !(unit.isHealing || unit.isGettingExperience || unit.isTakingDamage || unit.isAttacking) && game.battleState != null) {
 			game.batcher.setColor(new Color(1f, 1f, 1f, .7f));
 		}
+		
 		if (isFlipped) sprite.flip(true, false);
-		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);
-		if ((unit.isHealing || unit.isGettingExperience) && game.battleState != null && unit.damageDisplay >= 0) {
+		game.batcher.draw(sprite, x, y, scaledSize, scaledSize);	
+		if (unit.isHealing && game.battleState != null && unit.damageDisplay >=0) {
+			game.font.setColor(new Color(1f, 1f, 1f, 1f));
 			game.font.getData().setScale(.33f);
-			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 20 + game.font.getLineHeight() * 3 / 2, (int) (scaledSize * .8), 1, false);
+			game.batcher.draw(game.sprites.HealBackground, x + scaledSize / 5, y + scaledSize / 5, (int) (scaledSize * .6), (int) (scaledSize * .6));
+			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() * 2 / 5, (int) (scaledSize * .8), 1, false);
+		}
+		if (unit.isGettingExperience && game.battleState != null && unit.damageDisplay >= 0) {
+			game.font.setColor(new Color(1f, 1f, 1f, 1f));
+			game.font.getData().setScale(.33f);
+			game.batcher.draw(game.sprites.ExperienceBackground, x + scaledSize / 5, y + scaledSize / 5, (int) (scaledSize * .6), (int) (scaledSize * .6));
+			game.font.draw(game.batcher, "" + unit.damageDisplay, x + scaledSize / 10, y + scaledSize / 2 + game.font.getLineHeight() / 3, (int) (scaledSize * .8), 1, false);
 		}
 		if (unit.isTakingDamage && game.battleState != null && unit.damageDisplay > 0) {
 			game.font.getData().setScale(.33f);

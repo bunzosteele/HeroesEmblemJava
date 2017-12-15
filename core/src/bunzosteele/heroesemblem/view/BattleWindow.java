@@ -107,40 +107,10 @@ public class BattleWindow
 		}
 	}
 
-	private void drawHealthBar(final Unit unit)
-	{
-		final float healthPercent = unit.currentHealth / (float) unit.maximumHealth;
-		if ((healthPercent > 0) && (healthPercent < 1))
-		{
-			Color color;
-			if (healthPercent > .7)
-			{
-				color = new Color(0f, 1f, 0f, 1f);
-			} else if (healthPercent > .3)
-			{
-				color = new Color(1f, 1f, 0f, 1f);
-			} else
-			{
-				color = new Color(1f, 0f, 0f, 1f);
-			}
-
-			game.shapeRenderer.setColor(color);
-			game.shapeRenderer.rect((unit.x * tileWidth) + xOffset + (tileWidth * .21875f), Gdx.graphics.getHeight() - (tileHeight * (unit.y + 1)), (tileWidth - (tileWidth * .4375f)) * healthPercent, tileHeight / 10);
-		}
-	}
-
-	public void drawHealthBars()
-	{
-		for (final Unit unit : state.AllUnits())
-		{
-			drawHealthBar(unit);
-		}
-	}
-
 	public HashSet<Tile> drawHighlights() throws IOException
 	{
 		HashSet<Tile> highlightedTiles = new HashSet<Tile>();
-		if(state.selected != null && state.selected.team != 0 && state.currentPlayer == 0){
+		if(state.selected != null && state.selected.team != 0 && state.currentPlayer == 0 && !state.isInTactics){
 			final HashSet<Tile> options = MovementHelper.GetMovementOptions(state, state.selected);		
 			for (final Tile tile : options)
 			{
@@ -157,7 +127,7 @@ public class BattleWindow
 				highlightedTiles.add(tile);
 			}
 		}
-		if (state.isMoving && ! state.isUsingAbility)
+		if (state.isMoving && !state.isUsingAbility)
 		{
 			final HashSet<Tile> options = MovementHelper.GetMovementOptions(state);
 			for (final Tile tile : options)
@@ -222,6 +192,8 @@ public class BattleWindow
 				Sprite healthBarSprite = new Sprite(healthBarRegion);
 				game.batcher.draw(healthBarSprite, healthOffset, Gdx.graphics.getHeight() - (tileHeight * (unit.y + 1)) + (tileHeight / 50), tileWidth * 2 / 50, tileHeight * 2 / 50);	
 				healthOffset += tileWidth * 2 / 50;
+				if(i == 10)
+					game.batcher.draw(healthBarSprite, healthOffset, Gdx.graphics.getHeight() - (tileHeight * (unit.y + 1)) + (tileHeight / 50), tileWidth * 2 / 50, tileHeight * 2 / 50);	
 			}
 		
 			
@@ -232,7 +204,7 @@ public class BattleWindow
 	}
 	
 	private void drawProjection(){
-		if(state.selected != null && state.CanAttack(state.selected)){
+		if(state.selected != null && state.CanAttack(state.selected) && !state.isUsingAbility){
 			final HashSet<Tile> options = CombatHelper.GetAttackOptions(state, state.selected, false);
 			for(Tile option : options){
 				for(Unit enemy : state.enemies){
@@ -243,8 +215,9 @@ public class BattleWindow
 			}
 			if(state.targeted != null){
 				double projectionHeightRatio = .75;
-				game.batcher.draw(game.sprites.ProjectionBackground, (state.targeted.x * tileWidth) + xOffset, Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8), tileWidth, (int) (tileHeight * projectionHeightRatio));
-				game.batcher.draw(game.sprites.ProjectionBorder, (state.targeted.x * tileWidth) + xOffset, Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8), tileWidth, (int) (tileHeight * projectionHeightRatio));
+				float borderOffset = .1363f;
+				game.batcher.draw(game.sprites.ProjectionBackground, (state.targeted.x * tileWidth) + xOffset - (tileWidth * borderOffset), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8), (int) (tileWidth + 2 * borderOffset * tileWidth), (int) (tileHeight * projectionHeightRatio));
+				game.batcher.draw(game.sprites.ProjectionBorder, (state.targeted.x * tileWidth) + xOffset - (tileWidth * borderOffset), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8), (int) (tileWidth + 2 * borderOffset * tileWidth), (int) (tileHeight * projectionHeightRatio));
 				Tile enemyTile = state.battlefield.get(state.targeted.y).get(state.targeted.x);
 				int expectedDamage = CombatHelper.GetExpectedDamage(state.selected, state.targeted, enemyTile);
 				int hitChance = CombatHelper.GetHitPercent(state.selected, state.targeted, enemyTile);
@@ -253,16 +226,15 @@ public class BattleWindow
 				String hitString = (hitChance > 0 ? (hitChance > 100 ? "100" : hitChance) : "0") + "%";
 				String critString = (critChance > 0 ? (critChance > 100 ? "100" : critChance) : "0") + "%";
 				game.projectionFont.setColor(new Color(0f, 0f, 0f, 1f));
-				float borderOffset = .1363f;
 				
-				game.projectionFont.draw(game.batcher, "DMG", (state.targeted.x * tileWidth) + xOffset  + (int)(borderOffset * tileWidth), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 3 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
-				game.projectionFont.draw(game.batcher, damageString, ((state.targeted.x + 1) * tileWidth) + xOffset - (int)(borderOffset * tileWidth) - (tileWidth * 32 / 44), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 3 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
+				game.projectionFont.draw(game.batcher, "DMG", (state.targeted.x * tileWidth) + xOffset+ tileWidth * 2 / 44, Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 88/30 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
+				game.projectionFont.draw(game.batcher, damageString, ((state.targeted.x + 1) * tileWidth) + xOffset  - (tileWidth * 34 / 44), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 88/30 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
 	
-				game.projectionFont.draw(game.batcher, "HIT", (state.targeted.x * tileWidth) + xOffset + (int)(borderOffset * tileWidth), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 2 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
-				game.projectionFont.draw(game.batcher, hitString, ((state.targeted.x + 1) * tileWidth) + xOffset  - (int)(borderOffset * tileWidth) - (tileWidth * 32 / 44), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 2 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
+				game.projectionFont.draw(game.batcher, "HIT", (state.targeted.x * tileWidth) + xOffset+ tileWidth * 2 / 44, Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 58/30 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
+				game.projectionFont.draw(game.batcher, hitString, ((state.targeted.x + 1) * tileWidth) + xOffset  - (tileWidth * 34 / 44), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 58/30 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
 				
-				game.projectionFont.draw(game.batcher, "CRT", (state.targeted.x * tileWidth) + xOffset + (int)(borderOffset * tileWidth), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
-				game.projectionFont.draw(game.batcher, critString, ((state.targeted.x + 1) * tileWidth) + xOffset - (int)(borderOffset * tileWidth) - (tileWidth * 32 / 44), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
+				game.projectionFont.draw(game.batcher, "CRT", (state.targeted.x * tileWidth) + xOffset + tileWidth * 2 / 44, Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight() * 28/ 30+ (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), -1, false);
+				game.projectionFont.draw(game.batcher, critString, ((state.targeted.x + 1) * tileWidth) + xOffset - (tileWidth * 34 / 44), Gdx.graphics.getHeight() - (tileHeight * (state.targeted.y + 1)) + (tileWidth / 8) + game.projectionFont.getLineHeight()* 28/ 30 + (int)(borderOffset * (tileWidth * .75)), (tileWidth * 32 / 44), 0, false);
 			}
 		}
 	}
@@ -285,7 +257,7 @@ public class BattleWindow
 			ProcessTacticsTouch(x, y);
 			return;
 		}		
-		if ((state.selected != null) && !state.selected.hasAttacked && state.selected.team == 0)
+		if ((state.selected != null) && !state.selected.hasAttacked && state.selected.team == 0 && !state.isUsingAbility)
 			if(ProcessAttackTouch(x, y)) return;	
 
 		if ((state.selected != null) && state.isUsingAbility)

@@ -26,6 +26,7 @@ public class HelpPanel extends PopupPanel
 {	
 	String title = "";
 	String text = "";
+	String subtext = "";
 	boolean isVisible = false;
 		
 	public HelpPanel(final HeroesEmblem game, int width, int height, int xOffset, int yOffset)
@@ -51,12 +52,13 @@ public class HelpPanel extends PopupPanel
 	public void draw() throws IOException{
 		if(isVisible){
 			super.drawBorder();
-			game.font.setColor(Color.BLACK);
+			game.font.setColor(Color.WHITE);
 			if(title.length() > 0){
 				game.font.getData().setScale(.5f);
 				game.font.draw(game.batcher, title, xOffset + chainSize + shadowSize, yOffset + height - game.font.getLineHeight() / 2, width - chainSize * 2 - shadowSize * 2, 1, true);
 				game.font.getData().setScale(.33f);
 				game.font.draw(game.batcher, text, xOffset + chainSize + shadowSize, yOffset + game.font.getLineHeight() * 7 / 2, width - chainSize * 2 - shadowSize * 2, 1, true);
+				game.font.draw(game.batcher, subtext, xOffset + chainSize + shadowSize, yOffset + game.font.getLineHeight() * 5 / 2, width - chainSize * 2 - shadowSize * 2, 1, true);
 			}else{
 				game.font.getData().setScale(.33f);
 				game.font.draw(game.batcher, text, xOffset + chainSize + shadowSize, yOffset + height / 2  + game.font.getLineHeight() / 2, width - chainSize * 2 - shadowSize * 2, 1, true);

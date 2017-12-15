@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import bunzosteele.heroesemblem.HeroesEmblem;
 import bunzosteele.heroesemblem.model.BattleState;
 import bunzosteele.heroesemblem.model.Battlefield.Tile;
 import bunzosteele.heroesemblem.model.Units.Unit;
@@ -11,6 +12,7 @@ import bunzosteele.heroesemblem.model.Units.Unit;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 public abstract class Ability
 {
@@ -102,7 +104,7 @@ public abstract class Ability
 	public static Ability GenerateAbilityByName(String abilityName, boolean exhausted, boolean canUse, List<Integer> abilityTargets){
 		if(abilityName.equals("Block"))
 			return new Block(exhausted, canUse, abilityTargets);
-		if(abilityName.equals("Lightning"))
+		if(abilityName.equals("Chain Lightning"))
 			return new ChainLightning(exhausted, canUse, abilityTargets);
 		if(abilityName.equals("Heal"))
 			return new Heal(exhausted, canUse, abilityTargets);
@@ -127,5 +129,10 @@ public abstract class Ability
 		if(abilityName.equals("Vault"))
 			return new Vault(exhausted, canUse, abilityTargets);
 		return null;
+	}
+	
+	public Sprite GetAbilityIcon(HeroesEmblem game){
+		final AtlasRegion iconRegion = game.textureAtlas.findRegion(this.displayName);
+		return new Sprite(iconRegion);
 	}
 }

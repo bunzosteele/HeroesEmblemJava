@@ -32,11 +32,6 @@ public class GameOverScreen extends MenuScreen
 	UnitDto hero;
 	int score;
 	static boolean hasSubmitted = false;
-	int tileSize;
-	int chainSize;
-	int shadowSize;
-	int width;
-	int height;
 	int backdropWidth;
 	int backdropHeight;	
 	int buttonWidth;
@@ -50,12 +45,7 @@ public class GameOverScreen extends MenuScreen
 		this.roundsSurvived = roundsSurvived;
 		this.graveyard = graveyard;
 		this.hero = GetHero(graveyard);
-		this.tileSize = Gdx.graphics.getWidth() / 16;
-		this.chainSize = tileSize / 5;
-		this.shadowSize = chainSize / 3;
 		this.score = roundsSurvived * 100;
-		this.width = Gdx.graphics.getWidth();
-		this.height = Gdx.graphics.getHeight();
 		backdropWidth = tileSize * 12 / 5;
 		backdropHeight = (int) Math.floor(backdropWidth * .353);
 		buttonWidth = (width * 3 / 16 - (chainSize - shadowSize) * 2) * 9 / 10;
@@ -87,36 +77,8 @@ public class GameOverScreen extends MenuScreen
 		this.game.batcher.end();
 	}
 	
-	public void drawBackground()
-	{
-		Color backgroundColor = new Color(.227f, .204f, .157f, 1);
-		game.shapeRenderer.rect(0, 0, width, height, backgroundColor, backgroundColor, backgroundColor, backgroundColor);
-	}
-	
-	public void drawBorder(){
-		int chainXOffset = 0;
-		int chainYOffset = height  - chainSize;
-		
-		while (chainXOffset < width){
-			if(chainXOffset > 0 && chainXOffset < width - chainSize)
-				game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, height - chainSize - shadowSize, chainSize, chainSize + shadowSize);
-			game.batcher.draw(game.sprites.ChainHorizontal, chainXOffset, -shadowSize, chainSize, chainSize + shadowSize);
-			chainXOffset += chainSize;
-		}
-		while (chainYOffset >= 0){
-			if(chainYOffset > 0 && chainYOffset < height - chainSize)
-				game.batcher.draw(game.sprites.ChainVertical, 0, chainYOffset, chainSize + shadowSize, chainSize);
-			game.batcher.draw(game.sprites.ChainVertical, width - chainSize, chainYOffset, chainSize + shadowSize, chainSize);
-			chainYOffset -= chainSize;
-		}
-		
-		game.batcher.draw(game.sprites.ChainNW, 0, height - chainSize, chainSize, chainSize);
-		game.batcher.draw(game.sprites.ChainNE, width - chainSize, height - chainSize, chainSize, chainSize);
-		game.batcher.draw(game.sprites.ChainSW, 0, 0, chainSize, chainSize);
-		game.batcher.draw(game.sprites.ChainSE, width - chainSize, 0, chainSize, chainSize);
-	}
-	
 	private void drawContent() throws IOException{	
+		game.font.setColor(Color.WHITE);
 		if(this.hero == null){
 			this.game.font.getData().setScale(.5f);
 			this.game.font.draw(this.game.batcher, "You resigned before doing anything.", width / 8, height * 8 / 9, width * 3 / 4, 1, false);
@@ -155,9 +117,14 @@ public class GameOverScreen extends MenuScreen
 		game.batcher.draw(new Sprite(portraitRegion), contentXOffset, nameY + shadowSize, portraitHeight, portraitHeight);		
 		final AtlasRegion nameBackdropRegion = game.textureAtlas.findRegion("NameBackdrop" + this.hero.team);
 		game.batcher.draw(new Sprite(nameBackdropRegion), contentXOffset + portraitHeight, contentHeight - chainSize - shadowSize - nameBackdropHeight, nameBackdropWidth, nameBackdropHeight);
+		game.font.setColor(Color.WHITE);
+		game.font.getData().setScale(.4f);
+		game.font.draw(game.batcher, "Score: " + this.score, 0, contentHeight + shadowSize, width, 1, false);
+		game.font.getData().setScale(.2f);
 		game.font.draw(game.batcher, this.hero.name, contentXOffset + portraitHeight, nameY + (portraitHeight + shadowSize * 2) / 2 + game.font.getData().lineHeight, nameBackdropWidth - (nameBackdropWidth / 10), 1, false);
 		game.font.draw(game.batcher, this.hero.type.toString(), contentXOffset + portraitHeight, nameY + (portraitHeight + shadowSize * 2) / 2 - game.font.getData().lineHeight /4 , nameBackdropWidth - (nameBackdropWidth / 10), 1, false);	
 		game.font.getData().setScale(.25f);
+		game.font.setColor(Color.BLACK);
 		game.batcher.draw(game.sprites.ExperienceBackdrop, contentXOffset, nameY - backdropHeight, backdropWidth, backdropHeight);
 		DrawExperienceBar(nameY, contentXOffset);
 		game.batcher.draw(game.sprites.AttackBackdrop, contentXOffset + nameBackdropWidth + portraitHeight, contentHeight - chainSize - shadowSize - backdropHeight, backdropWidth, backdropHeight);
@@ -174,16 +141,28 @@ public class GameOverScreen extends MenuScreen
 		game.font.draw(game.batcher, "" + this.hero.accuracy, statTextXOffset, nameY - backdropHeight - statRelativeYOffset, statTextWidth, 1, false);
 		game.font.draw(game.batcher, "" + this.hero.defense, statTextXOffset + backdropWidth, nameY  - statRelativeYOffset, statTextWidth, 1, false);
 		game.font.draw(game.batcher, "" + this.hero.evasion, statTextXOffset + backdropWidth, nameY - backdropHeight - statRelativeYOffset, statTextWidth, 1, false);
-		
-		game.font.draw(game.batcher, "Movement Speed: " + this.hero.movement, contentXOffset + backdropWidth, nameY - backdropHeight * 2 - statRelativeYOffset + game.font.getData().lineHeight / 2, backdropWidth * 2, 1, false);
-		game.font.draw(game.batcher, "Ability: " + (this.hero.ability == null ? "None" : this.hero.ability), contentXOffset + backdropWidth, nameY - backdropHeight * 2 - statRelativeYOffset - game.font.getData().lineHeight * 3 / 4, backdropWidth * 2, 1, false);
+		game.font.setColor(Color.WHITE);
+		if(this.hero.ability != null){
+			game.font.setColor(Color.WHITE);
+			game.font.draw(game.batcher, this.hero.ability, contentXOffset + backdropWidth, nameY - backdropHeight * 2 - statRelativeYOffset + game.font.getData().lineHeight / 2 - shadowSize, backdropWidth * 2, 1, false);
+			game.font.setColor(Color.BLACK);
+		}
 		game.font.getData().setScale(.2f);
-		game.font.draw(game.batcher, "Experience: " + this.hero.experience + "/" + this.hero.experienceNeeded, contentXOffset, nameY - backdropHeight * 2 - statRelativeYOffset + game.font.getData().lineHeight, backdropWidth, 1, false);
-		game.font.draw(game.batcher, "Damage Dealt: " + this.hero.damageDealt, contentXOffset, nameY - backdropHeight * 2 - statRelativeYOffset, backdropWidth, 1, false);
-		game.font.draw(game.batcher, "Units Killed: " + this.hero.unitsKilled, contentXOffset, nameY - backdropHeight * 2 - statRelativeYOffset - game.font.getData().lineHeight, backdropWidth, 1, false);
-		game.font.getData().setScale(.5f);
-		game.font.draw(game.batcher, "Biography:", chainSize + shadowSize, nameY - backdropHeight * 2 - statRelativeYOffset - game.font.getData().lineHeight * 5 / 2, width - chainSize * 2 - shadowSize * 2, 1, false);
+		int footprintSize = tileSize / 5;
+		int totalMovementWidth = footprintSize * this.hero.movement;
+		for(int i = 0; i < this.hero.movement; i++){
+			game.batcher.draw(game.sprites.FootprintsBlack, contentXOffset + ((backdropWidth - totalMovementWidth) / 2) + footprintSize * i, nameY - backdropHeight * 2 - statRelativeYOffset + game.font.getData().lineHeight - footprintSize, footprintSize, footprintSize * 23 / 20);
+		}
+		int scrollHeight = backdropHeight * 13 / 12;
+		game.batcher.draw(game.sprites.StockNameBackdrop, contentXOffset + chainSize, nameY - backdropHeight * 2 - statRelativeYOffset - scrollHeight, scrollHeight * 93 / 42, scrollHeight);
+		game.font.setColor(Color.BLACK);
+		game.font.draw(game.batcher, "Experience: " + this.hero.experience + "/" + this.hero.experienceNeeded, contentXOffset, nameY - backdropHeight * 2 - statRelativeYOffset + game.font.getData().lineHeight - footprintSize * 2, backdropWidth, 1, false);
+		game.font.draw(game.batcher, "Damage Dealt: " + this.hero.damageDealt, contentXOffset, nameY - backdropHeight * 2 - statRelativeYOffset-footprintSize * 2 , backdropWidth, 1, false);
+		game.font.draw(game.batcher, "Units Killed: " + this.hero.unitsKilled, contentXOffset, nameY - backdropHeight * 2 - statRelativeYOffset - game.font.getData().lineHeight - footprintSize * 2, backdropWidth, 1, false);
 		game.font.getData().setScale(.4f);
+		game.font.setColor(Color.WHITE);
+		game.font.draw(game.batcher, "Biography:", chainSize + shadowSize, nameY - backdropHeight * 2 - statRelativeYOffset - game.font.getData().lineHeight * 5 / 2, width - chainSize * 2 - shadowSize * 2, 1, false);
+		game.font.getData().setScale(.35f);
 		game.font.draw(game.batcher, this.hero.backStory, width / 8, nameY - backdropHeight * 2 - statRelativeYOffset - game.font.getData().lineHeight * 9 / 2, width * 3 / 4, 1, true);
 	}
 
@@ -222,7 +201,7 @@ public class GameOverScreen extends MenuScreen
 					this.game.gameServicesController.ViewLeaderboard();
 				}else if(clickedX >= tileSize * 13 / 2 && clickedX < tileSize * 13 / 2 + buttonWidth){
 					GameOverScreen.hasSubmitted = false;
-					this.game.setScreen(new HighscoreScreen(this.game));
+					this.game.setScreen(new HighscoreScreen(this.game, this));
 					return;
 				}else if(clickedX >= tileSize * 19 / 2 && clickedX < tileSize * 19 / 2 + buttonWidth){
 					GameOverScreen.hasSubmitted = false;
